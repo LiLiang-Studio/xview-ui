@@ -1,0 +1,44 @@
+{
+  "name": "vuewidgets",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/vueui.common.js",
+  "author": {
+    "email": "ll917274996@live.com", 
+    "name": "liliang"
+  },
+  "scripts": {
+    "serve": "vue-cli-service serve ./samples/main.js",
+    "build": "vue-cli-service build --target lib --name vueui ./src/index.js",
+    "build:demo": "vue-cli-service build --dest demo ./samples/main.js"
+  },
+  "dependencies": {
+    "vue": "^2.6.6",
+    "vue-router": "^3.0.2"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.5.0",
+    "@vue/cli-service": "^3.5.0",
+    "less": "^3.0.4",
+    "less-loader": "^4.1.0",
+    "style-resources-loader": "^1.2.1",
+    "vue-template-compiler": "^2.5.21"
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
+  "keywords": ["vuewidgets", "vue-widgets", "vue", "components", "vueui", "vue-ui"],
+  "description": "一个基于Vuejs，功能和iview相似，但很轻量级的UI库",
+  "homepage": "https://github.com/liliangabc/vuewidgets",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liliangabc/vuewidgets.git"
+  }
+}

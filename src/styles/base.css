@@ -1,0 +1,58 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-size: 12px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  color: #495060;
+  background-color: #fff;
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+}
+
+/* 淡入淡出动画 */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .24s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+/* 消息提示 Y轴平移 and 淡入淡出 */
+.message-enter-active, .message-leave-active  {
+  transition: transform .3s, opacity .3s;
+}
+
+.message-enter, .message-leave-to {
+  opacity: 0;
+  transform: translateY(-24px)
+}
+
+/* 通知 X轴平移 and 淡入淡出 */
+.notice-enter-active, .notice-leave-active  {
+  transition: transform .3s, opacity .3s;
+}
+
+.notice-enter, .notice-leave-to {
+  opacity: 0;
+  transform: translateX(100%)
+}
+
+/* 加载中动画 */
+@keyframes ani-load-loop {
+  0% {
+    transform: rotate(0);
+  }
+
+  50% {
+    transform: rotate(180deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

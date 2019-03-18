@@ -1,0 +1,44 @@
+// 主色
+@primary-color: #2d8cf0;
+@primary-light-color: #5cadff;
+@primary-dark-color: #2b85e4;
+
+// 辅助色
+@info-color: #2db7f5;
+@success-color: #19be6b;
+@warning-color: #ff9900;
+@error-color: #ed3f14;
+
+// 中性色
+@title-color: #1c2438;
+@content-color: #495060;
+@sub-color: #80848f;
+@disabled-color: #bbbec4;
+@border-color: #dddee1;
+@divider-color: #e9eaec;
+@bg-color: #f8f8f9;
+@disabled-bg-color: #f3f3f3;
+
+// 加亮色
+@primary-light-color: lighten(@primary-color, 8%);
+@info-light-color: lighten(@info-color, 8%);
+@success-light-color: lighten(@success-color, 8%);
+@warning-light-color: lighten(@warning-color, 8%);
+@error-light-color: lighten(@error-color, 8%);
+
+// 加暗色
+@primary-dark-color: darken(@primary-color, 8%);
+@info-dark-color: darken(@info-color, 8%);
+@success-dark-color: darken(@success-color, 8%);
+@warning-dark-color: darken(@warning-color, 8%);
+@error-dark-color: darken(@error-color, 8%);
+
+// 表单控件焦点阴影
+.form-control-shadow (@color) {
+  box-shadow: 0 0 0 2px fadeout(@color, 80%);
+}
+
+// 表单控件尺寸
+@form-control-small: 24px;
+@form-control-normal: 32px;
+@form-control-large: 36px;

@@ -1,29 +1,59 @@
-# vueui
+# vueui-widgets
 
-## Project setup
-```
-npm install
-```
+## 与iview功能几乎一样的Vuejs UI库，但这可能更轻量级，部分组件可能实现的更好；
 
-### Compiles and hot-reloads for development
 ```
-npm run serve
-```
+  npm install vueui-widgets
 
-### Compiles and minifies for production
-```
-npm run build
+  import Vue from 'vue'
+  import VueUIWidgets from 'vueui-widgets'
+  Vue.use(VueUIWidgets, { prefix: 'ui' })
 ```
 
-### Run your tests
+### options 目前仅支持 prefix属性，默认值为 'ui'，用来设置组件名字前缀，如果为空字符串，则不带前缀使用组件
+
+
+目前已完成的组件如下：
+
+1. Alert
+2. Avator
+3. BackTop
+4. Badge
+5. Button
+6. ButtonGroup
+7. Icon
+8. Input
+9. Tag
+10. Message
+11. Notice
+
+### Message用法 (options 为String || Object 类型)
+
 ```
-npm run test
+  this.$Message.info(options)
+  this.$Message.success(options)
+  this.$Message.warning(options)
+  this.$Message.error(options)
+  this.$Message.loading(options)
+
+  this.$Message.config(options)
+  this.$Message.destroy(options)
 ```
 
-### Lints and fixes files
+### Notice用法 (options 为String || Object 类型)
+
 ```
-npm run lint
+  this.$Notice.open(options)
+  this.$Notice.info(options)
+  this.$Notice.success(options)
+  this.$Notice.warning(options)
+  this.$Notice.error(options)
+
+  this.$Notice.config(options)
+  this.$Notice.destroy(options)
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+详细文档请参见iview(http://www.iviewui.com/)
+
+
+更多组件正在开发的路上，敬请期待...

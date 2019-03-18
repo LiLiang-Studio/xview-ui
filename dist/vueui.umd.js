@@ -6622,12 +6622,12 @@ var meta = module.exports = {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return setMaxZIndex; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return setAutoHeight; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return throttle; });
-/* harmony import */ var E_projects_mygithub_vueui_node_modules_babel_runtime_corejs2_core_js_date_now__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("0a0d");
-/* harmony import */ var E_projects_mygithub_vueui_node_modules_babel_runtime_corejs2_core_js_date_now__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(E_projects_mygithub_vueui_node_modules_babel_runtime_corejs2_core_js_date_now__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var E_projects_mygithub_vue_components_node_modules_babel_runtime_corejs2_core_js_date_now__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("0a0d");
+/* harmony import */ var E_projects_mygithub_vue_components_node_modules_babel_runtime_corejs2_core_js_date_now__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(E_projects_mygithub_vue_components_node_modules_babel_runtime_corejs2_core_js_date_now__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var core_js_modules_es6_regexp_match__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("4917");
 /* harmony import */ var core_js_modules_es6_regexp_match__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_regexp_match__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var E_projects_mygithub_vueui_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("e814");
-/* harmony import */ var E_projects_mygithub_vueui_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(E_projects_mygithub_vueui_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var E_projects_mygithub_vue_components_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("e814");
+/* harmony import */ var E_projects_mygithub_vue_components_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(E_projects_mygithub_vue_components_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var core_js_modules_web_dom_iterable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("ac6a");
 /* harmony import */ var core_js_modules_web_dom_iterable__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_iterable__WEBPACK_IMPORTED_MODULE_3__);
 
@@ -6686,11 +6686,11 @@ function setMaxZIndex() {
 function setAutoHeight(textarea, minRows, maxRows) {
   var style = window.getComputedStyle(textarea, null);
 
-  var borderWidth = E_projects_mygithub_vueui_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_2___default()(style.borderTopWidth) + E_projects_mygithub_vueui_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_2___default()(style.borderBottomWidth);
+  var borderWidth = E_projects_mygithub_vue_components_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_2___default()(style.borderTopWidth) + E_projects_mygithub_vue_components_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_2___default()(style.borderBottomWidth);
 
-  var padding = E_projects_mygithub_vueui_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_2___default()(style.paddingTop) + E_projects_mygithub_vueui_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_2___default()(style.paddingBottom);
+  var padding = E_projects_mygithub_vue_components_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_2___default()(style.paddingTop) + E_projects_mygithub_vue_components_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_2___default()(style.paddingBottom);
 
-  var lineHeight = E_projects_mygithub_vueui_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_2___default()(style.lineHeight);
+  var lineHeight = E_projects_mygithub_vue_components_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_2___default()(style.lineHeight);
 
   var matches = textarea.value.match(/\n/gm);
   var lbCount = matches ? matches.length : 0;
@@ -6710,7 +6710,7 @@ function throttle(fn) {
   var gapTime = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 20;
   var lastTime = null;
   return function () {
-    var nowTime = E_projects_mygithub_vueui_node_modules_babel_runtime_corejs2_core_js_date_now__WEBPACK_IMPORTED_MODULE_0___default()();
+    var nowTime = E_projects_mygithub_vue_components_node_modules_babel_runtime_corejs2_core_js_date_now__WEBPACK_IMPORTED_MODULE_0___default()();
 
     if (nowTime - lastTime > gapTime || !lastTime) {
       fn();
@@ -7097,59 +7097,59 @@ var Notice = _require('Notice'); // 通知组件
 var coms = {
   Alert: _require('Alert'),
   // 警告提示
-  AutoComplete: _require('AutoComplete'),
+  // AutoComplete: _require('AutoComplete'),
   Avator: _require('Avator'),
   // 头像
   BackTop: _require('BackTop'),
   // 返回顶部
   Badge: _require('Badge'),
   // 微标
-  Breadcrumb: _require('Breadcrumb'),
+  // Breadcrumb: _require('Breadcrumb'),
   Button: _require('Button'),
   // 按钮
   ButtonGroup: _require('ButtonGroup'),
   // 按钮组
-  Cascader: _require('Cascader'),
-  Checkbox: _require('Checkbox'),
-  Collapse: _require('Collapse'),
-  ColorPicker: _require('ColorPicker'),
-  DatePicker: _require('DatePicker'),
-  Modal: _require('Modal'),
-  Dropdown: _require('Dropdown'),
-  Form: _require('Form'),
-  FormItem: _require('FormItem'),
+  // Cascader: _require('Cascader'),
+  // Checkbox: _require('Checkbox'),
+  // Collapse: _require('Collapse'),
+  // ColorPicker: _require('ColorPicker'),
+  // DatePicker: _require('DatePicker'),
+  // Modal: _require('Modal'),
+  // Dropdown: _require('Dropdown'),
+  // Form: _require('Form'),
+  // FormItem: _require('FormItem'),
   Icon: _require('Icon'),
   // 图标
   Input: _require('Input'),
   // 文本框
-  InputNumber: _require('InputNumber'),
-  Loading: _require('Loading'),
-  Menu: _require('Menu'),
-  MenuItem: _require('MenuItem'),
-  Option: _require('Option'),
-  Pager: _require('Pager'),
-  Poptip: _require('Poptip'),
-  Progress: _require('Progress'),
-  Radio: _require('Radio'),
-  Rate: _require('Rate'),
-  ScrollView: _require('ScrollView'),
-  Select: _require('Select'),
-  Slider: _require('Slider'),
-  Spinner: _require('Spinner'),
-  Swiper: _require('Swiper'),
-  SwiperItem: _require('SwiperItem'),
-  Switch: _require('Switch'),
-  Table: _require('Table'),
-  TabPanel: _require('TabPanel'),
-  Tabs: _require('Tabs'),
-  Tag: _require('Tag'),
-  // 标签
-  Timeline: _require('Timeline'),
-  TimePicker: _require('TimePicker'),
-  Tooltip: _require('Tooltip'),
-  Transfer: _require('Transfer'),
-  Tree: _require('Tree'),
-  Upload: _require('Upload')
+  // InputNumber: _require('InputNumber'),
+  // Loading: _require('Loading'),
+  // Menu: _require('Menu'),
+  // MenuItem: _require('MenuItem'),
+  // Option: _require('Option'),
+  // Pager: _require('Pager'),
+  // Poptip: _require('Poptip'),
+  // Progress: _require('Progress'),
+  // Radio: _require('Radio'),
+  // Rate: _require('Rate'),
+  // ScrollView: _require('ScrollView'),
+  // Select: _require('Select'),
+  // Slider: _require('Slider'),
+  // Spinner: _require('Spinner'),
+  // Swiper: _require('Swiper'),
+  // SwiperItem: _require('SwiperItem'),
+  // Switch: _require('Switch'),
+  // Table: _require('Table'),
+  // TabPanel: _require('TabPanel'),
+  // Tabs: _require('Tabs'),
+  Tag: _require('Tag') // 标签
+  // Timeline: _require('Timeline'),
+  // TimePicker: _require('TimePicker'),
+  // Tooltip: _require('Tooltip'),
+  // Transfer: _require('Transfer'),
+  // Tree: _require('Tree'),
+  // Upload: _require('Upload')
+
 };
 /* harmony default export */ var src = ({
   install: function install(Vue) {

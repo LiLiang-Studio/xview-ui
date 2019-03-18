@@ -1,6 +1,6 @@
 {
-  "name": "vuewidgets",
-  "version": "0.1.0",
+  "name": "vueui-widgets",
+  "version": "0.1.1",
   "private": false,
   "main": "dist/vueui.common.js",
   "author": {
@@ -34,7 +34,9 @@
     "last 2 versions",
     "not ie <= 8"
   ],
-  "keywords": ["vuewidgets", "vue-widgets", "vue", "components", "vueui", "vue-ui"],
+  "keywords": [
+    "vueui-widgets", "vuewidgets", "vue-widgets", "vue", "components", "vueui", "vue-ui"
+  ],
   "description": "一个基于Vuejs，功能和iview相似，但很轻量级的UI库",
   "homepage": "https://github.com/liliangabc/vuewidgets",
   "repository": {

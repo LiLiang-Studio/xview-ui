@@ -1,7 +1,7 @@
 {
   "name": "vuewidgets",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "main": "dist/vueui.common.js",
   "author": {
     "email": "ll917274996@live.com", 

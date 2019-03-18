@@ -18,7 +18,8 @@ const coms = {
   Button: _require('Button'), // 按钮
   ButtonGroup: _require('ButtonGroup'), // 按钮组
   // Cascader: _require('Cascader'),
-  // Checkbox: _require('Checkbox'),
+  Checkbox: _require('Checkbox'), // 复选框
+  CheckboxGroup: _require('CheckboxGroup'), // 复选框组
   // Collapse: _require('Collapse'),
   // ColorPicker: _require('ColorPicker'),
   // DatePicker: _require('DatePicker'),

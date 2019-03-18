@@ -24,7 +24,8 @@ export default new Router({
         { path: 'Input', name: 'Input', component: _require('Input') },
         { path: 'Message', name: 'Message', component: _require('Message') },
         { path: 'Notice', name: 'Notice', component: _require('Notice') },
-        { path: 'Tag', name: 'Tag', component: _require('Tag') }
+        { path: 'Tag', name: 'Tag', component: _require('Tag') },
+        { path: 'Checkbox', name: 'Checkbox', component: _require('Checkbox') }
       ]
     }
   ]

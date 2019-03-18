@@ -62,6 +62,19 @@ export function setAutoHeight(textarea, minRows, maxRows) {
 }
 
 /**
+ * 通过组件名字查找父组件
+ * @param {Vue.default} vm 
+ * @param {String} name 
+ */
+export function findParentByName(vm, name) {
+  let par = vm.$parent
+  while (par) {
+    if (par.$options.name === name) return par
+    par = par.$parent
+  }
+}
+
+/**
  * 节流控制
  * @param {Function} fn
  * @param {Number} gapTime

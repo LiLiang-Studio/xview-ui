@@ -1,5 +1,5 @@
 <template>
-  <div class="ui-checkbox-group">
+  <div class="ui-checkbox-group" :class="size">
     <slot></slot>
   </div>
 </template>
@@ -15,6 +15,11 @@ export default {
     value: {
       type: Array,
       default: () => []
+    },
+    size: {
+      validator(value) {
+        return !value || ['small', 'default', 'large'].indexOf(value) !== -1
+      }
     }
   },
   watch: {
@@ -31,6 +36,7 @@ export default {
         this.checkedArray.push(value)
       }
       this.$emit('input', this.checkedArray)
+      this.$emit('on-change', this.checkedArray)
     },
     getValues() {
       return this.checkedArray

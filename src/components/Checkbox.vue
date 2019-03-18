@@ -51,6 +51,7 @@ export default {
       } else {
         this.$emit('input', this.isChecked ? this.trueValue : this.falseValue)
       }
+      this.$emit('on-change', this.isChecked)
     }
   },
   mounted() {
@@ -65,20 +66,21 @@ export default {
 }
 </script>
 <style lang="less">
+.ui-checkbox-group.large .ui-checkbox, .ui-checkbox.large {
+  font-size: 14px;
+  .ui-checkbox-icon {
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+}
+
 .ui-checkbox {
   cursor: pointer;
   display: inline-block;
   position: relative;
   margin-right: 8px;
   font-size: 12px;
-  &.large {
-    font-size: 14px;
-    .ui-checkbox-icon {
-      width: 18px;
-      height: 18px;
-      line-height: 18px;
-    }
-  }
   &.isChecked:not(.disabled) .ui-checkbox-button {
     border-color: @primary-color;
     background-color: @primary-color;

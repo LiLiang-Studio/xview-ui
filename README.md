@@ -1,6 +1,6 @@
 # vueui-widgets
 
-### 与iview功能几乎一样的Vuejs UI库，但这可能更轻量级，部分组件可能实现的更好；
+### 与iview功能几乎一样的Vuejs UI库，但这更轻量级，部分组件可能实现的更好；
 
 ```
   npm install vueui-widgets
@@ -11,7 +11,8 @@
   Vue.use(VueUI, { prefix: 'ui' })
 ```
 
-#### options 目前仅支持 prefix属性，默认值为 'ui'，用来设置组件名字前缀，如果为空字符串，则不带前缀使用组件
+#### options 目前仅支持 prefix属性，默认值为 'ui'，用来设置组件名字前缀，
+#### 如果为空字符串，则不带前缀使用组件，这样iview官方例子基本可以直接拿来用
 
 
 目前已完成的组件如下：
@@ -29,6 +30,13 @@
 11. Notice
 12. Checkbox
 13. CheckboxGroup
+14. Card
+15. Timeline
+16. TimelineItem
+
+#### 0.1.4版本更新
+
+新增Card, Timeline, TimelineItem 组件
 
 #### 0.1.3版本更新
 

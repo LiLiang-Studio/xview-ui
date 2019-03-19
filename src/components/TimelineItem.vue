@@ -1,7 +1,7 @@
 <template>
-  <li class="ui-timeline-item" :style="styles">
+  <li class="ui-timeline-item">
     <span class="ui-timeline-item-tail"></span>
-    <span :class="[{[color]: clsName}, `ui-timeline-item-${hasSlotDot ? 'custom' : 'dot'}` ]">
+    <span class="ui-timeline-item-dot" :class="{[color]: clsName, custom}" :style="styles">
       <slot name="dot"></slot>
     </span>
     <div class="ui-timeline-item-content">
@@ -13,7 +13,7 @@
 export default {
   data() {
     return {
-      hasSlotDot: false
+      custom: false
     }
   },
   props: {
@@ -31,13 +31,13 @@ export default {
     }
   },
   mounted() {
-    this.hasSlotDot = this.$slots.dot !== undefined
+    this.custom = this.$slots.dot !== undefined
   }
 }
 </script>
 <style lang="less">
 .ui-timeline-item {
-  padding-bottom: 12px;
+  padding-bottom: 24px;
   position: relative;
   &:last-child .ui-timeline-item-tail {
     display: none;
@@ -55,52 +55,35 @@ export default {
   border-left: 1px solid @divider-color;
 }
 
-.ui-timeline-item-dot, .ui-timeline-item-custom {
-  &.blue {
-    border-color: @primary-color;
-  }
-  &.green {
-    border-color: @success-color;
-  }
-  &.red {
-    border-color: @error-color;
-  }
-}
-
 .ui-timeline-item-dot {
   width: 13px;
   height: 13px;
   border-radius: 50%;
-  border: 1px solid transparent;
+  border: 1px solid;
   background-color: #fff;
-}
-
-.ui-timeline-item-custom {
-  width: 40px;
-  height: auto;
-  margin-top: 6px;
-  padding: 3px 0;
-  text-align: center;
-  line-height: 1;
-  border: 0;
-  border-radius: 0;
-  font-size: 14px;
-  position: absolute;
-  left: -13px;
-  transform: translateY(-50%);
   &.blue {
     color: @primary-color;
+    border-color: @primary-color;
   }
   &.green {
     color: @success-color;
+    border-color: @success-color;
   }
   &.red {
     color: @error-color;
+    border-color: @error-color;
+  }
+  &.custom {
+    text-align: center;
+    line-height: 1;
+    border: none;
+    border-radius: 0;
+    font-size: 14px;
   }
 }
 
 .ui-timeline-item-content {
-  padding: 1px 1px 10px 24px;
+  padding: 1px 0 0 24px;
   font-size: 12px;
   position: relative;
   top: -3px;

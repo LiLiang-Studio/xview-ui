@@ -20,13 +20,14 @@ export default new Router({
         { path: 'Badge', name: 'Badge', component: _require('Badge') },
         { path: 'Button', name: 'Button', component: _require('Button') },
         { path: 'ButtonGroup', name: 'ButtonGroup', component: _require('ButtonGroup') },
+        { path: 'Card', name: 'Card', component: _require('Card') },
+        { path: 'Checkbox', name: 'Checkbox', component: _require('Checkbox') },
         { path: 'Icon', name: 'Icon', component: _require('Icon') },
         { path: 'Input', name: 'Input', component: _require('Input') },
         { path: 'Message', name: 'Message', component: _require('Message') },
         { path: 'Notice', name: 'Notice', component: _require('Notice') },
         { path: 'Tag', name: 'Tag', component: _require('Tag') },
-        { path: 'Checkbox', name: 'Checkbox', component: _require('Checkbox') },
-        { path: 'Card', name: 'Card', component: _require('Card') }
+        { path: 'Timeline', name: 'Timeline', component: _require('Timeline') }
       ]
     }
   ]

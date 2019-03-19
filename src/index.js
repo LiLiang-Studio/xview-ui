@@ -51,7 +51,8 @@ const coms = {
   // TabPanel: _require('TabPanel'),
   // Tabs: _require('Tabs'),
   Tag: _require('Tag'), // 标签
-  // Timeline: _require('Timeline'),
+  Timeline: _require('Timeline'), // 时光轴
+  TimelineItem: _require('TimelineItem'), // 时光轴item
   // TimePicker: _require('TimePicker'),
   // Tooltip: _require('Tooltip'),
   // Transfer: _require('Transfer'),

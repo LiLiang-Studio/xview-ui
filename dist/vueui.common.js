@@ -679,14 +679,14 @@ var utils = __webpack_require__("ed08");
   },
   computed: {
     iconType: function iconType() {
-      return utils["a" /* iconTypes */][this.type];
+      return utils["b" /* iconTypes */][this.type];
     }
   },
   methods: {
     close: function close(event) {
       this.$emit('destroy');
       clearTimeout(this.tid);
-      Object(utils["b" /* isFunc */])(this.onClose) && this.onClose();
+      Object(utils["c" /* isFunc */])(this.onClose) && this.onClose();
     },
     timer: function timer() {
       var _this = this;
@@ -1019,9 +1019,9 @@ var utils = __webpack_require__("ed08");
     handleInput: function handleInput(event) {
       if (this.isTextarea && this.autosize) {
         if (typeof this.autosize === 'boolean') {
-          Object(utils["c" /* setAutoHeight */])(event.target);
+          Object(utils["d" /* setAutoHeight */])(event.target);
         } else {
-          Object(utils["c" /* setAutoHeight */])(event.target, this.autosize.minRows, this.autosize.maxRows);
+          Object(utils["d" /* setAutoHeight */])(event.target, this.autosize.minRows, this.autosize.maxRows);
         }
       }
 
@@ -1199,6 +1199,17 @@ module.exports = (
 
 /***/ }),
 
+/***/ "1823":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_10_oneOf_1_0_node_modules_css_loader_index_js_ref_10_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_oneOf_1_2_node_modules_less_loader_dist_cjs_js_ref_10_oneOf_1_3_node_modules_style_resources_loader_lib_index_js_ref_10_oneOf_1_4_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Checkbox_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("833a");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_10_oneOf_1_0_node_modules_css_loader_index_js_ref_10_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_oneOf_1_2_node_modules_less_loader_dist_cjs_js_ref_10_oneOf_1_3_node_modules_style_resources_loader_lib_index_js_ref_10_oneOf_1_4_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Checkbox_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_10_oneOf_1_0_node_modules_css_loader_index_js_ref_10_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_oneOf_1_2_node_modules_less_loader_dist_cjs_js_ref_10_oneOf_1_3_node_modules_style_resources_loader_lib_index_js_ref_10_oneOf_1_4_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Checkbox_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_10_oneOf_1_0_node_modules_css_loader_index_js_ref_10_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_oneOf_1_2_node_modules_less_loader_dist_cjs_js_ref_10_oneOf_1_3_node_modules_style_resources_loader_lib_index_js_ref_10_oneOf_1_4_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Checkbox_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "1b03":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1223,6 +1234,8 @@ var map = {
 	"./Cascader.vue": "12f4",
 	"./Checkbox": "7737",
 	"./Checkbox.vue": "7737",
+	"./CheckboxGroup": "a5a7",
+	"./CheckboxGroup.vue": "a5a7",
 	"./CloseIconButton": "2fbd",
 	"./CloseIconButton.vue": "2fbd",
 	"./Collapse": "f48b",
@@ -3759,24 +3772,104 @@ if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6df7c4d9-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Checkbox.vue?vue&type=template&id=31bb3fc8&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')}
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6df7c4d9-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Checkbox.vue?vue&type=template&id=35e35238&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span',{staticClass:"ui-checkbox",class:[{isChecked: _vm.isChecked, disabled: _vm.disabled}, _vm.size],on:{"click":_vm.handleClick}},[_c('span',{staticClass:"ui-checkbox-button",attrs:{"tabindex":"-1"}},[_c('UiIcon',{staticClass:"ui-checkbox-icon",attrs:{"type":"checkmark"}})],1),_vm._t("default",[_vm._v(_vm._s(_vm.label))])],2)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/Checkbox.vue?vue&type=template&id=31bb3fc8&
+// CONCATENATED MODULE: ./src/components/Checkbox.vue?vue&type=template&id=35e35238&
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es6.number.constructor.js
+var es6_number_constructor = __webpack_require__("c5f6");
+
+// EXTERNAL MODULE: ./src/components/Icon.vue + 4 modules
+var Icon = __webpack_require__("cdae");
+
+// EXTERNAL MODULE: ./src/utils/index.js
+var utils = __webpack_require__("ed08");
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Checkbox.vue?vue&type=script&lang=js&
+
 //
 //
 //
-/* harmony default export */ var Checkboxvue_type_script_lang_js_ = ({});
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ var Checkboxvue_type_script_lang_js_ = ({
+  components: {
+    UiIcon: Icon["default"]
+  },
+  data: function data() {
+    return {
+      parent: null,
+      isChecked: false
+    };
+  },
+  props: {
+    value: [String, Number, Boolean],
+    label: [String, Number, Boolean],
+    disabled: Boolean,
+    indeterminate: Boolean,
+    size: {
+      validator: function validator(value) {
+        return !value || ['small', 'default', 'large'].indexOf(value) !== -1;
+      }
+    },
+    trueValue: {
+      type: [String, Number, Boolean],
+      default: true
+    },
+    falseValue: {
+      type: [String, Number, Boolean],
+      default: false
+    }
+  },
+  watch: {
+    value: function value(newVal) {
+      if (this.parent) return;
+      this.isChecked = newVal === this.trueValue;
+    }
+  },
+  methods: {
+    handleClick: function handleClick(event) {
+      if (this.disabled) return;
+      this.isChecked = !this.isChecked;
+
+      if (this.parent) {
+        this.parent.updateValue(this.label);
+      } else {
+        this.$emit('input', this.isChecked ? this.trueValue : this.falseValue);
+      }
+
+      this.$emit('on-change', this.isChecked);
+    }
+  },
+  mounted: function mounted() {
+    this.parent = Object(utils["a" /* findParentByName */])(this, 'ui-checkbox-group');
+
+    if (this.parent) {
+      var checkedArray = this.parent.getValues();
+      this.isChecked = checkedArray.indexOf(this.label) !== -1;
+    } else {
+      this.isChecked = this.value === this.trueValue;
+    }
+  }
+});
 // CONCATENATED MODULE: ./src/components/Checkbox.vue?vue&type=script&lang=js&
  /* harmony default export */ var components_Checkboxvue_type_script_lang_js_ = (Checkboxvue_type_script_lang_js_); 
+// EXTERNAL MODULE: ./src/components/Checkbox.vue?vue&type=style&index=0&lang=less&
+var Checkboxvue_type_style_index_0_lang_less_ = __webpack_require__("1823");
+
 // EXTERNAL MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
 var componentNormalizer = __webpack_require__("2877");
 
 // CONCATENATED MODULE: ./src/components/Checkbox.vue
+
 
 
 
@@ -3966,6 +4059,13 @@ NAME in FProto || __webpack_require__("9e1e") && dP(FProto, NAME, {
   }
 });
 
+
+/***/ }),
+
+/***/ "833a":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -4538,7 +4638,7 @@ var utils = __webpack_require__("ed08");
   mounted: function mounted() {
     var _this2 = this;
 
-    this.handleWinScroll = Object(utils["e" /* throttle */])(function () {
+    this.handleWinScroll = Object(utils["f" /* throttle */])(function () {
       return _this2.visible = window.scrollY > _this2.height;
     }, 50);
     window.addEventListener('scroll', this.handleWinScroll);
@@ -4651,7 +4751,7 @@ var utils = __webpack_require__("ed08");
   },
   computed: {
     iconType: function iconType() {
-      return utils["a" /* iconTypes */][this.type];
+      return utils["b" /* iconTypes */][this.type];
     }
   },
   methods: {
@@ -4987,6 +5087,96 @@ module.exports = __webpack_require__("8aae");
 
 /***/ }),
 
+/***/ "a5a7":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6df7c4d9-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CheckboxGroup.vue?vue&type=template&id=41a08127&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ui-checkbox-group",class:_vm.size},[_vm._t("default")],2)}
+var staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/CheckboxGroup.vue?vue&type=template&id=41a08127&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CheckboxGroup.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+//
+/* harmony default export */ var CheckboxGroupvue_type_script_lang_js_ = ({
+  name: 'ui-checkbox-group',
+  data: function data() {
+    return {
+      checkedArray: this.value
+    };
+  },
+  props: {
+    value: {
+      type: Array,
+      default: function _default() {
+        return [];
+      }
+    },
+    size: {
+      validator: function validator(value) {
+        return !value || ['small', 'default', 'large'].indexOf(value) !== -1;
+      }
+    }
+  },
+  watch: {
+    value: function value(newVal) {
+      this.checkedArray = newVal;
+    }
+  },
+  methods: {
+    updateValue: function updateValue(value) {
+      var index = this.checkedArray.indexOf(value);
+
+      if (index !== -1) {
+        this.checkedArray.splice(index, 1);
+      } else {
+        this.checkedArray.push(value);
+      }
+
+      this.$emit('input', this.checkedArray);
+      this.$emit('on-change', this.checkedArray);
+    },
+    getValues: function getValues() {
+      return this.checkedArray;
+    }
+  }
+});
+// CONCATENATED MODULE: ./src/components/CheckboxGroup.vue?vue&type=script&lang=js&
+ /* harmony default export */ var components_CheckboxGroupvue_type_script_lang_js_ = (CheckboxGroupvue_type_script_lang_js_); 
+// EXTERNAL MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
+var componentNormalizer = __webpack_require__("2877");
+
+// CONCATENATED MODULE: ./src/components/CheckboxGroup.vue
+
+
+
+
+
+/* normalize component */
+
+var component = Object(componentNormalizer["a" /* default */])(
+  components_CheckboxGroupvue_type_script_lang_js_,
+  render,
+  staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var CheckboxGroup = __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
 /***/ "a5ae":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -5055,7 +5245,7 @@ var utils = __webpack_require__("ed08");
   },
   computed: {
     iconType: function iconType() {
-      return utils["a" /* iconTypes */][this.type];
+      return utils["b" /* iconTypes */][this.type];
     },
     showIcon: function showIcon() {
       return this.type !== 'open';
@@ -5065,7 +5255,7 @@ var utils = __webpack_require__("ed08");
     close: function close(event) {
       this.$emit('destroy');
       clearTimeout(this.tid);
-      Object(utils["b" /* isFunc */])(this.onClose) && this.onClose();
+      Object(utils["c" /* isFunc */])(this.onClose) && this.onClose();
     },
     timer: function timer() {
       var _this = this;
@@ -6608,19 +6798,23 @@ var meta = module.exports = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return iconTypes; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return isFunc; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return setMaxZIndex; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return setAutoHeight; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return throttle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return iconTypes; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return isFunc; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return setMaxZIndex; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return setAutoHeight; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return findParentByName; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return throttle; });
 /* harmony import */ var E_projects_mygithub_vuewidgets_node_modules_babel_runtime_corejs2_core_js_date_now__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("0a0d");
 /* harmony import */ var E_projects_mygithub_vuewidgets_node_modules_babel_runtime_corejs2_core_js_date_now__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(E_projects_mygithub_vuewidgets_node_modules_babel_runtime_corejs2_core_js_date_now__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es6_regexp_match__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("4917");
-/* harmony import */ var core_js_modules_es6_regexp_match__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_regexp_match__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var E_projects_mygithub_vuewidgets_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("e814");
-/* harmony import */ var E_projects_mygithub_vuewidgets_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(E_projects_mygithub_vuewidgets_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_web_dom_iterable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("ac6a");
-/* harmony import */ var core_js_modules_web_dom_iterable__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_iterable__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("7f7f");
+/* harmony import */ var core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es6_regexp_match__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("4917");
+/* harmony import */ var core_js_modules_es6_regexp_match__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_regexp_match__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var E_projects_mygithub_vuewidgets_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("e814");
+/* harmony import */ var E_projects_mygithub_vuewidgets_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(E_projects_mygithub_vuewidgets_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_web_dom_iterable__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("ac6a");
+/* harmony import */ var core_js_modules_web_dom_iterable__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_iterable__WEBPACK_IMPORTED_MODULE_4__);
+
 
 
 
@@ -6677,11 +6871,11 @@ function setMaxZIndex() {
 function setAutoHeight(textarea, minRows, maxRows) {
   var style = window.getComputedStyle(textarea, null);
 
-  var borderWidth = E_projects_mygithub_vuewidgets_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_2___default()(style.borderTopWidth) + E_projects_mygithub_vuewidgets_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_2___default()(style.borderBottomWidth);
+  var borderWidth = E_projects_mygithub_vuewidgets_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_3___default()(style.borderTopWidth) + E_projects_mygithub_vuewidgets_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_3___default()(style.borderBottomWidth);
 
-  var padding = E_projects_mygithub_vuewidgets_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_2___default()(style.paddingTop) + E_projects_mygithub_vuewidgets_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_2___default()(style.paddingBottom);
+  var padding = E_projects_mygithub_vuewidgets_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_3___default()(style.paddingTop) + E_projects_mygithub_vuewidgets_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_3___default()(style.paddingBottom);
 
-  var lineHeight = E_projects_mygithub_vuewidgets_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_2___default()(style.lineHeight);
+  var lineHeight = E_projects_mygithub_vuewidgets_node_modules_babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_3___default()(style.lineHeight);
 
   var matches = textarea.value.match(/\n/gm);
   var lbCount = matches ? matches.length : 0;
@@ -6690,6 +6884,20 @@ function setAutoHeight(textarea, minRows, maxRows) {
   if (typeof maxRows === 'number' && lbCount >= maxRows) return;
   textarea.style.height = 'auto';
   textarea.style.height = "".concat(textarea.scrollHeight + borderWidth, "px");
+}
+/**
+ * 通过组件名字查找父组件
+ * @param {Vue.default} vm 
+ * @param {String} name 
+ */
+
+function findParentByName(vm, name) {
+  var par = vm.$parent;
+
+  while (par) {
+    if (par.$options.name === name) return par;
+    par = par.$parent;
+  }
 }
 /**
  * 节流控制
@@ -6982,13 +7190,13 @@ function () {
           data: function data() {
             return {
               comps: [],
-              zIndex: Object(utils["d" /* setMaxZIndex */])()
+              zIndex: Object(utils["e" /* setMaxZIndex */])()
             };
           },
           watch: {
             'comps.length': function compsLength(newVal, oldVal) {
               if (newVal > oldVal) {
-                this.zIndex = Object(utils["d" /* setMaxZIndex */])();
+                this.zIndex = Object(utils["e" /* setMaxZIndex */])();
               }
             }
           },
@@ -7101,7 +7309,10 @@ var coms = {
   ButtonGroup: _require('ButtonGroup'),
   // 按钮组
   // Cascader: _require('Cascader'),
-  // Checkbox: _require('Checkbox'),
+  Checkbox: _require('Checkbox'),
+  // 复选框
+  CheckboxGroup: _require('CheckboxGroup'),
+  // 复选框组
   // Collapse: _require('Collapse'),
   // ColorPicker: _require('ColorPicker'),
   // DatePicker: _require('DatePicker'),

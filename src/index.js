@@ -1,5 +1,5 @@
-import './styles/base.css'
 import './styles/ionicons.css'
+import './styles/base.less'
 import { NoticeManager } from './utils/vueFunc'
 
 const _require = name => require(`./components/${name}`).default
@@ -17,6 +17,7 @@ const coms = {
   // Breadcrumb: _require('Breadcrumb'),
   Button: _require('Button'), // 按钮
   ButtonGroup: _require('ButtonGroup'), // 按钮组
+  Card: _require('Card'), // 卡片
   // Cascader: _require('Cascader'),
   Checkbox: _require('Checkbox'), // 复选框
   CheckboxGroup: _require('CheckboxGroup'), // 复选框组

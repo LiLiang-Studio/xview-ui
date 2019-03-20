@@ -7,7 +7,7 @@
   </button>
 </template>
 <script>
-import UiIcon from './Icon'
+import UiIcon from './../Icon'
 export default {
   components: { UiIcon },
   data() {

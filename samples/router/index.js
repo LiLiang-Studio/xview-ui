@@ -5,6 +5,24 @@ const _require = name => require(`../pages/${name}.vue`).default
 
 Vue.use(Router)
 
+const routeArray = [
+  'Alert',
+  'Avator',
+  'BackTop',
+  'Badge',
+  'Button',
+  'Card',
+  'Checkbox',
+  'Icon',
+  'Input',
+  'Message',
+  'Notice',
+  'Progress',
+  'Tag',
+  'Timeline',
+  'Collapse'
+]
+
 export default new Router({
   mode: 'history',
   base: '/samples/',
@@ -12,23 +30,7 @@ export default new Router({
     {
       path: '/',
       component: _require('HomeRouter'),
-      children: [
-        { path: '', redirect: 'Alert' },
-        { path: 'Alert', name: 'Alert', component: _require('Alert') },
-        { path: 'Avator', name: 'Avator', component: _require('Avator') },
-        { path: 'BackTop', name: 'BackTop', component: _require('BackTop') },
-        { path: 'Badge', name: 'Badge', component: _require('Badge') },
-        { path: 'Button', name: 'Button', component: _require('Button') },
-        { path: 'ButtonGroup', name: 'ButtonGroup', component: _require('ButtonGroup') },
-        { path: 'Card', name: 'Card', component: _require('Card') },
-        { path: 'Checkbox', name: 'Checkbox', component: _require('Checkbox') },
-        { path: 'Icon', name: 'Icon', component: _require('Icon') },
-        { path: 'Input', name: 'Input', component: _require('Input') },
-        { path: 'Message', name: 'Message', component: _require('Message') },
-        { path: 'Notice', name: 'Notice', component: _require('Notice') },
-        { path: 'Tag', name: 'Tag', component: _require('Tag') },
-        { path: 'Timeline', name: 'Timeline', component: _require('Timeline') }
-      ]
+      children: routeArray.map(_ => ({ path: _, name: _, component: _require(_) }))
     }
   ]
 })

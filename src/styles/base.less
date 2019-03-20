@@ -23,16 +23,16 @@ body {
   font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
 }
 
-/* 淡入淡出动画 */
+// 淡入淡出动画
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .24s;
+  transition: opacity .22s;
 }
 
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }
 
-/* 消息提示 Y轴平移 and 淡入淡出 */
+// 消息提示 Y轴平移 and 淡入淡出
 .message-enter-active, .message-leave-active  {
   transition: transform .3s, opacity .3s;
 }
@@ -42,7 +42,7 @@ body {
   transform: translateY(-24px)
 }
 
-/* 通知 X轴平移 and 淡入淡出 */
+// 通知 X轴平移 and 淡入淡出
 .notice-enter-active, .notice-leave-active  {
   transition: transform .3s, opacity .3s;
 }
@@ -52,7 +52,7 @@ body {
   transform: translateX(100%)
 }
 
-/* 加载中动画 */
+// 加载中动画
 @keyframes ani-load-loop {
   0% {
     transform: rotate(0);
@@ -64,5 +64,30 @@ body {
 
   100% {
     transform: rotate(360deg);
+  }
+}
+
+// 进度条动画
+@keyframes ui-progress-animate-x {
+  0% {
+    opacity: .3;
+    transform: scaleX(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes ui-progress-animate-y {
+  0% {
+    opacity: .3;
+    transform: scaleY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scaleY(1);
   }
 }

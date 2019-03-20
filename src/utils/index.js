@@ -23,6 +23,14 @@ export function isFunc(f) {
 }
 
 /**
+ * 获取对象的类型
+ * @param {any} obj 
+ */
+export function getType(obj) {
+  return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase()
+}
+
+/**
  * 设置最大图层值
  */
 export function setMaxZIndex() {

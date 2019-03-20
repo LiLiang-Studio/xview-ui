@@ -7,8 +7,8 @@
   </span>
 </template>
 <script>
-import UiIcon from './Icon'
-import { findParentByName } from '../utils'
+import UiIcon from './../Icon'
+import { findParentByName } from '../../utils'
 export default {
   components: { UiIcon },
   data() {

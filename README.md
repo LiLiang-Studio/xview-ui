@@ -33,10 +33,17 @@
 14. Card
 15. Timeline
 16. TimelineItem
+17. Progress
+18. Collapse
+19. Panel
+
+#### 0.1.5版本更新
+
+新增Progress, Collapse, Panel组件
 
 #### 0.1.4版本更新
 
-新增Card, Timeline, TimelineItem 组件
+新增Card, Timeline, TimelineItem组件
 
 #### 0.1.3版本更新
 

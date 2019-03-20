@@ -20,7 +20,8 @@ const routeArray = [
   'Progress',
   'Tag',
   'Timeline',
-  'Collapse'
+  'Collapse',
+  'Modal'
 ]
 
 export default new Router({

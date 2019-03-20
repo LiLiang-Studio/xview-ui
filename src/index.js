@@ -37,6 +37,8 @@ import Panel from './components/collapse/Panel'
 import Message from './components/Message'
 // 通知提醒
 import Notice from './components/Notice'
+// 模态框
+import Modal from './components/modal/Modal'
 
 const comps = {
   Alert,
@@ -55,7 +57,8 @@ const comps = {
   Timeline,
   TimelineItem,
   Collapse,
-  Panel
+  Panel,
+  Modal
 }
 
 export default {

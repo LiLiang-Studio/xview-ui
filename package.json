@@ -10,7 +10,7 @@
   "scripts": {
     "serve": "vue-cli-service serve ./samples/main.js",
     "build": "vue-cli-service build --target lib --name vueui ./src/index.js",
-    "build:demo": "vue-cli-service build --dest demo ./samples/main.js"
+    "build:docs": "vue-cli-service build --dest docs ./samples/main.js"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.5.0",

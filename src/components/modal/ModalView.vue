@@ -1,24 +1,22 @@
 <template>
-  <transition name="ui-modal">
-    <div class="ui-modal" :class="[{middle}, className]">
-      <div class="ui-modal-mask" @click="handleMaskClick"></div>
-      <div class="ui-modal-dialog" :style="dialogStyle">
-        <div v-if="hasTitle" class="ui-modal-header">
-          <slot name="header">{{title}}</slot>
-        </div>
-        <a v-if="closable" class="ui-modal-close" @click="close">
-          <slot name="close"><UiCloseIconButton/></slot>
-        </a>
-        <div class="ui-modal-body"><slot></slot></div>
-        <div class="ui-modal-footer">
-          <slot name="footer">
-            <ui-button type="text" size="large" @click="handleCancel">{{cancelText}}</ui-button>
-            <ui-button type="primary" size="large" :loading="loading" @click="handleOK">{{okText}}</ui-button>
-          </slot>
-        </div>
+  <div class="ui-modal" :class="[{middle}, className]">
+    <div class="ui-modal-mask" @click="handleMaskClick"></div>
+    <div class="ui-modal-dialog" :style="dialogStyle">
+      <div v-if="hasTitle" class="ui-modal-header">
+        <slot name="header">{{title}}</slot>
+      </div>
+      <a v-if="closable" class="ui-modal-close" @click="close">
+        <slot name="close"><UiCloseIconButton/></slot>
+      </a>
+      <div class="ui-modal-body"><slot></slot></div>
+      <div class="ui-modal-footer">
+        <slot name="footer">
+          <ui-button type="text" size="large" @click="handleCancel">{{cancelText}}</ui-button>
+          <ui-button type="primary" size="large" :loading="loading" @click="handleOK">{{okText}}</ui-button>
+        </slot>
       </div>
     </div>
-  </transition>
+  </div>
 </template>
 <script>
 import { getDefaultProps } from './modalUntils'

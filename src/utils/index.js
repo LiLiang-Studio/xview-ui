@@ -11,7 +11,8 @@ export const iconTypes = {
   success: 'checkmark-circled',
   warning: 'android-alert',
   error: 'close-circled',
-  loading: 'load-c'
+  loading: 'load-c',
+  confirm: 'help-circled'
 }
 
 /**

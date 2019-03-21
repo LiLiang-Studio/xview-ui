@@ -71,6 +71,19 @@
       <p>Content of dialog</p>
       <p>Content of dialog</p>
     </Modal>
+
+    <div class="page-sub-title">
+      除了上述通过标准组件的使用方法，我还精心封装了一些实例方法，用来创建一次性的轻量级对话框。
+      实例以隐式创建 Vue 组件的方式在全局创建一个对话框，并在消失时移除，所以同时只能操作一个对话框。
+    </div>
+    <Button @click="instance('info')">Info</Button>
+    <Button @click="instance('success')">Success</Button>
+    <Button @click="instance('warning')">Warning</Button>
+    <Button @click="instance('error')">Error</Button>
+    <div class="page-sub-title">快速弹出确认对话框，并且可以自定义按钮文字及异步关闭。</div>
+    <Button @click="instance('confirm')">Confirm</Button>
+    <Button @click="custom">Custom button text</Button>
+    <Button @click="async">Asynchronous closing</Button>
   </div>
 </template>
 <script>
@@ -108,6 +121,70 @@ export default {
       setTimeout(() => {
         this.modal6 = false;
       }, 2000);
+    },
+    instance(type) {
+      const title = "对话框的标题";
+      const content =
+        "<p>一些对话框内容</p><p>一些对话框内容</p><p>一些对话框内容</p>";
+      switch (type) {
+        case "info":
+          this.$Modal.info({
+            title: title,
+            content: content
+          });
+          break;
+        case "success":
+          this.$Modal.success({
+            title: title,
+            content: content
+          });
+          break;
+        case "warning":
+          this.$Modal.warning({
+            title: title,
+            content: content
+          });
+          break;
+        case "error":
+          this.$Modal.error({
+            title: title,
+            content: content
+          });
+          break;
+        case "confirm":
+          this.$Modal.confirm({
+            title: title,
+            content: content,
+            onOk: () => {
+              this.$Message.info("Clicked ok");
+            },
+            onCancel: () => {
+              this.$Message.info("Clicked cancel");
+            }
+          });
+          break;
+      }
+    },
+    custom() {
+      this.$Modal.confirm({
+        title: "Title",
+        content: "<p>Content of dialog</p><p>Content of dialog</p>",
+        okText: "OK",
+        cancelText: "Cancel"
+      });
+    },
+    async() {
+      this.$Modal.confirm({
+        title: "Title",
+        content: "<p>The dialog box will be closed after 2 seconds</p>",
+        loading: true,
+        onOk: () => {
+          setTimeout(() => {
+            this.$Modal.remove();
+            this.$Message.info("Asynchronously close the dialog box");
+          }, 2000);
+        }
+      });
     }
   }
 };

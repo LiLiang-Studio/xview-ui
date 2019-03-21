@@ -5,6 +5,7 @@
 export function getDefaultProps() {
   return {
     title: String,
+    content: String,
     closable: {
       type: Boolean,
       default: true

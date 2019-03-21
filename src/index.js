@@ -1,6 +1,7 @@
 import './styles/ionicons.css'
 import './styles/base.less'
 import { NoticeManager } from './utils/vueFunc'
+import { createModal } from './components/modal'
 
 // 警告提示
 import Alert from './components/Alert'
@@ -70,5 +71,7 @@ export default {
     Vue.prototype.$Message = new NoticeManager(Vue, Message, 'ui-message-wrapper')
     // 通知提醒对象
     Vue.prototype.$Notice = new NoticeManager(Vue, Notice, 'ui-notice-wrapper', { duration: 4.5 })
+    // 标准对话框
+    Vue.prototype.$Modal = createModal(Vue)
   }
 }

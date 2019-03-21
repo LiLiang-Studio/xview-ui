@@ -1,10 +1,10 @@
 # vueui-widgets
 
-### 与iview功能几乎一样的Vuejs UI库，但这更轻量级，部分组件可能实现的更好；
+### 与iview功能几乎一样的Vuejs UI库，但这更轻量级，部分组件可能实现的更好；用更少的代码完成更多的功能是我的目标；
+
+demo地址(不完善) (https://liliangabc.github.io/vuewidgets)
 
 ```
-  npm install vueui-widgets
-
   import Vue from 'vue'
   import VueUI from 'vueui-widgets'
   import 'vueui-widgets/dist/vueui.css'
@@ -36,6 +36,20 @@
 17. Progress
 18. Collapse
 19. Panel
+20. Modal
+
+#### 0.1.6版本更新
+新增Modal组件
+
+该组件既可以再模板中使用，亦可以通过添加到Vue实例的$Modal对象使用
+对象用法如下：
+
+ + this.$Modal.info(config)
+ + this.$Modal.success(config)
+ + this.$Modal.warning(config)
+ + this.$Modal.error(config)
+ + this.$Modal.confirm(config)
+ + this.$Modal.remove()  // 全局关闭对话框
 
 #### 0.1.5版本更新
 
@@ -74,8 +88,8 @@
   this.$Notice.config(options)
   this.$Notice.destroy(options)
 ```
-
-详细文档请暂时参见iview(http://www.iviewui.com/)
+很抱歉，因精力有限，目前专注于开发新组件，文档暂时没充足时间编写，
+详细文档请暂时参见iview (http://www.iviewui.com/)
 
 
 更多组件正在开发的路上，敬请期待...

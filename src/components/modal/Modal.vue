@@ -1,11 +1,13 @@
 <template>
-  <UiModalView v-bind="this.$props" v-show="visible" :style="{zIndex}" :loading="isLoading"
-    @ok="handleOK" @close="handleClose" @cancel="handleCancel">
-    <slot></slot>
-    <slot slot="close" name="close"></slot>
-    <slot slot="header" name="header"></slot>
-    <slot slot="footer" name="footer"></slot>
-  </UiModalView>
+  <transition name="ui-modal">
+    <UiModalView v-bind="this.$props" v-if="visible" :style="{zIndex}" :loading="isLoading"
+      @ok="handleOK" @close="handleClose" @cancel="handleCancel">
+      <slot></slot>
+      <slot slot="close" name="close"></slot>
+      <slot slot="header" name="header"></slot>
+      <slot slot="footer" name="footer"></slot>
+    </UiModalView>
+  </transition>
 </template>
 <script>
 import UiModalView from './ModalView'

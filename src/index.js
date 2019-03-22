@@ -2,6 +2,7 @@ import './styles/ionicons.css'
 import './styles/base.less'
 import { NoticeManager } from './utils/vueFunc'
 import { createModal } from './components/modal'
+import { createDirectives } from './directives'
 
 // 警告提示
 import Alert from './components/Alert'
@@ -33,6 +34,9 @@ import TimelineItem from './components/timeline/TimelineItem'
 // 折叠面板
 import Collapse from './components/collapse/Collapse'
 import Panel from './components/collapse/Panel'
+// 面包屑导航
+import Breadcrumb from './components/breadcrumb/Breadcrumb'
+import BreadcrumbItem from './components/breadcrumb/BreadcrumbItem'
 
 // 消息提示
 import Message from './components/Message'
@@ -59,7 +63,9 @@ const comps = {
   TimelineItem,
   Collapse,
   Panel,
-  Modal
+  Modal,
+  Breadcrumb,
+  BreadcrumbItem
 }
 
 export default {
@@ -73,5 +79,7 @@ export default {
     Vue.prototype.$Notice = new NoticeManager(Vue, Notice, 'ui-notice-wrapper', { duration: 4.5 })
     // 标准对话框
     Vue.prototype.$Modal = createModal(Vue)
+    // 全局指令
+    createDirectives(Vue)
   }
 }

@@ -1,8 +1,10 @@
 # vueui-widgets
 
-### 与iview功能几乎一样的Vuejs UI库，但这更轻量级，部分组件可能实现的更好；用更少的代码完成更多的功能是我的目标；
+### 基于Vuejs 2.x的高性能，轻量级组件库
 
-demo地址(不完善) (https://liliangabc.github.io/vuewidgets)
+### 与iview功能几乎一样，但这更轻量级，部分组件可能实现的更好；用更少的代码完成更多的功能是我的目标；
+
+demo地址(不完善) [https://liliangabc.github.io/vuewidgets](https://liliangabc.github.io/vuewidgets)
 
 ```
   import Vue from 'vue'
@@ -37,11 +39,39 @@ demo地址(不完善) (https://liliangabc.github.io/vuewidgets)
 18. Collapse
 19. Panel
 20. Modal
+21. breadcrumb
+22. breadcrumbItem
+
+#### 0.1.7版本更新
++ 新增breadcrumb， breadcrumbItem导航组件
++ 新增resize，scroll 指令， 二者都绑定一个Function，window大小改变或滚动会调用该Function，用法如下： 
+
+```
+  <template>
+    <div>
+      <div v-resize="handleResize"></div>
+      <div v-scroll="handleScroll"></div>
+    </div>
+  </template>
+
+  <script>
+    export default {
+      methods: {
+        handleResize(event) {
+
+        },
+        handleScroll(event) {
+
+        }
+      }
+    }
+  </script>
+```
 
 #### 0.1.6版本更新
 新增Modal组件
 
-该组件既可以再模板中使用，亦可以通过添加到Vue实例的$Modal对象使用
+该组件既可以在模板中使用，亦可以通过添加到Vue实例的$Modal对象使用
 对象用法如下：
 
  + this.$Modal.info(config)
@@ -88,8 +118,10 @@ demo地址(不完善) (https://liliangabc.github.io/vuewidgets)
   this.$Notice.config(options)
   this.$Notice.destroy(options)
 ```
+***该组件库兼容IE10以上，如果你要考虑IE9的兼容，请谨慎选择！***
+
 很抱歉，因精力有限，目前专注于开发新组件，文档暂时没充足时间编写，
-详细文档请暂时参见iview (http://www.iviewui.com/)
+详细文档请暂时参见iview [http://www.iviewui.com/](http://www.iviewui.com/)
 
 
 更多组件正在开发的路上，敬请期待...

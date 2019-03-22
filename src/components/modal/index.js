@@ -1,5 +1,5 @@
 /**
- * 对话框模块
+ * 通用对话框模块
  */
 
 import UiDialog from './Dialog.vue'
@@ -7,7 +7,7 @@ import { setMaxZIndex, isFunc, winScrollLock } from './../../utils'
 
 /**
  * 创建对话框
- * @param {Vue} Vue 
+ * @param {Vue.VueConstructor} Vue 
  */
 export function createModal(Vue) {
   return {
@@ -50,9 +50,6 @@ export function createModal(Vue) {
                 cancel: () => {
                   this.close()
                   isFunc(onCancel) && onCancel()
-                },
-                leave: () => {
-                  console.log('离开啦')
                 }
               }
             })

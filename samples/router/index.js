@@ -21,7 +21,8 @@ export const routeArray = [
   'Tag',
   'Timeline',
   'Collapse',
-  'Modal'
+  'Modal',
+  'Breadcrumb'
 ]
 
 export default new Router({

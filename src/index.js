@@ -37,6 +37,9 @@ import Panel from './components/collapse/Panel'
 // 面包屑导航
 import Breadcrumb from './components/breadcrumb/Breadcrumb'
 import BreadcrumbItem from './components/breadcrumb/BreadcrumbItem'
+// 轮播切换
+import Swiper from './components/swiper/Swiper'
+import SwiperItem from './components/swiper/SwiperItem'
 
 // 消息提示
 import Message from './components/Message'
@@ -65,7 +68,9 @@ const comps = {
   Panel,
   Modal,
   Breadcrumb,
-  BreadcrumbItem
+  BreadcrumbItem,
+  Swiper,
+  SwiperItem
 }
 
 export default {

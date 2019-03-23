@@ -41,8 +41,15 @@ demo地址(不完善) [https://liliangabc.github.io/vuewidgets](https://lilianga
 20. Modal
 21. breadcrumb
 22. breadcrumbItem
+23. Swiper
+24. SwiperItem
+
+#### 0.1.8版本更新
+
+新增Swiper, SwiperItem组件; 对应于iview中的Carousel, CarouselItem，用法完全一样;
 
 #### 0.1.7版本更新
+
 + 新增breadcrumb， breadcrumbItem导航组件
 + 新增resize，scroll 指令， 二者都绑定一个Function，window大小改变或滚动会调用该Function，用法如下： 
 
@@ -69,7 +76,8 @@ demo地址(不完善) [https://liliangabc.github.io/vuewidgets](https://lilianga
 ```
 
 #### 0.1.6版本更新
-新增Modal组件
+
++ 新增Modal组件
 
 该组件既可以在模板中使用，亦可以通过添加到Vue实例的$Modal对象使用
 对象用法如下：

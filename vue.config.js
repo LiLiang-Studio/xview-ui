@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production' ? '/vuewidgets/' : '/',
+  publicPath: process.env.NODE_ENV === 'production' ? '/vueui-widgets/' : '/',
   chainWebpack: config => {
     const types = ['vue-modules', 'vue', 'normal-modules', 'normal']
     types.forEach(type => addStyleResource(config.module.rule('less').oneOf(type)))

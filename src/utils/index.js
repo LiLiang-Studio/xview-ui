@@ -84,6 +84,28 @@ export function findParentByName(vm, name) {
 }
 
 /**
+ * 通过组件名查找所有子组件
+ * @param {Vue.default} vm 
+ * @param {String} name 
+ */
+export function findChildrensByName(vm, name) {
+  let rtnArr = [], nochecked = [...vm.$children]
+  const checkFunc = vm => vm.$options.name === name
+  while (nochecked.length) {
+    let curItem = nochecked.pop()
+    if (checkFunc(curItem)) {
+      rtnArr.push(curItem)
+    } else {
+      curItem.$children.forEach(_ => {
+        nochecked.push(_)
+        if (checkFunc(_)) rtnArr.push(_)
+      })
+    }
+  }
+  return rtnArr
+}
+
+/**
  * 节流控制
  * @param {Function} fn
  * @param {Number} gapTime

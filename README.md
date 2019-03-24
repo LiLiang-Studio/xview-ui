@@ -4,7 +4,7 @@
 
 ### 与iview功能几乎一样，但这更轻量级，部分组件可能实现的更好；用更少的代码完成更多的功能是我的目标；
 
-demo地址(不完善) [https://liliangabc.github.io/vuewidgets](https://liliangabc.github.io/vuewidgets)
+demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://liliangabc.github.io/vueui-widgets)
 
 ```
   import Vue from 'vue'
@@ -43,6 +43,10 @@ demo地址(不完善) [https://liliangabc.github.io/vuewidgets](https://lilianga
 22. breadcrumbItem
 23. Swiper
 24. SwiperItem
+
+#### 0.1.9版本更新
+1. 因发现Swiper组件存在bug，和代码实现上的不够完美，紧急修复bug并优化代码逻辑，尺寸计算全部改成百分比，更适应窗口大小的变化;
+2. github仓库地址已变更，现在和包名保持一致;
 
 #### 0.1.8版本更新
 

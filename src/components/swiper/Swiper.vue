@@ -4,9 +4,7 @@
       <UiIcon type="chevron-left"/>
     </button>
     <div class="ui-swiper-list">
-      <div :style="trackStyle" v-resize="handleWinResize">
-        <slot></slot>
-      </div>
+      <div :style="trackStyle"><slot></slot></div>
     </div>
     <button class="ui-swiper-arrow next" :disabled="disabledNext" @click="toNext">
       <UiIcon type="chevron-right"/>
@@ -21,17 +19,18 @@
 </template>
 <script>
 import UiIcon from './../Icon'
+import { findChildrensByName } from './../../utils'
 export default {
-  name: 'ui-swiper',
   components: { UiIcon },
   data() {
     return {
-      children: [],
       trackStyle: {
+        overflow: 'hidden',
         transition: `transform .5s ${this.easing}`,
         height: this.height === 'auto' ? 'auto' : `${parseInt(this.height)}px`
       },
-      curIndex: this.value
+      curIndex: this.value,
+      children: []
     }
   },
   props: {
@@ -97,17 +96,9 @@ export default {
     }
   },
   methods: {
-    addChild(vm) {
-      this.children.push(vm)
-    },
-    getWidth() {
-      return this.$el ? this.$el.offsetWidth : 0
-    },
     toPrev() {
       if (this.curIndex === 0) {
-        if (this.loop) {
-          this.curIndex = this.children.length - 1
-        }
+        if (this.loop) this.curIndex = this.children.length - 1
       } else {
         this.curIndex--
       }
@@ -115,9 +106,7 @@ export default {
     },
     toNext() {
       if (this.curIndex === this.children.length - 1) {
-        if (this.loop) {
-          this.curIndex = 0
-        }
+        if (this.loop) this.curIndex = 0
       } else {
         this.curIndex++
       }
@@ -127,7 +116,7 @@ export default {
       this.$emit('on-change', oldVal, newVal)
       this.trackStyle = {
         ...this.trackStyle,
-        transform: `translateX(${-newVal * this.$el.offsetWidth}px)`
+        transform: `translateX(${-(newVal / this.children.length) * 100}%)`
       }
     },
     handleDotEvent(index, event) {
@@ -140,29 +129,22 @@ export default {
       }
     },
     startTimer() {
-      if (this.autoplay) {
-        this.tid = setInterval(this.toNext, this.autoplaySpeed)
-      }
+      if (this.autoplay) this.tid = setInterval(this.toNext, this.autoplaySpeed)
     },
     stopTimer() {
       clearInterval(this.tid)
     },
     setTrackStyle() {
-      this.trackStyle = { ...this.trackStyle, width: `${this.getWidth() * this.children.length}px` }
-    },
-    handleWinResize() {
-      this.setTrackStyle()
-      this.handleIndexChange(this.curIndex)
-      this.$nextTick(() => {
-        this.children.forEach(item =>
-          item.styles = { width: `${this.getWidth()}px`
-        })
-      })
+      this.children = findChildrensByName(this, 'ui-swiper-item')
+      let len = this.children.length
+      this.trackStyle = { ...this.trackStyle, width: `${100 * len}%` }
+      this.children.forEach(item => item.$el.style.width = `${(1 / len) * 100}%`)
+      this.handleIndexChange(this.curIndex, this.curIndex)
     }
   },
   mounted() {
-    this.$nextTick(this.setTrackStyle)
     this.startTimer()
+    this.$nextTick(this.setTrackStyle)
   },
   beforeDestroy() {
     this.stopTimer()

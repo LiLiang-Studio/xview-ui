@@ -40,6 +40,9 @@ import BreadcrumbItem from './components/breadcrumb/BreadcrumbItem'
 // 轮播切换
 import Swiper from './components/swiper/Swiper'
 import SwiperItem from './components/swiper/SwiperItem'
+// 网格布局
+import Row from './components/grid/Row'
+import Col from './components/grid/Col'
 
 // 消息提示
 import Message from './components/Message'
@@ -70,7 +73,9 @@ const comps = {
   Breadcrumb,
   BreadcrumbItem,
   Swiper,
-  SwiperItem
+  SwiperItem,
+  Row,
+  Col
 }
 
 export default {

@@ -15,7 +15,8 @@ export default {
 <style lang="less">
 #app {
   padding: 30px 0;
-  padding-left: 256px;
+  padding-left: 220px;
+  font-size: 14px;
 }
 .page-title {
   margin-bottom: 30px;
@@ -34,8 +35,8 @@ export default {
   top: 0;
   bottom: 0;
   left: 0;
-  width: 256px;
-  min-width: 256px;
+  width: 220px;
+  min-width: 220px;
   background-color: #fff;
   border-right: 1px solid #f2f2f2;
   overflow: auto;

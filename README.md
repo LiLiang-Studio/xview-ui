@@ -43,6 +43,11 @@ demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://lilia
 22. breadcrumbItem
 23. Swiper
 24. SwiperItem
+25. Row
+26. Col
+
+#### 0.2.0版本更新
+新增Row，Col组件，用来实现与boostrap一致的响应式网格布局
 
 #### 0.1.9版本更新
 1. 因发现Swiper组件存在bug，和代码实现上的不够完美，紧急修复bug并优化代码逻辑，尺寸计算全部改成百分比，更适应窗口大小的变化;

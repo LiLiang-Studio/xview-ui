@@ -20,6 +20,7 @@ export default {
 </script>
 <style lang="less">
 .com-sidebar-nav {
+  padding-bottom: 30px;
   .title {
     padding: 0 12px;
     line-height: 48px;

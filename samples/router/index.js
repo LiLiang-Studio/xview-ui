@@ -7,6 +7,7 @@ Vue.use(Router)
 
 export const routeArray = [
   'Grid',
+  'Layout',
   'Swiper',
   'Alert',
   'Avator',

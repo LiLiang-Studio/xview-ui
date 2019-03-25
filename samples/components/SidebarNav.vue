@@ -24,7 +24,7 @@ export default {
   .title {
     padding: 0 12px;
     line-height: 48px;
-    font-size: 16px;
+    font-size: 15px;
     color: #1c2438;
     font-weight: bold;
   }

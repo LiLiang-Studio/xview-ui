@@ -1,6 +1,6 @@
 {
   "name": "vueui-widgets",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": false,
   "main": "dist/vueui.common.js",
   "author": {

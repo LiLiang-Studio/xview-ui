@@ -43,6 +43,12 @@ import SwiperItem from './components/swiper/SwiperItem'
 // 网格布局
 import Row from './components/grid/Row'
 import Col from './components/grid/Col'
+// 布局
+import Layout from './components/layout/Layout'
+import Header from './components/layout/Header'
+import Content from './components/layout/Content'
+import Footer from './components/layout/Footer'
+import Sider from './components/layout/Sider'
 
 // 消息提示
 import Message from './components/Message'
@@ -75,7 +81,12 @@ const comps = {
   Swiper,
   SwiperItem,
   Row,
-  Col
+  Col,
+  Layout,
+  Header,
+  Content,
+  Footer,
+  Sider
 }
 
 export default {

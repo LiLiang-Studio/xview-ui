@@ -45,6 +45,14 @@ demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://lilia
 24. SwiperItem
 25. Row
 26. Col
+27. Layout
+28. Header
+29. Content
+30. Footer
+31. Sider
+
+#### 0.2.1版本更新
+新增Layout，Header，Content，Footer，Sider组件，除了Sider不支持breakpoint属性，其它与iview完全一致；
 
 #### 0.2.0版本更新
 新增Row，Col组件，用来实现与boostrap一致的响应式网格布局

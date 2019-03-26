@@ -49,6 +49,9 @@ import Header from './components/layout/Header'
 import Content from './components/layout/Content'
 import Footer from './components/layout/Footer'
 import Sider from './components/layout/Sider'
+// 单选按钮
+import Radio from './components/radio/Radio'
+import RadioGroup from './components/radio/RadioGroup'
 
 // 消息提示
 import Message from './components/Message'
@@ -86,7 +89,9 @@ const comps = {
   Header,
   Content,
   Footer,
-  Sider
+  Sider,
+  Radio,
+  RadioGroup
 }
 
 export default {

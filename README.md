@@ -1,6 +1,6 @@
 # vueui-widgets
 
-### 基于Vuejs 2.x的高性能，轻量级组件库
+### 基于Vuejs 2.x的高性能且轻量级的组件库
 
 ### 与iview功能几乎一样，但这更轻量级，部分组件可能实现的更好；用更少的代码完成更多的功能是我的目标；
 
@@ -50,6 +50,11 @@ demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://lilia
 29. Content
 30. Footer
 31. Sider
+32. Radio
+33. RadioGroup
+
+#### 0.2.2版本更新
+新增Radio，RadioGroup组件
 
 #### 0.2.1版本更新
 新增Layout，Header，Content，Footer，Sider组件，除了Sider不支持breakpoint属性，其它与iview完全一致；

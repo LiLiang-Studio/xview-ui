@@ -16,7 +16,10 @@ export default {
 #app {
   padding: 30px 0;
   padding-left: 220px;
+}
+p {
   font-size: 14px;
+  margin-bottom: 15px;
 }
 .page-title {
   margin-bottom: 30px;

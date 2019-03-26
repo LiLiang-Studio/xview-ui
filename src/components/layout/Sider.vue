@@ -54,6 +54,7 @@ export default {
       if (!(this.defaultCollapsed || this.collapsible)) return
       this.isCollapsed = !this.isCollapsed
       this.$emit('input', this.isCollapsed)
+      this.$emit('on-change', this.isCollapsed)
     }
   }
 }

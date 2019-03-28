@@ -1,12 +1,12 @@
 # vueui-widgets
 
-### 基于Vuejs 2.x的高性能且轻量级的组件库
+### 基于Vuejs 2.x的高性能轻量级的组件库
 
-### 与iview功能几乎一样，但这更轻量级，部分组件可能实现的更好；用更少的代码完成更多的功能是我的目标；
+### 与iview功能和用法几乎一样，但这更轻量级，性能更有优势；
 
 demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://liliangabc.github.io/vueui-widgets)
 
-```
+```javascript
   import Vue from 'vue'
   import VueUI from 'vueui-widgets'
   import 'vueui-widgets/dist/vueui.css'
@@ -52,30 +52,34 @@ demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://lilia
 31. Sider
 32. Radio
 33. RadioGroup
+34. ISwitch
 
-#### 0.2.2版本更新
+#### 0.2.3版本更新（2019年3月28日）
+新增ISwitch组件，对应iview中的Switch组件，用法完全一样；
+
+#### 0.2.2版本更新（2019年3月27日）
 新增Radio，RadioGroup组件
 
-#### 0.2.1版本更新
+#### 0.2.1版本更新（2019年3月26日）
 新增Layout，Header，Content，Footer，Sider组件，除了Sider不支持breakpoint属性，其它与iview完全一致；
 
-#### 0.2.0版本更新
+#### 0.2.0版本更新（2019年3月25日）
 新增Row，Col组件，用来实现与boostrap一致的响应式网格布局
 
-#### 0.1.9版本更新
+#### 0.1.9版本更新（2019年3月25日）
 1. 因发现Swiper组件存在bug，和代码实现上的不够完美，紧急修复bug并优化代码逻辑，尺寸计算全部改成百分比，更适应窗口大小的变化;
 2. github仓库地址已变更，现在和包名保持一致;
 
-#### 0.1.8版本更新
+#### 0.1.8版本更新（2019年3月24日）
 
 新增Swiper, SwiperItem组件; 对应于iview中的Carousel, CarouselItem，用法完全一样;
 
-#### 0.1.7版本更新
+#### 0.1.7版本更新（2019年3月23日）
 
 + 新增breadcrumb， breadcrumbItem导航组件
 + 新增resize，scroll 指令， 二者都绑定一个Function，window大小改变或滚动会调用该Function，用法如下： 
 
-```
+```javascript
   <template>
     <div>
       <div v-resize="handleResize"></div>
@@ -97,7 +101,7 @@ demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://lilia
   </script>
 ```
 
-#### 0.1.6版本更新
+#### 0.1.6版本更新（2019年3月22日）
 
 + 新增Modal组件
 

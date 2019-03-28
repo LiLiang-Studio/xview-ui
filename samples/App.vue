@@ -19,7 +19,6 @@ export default {
 }
 p {
   font-size: 14px;
-  margin-bottom: 15px;
 }
 .page-title {
   margin-bottom: 30px;

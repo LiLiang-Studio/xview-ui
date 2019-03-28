@@ -6,6 +6,7 @@ const _require = name => require(`../pages/${name}.vue`).default
 Vue.use(Router)
 
 export const routeArray = [
+  'Switch',
   'Radio',
   'Grid',
   'Layout',
@@ -38,7 +39,7 @@ export default new Router({
       path: '/samples',
       component: _require('HomeRouter'),
       children: [
-        { path: '', redirect: 'Alert' },
+        { path: '', redirect: 'Switch' },
         ...routeArray.map(_ => ({ path: _, name: _, component: _require(_) }))
       ]
     }

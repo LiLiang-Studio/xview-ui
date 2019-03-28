@@ -52,6 +52,8 @@ import Sider from './components/layout/Sider'
 // 单选按钮
 import Radio from './components/radio/Radio'
 import RadioGroup from './components/radio/RadioGroup'
+// 开关
+import ISwitch from './components/ISwitch'
 
 // 消息提示
 import Message from './components/Message'
@@ -91,7 +93,8 @@ const comps = {
   Footer,
   Sider,
   Radio,
-  RadioGroup
+  RadioGroup,
+  ISwitch
 }
 
 export default {

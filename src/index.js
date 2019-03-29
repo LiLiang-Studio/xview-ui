@@ -1,5 +1,6 @@
 import './styles/ionicons.css'
 import './styles/base.less'
+import './utils/polyfill'
 import { NoticeManager } from './utils/vueFunc'
 import { createModal } from './components/modal'
 import { createDirectives } from './directives'
@@ -54,6 +55,9 @@ import Radio from './components/radio/Radio'
 import RadioGroup from './components/radio/RadioGroup'
 // 开关
 import ISwitch from './components/ISwitch'
+// 标签页
+import Tabs from './components/tabs/Tabs'
+import TabPane from './components/tabs/TabPane'
 
 // 消息提示
 import Message from './components/Message'
@@ -94,7 +98,9 @@ const comps = {
   Sider,
   Radio,
   RadioGroup,
-  ISwitch
+  ISwitch,
+  Tabs,
+  TabPane
 }
 
 export default {

@@ -53,6 +53,11 @@ demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://lilia
 32. Radio
 33. RadioGroup
 34. ISwitch
+35. Tabs
+36. TabPane
+
+#### 0.2.4版本更新（2019年3月30日）
+新增Tabs，TabPane组件
 
 #### 0.2.3版本更新（2019年3月28日）
 新增ISwitch组件，对应iview中的Switch组件，用法完全一样；

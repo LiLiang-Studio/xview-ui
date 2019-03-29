@@ -145,3 +145,12 @@ export const winScrollLock = {
     document.body.style.paddingRight = document.body.style.overflow = ''
   }
 }
+
+export const RenderCell = {
+  name: 'ui-render',
+  functional: true,
+  props: {
+    render: Function
+  },
+  render: (h, ctx) => ctx.props.render(h)
+}

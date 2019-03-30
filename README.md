@@ -55,6 +55,10 @@ demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://lilia
 34. ISwitch
 35. Tabs
 36. TabPane
+37. Spin
+
+#### 0.2.5版本更新（2019年3月30日）
+新增Spin组件
 
 #### 0.2.4版本更新（2019年3月30日）
 新增Tabs，TabPane组件

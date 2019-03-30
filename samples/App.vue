@@ -7,10 +7,10 @@
   </div>
 </template>
 <script>
-import SidebarNav from './components/SidebarNav'
+import SidebarNav from "./components/SidebarNav";
 export default {
   components: { SidebarNav }
-}
+};
 </script>
 <style lang="less">
 #app {

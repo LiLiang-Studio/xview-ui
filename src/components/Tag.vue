@@ -1,5 +1,5 @@
 <template>
-  <transition :name="fade && 'fade'">
+  <transition :name="fade && 'ui-fade'">
     <div class="ui-tag" @click="handleClick">
       <div class="ui-tag-wrapper" :class="[colorClass, type, {isChecked}]" :style="{backgroundColor}">
         <span v-if="type === 'dot'" class="ui-tag-dot"></span>

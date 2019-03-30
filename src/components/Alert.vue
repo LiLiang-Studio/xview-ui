@@ -1,5 +1,5 @@
 <template>
-  <transition name="fade">
+  <transition name="ui-fade">
     <div class="ui-alert" v-if="visible" :class="[type, { closable, showIcon, hasDesc }]">
       <UiIcon v-if="showIcon" class="ui-alert-icon" :type="iconType"/>
       <div class="ui-alert-body">

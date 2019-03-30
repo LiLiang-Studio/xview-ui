@@ -1,5 +1,5 @@
 <template>
-  <transition name="fade">
+  <transition name="ui-fade">
     <div v-if="visible" class="ui-back-top" :style="styles" @click="handleClick">
       <slot>
         <UiIcon class="ui-back-top-icon" type="ios-arrow-up"/>

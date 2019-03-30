@@ -65,6 +65,8 @@ import Message from './components/Message'
 import Notice from './components/Notice'
 // 模态框
 import Modal from './components/modal/Modal'
+// 加载中
+import Spin, { createSpin } from './components/spin'
 
 const comps = {
   Alert,
@@ -100,7 +102,8 @@ const comps = {
   RadioGroup,
   ISwitch,
   Tabs,
-  TabPane
+  TabPane,
+  Spin
 }
 
 export default {
@@ -114,6 +117,8 @@ export default {
     Vue.prototype.$Notice = new NoticeManager(Vue, Notice, 'ui-notice-wrapper', { duration: 4.5 })
     // 标准对话框
     Vue.prototype.$Modal = createModal(Vue)
+    // 加载中对象
+    Vue.prototype.$Spin = createSpin(Vue)
     // 全局指令
     createDirectives(Vue)
   }

@@ -58,6 +58,8 @@ import ISwitch from './components/ISwitch'
 // 标签页
 import Tabs from './components/tabs/Tabs'
 import TabPane from './components/tabs/TabPane'
+// 穿梭框
+import Transfer from './components/Transfer'
 
 // 消息提示
 import Message from './components/Message'
@@ -103,7 +105,8 @@ const comps = {
   ISwitch,
   Tabs,
   TabPane,
-  Spin
+  Spin,
+  Transfer
 }
 
 export default {

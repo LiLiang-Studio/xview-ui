@@ -1,51 +1,82 @@
 <template>
   <div class="ui-transfer">
-    <div class="ui-transfer-list" :style="listStyle">
+    <div class="ui-transfer-list" :style="boxStyle">
       <div class="ui-transfer-list-header">
-        <ui-checkbox v-model="selectAllOfLeft" @on-change="toggleSelectAllOfLeft">{{titles[0]}}</ui-checkbox>
+        <ui-checkbox v-model="selectAllOfLeft" :disabled="diaabledSelectAllOfLeft" @on-change="toggleSelectAllOfLeft">
+          {{titles[0]}}
+        </ui-checkbox>
         <span>{{leftCountText}}</span>
       </div>
       <div class="ui-transfer-list-body">
-        <ul class="ui-transfer-list-content">
-          <li class="ui-transfer-list-content-item" v-for="item in leftData" :key="item.key">
-            <ui-checkbox v-model="item.checked" :disabled="item.disabled" @on-change="handleSelectedChange">
-              {{renderItem(item)}}
-            </ui-checkbox>
-          </li>
+        <div class="ui-transfer-search" v-if="filterable">
+          <UiInput size="small" clearable v-model.trim="leftSearchValue" :placeholder="filterPlaceholder"/>
+        </div>
+        <ul class="ui-transfer-list-content" :style="listStyle">
+          <template v-if="leftTargetData.length">
+            <li class="ui-transfer-list-content-item" v-for="item in leftTargetData" :title="renderItem(item)" :key="item.key">
+              <ui-checkbox v-model="item.checked" :disabled="item.disabled" @on-change="handleSelectedChange">
+                {{renderItem(item)}}
+              </ui-checkbox>
+            </li>
+          </template>
+          <li v-else class="ui-transfer-list-content-empty">{{notFoundText}}</li>
         </ul>
       </div>
+      <div v-if="hasSlot" class="ui-transfer-list-footer"><slot></slot></div>
     </div>
     <div class="ui-transfer-operation">
-      <ui-button type="primary" size="small" icon="ios-arrow-left" :disabled="disabledLeft" @click="moveToLeft"></ui-button>
-      <ui-button type="primary" size="small" icon="ios-arrow-right" :disabled="disabledRight" @click="moveToRight"></ui-button>
+      <ui-button type="primary" size="small" v-if="operations[0]" :disabled="disabledLeft" @click="moveToLeft">
+        <UiIcon type="ios-arrow-left"/>
+        {{operations[0]}}
+      </ui-button>
+      <ui-button v-else type="primary" size="small" icon="ios-arrow-left" :disabled="disabledLeft" @click="moveToLeft"></ui-button>
+      <ui-button type="primary" size="small" v-if="operations[1]" :disabled="disabledRight" @click="moveToRight">
+        {{operations[1]}}
+        <UiIcon type="ios-arrow-right"/>
+      </ui-button>
+      <ui-button v-else type="primary" size="small" icon="ios-arrow-right" :disabled="disabledRight" @click="moveToRight"></ui-button>
     </div>
-    <div class="ui-transfer-list" :style="listStyle">
+    <div class="ui-transfer-list" :style="boxStyle">
       <div class="ui-transfer-list-header">
-        <ui-checkbox v-model="selectAllOfRight" @on-change="toggleSelectAllOfRight">{{titles[1]}}</ui-checkbox>
+        <ui-checkbox v-model="selectAllOfRight" :disabled="disabledSelectAllOfRight" @on-change="toggleSelectAllOfRight">
+          {{titles[1]}}
+        </ui-checkbox>
         <span>{{rightCountText}}</span>
       </div>
       <div class="ui-transfer-list-body">
-        <ul class="ui-transfer-list-content">
-          <li class="ui-transfer-list-content-item" v-for="item in rightData" :key="item.key">
-            <ui-checkbox v-model="item.checked" :disabled="item.disabled" @on-change="handleSelectedChange">
-              {{renderItem(item)}}
-            </ui-checkbox>
-          </li>
+        <div class="ui-transfer-search" v-if="filterable">
+          <UiInput size="small" clearable v-model.trim="rightSearchValue" :placeholder="filterPlaceholder"/>
+        </div>
+        <ul class="ui-transfer-list-content" :style="listStyle">
+          <template v-if="rightTargetData.length">
+            <li class="ui-transfer-list-content-item" v-for="item in rightTargetData" :title="renderItem(item)" :key="item.key">
+              <ui-checkbox v-model="item.checked" :disabled="item.disabled" @on-change="handleSelectedChange">
+                {{renderItem(item)}}
+              </ui-checkbox>
+            </li>
+          </template>
+          <li v-else class="ui-transfer-list-content-empty">{{notFoundText}}</li>
         </ul>
       </div>
+      <div v-if="hasSlot" class="ui-transfer-list-footer"><slot></slot></div>
     </div>
   </div>
 </template>
 <script>
 import UiButton from './button/Button'
 import UiCheckbox from './checkbox/Checkbox'
+import UiInput from './Input'
+import UiIcon from './Icon'
 export default {
-  components: { UiButton, UiCheckbox },
+  components: { UiButton, UiCheckbox, UiInput, UiIcon },
   data() {
     return {
       selectAllOfLeft: false,
       selectAllOfRight: false,
-      selectedData: { left: [], right: [] }
+      leftSearchValue: '',
+      rightSearchValue: '',
+      selectedData: { left: [], right: [] },
+      hasSlot: false
     }
   },
   props: {
@@ -61,6 +92,10 @@ export default {
     selectedKeys: {
       type: Array,
       default: () => []
+    },
+    boxStyle: {
+      type: Object,
+      default: () => ({})
     },
     listStyle: {
       type: Object,
@@ -82,7 +117,7 @@ export default {
     filterMethod: Function,
     notFoundText: {
       type: String,
-      default: '列别为空'
+      default: '列表为空'
     }
   },
   computed: {
@@ -100,6 +135,22 @@ export default {
     rightData() {
       return this.convertData.right
     },
+    searchData() {
+      return {
+        left: this.filterMethod ? 
+          this.filterMethod(this.leftData, this.leftSearchValue) : 
+          this.leftData.filter(_ => _.label && _.label.indexOf(this.leftSearchValue) !== -1),
+        right: this.filterMethod ? 
+          this.filterMethod(this.rightData, this.rightSearchValue) : 
+          this.rightData.filter(_ => _.label && _.label.indexOf(this.rightSearchValue) !== -1)
+      }
+    },
+    leftTargetData() {
+      return this.leftSearchValue ? this.searchData.left : this.leftData
+    },
+    rightTargetData() {
+      return this.rightSearchValue ? this.searchData.right : this.rightData
+    },
     leftCountText() {
       let selectedCount = this.selectedData.left.length
       return selectedCount ? `${selectedCount}/${this.leftData.length}` : this.leftData.length
@@ -113,6 +164,17 @@ export default {
     },
     disabledRight() {
       return !this.selectedData.left.length
+    },
+    diaabledSelectAllOfLeft() {
+      return this.leftData.every(_ => _.disabled)
+    },
+    disabledSelectAllOfRight() {
+      return this.rightData.every(_ => _.disabled)
+    }
+  },
+  watch: {
+    targetKeys(newVal) {
+      this.setSelectedData()
     }
   },
   methods: {
@@ -125,6 +187,12 @@ export default {
       this.selectedData = { left, right }
       this.selectAllOfLeft = this.leftData.every(_ => _.disabled || _.checked)
       this.selectAllOfRight = this.rightData.every(_ => _.disabled || _.checked)
+      if (this.leftData.every(_ => _.disabled)) {
+        this.selectAllOfLeft = false
+      }
+      if (this.rightData.every(_ => _.disabled)) {
+        this.selectAllOfRight = false
+      }
     },
     handleSelectedChange() {
       this.setSelectedData()
@@ -152,14 +220,13 @@ export default {
   },
   mounted() {
     this.setSelectedData()
+    this.hasSlot = this.$slots.default !== undefined
   }
 }
 </script>
 <style lang="less">
-.ui-transfer {
-  .ui-checkbox-button {
-    margin-right: 12px;
-  }
+.ui-transfer .ui-checkbox-button {
+  margin-right: 12px;
 }
 
 .ui-transfer-list {
@@ -176,10 +243,15 @@ export default {
   align-items: center;
   justify-content: space-between;
   padding: 8px 16px;
+  background-color: @bg-color;
   border-bottom: 1px solid @border-color;
 }
 
-.ui-transfer-list-body {
+.ui-transfer-search {
+  padding: 8px 8px 0 8px;
+}
+
+.ui-transfer-list-content {
   height: 180px;
   overflow: auto;
   padding: 4px 0;
@@ -190,11 +262,23 @@ export default {
     width: 100%;
     padding: 7px 16px;
     margin-right: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     transition: background-color .2s ease-in-out;
     &:hover:not(.disabled) {
       background-color: #f3f3f3;
     }
   }
+}
+
+.ui-transfer-list-content-empty {
+  text-align: center;
+  color: @disabled-color;
+}
+
+.ui-transfer-list-footer {
+  border-top: 1px solid @border-color;
 }
 
 .ui-transfer-operation {
@@ -204,6 +288,7 @@ export default {
   .ui-button {
     display: block;
     border-radius: 3px;
+    padding: 0 7px;
     + .ui-button {
       margin-top: 12px;
     }

@@ -1,6 +1,6 @@
 # vueui-widgets
 
-### 基于Vuejs 2.x的高性能轻量级的组件库
+### 基于Vuejs 2.x的高性能轻量级组件库
 
 ### 与iview功能和用法几乎一样，但这更轻量级，性能更有优势；
 
@@ -56,6 +56,10 @@ demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://lilia
 35. Tabs
 36. TabPane
 37. Spin
+38. Transfer
+
+#### 0.2.6版本更新（2019年3月31日）
+新增Transfer组件
 
 #### 0.2.5版本更新（2019年3月30日）
 新增Spin组件

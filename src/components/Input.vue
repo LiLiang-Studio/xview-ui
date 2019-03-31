@@ -105,9 +105,6 @@ export default {
   watch: {
     value(newVal) {
       this.inputValue = newVal
-    },
-    inputValue(newVal) {
-      this.$emit('input', newVal)
     }
   },
   methods: {
@@ -116,6 +113,7 @@ export default {
     },
     clear() {
       this.inputValue = ''
+      this.$emit('input', this.inputValue)
     },
     handleInput(event) {
       if (this.isTextarea && this.autosize) {
@@ -125,7 +123,8 @@ export default {
           setAutoHeight(event.target, this.autosize.minRows, this.autosize.maxRows)
         }
       }
-      this.$emit('input', event.target.value)
+      this.inputValue = event.target.value
+      this.$emit('input', this.inputValue)
     },
     handleIconClick(event) {
       this.$emit('on-click', event)

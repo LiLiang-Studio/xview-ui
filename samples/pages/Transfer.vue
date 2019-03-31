@@ -26,7 +26,39 @@
       :target-keys="targetKeys1"
       :render-format="render1"
       @on-change="handleChange1"
-      @on-selected-change="handleSelectedChange"
+    ></Transfer>
+
+    <div class="page-sub-title">通过设置属性 filterable 可以进行搜索，可以自定义搜索函数。</div>
+    <Transfer
+      :data="data2"
+      :target-keys="targetKeys2"
+      filterable
+      :filter-method="filterMethod"
+      @on-change="handleChange2"
+    ></Transfer>
+
+    <div class="page-sub-title">穿梭框高级用法，可以自定义两列的宽高、操作文案，以及底部自定义操作，更多配置见 API。</div>
+    <Transfer
+      :data="data3"
+      :target-keys="targetKeys3"
+      :boxStyle="boxStyle"
+      :list-style="listStyle"
+      :render-format="render3"
+      :operations="['To left','To right']"
+      filterable
+      @on-change="handleChange3"
+    >
+      <div :style="{float: 'right', margin: '5px'}">
+        <Button type="ghost" size="small" @click="reloadMockData">Refresh</Button>
+      </div>
+    </Transfer>
+
+    <div class="page-sub-title">可以通过 render-format 来渲染复杂的数据。</div>
+    <Transfer
+      :data="data4"
+      :target-keys="targetKeys4"
+      :render-format="render4"
+      @on-change="handleChange4"
     ></Transfer>
   </div>
 </template>
@@ -35,7 +67,19 @@ export default {
   data() {
     return {
       data1: this.getMockData(),
-      targetKeys1: this.getTargetKeys()
+      targetKeys1: this.getTargetKeys(),
+      data2: this.getMockData(),
+      targetKeys2: this.getTargetKeys(),
+      data3: this.getMockData(),
+      targetKeys3: this.getTargetKeys(),
+      data4: this.getMockData(),
+      targetKeys4: this.getTargetKeys(),
+      listStyle: {
+        height: "250px"
+      },
+      boxStyle: {
+        width: "250px"
+      }
     };
   },
   methods: {
@@ -65,8 +109,27 @@ export default {
       console.log(moveKeys);
       this.targetKeys1 = newTargetKeys;
     },
-    handleSelectedChange(a, b) {
-      console.log(a, b)
+    handleChange2(newTargetKeys) {
+      this.targetKeys2 = newTargetKeys;
+    },
+    filterMethod(data, query) {
+      return data.filter(_ => _.label.indexOf(query) !== -1);
+    },
+    handleChange3(newTargetKeys) {
+      this.targetKeys3 = newTargetKeys;
+    },
+    render3(item) {
+      return item.label + " - " + item.description;
+    },
+    reloadMockData() {
+      this.data3 = this.getMockData();
+      this.targetKeys3 = this.getTargetKeys();
+    },
+    handleChange4(newTargetKeys) {
+      this.targetKeys4 = newTargetKeys;
+    },
+    render4(item) {
+      return item.label + " - " + item.description;
     }
   }
 };

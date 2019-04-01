@@ -57,6 +57,10 @@ demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://lilia
 36. TabPane
 37. Spin
 38. Transfer
+39. Rate
+
+#### 0.2.7版本更新（2019年4月1日）
+新增Rate组件
 
 #### 0.2.6版本更新（2019年3月31日）
 新增Transfer组件

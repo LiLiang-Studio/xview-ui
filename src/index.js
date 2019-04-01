@@ -60,6 +60,8 @@ import Tabs from './components/tabs/Tabs'
 import TabPane from './components/tabs/TabPane'
 // 穿梭框
 import Transfer from './components/Transfer'
+// 评分
+import Rate from './components/Rate'
 
 // 消息提示
 import Message from './components/Message'
@@ -106,7 +108,8 @@ const comps = {
   Tabs,
   TabPane,
   Spin,
-  Transfer
+  Transfer,
+  Rate
 }
 
 export default {

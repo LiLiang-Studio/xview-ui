@@ -62,6 +62,8 @@ import TabPane from './components/tabs/TabPane'
 import Transfer from './components/Transfer'
 // 评分
 import Rate from './components/Rate'
+// 数值输入框
+import InputNumber from './components/InputNumber'
 
 // 消息提示
 import Message from './components/Message'
@@ -109,7 +111,8 @@ const comps = {
   TabPane,
   Spin,
   Transfer,
-  Rate
+  Rate,
+  InputNumber
 }
 
 export default {

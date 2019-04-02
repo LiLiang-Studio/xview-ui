@@ -58,6 +58,10 @@ demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://lilia
 37. Spin
 38. Transfer
 39. Rate
+40. InputNumber
+
+#### 0.2.8版本更新（2019年4月2日）
+新增InputNumber组件 暂不支持用于格式化数值的 formatter 和 parser属性
 
 #### 0.2.7版本更新（2019年4月1日）
 新增Rate组件

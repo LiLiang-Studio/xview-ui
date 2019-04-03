@@ -59,6 +59,12 @@ demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://lilia
 38. Transfer
 39. Rate
 40. InputNumber
+41. Select
+42. Option
+43. OptionGroup
+
+#### 0.2.9版本更新（2019年4月3日）
+新增Select，Option，OptionGroup组件，暂不支持多选和键盘选择，将在下个版本提供支持
 
 #### 0.2.8版本更新（2019年4月2日）
 新增InputNumber组件 暂不支持用于格式化数值的 formatter 和 parser属性

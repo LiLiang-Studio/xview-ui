@@ -1,15 +1,15 @@
 <template>
-  <div class="ui-option-group">
-    
-  </div>
+  <li class="ui-option-group">
+    <span class="ui-option-group-title">{{label}}</span>
+    <ul>
+      <slot></slot>
+    </ul>
+  </li>
 </template>
 <script>
 export default {
   props: {
-      label: String
+    label: String
   }
 }
 </script>
-<style lang="less">
-
-</style>

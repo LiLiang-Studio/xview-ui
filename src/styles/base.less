@@ -32,6 +32,17 @@ body {
   opacity: 0;
 }
 
+// 下拉动画
+.ui-dropdown-enter-active, .ui-dropdown-leave-active {
+  transform-origin: 0 0;
+  transition: opacity .22s ease-out, transform .22s ease-out;
+}
+
+.ui-dropdown-enter, .ui-dropdown-leave-to {
+  opacity: 0;
+  transform: scaleY(0);
+}
+
 // 消息提示 Y轴平移 and 淡入淡出
 .message-enter-active, .message-leave-active  {
   transition: transform .3s, opacity .3s;

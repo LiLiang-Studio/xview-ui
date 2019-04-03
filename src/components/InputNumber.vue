@@ -1,6 +1,6 @@
 <template>
   <div class="ui-input-number">
-    <UiInput v-model="textValue" :elementId="elementId" :size="size" :disabled="disabled" :readonly="readonly||!editable"
+    <UiInput ref="UiInput" v-model="inputValue" :elementId="elementId" :size="size" :disabled="disabled" :readonly="readonly||!editable"
       @on-keydown="handleKeydown" @on-keypress="handleKeypress" @on-blur="handleBlur"/>
     <div class="ui-input-number-actions" v-if="!disabled">
       <a class="ui-input-number-action" :class="{disabled: disabledAdd}" @click="add">
@@ -19,8 +19,7 @@ export default {
   components: { UiIcon, UiInput },
   data() {
     return {
-      inputValue: this.value,
-      textValue: this.value
+      inputValue: this.setValue(this.value)
     }
   },
   props: {
@@ -71,30 +70,30 @@ export default {
     }
   },
   watch: {
-    textValue(newVal, oldVal) {
-      if (!newVal) return this.inputValue = ''
+    inputValue(newVal, oldVal) {
+      if (!newVal) return
       if (newVal.toString().split('').reverse()[0] === '.') return
-      this.inputValue = +newVal
+      this.$nextTick(() => this.$refs.UiInput.$el.querySelector('input').value = newVal)
+      this.$emit('input', +newVal)
     },
     value(newVal) {
-      this.inputValue = newVal
-      this.textValue = newVal
-    },
-    inputValue(newVal) {
-      this.$emit('input', newVal)
+      this.inputValue = this.setValue(newVal)
     }
   },
   methods: {
+    setValue(val) {
+      return Math.min(Math.max(+val, this.min), this.max)
+    },
     add() {
       if (this.readonly) return
-      if (this.inputValue + this.step <= this.max) {
-        this.inputValue = Number((this.inputValue + this.step).toFixed(this.prec))
+      if (+this.inputValue + this.step <= this.max) {
+        this.inputValue = (+this.inputValue + this.step).toFixed(this.prec)
       }
     },
     minus() {
       if (this.readonly) return
-      if (this.inputValue - this.step >= this.min) {
-        this.inputValue = Number((this.inputValue - this.step).toFixed(this.prec))
+      if (+this.inputValue - this.step >= this.min) {
+        this.inputValue = (+this.inputValue - this.step).toFixed(this.prec)
       }
     },
     handleKeydown(event) {
@@ -116,13 +115,9 @@ export default {
       if (event.keyCode && (event.keyCode < 48 || event.keyCode > 57) && event.keyCode != 8 && event.keyCode != 46) {
         return event.preventDefault()
       }
-      let val = +(value + event.key)
-      if (val > this.max || val < this.min) {
-        return event.preventDefault()
-      }
     },
     handleBlur() {
-      this.textValue = +this.textValue
+      this.inputValue = this.setValue(this.inputValue)
     }
   }
 }
@@ -134,6 +129,9 @@ export default {
   background-color: #fff;
   position: relative;
   &:hover {
+    .ui-input input {
+      border-color: @primary-color;
+    }
     .ui-input-number-actions {
       opacity: 1;
     }

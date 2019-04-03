@@ -64,6 +64,10 @@ import Transfer from './components/Transfer'
 import Rate from './components/Rate'
 // 数值输入框
 import InputNumber from './components/InputNumber'
+// 下拉选择框
+import Select from './components/select/Select'
+import Option from './components/select/Option'
+import OptionGroup from './components/select/OptionGroup'
 
 // 消息提示
 import Message from './components/Message'
@@ -112,7 +116,10 @@ const comps = {
   Spin,
   Transfer,
   Rate,
-  InputNumber
+  InputNumber,
+  Select,
+  Option,
+  OptionGroup
 }
 
 export default {

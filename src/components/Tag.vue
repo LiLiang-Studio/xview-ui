@@ -1,5 +1,5 @@
 <template>
-  <transition :name="fade && 'ui-fade'">
+  <transition v-if="fade" name="ui-fade">
     <div class="ui-tag" @click="handleClick">
       <div class="ui-tag-wrapper" :class="[colorClass, type, {isChecked}]" :style="{backgroundColor}">
         <span v-if="type === 'dot'" class="ui-tag-dot"></span>
@@ -8,6 +8,13 @@
       </div>
     </div>
   </transition>
+  <div v-else class="ui-tag" @click="handleClick">
+    <div class="ui-tag-wrapper" :class="[colorClass, type, {isChecked}]" :style="{backgroundColor}">
+      <span v-if="type === 'dot'" class="ui-tag-dot"></span>
+      <slot></slot>
+      <UiIcon v-if="closable" type="ios-close-empty" @click.native.stop="handleClose"/>
+    </div>
+  </div>
 </template>
 <script>
 import UiIcon from './Icon'

@@ -7,7 +7,7 @@
       基本用法。可以使用 v-model 双向绑定数据。
       <br>单选时，value 只接受字符串和数字类型，多选时，只接受数组类型，组件会自动根据Option的value来返回选中的数据。
       <br>可以给Select添加 style 样式，比如宽度。
-      <!-- <br>在展开选择器后，可以使用键盘的up和down快速上下选择，按下Enter选择，按下Esc收起选择器。 -->
+      <br>在展开选择器后，可以使用键盘的up和down快速上下选择，按下Enter选择，按下Esc收起选择器。
     </div>
     <Select v-model="model1" style="width:200px">
       <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -57,22 +57,82 @@
     <p>对于选项显示内容的逻辑：优先显示 slot 内容，如果没有定义 slot，则显示label的值，如果没有设置 label，则显示value的值。</p>
     <br>
     <Select v-model="model9" style="width:200px">
-      <Option value="New York" label="New York">
+      <Option value="New York" label="纽约">
         <span>New York</span>
         <span style="float:right;color:#ccc">America</span>
       </Option>
-      <Option value="London" label="London">
+      <Option value="London" label="伦敦">
         <span>London</span>
         <span style="float:right;color:#ccc">U.K.</span>
       </Option>
-      <Option value="Sydney" label="Sydney">
+      <Option value="Sydney" label="悉尼">
         <span>Sydney</span>
         <span style="float:right;color:#ccc">Australian</span>
       </Option>
     </Select>
-    <div style="padding:100px;"></div>
 
-    <!-- <div class="page-sub-title">通过设置属性multiple可以开启多选模式。多选模式下，model 接受数组类型的数据，所返回的也是数组。</div> -->
+    <div class="page-sub-title">通过设置属性multiple可以开启多选模式。多选模式下，model 接受数组类型的数据，所返回的也是数组。</div>
+    <Select v-model="model10" multiple style="width:260px">
+      <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+    </Select>
+
+    <div class="page-sub-title">
+      通过设置属性filterable可以开启搜索模式。
+      单选和多选都支持搜索模式。多选搜索时，可以使用键盘Delete快捷删除最后一个已选项。
+    </div>
+    <Row>
+      <Col span="12" style="padding-right:10px">
+        <Select v-model="model11" filterable>
+          <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        </Select>
+      </Col>
+      <Col span="12">
+        <Select v-model="model12" filterable multiple>
+          <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        </Select>
+      </Col>
+    </Row>
+
+    <div class="page-sub-title">远程搜索</div>
+    <p>
+      远程搜索需同时设置 filterable、remote、remote-method、loading 四个 props，其中 loading 用于控制是否正在搜索中，
+      remote-method 是远程搜索的方法。注意：需要给 Option 设置 key。设置初始显示值，需设置 label 属性。本例为美国州名，尝试输入一些字母。
+    </p>
+    <Row>
+      <Col span="12" style="padding-right:10px">
+        <Select
+          v-model="model13"
+          filterable
+          remote
+          :remote-method="remoteMethod1"
+          :loading="loading1"
+        >
+          <Option
+            v-for="(option, index) in options1"
+            :value="option.value"
+            :key="index"
+          >{{option.label}}</Option>
+        </Select>
+      </Col>
+      <Col span="12">
+        <Select
+          v-model="model14"
+          multiple
+          filterable
+          remote
+          :remote-method="remoteMethod2"
+          :loading="loading2"
+        >
+          <Option
+            v-for="(option, index) in options2"
+            :value="option.value"
+            :key="index"
+          >{{option.label}}</Option>
+        </Select>
+      </Col>
+    </Row>
+
+    <div style="padding:100px;"></div>
   </div>
 </template>
 <script>
@@ -141,8 +201,109 @@ export default {
         }
       ],
       model7: "",
-      model9: ""
+      model9: "",
+      model10: [],
+      model11: "",
+      model12: [],
+      model13: "",
+      loading1: false,
+      options1: [],
+      model14: [],
+      loading2: false,
+      options2: [],
+      list: [
+        "Alabama",
+        "Alaska",
+        "Arizona",
+        "Arkansas",
+        "California",
+        "Colorado",
+        "Connecticut",
+        "Delaware",
+        "Florida",
+        "Georgia",
+        "Hawaii",
+        "Idaho",
+        "Illinois",
+        "Indiana",
+        "Iowa",
+        "Kansas",
+        "Kentucky",
+        "Louisiana",
+        "Maine",
+        "Maryland",
+        "Massachusetts",
+        "Michigan",
+        "Minnesota",
+        "Mississippi",
+        "Missouri",
+        "Montana",
+        "Nebraska",
+        "Nevada",
+        "New hampshire",
+        "New jersey",
+        "New mexico",
+        "New york",
+        "North carolina",
+        "North dakota",
+        "Ohio",
+        "Oklahoma",
+        "Oregon",
+        "Pennsylvania",
+        "Rhode island",
+        "South carolina",
+        "South dakota",
+        "Tennessee",
+        "Texas",
+        "Utah",
+        "Vermont",
+        "Virginia",
+        "Washington",
+        "West virginia",
+        "Wisconsin",
+        "Wyoming"
+      ]
     };
+  },
+  methods: {
+    remoteMethod1(query) {
+      if (query !== "") {
+        this.loading1 = true;
+        setTimeout(() => {
+          this.loading1 = false;
+          const list = this.list.map(item => {
+            return {
+              value: item,
+              label: item
+            };
+          });
+          this.options1 = list.filter(
+            item => item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
+          );
+        }, 200);
+      } else {
+        this.options1 = [];
+      }
+    },
+    remoteMethod2(query) {
+      if (query !== "") {
+        this.loading2 = true;
+        setTimeout(() => {
+          this.loading2 = false;
+          const list = this.list.map(item => {
+            return {
+              value: item,
+              label: item
+            };
+          });
+          this.options2 = list.filter(
+            item => item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
+          );
+        }, 200);
+      } else {
+        this.options2 = [];
+      }
+    }
   }
 };
 </script>

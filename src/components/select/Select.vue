@@ -1,23 +1,45 @@
 <template>
   <div class="ui-select" :class="{disabled}" :style="{zIndex}">
-    <div class="ui-select-selection" 
-      :class="[size, {isCollapsed, clearable: clearable && selectedValue, disabled}]" @click="toggleCollapse">
-      <input class="ui-select-input" readonly v-if="!multiple" :placeholder="placeholder" :value="selectedValue">
+    <div class="ui-select-selection" tabindex="-1"
+      :class="[size, {isCollapsed, clearable: clearable && selectedValue, multiple, filterable, disabled}]" 
+      @click="toggleCollapse" @focus="handleFocus">
+      <template v-if="multiple">
+        <ui-tag closable v-for="item in selectedItems" :key="item.value" :fade="false" @on-close="delSelectedItem(item)">
+          {{item.label || item.value}}
+        </ui-tag>
+        <input ref="Input" class="ui-select-search" 
+          v-if="filterable" v-model="searchValue" 
+          :style="multipleInputStyles" :placeholder="multiplePlaceholder" 
+          @blur="handleSearchBlur">
+        <span class="ui-select-search-text" ref="SearchText">{{searchText}}</span>
+      </template>
+      <div class="ui-select-single" v-else>
+        <input ref="Input" class="ui-select-search" 
+          v-if="filterable" v-model="searchValue" :placeholder="placeholder" @blur="handleSearchBlur">
+        <template v-else>
+          <span class="ui-select-label" v-if="selectedLabelOfSingle">{{selectedLabelOfSingle}}</span>
+          <span class="ui-select-placeholder" v-else>{{placeholder}}</span>
+        </template>
+      </div>
       <div class="ui-select-arrow">
         <UiIcon class="ui-select-clear-icon" type="ios-close" @click.native.stop="clearValue"/>
         <UiIcon class="ui-select-down-icon" type="arrow-down-b"/>
       </div>
     </div>
     <transition name="ui-dropdown">
-      <div v-show="isCollapsed" class="ui-select-dropdown">
+      <div v-show="isCollapsed" ref="Dropdown" class="ui-select-dropdown" :class="{multiple}">
+        <div class="ui-select-empty" v-if="isEmpty">
+          {{loading ? loadingText : notFoundText}}
+        </div>
         <ul><slot></slot></ul>
       </div>
     </transition>
   </div>
 </template>
 <script>
+import UiTag from './../Tag'
 import UiIcon from './../Icon'
-import { hasClassNameOfParent, findParentByClassName } from './../../utils'
+import { hasClassNameOfParent, findParentByClassName, isSelfOrParent } from './../../utils'
 
 let currentSelect = null
 
@@ -43,11 +65,13 @@ addDocClickListener()
 
 export default {
   name: 'ui-select',
-  components: { UiIcon },
+  components: { UiTag, UiIcon },
   data() {
     return {
       isCollapsed: false,
-      selectedValue: this.value
+      selectedValue: this.value,
+      children: [],
+      searchValue: this.value instanceof Array ? '' : this.value
     }
   },
   props: {
@@ -83,13 +107,32 @@ export default {
       validator(value) {
         return ['bottom', 'top'].indexOf(value) !== -1
       }
-    },
-    transfer: Boolean,
-    elementId: String
+    }
   },
   computed: {
     zIndex() {
       return this.isCollapsed ? 2 : 1
+    },
+    selectedItems() {
+      return this.children.filter(_ => _.selected)
+    },
+    selectedLabelOfSingle() {
+      let item = this.selectedItems[0]
+      return item ? item.label || item.value : ''
+    },
+    isEmpty() {
+      return this.children.every(_ => _.isDelete)
+    },
+    multipleInputStyles() {
+      return this.selectedItems.length ? { width: '20px' } : {}
+    },
+    multiplePlaceholder() {
+      return this.selectedItems.length === 0 && this.placeholder
+    },
+    searchText() {
+      return this.searchValue.replace(/\s/gm, val => {
+        return '&nbsp;'
+      })
     }
   },
   watch: {
@@ -99,9 +142,30 @@ export default {
     selectedValue(newVal) {
       this.$emit('input', newVal)
       this.$emit('on-change', newVal)
+    },
+    searchValue(newVal) {
+      if (!this.filterable) return
+      if (this.remote) {
+        this.remoteMethod(newVal)
+      } else {
+        let _newVal = ('' + newVal).toLowerCase()
+        this.children.forEach(_ => {
+          let _val = ('' + _.value).toLowerCase()
+          let _label = _.label === undefined ? '' : ('' + _.label).toLowerCase()
+          _.$data.isDelete = _val.indexOf(_newVal) === -1 && _label.indexOf(_newVal) === -1
+        })
+      }
+      if (!this.multiple) return
+      this.$nextTick(() => {
+        this.$refs.Input.style.width = newVal || this.selectedValue.length ? 
+          Math.min(this.$refs.SearchText.offsetWidth, this.$el.offsetWidth - 25) + 'px' : ''
+      })
     }
   },
   methods: {
+    showAll() {
+      this.children.forEach(_ => _.$data.isDelete = false)
+    },
     toggleCollapse() {
       if (this.disabled) return
       this.isCollapsed = !this.isCollapsed
@@ -110,28 +174,52 @@ export default {
           currentSelect.$data.isCollapsed = false
         }
         currentSelect = this
+        this.showAll()
       }
       this.$emit('on-open-change', this.isCollapsed)
     },
     isSelectedChild(value) {
-      return this.selectedValue instanceof Array ? this.selectedValue.indexOf(value) !== -1 : this.selectedValue === value
+      return this.multiple ? this.selectedValue.indexOf(value) !== -1 : this.selectedValue === value
     },
     updateSelectedValue(value) {
-      if (this.selectedValue instanceof Array) {
+      if (this.multiple) {
         let index = this.selectedValue.indexOf(value)
         if (index === -1) {
           this.selectedValue.push(value)
         } else {
           this.selectedValue.splice(index, 1)
         }
+        this.$refs.Input.focus()
       } else {
-        this.selectedValue = value
+        this.selectedValue = this.searchValue = value
+        this.isCollapsed = false
       }
-      this.isCollapsed = false
+    },
+    addChild(vm) {
+      this.children.push(vm)
+    },
+    removeChild(vm) {
+      this.children.splice(this.children.indexOf(vm), 1)
     },
     clearValue() {
       this.selectedValue = ''
       this.isCollapsed = false
+    },
+    delSelectedItem(item) {
+      this.selectedValue.splice(this.selectedValue.indexOf(item.value), 1)
+    },
+    handleFocus() {
+      if (this.filterable) this.$refs.Input.focus()
+    },
+    handleSearchBlur(event) {
+      if (!this.filterable || this.multiple) return
+      let { relatedTarget } = event
+      if (
+        relatedTarget && 
+        (isSelfOrParent(this.$el, relatedTarget) || 
+        isSelfOrParent(this.$refs.Dropdown, relatedTarget))
+      ) return
+      this.searchValue = this.selectedValue
     }
   }
 }
@@ -141,6 +229,7 @@ export default {
   display: inline-block;
   width: 100%;
   position: relative;
+  vertical-align: middle;
 }
 
 .ui-select-selection {
@@ -153,11 +242,26 @@ export default {
   outline: none;
   background-color: #fff;
   transition: all .2s ease-in-out;
+  padding: 0 24px 0 8px;
   &.large {
     height: 36px;
   }
   &.small {
     height: 24px;
+  }
+  &.multiple {
+    height: auto;
+    padding-left: 4px;
+    min-height: 32px;
+    &.large {
+      min-height: 36px;
+    }
+    &.small {
+      min-height: 24px;
+    }
+    .ui-select-search {
+      height: 30px;
+    }
   }
   &:hover:not(.disabled), &.isCollapsed {
     border-color: @primary-color;
@@ -182,6 +286,18 @@ export default {
     }
     background-color: @disabled-bg-color;
   }
+  .ui-tag {
+    margin: 3px 4px 3px 0;
+  }
+}
+
+.ui-select-search-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 20px;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .ui-select-clear-icon {
@@ -202,20 +318,34 @@ export default {
   right: 0;
 }
 
-.ui-select-input {
+.ui-select-single {
+  height: 100%;
+  color: @content-color;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.ui-select-placeholder {
+  color: @disabled-color;
+}
+
+.ui-select-search {
   width: 100%;
   height: 100%;
   outline: none;
   border: none;
-  background-color: transparent;
-  border-radius: 4px;
-  padding: 0 24px 0 8px;
-  cursor: pointer;
   color: @content-color;
   font-size: 12px;
   &::placeholder {
     color: @disabled-color;
   }
+}
+
+.ui-select-empty {
+  text-align: center;
+  font-size: 14px;
+  color: @disabled-color;
 }
 
 .ui-select-arrow {
@@ -238,10 +368,11 @@ export default {
   outline: none;
   cursor: pointer;
   line-height: 1.2;
+  position: relative;
   &:focus:not(.disabled), &:hover:not(.disabled) {
     background-color: @disabled-bg-color;
   }
-  &.selected:not(.disabled) {
+  &.selected:not(.isMultiple):not(.disabled) {
     color: #fff;
     background-color: @primary-color;
   }
@@ -249,6 +380,16 @@ export default {
     color: @disabled-color;
     cursor: not-allowed;
   }
+  &.selected.isMultiple {
+    color: @primary-color;
+  }
+}
+
+.ui-select-option-icon {
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  font-size: 14px;
 }
 
 .ui-option-group-title {

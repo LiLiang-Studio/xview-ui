@@ -189,3 +189,22 @@ export function findParentByClassName(el, clsName) {
   } while (el && el !== document.body)
   return null
 }
+
+/**
+ * 获取元素在页面中的偏移位置
+ * @param {HTMLElement} el
+ */
+export function getOffset(el) {
+  let offset = {
+    top: 0,
+    left: 0,
+    width: el.offsetWidth,
+    height: el.offsetHeight
+  }
+  while (el) {
+    offset.top += el.offsetTop
+    offset.left += el.offsetLeft
+    el = el.offsetParent
+  }
+  return offset
+}

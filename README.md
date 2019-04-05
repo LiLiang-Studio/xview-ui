@@ -63,6 +63,9 @@ demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://lilia
 42. Option
 43. OptionGroup
 
+#### 0.3.0版本更新（2019年4月5日）
+Select组件新增支持多选和键盘选择，以及本地和远程搜索功能，与iview Select用法完全一致
+
 #### 0.2.9版本更新（2019年4月3日）
 新增Select，Option，OptionGroup组件，暂不支持多选和键盘选择，将在下个版本提供支持
 

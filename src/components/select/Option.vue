@@ -1,7 +1,7 @@
 <template>
-  <li class="ui-select-option" v-if="!isDelete" :class="{selected, isMultiple, disabled}" :tabindex="tabindex" @click="handleClick">
+  <li class="ui-select-option" tabindex="-1" v-if="!isDelete" :class="{selected, multiple, focus, disabled}" @click="handleClick">
     <slot>{{label || value}}</slot>
-    <UiIcon v-if="selected && isMultiple" class="ui-select-option-icon" type="android-done"/>
+    <UiIcon v-if="selected && multiple" class="ui-select-option-icon" type="android-done"/>
   </li>
 </template>
 <script>
@@ -12,30 +12,27 @@ export default {
   data() {
     return {
       parent: null,
-      isDelete: false
+      isDelete: false,
+      focus: false
     }
   },
   props: {
     value: [String, Number],
     label: String,
-    disabled: Boolean,
-    tabindex: {
-      type: [Number, String],
-      default: -1
-    }
+    disabled: Boolean
   },
   computed: {
     selected() {
-      return this.parent && this.parent.isSelectedChild(this.value)
+      return this.parent && this.parent.isSelectedChild(this)
     },
-    isMultiple() {
+    multiple() {
       return this.parent && this.parent.multiple
     }
   },
   methods: {
     handleClick() {
       if (this.disabled) return
-      if (this.parent) this.parent.updateSelectedValue(this.value)
+      if (this.parent) this.parent.updateSelectedValue(this)
     }
   },
   mounted() {
@@ -47,3 +44,37 @@ export default {
   }
 }
 </script>
+<style lang="less">
+.ui-select-option {
+  padding: 7px 16px;
+  list-style: none;
+  outline: none;
+  cursor: pointer;
+  line-height: 1.2;
+  position: relative;
+  &.focus:not(.disabled), &:hover:not(.disabled) {
+    background-color: @disabled-bg-color;
+  }
+  &.selected:not(.multiple):not(.disabled) {
+    color: #fff;
+    background-color: @primary-color;
+    &.focus {
+      background-color: darken(@primary-color, 8%);
+    }
+  }
+  &.disabled {
+    color: @disabled-color;
+    cursor: not-allowed;
+  }
+  &.selected.multiple {
+    color: @primary-color;
+  }
+}
+
+.ui-select-option-icon {
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  font-size: 14px;
+}
+</style>

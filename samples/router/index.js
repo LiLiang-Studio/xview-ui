@@ -6,6 +6,9 @@ const _require = name => require(`../pages/${name}.vue`).default
 Vue.use(Router)
 
 export const routeArray = [
+  'Scroll',
+  'ICircle',
+  'Steps',
   'Select',
   'InputNumber',
   'Rate',

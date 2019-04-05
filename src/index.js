@@ -68,6 +68,13 @@ import InputNumber from './components/InputNumber'
 import Select from './components/select/Select'
 import Option from './components/select/Option'
 import OptionGroup from './components/select/OptionGroup'
+// 步骤条
+import Step from './components/step/Step'
+import Steps from './components/step/Steps'
+// 进度环
+import ICircle from './components/ICircle'
+// 无限滚动
+import Scroll from './components/Scroll'
 
 // 消息提示
 import Message from './components/Message'
@@ -119,7 +126,11 @@ const comps = {
   InputNumber,
   Select,
   Option,
-  OptionGroup
+  OptionGroup,
+  Step,
+  Steps,
+  ICircle,
+  Scroll
 }
 
 export default {

@@ -75,6 +75,8 @@ import Steps from './components/step/Steps'
 import ICircle from './components/ICircle'
 // 无限滚动
 import Scroll from './components/scroll/Scroll'
+// 图钉
+import Affix from './components/Affix'
 
 // 消息提示
 import Message from './components/Message'
@@ -130,7 +132,8 @@ const comps = {
   Step,
   Steps,
   ICircle,
-  Scroll
+  Scroll,
+  Affix
 }
 
 export default {

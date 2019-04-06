@@ -66,6 +66,10 @@ demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://lilia
 45. ICircle
 46. Step
 47. Steps
+48. Affix
+
+#### 0.3.2版本更新（2019年4月6日）
+新增Affix组件
 
 #### 0.3.1版本更新（2019年4月6日）
 新增Scroll，ICircle，Step，Steps组件，ICircle对应于iview中的Circle组件

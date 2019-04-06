@@ -74,7 +74,7 @@ import Steps from './components/step/Steps'
 // 进度环
 import ICircle from './components/ICircle'
 // 无限滚动
-import Scroll from './components/Scroll'
+import Scroll from './components/scroll/Scroll'
 
 // 消息提示
 import Message from './components/Message'

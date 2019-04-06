@@ -1,6 +1,6 @@
 # vueui-widgets
 
-### 基于Vuejs 2.x的高性能轻量级组件库
+### 基于Vuejs的高性能轻量级组件库
 
 ### 与iview功能和用法几乎一样，但这更轻量级，性能更有优势；
 
@@ -62,6 +62,13 @@ demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://lilia
 41. Select
 42. Option
 43. OptionGroup
+44. Scroll
+45. ICircle
+46. Step
+47. Steps
+
+#### 0.3.1版本更新（2019年4月6日）
+新增Scroll，ICircle，Step，Steps组件，ICircle对应于iview中的Circle组件
 
 #### 0.3.0版本更新（2019年4月5日）
 Select组件新增支持多选和键盘选择，以及本地和远程搜索功能，与iview Select用法完全一致

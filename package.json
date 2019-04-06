@@ -1,6 +1,6 @@
 {
   "name": "vueui-widgets",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": false,
   "main": "dist/vueui.common.js",
   "author": {
@@ -37,12 +37,13 @@
     "vueui-widgets",
     "vuewidgets",
     "vue-widgets",
-    "vue",
     "components",
     "vueui",
-    "vue-ui"
+    "vue-ui",
+    "front-end",
+    "framework"
   ],
-  "description": "基于Vuejs 2.x，功能和iview相似，但高性能轻量级的组件库",
+  "description": "基于Vuejs的高性能轻量级组件库",
   "homepage": "https://github.com/liliangabc/vueui-widgets",
   "repository": {
     "type": "git",

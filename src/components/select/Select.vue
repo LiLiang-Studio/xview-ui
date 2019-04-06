@@ -59,11 +59,12 @@ let currentSelect = null
  * @param {MouseEvent} event
  */
 function closeSelect(event) {
+  if (!(currentSelect && currentSelect.isCollapsed)) return
   let domSelect = findParentByClassName(event.target, 'ui-select')
   let isDropdown = hasClassNameOfParent(event.target, 'ui-select-dropdown')
   let isDisabled = domSelect && domSelect.classList.contains('disabled')
   if (isDropdown || (domSelect && !isDisabled)) return
-  currentSelect && (currentSelect.$data.isCollapsed = false)
+  currentSelect.$data.isCollapsed = false
 }
 
 /**
@@ -413,6 +414,9 @@ export default {
   },
   mounted() {
     this.updateModel(this.value)
+  },
+  beforeDestroy() {
+    if (currentSelect === this) currentSelect = null
   }
 }
 </script>
@@ -424,7 +428,7 @@ export default {
 }
 
 .ui-select-selection {
-  height: 32px;
+  height: @form-control-normal;
   border: 1px solid @border-color;
   border-radius: 4px;
   cursor: pointer;
@@ -435,23 +439,23 @@ export default {
   transition: all .2s ease-in-out;
   padding: 0 24px 0 8px;
   &.large {
-    height: 36px;
+    height: @form-control-large;
   }
   &.small {
-    height: 24px;
+    height: @form-control-small;
   }
   &.multiple {
     height: auto;
     padding-left: 4px;
-    min-height: 32px;
+    min-height: @form-control-normal;
     &.large {
-      min-height: 36px;
+      min-height: @form-control-large;
     }
     &.small {
-      min-height: 24px;
+      min-height: @form-control-small;
     }
     .ui-select-search {
-      height: 30px;
+      height: @form-control-normal - 2px;
     }
   }
   &:focus:not(.disabled), &:hover:not(.disabled), &.isCollapsed {

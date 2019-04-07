@@ -508,6 +508,17 @@ module.exports = function (it, key) {
 
 /***/ }),
 
+/***/ "08ec":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_10_oneOf_1_0_node_modules_css_loader_index_js_ref_10_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_oneOf_1_2_node_modules_less_loader_dist_cjs_js_ref_10_oneOf_1_3_node_modules_style_resources_loader_lib_index_js_ref_10_oneOf_1_4_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LoadingBar_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("0d38");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_10_oneOf_1_0_node_modules_css_loader_index_js_ref_10_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_oneOf_1_2_node_modules_less_loader_dist_cjs_js_ref_10_oneOf_1_3_node_modules_style_resources_loader_lib_index_js_ref_10_oneOf_1_4_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LoadingBar_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_10_oneOf_1_0_node_modules_css_loader_index_js_ref_10_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_oneOf_1_2_node_modules_less_loader_dist_cjs_js_ref_10_oneOf_1_3_node_modules_style_resources_loader_lib_index_js_ref_10_oneOf_1_4_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LoadingBar_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_10_oneOf_1_0_node_modules_css_loader_index_js_ref_10_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_oneOf_1_2_node_modules_less_loader_dist_cjs_js_ref_10_oneOf_1_3_node_modules_style_resources_loader_lib_index_js_ref_10_oneOf_1_4_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LoadingBar_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "0a0d":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -588,6 +599,13 @@ module.exports = function () {
 /***/ }),
 
 /***/ "0d31":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
+/***/ "0d38":
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
@@ -11935,6 +11953,195 @@ function createSpin(Vue) {
   };
 }
 /* harmony default export */ var spin = (Spin);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6df7c4d9-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/loading-bar/LoadingBar.vue?vue&type=template&id=15e149da&
+var LoadingBarvue_type_template_id_15e149da_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('transition',{attrs:{"name":"ui-loadingbar"},on:{"afterLeave":_vm.handleLeave}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.visible),expression:"visible"}],staticClass:"ui-loadingbar",style:(_vm.styles)},[_c('div',{staticClass:"ui-loadingbar-inner",class:_vm.status,style:(_vm.innerStyles)})])])}
+var LoadingBarvue_type_template_id_15e149da_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/loading-bar/LoadingBar.vue?vue&type=template&id=15e149da&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/loading-bar/LoadingBar.vue?vue&type=script&lang=js&
+
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ var LoadingBarvue_type_script_lang_js_ = ({
+  props: {
+    color: String,
+    failedColor: String,
+    height: {
+      type: Number,
+      default: 2
+    },
+    percent: Number,
+    status: String,
+    zIndex: Number,
+    visible: Boolean
+  },
+  computed: {
+    styles: function styles() {
+      return {
+        height: "".concat(this.height, "px"),
+        zIndex: this.zIndex
+      };
+    },
+    innerStyles: function innerStyles() {
+      return {
+        transform: "scaleX(".concat(this.percent / 100, ")"),
+        backgroundColor: this.status === 'error' ? this.failedColor : this.color
+      };
+    }
+  },
+  methods: {
+    handleLeave: function handleLeave() {
+      this.$emit('leave');
+    }
+  },
+  mounted: function mounted() {
+    document.body.insertBefore(this.$el, document.body.firstChild);
+  }
+});
+// CONCATENATED MODULE: ./src/components/loading-bar/LoadingBar.vue?vue&type=script&lang=js&
+ /* harmony default export */ var loading_bar_LoadingBarvue_type_script_lang_js_ = (LoadingBarvue_type_script_lang_js_); 
+// EXTERNAL MODULE: ./src/components/loading-bar/LoadingBar.vue?vue&type=style&index=0&lang=less&
+var LoadingBarvue_type_style_index_0_lang_less_ = __webpack_require__("08ec");
+
+// CONCATENATED MODULE: ./src/components/loading-bar/LoadingBar.vue
+
+
+
+
+
+
+/* normalize component */
+
+var LoadingBar_component = normalizeComponent(
+  loading_bar_LoadingBarvue_type_script_lang_js_,
+  LoadingBarvue_type_template_id_15e149da_render,
+  LoadingBarvue_type_template_id_15e149da_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var loading_bar_LoadingBar = (LoadingBar_component.exports);
+// CONCATENATED MODULE: ./src/components/loading-bar/index.js
+
+
+/**
+ * 加载条对象
+ */
+
+
+/**
+ * 创建加载条
+ * @param {import("vue").VueConstructor} Vue 
+ */
+
+function createLoadingBar(Vue) {
+  return {
+    create: function create() {
+      return new Vue({
+        data: function data() {
+          return {
+            customOptions: {},
+            options: {
+              percent: 0
+            }
+          };
+        },
+        render: function render(h) {
+          var _this = this;
+
+          return h(loading_bar_LoadingBar, {
+            props: _objectSpread({}, this.options, this.customOptions),
+            on: {
+              leave: function leave() {
+                return _this.options = {
+                  percent: 0
+                };
+              }
+            }
+          });
+        },
+        methods: {
+          update: function update() {
+            var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+            this.options = _objectSpread({}, this.options, options);
+          },
+          config: function config() {
+            var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+            this.customOptions = options;
+          }
+        },
+        beforeDestroy: function beforeDestroy() {
+          this.$el.parentNode.removeChild(this.$el);
+        }
+      }).$mount();
+    },
+    getLoadingBar: function getLoadingBar() {
+      return this.LoadingBar = this.LoadingBar || this.create();
+    },
+    clearTimer: function clearTimer() {
+      clearInterval(this.timer);
+      this.timer = null;
+    },
+    start: function start() {
+      var _this2 = this;
+
+      if (this.timer) return;
+      var LoadingBar = this.getLoadingBar();
+      LoadingBar.update({
+        visible: true,
+        zIndex: setMaxZIndex()
+      });
+      var percent = 0;
+      this.timer = setInterval(function () {
+        percent += Math.floor(Math.random() * 3 + 2);
+        if (percent > 90) _this2.clearTimer();
+
+        _this2.update(percent);
+      }, 200);
+    },
+    finish: function finish(status) {
+      this.clearTimer();
+      var LoadingBar = this.getLoadingBar();
+      LoadingBar.update({
+        visible: true,
+        status: status,
+        zIndex: setMaxZIndex()
+      });
+      Vue.nextTick().then(function () {
+        return LoadingBar.update({
+          percent: 100,
+          visible: false
+        });
+      });
+    },
+    error: function error() {
+      this.finish('error');
+    },
+    update: function update(percent) {
+      this.getLoadingBar().update({
+        percent: percent
+      });
+    },
+    config: function config(options) {
+      this.getLoadingBar().config(options);
+    },
+    destroy: function destroy() {
+      this.clearTimer();
+      this.LoadingBar && this.LoadingBar.$destroy();
+      this.LoadingBar = null;
+    }
+  };
+}
 // CONCATENATED MODULE: ./src/index.js
 
 
@@ -12022,6 +12229,8 @@ function createSpin(Vue) {
 
  // 加载中
 
+ // 加载条
+
 
 var comps = {
   Alert: Alert,
@@ -12072,6 +12281,11 @@ var comps = {
   Affix: Affix
 };
 /* harmony default export */ var src = ({
+  /**
+   * 安装插件
+   * @param {import('vue').VueConstructor} Vue 
+   * @param {Object} options 
+   */
   install: function install(Vue) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var prefix = typeof options.prefix === 'string' ? options.prefix : 'Ui';
@@ -12089,7 +12303,9 @@ var comps = {
 
     Vue.prototype.$Modal = createModal(Vue); // 加载中对象
 
-    Vue.prototype.$Spin = createSpin(Vue); // 全局指令
+    Vue.prototype.$Spin = createSpin(Vue); // 加载条对象
+
+    Vue.LoadingBar = Vue.prototype.$Loading = createLoadingBar(Vue); // 全局指令
 
     createDirectives(Vue);
   }

@@ -86,6 +86,8 @@ import Notice from './components/Notice'
 import Modal from './components/modal/Modal'
 // 加载中
 import Spin, { createSpin } from './components/spin'
+// 加载条
+import { createLoadingBar } from './components/loading-bar'
 
 const comps = {
   Alert,
@@ -137,6 +139,11 @@ const comps = {
 }
 
 export default {
+  /**
+   * 安装插件
+   * @param {import('vue').VueConstructor} Vue 
+   * @param {Object} options 
+   */
   install(Vue, options = {}) {
     let prefix = typeof options.prefix === 'string' ? options.prefix : 'Ui'
     for (let name in comps) Vue.component(prefix + name, comps[name])
@@ -149,6 +156,8 @@ export default {
     Vue.prototype.$Modal = createModal(Vue)
     // 加载中对象
     Vue.prototype.$Spin = createSpin(Vue)
+    // 加载条对象
+    Vue.LoadingBar = Vue.prototype.$Loading = createLoadingBar(Vue)
     // 全局指令
     createDirectives(Vue)
   }

@@ -6,6 +6,7 @@ const _require = name => require(`../pages/${name}.vue`).default
 Vue.use(Router)
 
 export const routeArray = [
+  'LoadingBar',
   'Affix',
   'Scroll',
   'ICircle',
@@ -40,8 +41,7 @@ export const routeArray = [
   'Breadcrumb'
 ]
 
-export default new Router({
-  // mode: 'history',
+const router = new Router({
   base: '/samples',
   routes: [
     { path: '/', redirect: '/samples' },
@@ -55,3 +55,5 @@ export default new Router({
     }
   ]
 })
+
+export default router

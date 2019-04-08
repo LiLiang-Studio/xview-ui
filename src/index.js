@@ -77,6 +77,8 @@ import ICircle from './components/ICircle'
 import Scroll from './components/scroll/Scroll'
 // 图钉
 import Affix from './components/Affix'
+// 分页器
+import Page from './components/Page'
 
 // 消息提示
 import Message from './components/Message'
@@ -135,7 +137,8 @@ const comps = {
   Steps,
   ICircle,
   Scroll,
-  Affix
+  Affix,
+  Page
 }
 
 export default {

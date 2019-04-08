@@ -68,6 +68,10 @@ demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://lilia
 47. Steps
 48. Affix
 49. LoadingBar
+50. Page
+
+#### 0.3.4版本更新（2019年4月8日）
+新增Page组件
 
 #### 0.3.3版本更新（2019年4月7日）
 新增LoadingBar组件，具体用法请参见demo演示和介绍 [打开Demo](https://liliangabc.github.io/vueui-widgets/#/samples/LoadingBar)

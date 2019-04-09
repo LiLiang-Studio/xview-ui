@@ -79,6 +79,10 @@ import Scroll from './components/scroll/Scroll'
 import Affix from './components/Affix'
 // 分页器
 import Page from './components/Page'
+// 下拉菜单
+import Dropdown from './components/dropdown/Dropdown'
+import DropdownMenu from './components/dropdown/DropdownMenu'
+import DropdownItem from './components/dropdown/DropdownItem'
 
 // 消息提示
 import Message from './components/Message'
@@ -138,7 +142,10 @@ const comps = {
   ICircle,
   Scroll,
   Affix,
-  Page
+  Page,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem
 }
 
 export default {

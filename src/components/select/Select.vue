@@ -41,7 +41,7 @@
     <!-- 选项列表 -->
     <ui-option-list ref="UiOptionList" :visible="isCollapsed">
       <span v-if="isEmpty" slot="empty">{{loading ? loadingText : notFoundText}}</span>
-      <slot></slot>
+      <ul><slot></slot></ul>
     </ui-option-list>
   </div>
 </template>

@@ -4,7 +4,7 @@
       <div class="ui-select-empty">
         <slot name="empty"></slot>
       </div>
-      <ul><slot></slot></ul>
+      <slot></slot>
     </div>
   </transition>
 </template>
@@ -14,7 +14,7 @@ export default {
   data() {
     return { styles: {}, parent: null }
   },
-  props: { visible: Boolean },
+  props: { visible: Boolean, parentName: String },
   computed: {
     multiple() {
       return this.parent && this.parent.multiple
@@ -36,7 +36,7 @@ export default {
     getPosition() {
       if (!this.parent) return {}
       let offset = getOffset(this.parent.$el)
-      return { width: `${offset.width}px`, top: `${offset.top + offset.height}px`, left: `${offset.left}px` }
+      return { minWidth: `${offset.width}px`, top: `${offset.top + offset.height}px`, left: `${offset.left}px` }
     },
     /**
      * 更新位置，仅可见时更新
@@ -52,7 +52,7 @@ export default {
    */
   mounted() {
     document.body.appendChild(this.$el)
-    this.parent = findParentByName(this, 'ui-select')
+    this.parent = findParentByName(this, this.parentName || 'ui-select')
   },
   /**
    * 注销之前，移除挂载元素
@@ -72,9 +72,6 @@ export default {
   border-radius: 4px;
   box-shadow: 0 1px 6px rgba(0,0,0,.2);
   position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
 }
 
 .ui-select-empty {

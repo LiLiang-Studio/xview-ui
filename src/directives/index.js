@@ -74,4 +74,5 @@ export function createEventDirective(Vue) {
 export function createDirectives(Vue) {
   createEventDirective(Vue)('resize', window, 'resize')
   createEventDirective(Vue)('scroll', window, 'scroll')
+  createEventDirective(Vue)('winclick', window, 'click')
 }

@@ -69,6 +69,12 @@ demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://lilia
 48. Affix
 49. LoadingBar
 50. Page
+51. Dropdown
+52. DropdownMenu
+53. DropdownItem
+
+#### 0.3.5版本更新（2019年4月9日）
+新增Dropdown, DropdownMenu, DropdownItem组件, 暂不支持菜单位置设置和二级菜单，计划1.0版本发布之前完美支持该功能
 
 #### 0.3.4版本更新（2019年4月8日）
 新增Page组件

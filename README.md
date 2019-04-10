@@ -72,6 +72,13 @@ demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://lilia
 51. Dropdown
 52. DropdownMenu
 53. DropdownItem
+54. Menu
+55. MenuItem
+56. Submenu
+57. MenuGroup
+
+#### 0.3.6版本更新（2019年4月10日）
+新增Menu，MenuItem，Submenu，MenuGroup组件，目前仅支持水平导航菜单，垂直导航菜单下个版本提供支持
 
 #### 0.3.5版本更新（2019年4月9日）
 新增Dropdown, DropdownMenu, DropdownItem组件, 暂不支持菜单位置设置和二级菜单，计划1.0版本发布之前完美支持该功能

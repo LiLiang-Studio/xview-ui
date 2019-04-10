@@ -83,6 +83,11 @@ import Page from './components/Page'
 import Dropdown from './components/dropdown/Dropdown'
 import DropdownMenu from './components/dropdown/DropdownMenu'
 import DropdownItem from './components/dropdown/DropdownItem'
+// 菜单
+import Menu from './components/menu/Menu'
+import MenuItem from './components/menu/MenuItem'
+import Submenu from './components/menu/Submenu'
+import MenuGroup from './components/menu/MenuGroup'
 
 // 消息提示
 import Message from './components/Message'
@@ -145,7 +150,11 @@ const comps = {
   Page,
   Dropdown,
   DropdownMenu,
-  DropdownItem
+  DropdownItem,
+  Menu,
+  MenuItem,
+  Submenu,
+  MenuGroup
 }
 
 export default {

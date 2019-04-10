@@ -42,6 +42,9 @@ export default {
   watch: {
     visible(newVal) {
       if (this.trigger === 'custom') this.isVisible = newVal
+    },
+    isVisible(newVal) {
+      this.$emit('on-visible-change', newVal)
     }
   },
   methods: {
@@ -56,6 +59,10 @@ export default {
     },
     close() {
       this.isVisible = false
+    },
+    itemClick(name) {
+      this.close()
+      this.$emit('on-click', name)
     },
     handleDropMouseenter(event) {
       clearTimeout(this.timeout)
@@ -74,6 +81,7 @@ export default {
       if (isSelfOrParent(this.$el, event.target) || 
         isSelfOrParent(this.$refs.Drop, event.target)) return
       this.isVisible = false
+      this.$emit('on-clickoutside', event)
     }
   }
 }

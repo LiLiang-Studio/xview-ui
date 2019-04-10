@@ -18,8 +18,7 @@ export default {
   methods: {
     handleClick(event) {
       if (this.disabled) return
-      this.parent && this.parent.close()
-      this.$emit('click', event)
+      this.parent && this.parent.itemClick(this.name)
     }
   },
   mounted() {

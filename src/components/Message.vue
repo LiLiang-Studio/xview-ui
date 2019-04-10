@@ -101,7 +101,10 @@ export default {
   }
 }
 
-.ui-message-content.closable {
-  padding-right: 32px;
+.ui-message-content {
+  font-size: 12px;
+  &.closable {
+    padding-right: 32px;
+  }
 }
 </style>

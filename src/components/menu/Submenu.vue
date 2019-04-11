@@ -1,10 +1,13 @@
 <template>
-  <li class="ui-menu-item submenu" :class="{active}" @mouseenter="handleMouseenter" @mouseleave="handleMouseleave">
-    <div class="ui-menu-submenu-title">
+  <li class="ui-menu-submenu" :class="{vertical: isVertical, active}" @mouseenter="handleMouseenter" @mouseleave="handleMouseleave">
+    <div class="ui-menu-submenu-title" @click="handleTitleClick">
       <slot name="title"></slot>
       <UiIcon class="title-icon" type="ios-arrow-down"/>
     </div>
-    <ui-option-list class="ui-menu-submenu-list" :visible="visible" :parentName="$options.name"
+    <div v-show="isVertical && isOpened" class="vertical">
+      <ul><slot></slot></ul>
+    </div>
+    <ui-option-list v-if="!isVertical" class="ui-menu-submenu-list" :visible="visible" :parentName="$options.name"
       @mouseenter.native="handleDropMouseenter" @mouseleave.native="handleDropMouseleave">
       <ul><slot></slot></ul>
     </ui-option-list>
@@ -30,6 +33,12 @@ export default {
   computed: {
     active() {
       return this.visible || this.parent && this.parent.getActiveName() === this.name
+    },
+    isVertical() {
+      return this.parent && this.parent.getMode() === 'vertical'
+    },
+    isOpened() {
+      return this.parent && this.parent.getOpenedNames().indexOf(this.name) !== -1
     }
   },
   watch: {
@@ -42,10 +51,12 @@ export default {
       this.visible = false
     },
     handleMouseenter() {
+      if (this.isVertical) return
       clearTimeout(this.timeout)
       this.visible = true
     },
     handleMouseleave() {
+      if (this.isVertical) return
       this.timeout = setTimeout(this.close, 150)
     },
     handleDropMouseenter() {
@@ -56,6 +67,9 @@ export default {
     },
     getName() {
       return this.name
+    },
+    handleTitleClick() {
+      this.parent && this.parent.toggleSubmenu(this.name)
     }
   },
   mounted() {

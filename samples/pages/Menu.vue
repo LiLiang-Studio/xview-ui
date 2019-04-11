@@ -41,7 +41,7 @@
       <Radio label="primary"></Radio>
     </RadioGroup>
 
-    <!-- <div class="page-sub-title">
+    <div class="page-sub-title">
       垂直导航菜单，可以内嵌子菜单。
       设置 active-name 可以选中指定的菜单，设置 open-names 可以展开指定的子菜单。
       设置属性 accordion 可以开启手风琴模式，每次只能展开一个子菜单。
@@ -217,7 +217,7 @@
     <RadioGroup v-model="theme3">
       <Radio label="light"></Radio>
       <Radio label="dark"></Radio>
-    </RadioGroup> -->
+    </RadioGroup>
   </div>
 </template>
 <script>

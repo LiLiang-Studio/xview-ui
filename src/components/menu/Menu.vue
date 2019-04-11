@@ -4,6 +4,7 @@
   </ul>
 </template>
 <script>
+import { findChildrensByName } from './../../utils'
 export default {
   name: 'ui-menu',
   data() {
@@ -50,6 +51,22 @@ export default {
       this.$emit('update:openNames', names)
     },
     /**
+     * 切换子菜单打开状态
+     */
+    toggleSubmenu(name) {
+      let index = this.openedNames.indexOf(name)
+      if (this.accordion) {
+        this.openedNames = index === -1 ? [name] : []
+      } else {
+        if (index === -1) {
+          this.openedNames.push(name)
+        } else {
+          this.openedNames.splice(index, 1)
+        }
+      }
+      this.$emit('update:openNames', this.openedNames)
+    },
+    /**
      * 更新活动菜单
      */
     updateActiveName(name) {
@@ -61,6 +78,18 @@ export default {
      */
     getActiveName() {
       return this.currentActiveName
+    },
+    /**
+     * 获取模式
+     */
+    getMode() {
+      return this.mode
+    },
+    /**
+     * 获取打开的菜单
+     */
+    getOpenedNames() {
+      return this.openedNames
     },
     /**
      * 子菜单可见状态改变
@@ -80,15 +109,17 @@ export default {
 <style lang="less">
 // 主菜单容器
 .ui-menu {
-  list-style: none;
   font-size: 14px;
   position: relative;
   color: @content-color;
+  li {
+    list-style: none;
+  }
   // 水平
   &.horizontal {
     height: 60px;
     line-height: 60px;
-    .ui-menu-item {
+    .ui-menu-item, .ui-menu-submenu {
       float: left;
       padding: 0 20px;
       height: inherit;
@@ -96,31 +127,63 @@ export default {
     }
   }
   &.vertical {
-    .ui-menu-submenu-title {
+    .ui-menu-submenu .ui-menu-submenu {
+      padding-left: 1em;
+    }
+    .ui-menu-submenu-title, .ui-menu-item {
       padding: 14px 24px;
-      &:hover, &.active {
-        background-color: @disabled-bg-color;
-      }
+    }
+    .ui-menu-item-group-title {
+      padding-left: 24px;
+      height: 48px;
+      line-height: 48px;
+    }
+    .ui-menu-item, .ui-menu-item-group-title {
+      font-size: 14px;
+      text-indent: 1em;
     }
   }
   // 高亮主题
   &.light {
     background-color: #fff;
+    &:after {
+      content: '';
+      position: absolute;
+      background-color: @border-color;
+    }
     &.horizontal {
       &:after {
-        content: '';
-        position: absolute;
         bottom: 0;
         left: 0;
         width: 100%;
         height: 1px;
-        background-color: @border-color;
       }
-      .ui-menu-item {
+      .ui-menu-item, .ui-menu-submenu {
         border-bottom: 2px solid transparent;
         &:hover, &.active {
           color: @primary-color;
           border-bottom-color: @primary-color;
+        }
+      }
+    }
+    &.vertical {
+      &:after {
+        top: 0;
+        right: 0;
+        width: 1px;
+        height: 100%;
+      }
+      .ui-menu-submenu-title:hover {
+        background-color: @disabled-bg-color;
+      }
+      .ui-menu-item {
+        border-right: 2px solid transparent;
+        &.active {
+          color: @primary-color;
+          border-right-color: @primary-color;
+        }
+        &:hover {
+          background-color: @disabled-bg-color;
         }
       }
     }
@@ -129,8 +192,22 @@ export default {
   &.dark {
     background-color: @content-color;
     &.horizontal {
-      .ui-menu-item {
+      .ui-menu-item, .ui-menu-submenu {
         color: rgba(255, 255, 255, .7);
+        &:hover, &.active {
+          color: #fff;
+        }
+      }
+    }
+    &.vertical {
+      .ui-menu-submenu {
+        background-color: #363e4f;
+      }
+      .ui-menu-submenu-title {
+        background-color: @content-color;
+      }
+      .ui-menu-item, .ui-menu-submenu {
+        color: rgba(255, 255, 255, .7); 
         &:hover, &.active {
           color: #fff;
         }
@@ -141,7 +218,7 @@ export default {
   &.primary {
     background-color: @primary-color;
     &.horizontal {
-      .ui-menu-item {
+      .ui-menu-item, .ui-menu-submenu {
         color: #fff;
         &:hover, &.active {
           background-color: darken(@primary-color, 5%);
@@ -151,7 +228,7 @@ export default {
   }
 }
 // 菜单项
-.ui-menu-item {
+.ui-menu-item, .ui-menu-submenu {
   cursor: pointer;
   position: relative;
   z-index: 1;
@@ -161,6 +238,15 @@ export default {
     &.title-icon {
       margin-right: 0;
       transition: transform .2s ease-in-out;
+    }
+  }
+}
+.ui-menu-submenu {
+  &.vertical {
+    .title-icon {
+      float: right;
+      position: relative;
+      top: 4px;
     }
   }
 }

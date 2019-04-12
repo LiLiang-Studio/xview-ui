@@ -197,6 +197,8 @@ export function findParentByClassName(el, clsName) {
 export function getOffset(el) {
   let offset = {
     top: 0,
+    right: 0,
+    bottom: 0,
     left: 0,
     width: el.offsetWidth,
     height: el.offsetHeight
@@ -206,5 +208,7 @@ export function getOffset(el) {
     offset.left += el.offsetLeft
     el = el.offsetParent
   }
+  offset.right = offset.left + offset.width
+  offset.bottom = offset.top + offset.height
   return offset
 }

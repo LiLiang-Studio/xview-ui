@@ -76,6 +76,10 @@ demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://lilia
 55. MenuItem
 56. Submenu
 57. MenuGroup
+58. Tooltip
+
+#### 0.3.8版本更新（2019年4月12日）
+新增Tooltip组件
 
 #### 0.3.7版本更新（2019年4月11日）
 新增垂直导航菜单，但没有动画效果，计划1.0版本发布之前完美支持该功能，可能还存在一些细节未完善

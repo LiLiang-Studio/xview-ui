@@ -88,6 +88,8 @@ import Menu from './components/menu/Menu'
 import MenuItem from './components/menu/MenuItem'
 import Submenu from './components/menu/Submenu'
 import MenuGroup from './components/menu/MenuGroup'
+// 文字提示
+import Tooltip from './components/Tooltip'
 
 // 消息提示
 import Message from './components/Message'
@@ -154,7 +156,8 @@ const comps = {
   Menu,
   MenuItem,
   Submenu,
-  MenuGroup
+  MenuGroup,
+  Tooltip
 }
 
 export default {

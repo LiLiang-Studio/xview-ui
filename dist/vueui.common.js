@@ -5158,6 +5158,17 @@ module.exports = function (done, value) {
 
 /***/ }),
 
+/***/ "d827":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_10_oneOf_1_0_node_modules_css_loader_index_js_ref_10_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_oneOf_1_2_node_modules_less_loader_dist_cjs_js_ref_10_oneOf_1_3_node_modules_style_resources_loader_lib_index_js_ref_10_oneOf_1_4_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Poptip_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("db3c");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_10_oneOf_1_0_node_modules_css_loader_index_js_ref_10_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_oneOf_1_2_node_modules_less_loader_dist_cjs_js_ref_10_oneOf_1_3_node_modules_style_resources_loader_lib_index_js_ref_10_oneOf_1_4_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Poptip_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_10_oneOf_1_0_node_modules_css_loader_index_js_ref_10_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_oneOf_1_2_node_modules_less_loader_dist_cjs_js_ref_10_oneOf_1_3_node_modules_style_resources_loader_lib_index_js_ref_10_oneOf_1_4_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Poptip_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_10_oneOf_1_0_node_modules_css_loader_index_js_ref_10_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_oneOf_1_2_node_modules_less_loader_dist_cjs_js_ref_10_oneOf_1_3_node_modules_style_resources_loader_lib_index_js_ref_10_oneOf_1_4_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Poptip_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "d864":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -5237,6 +5248,13 @@ exports.f = __webpack_require__("8e60") ? Object.defineProperty : function defin
 /* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_10_oneOf_1_0_node_modules_css_loader_index_js_ref_10_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_oneOf_1_2_node_modules_less_loader_dist_cjs_js_ref_10_oneOf_1_3_node_modules_style_resources_loader_lib_index_js_ref_10_oneOf_1_4_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Swiper_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_10_oneOf_1_0_node_modules_css_loader_index_js_ref_10_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_oneOf_1_2_node_modules_less_loader_dist_cjs_js_ref_10_oneOf_1_3_node_modules_style_resources_loader_lib_index_js_ref_10_oneOf_1_4_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Swiper_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__);
 /* unused harmony reexport * */
  /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_10_oneOf_1_0_node_modules_css_loader_index_js_ref_10_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_10_oneOf_1_2_node_modules_less_loader_dist_cjs_js_ref_10_oneOf_1_3_node_modules_style_resources_loader_lib_index_js_ref_10_oneOf_1_4_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Swiper_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "db3c":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -6496,12 +6514,12 @@ var Icon_component = normalizeComponent(
 )
 
 /* harmony default export */ var Icon = (Icon_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6df7c4d9-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/button/Button.vue?vue&type=template&id=488f711a&
-var Buttonvue_type_template_id_488f711a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('button',{staticClass:"ui-button",class:[_vm.type, _vm.size, _vm.shape, { long: _vm.long, isOnlyIcon: _vm.isOnlyIcon, loading: _vm.loading }],attrs:{"disabled":_vm.disabled,"type":_vm.htmlType},on:{"click":function($event){return _vm.$emit('click', $event)}}},[(_vm.loading)?_c('UiIcon',{staticClass:"icon-load-loop",attrs:{"type":"load-c"}}):(_vm.icon)?_c('UiIcon',{attrs:{"type":_vm.icon}}):_vm._e(),(!_vm.isOnlyIcon)?_c('span',[_vm._t("default")],2):_vm._e()],1)}
-var Buttonvue_type_template_id_488f711a_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6df7c4d9-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/button/Button.vue?vue&type=template&id=1629d701&
+var Buttonvue_type_template_id_1629d701_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('button',{staticClass:"ui-button",class:[_vm.type, _vm.size, _vm.shape, { long: _vm.long, isOnlyIcon: _vm.isOnlyIcon, loading: _vm.loading }],attrs:{"disabled":_vm.disabled,"type":_vm.htmlType},on:{"click":function($event){return _vm.$emit('click', $event)}}},[(_vm.loading)?_c('UiIcon',{staticClass:"icon-load-loop",attrs:{"type":"load-c"}}):(_vm.icon)?_c('UiIcon',{attrs:{"type":_vm.icon}}):_vm._e(),(!_vm.isOnlyIcon)?_c('span',[_vm._t("default")],2):_vm._e()],1)}
+var Buttonvue_type_template_id_1629d701_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/button/Button.vue?vue&type=template&id=488f711a&
+// CONCATENATED MODULE: ./src/components/button/Button.vue?vue&type=template&id=1629d701&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/button/Button.vue?vue&type=script&lang=js&
 
@@ -6573,8 +6591,8 @@ var Buttonvue_type_style_index_0_lang_less_ = __webpack_require__("e603");
 
 var Button_component = normalizeComponent(
   button_Buttonvue_type_script_lang_js_,
-  Buttonvue_type_template_id_488f711a_render,
-  Buttonvue_type_template_id_488f711a_staticRenderFns,
+  Buttonvue_type_template_id_1629d701_render,
+  Buttonvue_type_template_id_1629d701_staticRenderFns,
   false,
   null,
   null,
@@ -12564,19 +12582,19 @@ var MenuGroup_component = normalizeComponent(
 )
 
 /* harmony default export */ var MenuGroup = (MenuGroup_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6df7c4d9-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Tooltip.vue?vue&type=template&id=80fb4a04&
-var Tooltipvue_type_template_id_80fb4a04_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ui-tooltip"},[_c('div',{staticClass:"ui-tooltip-rel",on:{"mouseenter":_vm.handleMouseenter,"mouseleave":_vm.handleMouseleave}},[_vm._t("default")],2),_c('ui-popper',{staticClass:"ui-tooltip-popper",attrs:{"hasArrow":"","placement":_vm.placement,"visible":_vm.always || _vm.popperVisible}},[_c('div',{staticClass:"ui-tooltip-content"},[_vm._t("content",[_vm._v(_vm._s(_vm.content))])],2)])],1)}
-var Tooltipvue_type_template_id_80fb4a04_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6df7c4d9-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Tooltip.vue?vue&type=template&id=04f84d2e&
+var Tooltipvue_type_template_id_04f84d2e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ui-tooltip"},[_c('div',{staticClass:"ui-tooltip-rel",on:{"mouseenter":_vm.handleMouseenter,"mouseleave":_vm.handleMouseleave}},[_vm._t("default")],2),_c('ui-popper',{attrs:{"hasArrow":"","placement":_vm.placement,"visible":_vm.always || _vm.popperVisible}},[_c('div',{staticClass:"ui-tooltip-content"},[_vm._t("content",[_vm._v(_vm._s(_vm.content))])],2)])],1)}
+var Tooltipvue_type_template_id_04f84d2e_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/Tooltip.vue?vue&type=template&id=80fb4a04&
+// CONCATENATED MODULE: ./src/components/Tooltip.vue?vue&type=template&id=04f84d2e&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6df7c4d9-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/popper/Popper.vue?vue&type=template&id=eea22cf4&
-var Poppervue_type_template_id_eea22cf4_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('transition',{attrs:{"name":_vm.transitionName}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.visible),expression:"visible"}],staticClass:"ui-popper",class:{hasArrow: _vm.hasArrow},style:(Object.assign({}, _vm.styles, {zIndex: _vm.zIndex})),attrs:{"data-dir":_vm.placement}},[_vm._t("default"),(_vm.hasArrow)?_c('span',{staticClass:"ui-popper-arrow",class:_vm.placement}):_vm._e()],2)])}
-var Poppervue_type_template_id_eea22cf4_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6df7c4d9-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/popper/Popper.vue?vue&type=template&id=159645a5&
+var Poppervue_type_template_id_159645a5_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('transition',{attrs:{"name":_vm.transitionName}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.visible),expression:"visible"}],staticClass:"ui-popper",class:{hasArrow: _vm.hasArrow},style:(Object.assign({}, _vm.styles, {zIndex: _vm.zIndex})),attrs:{"x-placement":_vm.placement}},[_vm._t("default"),(_vm.hasArrow)?_c('span',{staticClass:"ui-popper-arrow",class:_vm.arrowClass}):_vm._e()],2)])}
+var Poppervue_type_template_id_159645a5_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/popper/Popper.vue?vue&type=template&id=eea22cf4&
+// CONCATENATED MODULE: ./src/components/popper/Popper.vue?vue&type=template&id=159645a5&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.string.starts-with.js
 var es6_string_starts_with = __webpack_require__("f559");
@@ -12611,7 +12629,8 @@ var es6_string_starts_with = __webpack_require__("f559");
       type: String,
       default: 'ui-fade'
     },
-    hasArrow: Boolean
+    hasArrow: Boolean,
+    arrowClass: String
   },
   watch: {
     visible: function visible() {
@@ -12697,8 +12716,8 @@ var Poppervue_type_style_index_0_lang_less_ = __webpack_require__("606f");
 
 var Popper_component = normalizeComponent(
   popper_Poppervue_type_script_lang_js_,
-  Poppervue_type_template_id_eea22cf4_render,
-  Poppervue_type_template_id_eea22cf4_staticRenderFns,
+  Poppervue_type_template_id_159645a5_render,
+  Poppervue_type_template_id_159645a5_staticRenderFns,
   false,
   null,
   null,
@@ -12747,7 +12766,7 @@ var Popper_component = normalizeComponent(
     }
   },
   methods: {
-    handleMouseenter: function handleMouseenter(event) {
+    handleMouseenter: function handleMouseenter() {
       var _this = this;
 
       if (this.disabled) return;
@@ -12757,7 +12776,7 @@ var Popper_component = normalizeComponent(
         _this.$emit('on-popper-show');
       }, this.delay);
     },
-    handleMouseleave: function handleMouseleave(event) {
+    handleMouseleave: function handleMouseleave() {
       clearTimeout(this.timeout);
       this.popperVisible = false;
       this.$emit('on-popper-hide');
@@ -12780,8 +12799,8 @@ var Tooltipvue_type_style_index_0_lang_less_ = __webpack_require__("29ab");
 
 var Tooltip_component = normalizeComponent(
   components_Tooltipvue_type_script_lang_js_,
-  Tooltipvue_type_template_id_80fb4a04_render,
-  Tooltipvue_type_template_id_80fb4a04_staticRenderFns,
+  Tooltipvue_type_template_id_04f84d2e_render,
+  Tooltipvue_type_template_id_04f84d2e_staticRenderFns,
   false,
   null,
   null,
@@ -12790,6 +12809,171 @@ var Tooltip_component = normalizeComponent(
 )
 
 /* harmony default export */ var Tooltip = (Tooltip_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6df7c4d9-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Poptip.vue?vue&type=template&id=1adffc1c&
+var Poptipvue_type_template_id_1adffc1c_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{directives:[{name:"winclick",rawName:"v-winclick",value:(_vm.handleWinClick),expression:"handleWinClick"}],staticClass:"ui-poptip"},[_c('div',{staticClass:"ui-poptip-rel",on:{"mouseenter":_vm.handleMouseenter,"mouseleave":_vm.handleMouseleave,"mousedown":_vm.handleMousedown,"mouseup":_vm.handleMouseup,"click":_vm.handleClick}},[_vm._t("default")],2),_c('ui-popper',{ref:"Popper",class:[{confirm: _vm.confirm}, _vm.popperClass],style:(_vm.popperStyles),attrs:{"arrowClass":"ui-poptip-arrow","hasArrow":"","placement":_vm.placement,"visible":_vm.popperVisible}},[_c('div',{staticClass:"ui-poptip-body"},[_c('div',{staticClass:"ui-poptip-title"},[(_vm.confirm)?_c('UiIcon',{staticClass:"ui-poptip-confirm-icon",attrs:{"type":"help-circled"}}):_vm._e(),_vm._t("title",[_vm._v(_vm._s(_vm.title))])],2),(_vm.hasContent)?_c('div',{staticClass:"ui-poptip-content"},[_vm._t("content",[_vm._v(_vm._s(_vm.content))])],2):_vm._e(),(_vm.confirm)?_c('div',{staticClass:"ui-poptip-actions"},[_c('ui-button',{attrs:{"type":"text","size":"small"},on:{"click":_vm.onCancel}},[_vm._v(_vm._s(_vm.cancelText))]),_c('ui-button',{attrs:{"type":"primary","size":"small"},on:{"click":_vm.onOK}},[_vm._v(_vm._s(_vm.okText))])],1):_vm._e()])])],1)}
+var Poptipvue_type_template_id_1adffc1c_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/Poptip.vue?vue&type=template&id=1adffc1c&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Poptip.vue?vue&type=script&lang=js&
+
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ var Poptipvue_type_script_lang_js_ = ({
+  components: {
+    UiIcon: Icon,
+    UiPopper: Popper,
+    UiButton: Button
+  },
+  data: function data() {
+    return {
+      popperVisible: this.value
+    };
+  },
+  props: {
+    trigger: {
+      default: 'click',
+      validator: function validator(value) {
+        return ['hover', 'click', 'focus'].indexOf(value) !== -1;
+      }
+    },
+    title: [String, Number],
+    content: [String, Number],
+    placement: {
+      type: String,
+      default: 'top'
+    },
+    width: [String, Number],
+    confirm: Boolean,
+    okText: {
+      type: String,
+      default: '确定'
+    },
+    cancelText: {
+      type: String,
+      default: '取消'
+    },
+    popperClass: String,
+    value: Boolean
+  },
+  computed: {
+    hasContent: function hasContent() {
+      return this.content || this.$slots.content !== undefined;
+    },
+    popperStyles: function popperStyles() {
+      return this.width ? {
+        width: "".concat(parse_int_default()(this.width), "px")
+      } : {};
+    }
+  },
+  watch: {
+    popperVisible: function popperVisible(newVal) {
+      this.$emit('input', newVal);
+      this.$emit("on-popper-".concat(newVal ? 'show' : 'hide'));
+    },
+    value: function value(newVal) {
+      this.popperVisible = newVal;
+    }
+  },
+  methods: {
+    handleMouseenter: function handleMouseenter() {
+      if (this.confirm) return;
+      if (this.trigger === 'hover') this.popperVisible = true;
+    },
+    handleMouseleave: function handleMouseleave() {
+      if (this.confirm) return;
+      if (this.trigger === 'hover') this.popperVisible = false;
+    },
+    handleMousedown: function handleMousedown() {
+      if (this.confirm) return;
+      if (this.trigger === 'focus') this.popperVisible = true;
+    },
+    handleMouseup: function handleMouseup() {
+      if (this.confirm) return;
+      if (this.trigger === 'focus') this.popperVisible = false;
+    },
+    handleClick: function handleClick() {
+      if (this.trigger === 'click') {
+        this.popperVisible = !this.popperVisible;
+      }
+    },
+
+    /**
+     * 窗口单击处理
+     * @param {MouseEvent} event
+     */
+    handleWinClick: function handleWinClick(event) {
+      if (this.trigger !== 'click') return;
+      var target = event.target;
+      if (isSelfOrParent(this.$el, target) || isSelfOrParent(this.$refs.Popper.$el, target)) return;
+      this.popperVisible = false;
+    },
+    onCancel: function onCancel() {
+      this.popperVisible = false;
+      this.$emit('on-cancel');
+    },
+    onOK: function onOK() {
+      this.popperVisible = false;
+      this.$emit('on-ok');
+    }
+  }
+});
+// CONCATENATED MODULE: ./src/components/Poptip.vue?vue&type=script&lang=js&
+ /* harmony default export */ var components_Poptipvue_type_script_lang_js_ = (Poptipvue_type_script_lang_js_); 
+// EXTERNAL MODULE: ./src/components/Poptip.vue?vue&type=style&index=0&lang=less&
+var Poptipvue_type_style_index_0_lang_less_ = __webpack_require__("d827");
+
+// CONCATENATED MODULE: ./src/components/Poptip.vue
+
+
+
+
+
+
+/* normalize component */
+
+var Poptip_component = normalizeComponent(
+  components_Poptipvue_type_script_lang_js_,
+  Poptipvue_type_template_id_1adffc1c_render,
+  Poptipvue_type_template_id_1adffc1c_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var Poptip = (Poptip_component.exports);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6df7c4d9-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Message.vue?vue&type=template&id=f4649d1e&
 var Messagevue_type_template_id_f4649d1e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('transition',{attrs:{"name":"message","translate":""}},[_c('div',{staticClass:"ui-message"},[_c('div',{staticClass:"ui-message-outer"},[_c('div',{staticClass:"ui-message-inner"},[_c('UiIcon',{staticClass:"ui-message-icon",class:_vm.type,attrs:{"type":_vm.iconType}}),_c('p',{staticClass:"ui-message-content",class:{closable: _vm.closable},domProps:{"innerHTML":_vm._s(_vm.content)}}),(_vm.closable)?_c('UiCloseIconButton',{on:{"click":_vm.close}}):_vm._e()],1)])])])}
 var Messagevue_type_template_id_f4649d1e_staticRenderFns = []
@@ -13404,6 +13588,8 @@ function createLoadingBar(Vue) {
 
  // 文字提示
 
+ // 气泡提示
+
  // 消息提示
 
  // 通知提醒
@@ -13470,7 +13656,8 @@ var comps = {
   MenuItem: MenuItem,
   Submenu: Submenu,
   MenuGroup: MenuGroup,
-  Tooltip: Tooltip
+  Tooltip: Tooltip,
+  Poptip: Poptip
 };
 /* harmony default export */ var src = ({
   /**

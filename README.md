@@ -77,6 +77,10 @@ demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://lilia
 56. Submenu
 57. MenuGroup
 58. Tooltip
+59. Poptip
+
+#### 0.3.9版本更新（2019年4月13日）
+新增Poptip组件
 
 #### 0.3.8版本更新（2019年4月12日）
 新增Tooltip组件

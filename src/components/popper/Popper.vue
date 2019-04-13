@@ -1,8 +1,8 @@
 <template>
 <transition :name="transitionName">
-  <div class="ui-popper" v-show="visible" :data-dir="placement" :class="{hasArrow}" :style="{...styles, zIndex}">
+  <div class="ui-popper" v-show="visible" :x-placement="placement" :class="{hasArrow}" :style="{...styles, zIndex}">
     <slot></slot>
-    <span v-if="hasArrow" class="ui-popper-arrow" :class="placement"></span>
+    <span v-if="hasArrow" class="ui-popper-arrow" :class="arrowClass"></span>
   </div>
 </transition>
 </template>
@@ -29,7 +29,8 @@ export default {
       type: String,
       default: 'ui-fade'
     },
-    hasArrow: Boolean
+    hasArrow: Boolean,
+    arrowClass: String
   },
   watch: {
     visible() {
@@ -92,17 +93,69 @@ export default {
 .ui-popper {
   position: absolute;
   &.hasArrow {
-    &[data-dir^=top] {
+    &[x-placement^=top] {
       padding: 5px 0 8px;
     }
-    &[data-dir^=right] {
+    &[x-placement^=right] {
       padding: 0 5px 0 8px;
     }
-    &[data-dir^=bottom] {
+    &[x-placement^=bottom] {
       padding: 8px 0 5px;
     }
-    &[data-dir^=left] {
+    &[x-placement^=left] {
       padding: 0 8px 0 5px;
+    }
+  }
+  &[x-placement^=top] .ui-popper-arrow {
+    bottom: 3px;
+    border-width: 5px 5px 0;
+    border-top-color: fade(@content-color, 96%);
+  }
+  &[x-placement^=right] .ui-popper-arrow {
+    left: 3px;
+    border-width: 5px 5px 5px 0;
+    border-right-color: fade(@content-color, 96%);
+  }
+  &[x-placement^=bottom] .ui-popper-arrow {
+    top: 3px;
+    border-width: 0 5px 5px;
+    border-bottom-color: fade(@content-color, 96%);
+  }
+  &[x-placement^=left] .ui-popper-arrow {
+    right: 3px;
+    border-width: 5px 0 5px 5px;
+    border-left-color: fade(@content-color, 96%);
+  }
+  &[x-placement=top], &[x-placement=bottom] {
+    .ui-popper-arrow {
+      left: 50%;
+      margin-left: -5px;
+    }
+  }
+  &[x-placement=top-start], &[x-placement=bottom-start] {
+    .ui-popper-arrow {
+      left: 16px;
+    }
+  }
+  &[x-placement=top-end], &[x-placement=bottom-end] {
+    .ui-popper-arrow {
+      right: 16px;
+    }
+  }
+  &[x-placement=right], &[x-placement=left] {
+    .ui-popper-arrow {
+      top: 50%;
+      margin-top: -5px;
+    }
+  }
+  &[x-placement=right-start], &[x-placement=left-start] {
+    .ui-popper-arrow {
+      top: 8px;
+    }
+  }
+  &[x-placement=right-end], &[x-placement=left-end] {
+    .ui-popper-arrow {
+      bottom: 8px;
     }
   }
 }
@@ -113,45 +166,5 @@ export default {
   height: 0;
   border-style: solid;
   border-color: transparent;
-  &.top, &.top-start, &.top-end {
-    bottom: 3px;
-    border-width: 5px 5px 0;
-    border-top-color: fade(@content-color, 96%);
-  }
-  &.right, &.right-start, &.right-end {
-    left: 3px;
-    border-width: 5px 5px 5px 0;
-    border-right-color: fade(@content-color, 96%);
-  }
-  &.bottom, &.bottom-start, &.bottom-end {
-    top: 3px;
-    border-width: 0 5px 5px;
-    border-bottom-color: fade(@content-color, 96%);
-  }
-  &.left, &.left-start, &.left-end {
-    right: 3px;
-    border-width: 5px 0 5px 5px;
-    border-left-color: fade(@content-color, 96%);
-  }
-  &.top, &.bottom {
-    left: 50%;
-    margin-left: -5px;
-  }
-  &.top-start, &.bottom-start {
-    left: 16px;
-  }
-  &.top-end, &.bottom-end {
-    right: 16px;
-  }
-  &.right, &.left {
-    top: 50%;
-    margin-top: -5px;
-  }
-  &.right-start, &.left-start {
-    top: 8px;
-  }
-  &.right-end, &.left-end {
-    bottom: 8px;
-  }
 }
 </style>

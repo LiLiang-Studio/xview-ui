@@ -121,6 +121,7 @@ export default {
   }
   &.small {
     height: @form-control-small;
+    padding: 2px 7px;
     &.circle {
       border-radius: @form-control-small * 2;
     }

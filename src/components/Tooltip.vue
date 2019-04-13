@@ -3,7 +3,7 @@
     <div class="ui-tooltip-rel" @mouseenter="handleMouseenter" @mouseleave="handleMouseleave">
       <slot></slot>
     </div>
-    <ui-popper class="ui-tooltip-popper" hasArrow :placement="placement" :visible="always || popperVisible">
+    <ui-popper hasArrow :placement="placement" :visible="always || popperVisible">
       <div class="ui-tooltip-content">
         <slot name="content">{{content}}</slot>
       </div>
@@ -33,14 +33,14 @@ export default {
     }
   },
   methods: {
-    handleMouseenter(event) {
+    handleMouseenter() {
       if (this.disabled) return
       this.timeout = setTimeout(() => {
         this.popperVisible = true
         this.$emit('on-popper-show')
       }, this.delay)
     },
-    handleMouseleave(event) {
+    handleMouseleave() {
       clearTimeout(this.timeout)
       this.popperVisible = false
       this.$emit('on-popper-hide')

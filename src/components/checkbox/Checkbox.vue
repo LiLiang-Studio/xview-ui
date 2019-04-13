@@ -19,7 +19,10 @@ export default {
   },
   props: {
     value: [String, Number, Boolean],
-    label: [String, Number, Boolean],
+    label: {
+      type: [String, Number, Boolean],
+      default: ''
+    },
     disabled: Boolean,
     indeterminate: Boolean,
     size: {

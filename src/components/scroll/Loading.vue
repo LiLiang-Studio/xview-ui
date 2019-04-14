@@ -1,7 +1,7 @@
 <template>
   <div class="ui-scroll-loading">
     <ui-spin v-if="loading" fix>
-      <Icon type="load-c" size="18" class="ui-scroll-loading-icon"></Icon>
+      <Icon type="load-c" size="18" class="ui-scroll-loading-icon" :class="iconClass" :style="iconStyle"></Icon>
       <span class="ui-scroll-loading-text">{{loadingText}}</span>
     </ui-spin>
   </div>
@@ -13,7 +13,9 @@ export default {
   components: { UiIcon, UiSpin },
   props: {
     loading: Boolean,
-    loadingText: String
+    loadingText: String,
+    iconStyle: Object,
+    iconClass: String
   }
 }
 </script>

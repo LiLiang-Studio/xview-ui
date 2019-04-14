@@ -5,6 +5,7 @@
 </template>
 <script>
 import UiTreeNode from './Node'
+let key = 0
 export default {
   name: 'ui-tree',
   components: { UiTreeNode },
@@ -45,17 +46,16 @@ export default {
      * 转换数据，增加唯一标识的key
      */
     convertData() {
-      let key = 0, flatState = []
-      const func = data => {
+      let flatState = [], { data } = this
+      while (data.length) {
         let arr = []
         data.forEach(_ => {
           _.nodeKey = key++
           flatState.push(_)
           _.children && arr.push(..._.children)
         })
-        if (arr.length) func(arr)
+        data = arr
       }
-      func(this.data)
       this.flatState = flatState
     },
     /**
@@ -73,7 +73,21 @@ export default {
     /**
      * 更新选中的节点
      */
-    updateCheckedNodes() {
+    updateCheckedNodes(item) {
+      let eachData = item.children || []
+      while (eachData.length) {
+        let arr = []
+        eachData.forEach(_ => {
+          this.$set(_, 'checked', item.checked)
+          _.children && arr.push(..._.children)
+        })
+        eachData = arr
+      }
+      let data = [...this.flatState]
+      data.reverse()
+      data.forEach(_ => {
+        _.children && this.$set(_, 'checked', _.children.every(__ => __.checked))
+      })
       this.$emit('on-check-change', this.getCheckedNodes())
     },
     /**
@@ -93,6 +107,19 @@ export default {
         let { children: __, ...data } = _
         return data
       })
+    },
+    /**
+     * 切换折叠和展开子节点
+     */
+    toggleExpand(item) {
+      if (!item.children.length && this.loadData) {
+        this.$set(item, 'loading', true)
+        this.loadData(item, data => {
+          item.children = data
+          this.$set(item, 'loading', false)
+        })
+      }
+      this.$emit('on-toggle-expand', item)
     }
   },
   mounted() {

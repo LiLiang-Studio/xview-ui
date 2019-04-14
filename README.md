@@ -78,6 +78,10 @@ demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://lilia
 57. MenuGroup
 58. Tooltip
 59. Poptip
+60. Tree
+
+#### 0.4.0版本更新（2019年4月14日）
+新增Tree组件，暂不支持渲染方法，将在1.0版本之前提供支持
 
 #### 0.3.9版本更新（2019年4月13日）
 新增Poptip组件

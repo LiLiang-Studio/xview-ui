@@ -94,6 +94,8 @@ import Tooltip from './components/Tooltip'
 import Poptip from './components/Poptip'
 // 树形控件
 import Tree from './components/tree/Tree'
+// 表格
+import Table from './components/table/Table'
 
 // 消息提示
 import Message from './components/Message'
@@ -163,7 +165,8 @@ const comps = {
   MenuGroup,
   Tooltip,
   Poptip,
-  Tree
+  Tree,
+  Table
 }
 
 export default {

@@ -30,7 +30,8 @@ export default {
       default: 'ui-fade'
     },
     hasArrow: Boolean,
-    arrowClass: String
+    arrowClass: String,
+    refElement: {}
   },
   watch: {
     visible() {
@@ -44,9 +45,9 @@ export default {
     setPosition() {
       // 挂载元素尺寸
       let { offsetHeight: oh, offsetWidth: ow } = this.$el
-      // 父组件挂载元素位置和尺寸
-      let parentEl = this.$parent.$el
-      let { top: t, right: r, bottom: b, left: l, width: w, height: h } = getOffset(parentEl)
+      // 引用元素位置和尺寸
+      let refElement = this.refElement || this.$parent.$el
+      let { top: t, right: r, bottom: b, left: l, width: w, height: h } = getOffset(refElement)
       let pos = {}, { placement } = this
       // 如果是顶部和底部 那么top一样；如果是右边和左边 那么left一样
       if (placement.startsWith('top')) {

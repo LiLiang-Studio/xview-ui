@@ -1,12 +1,12 @@
 <template>
   <div class="ui-poptip" v-winclick="handleWinClick">
-    <div class="ui-poptip-rel" 
+    <div class="ui-poptip-rel" ref="Ref"
       @mouseenter="handleMouseenter" @mouseleave="handleMouseleave" 
       @mousedown="handleMousedown" @mouseup="handleMouseup"
       @click="handleClick">
       <slot></slot>
     </div>
-    <ui-popper ref="Popper" arrowClass="ui-poptip-arrow" hasArrow 
+    <ui-popper ref="Popper" arrowClass="ui-poptip-arrow" hasArrow :refElement="refElement"
       :class="[{confirm}, popperClass]" :style="popperStyles" :placement="placement" :visible="popperVisible">
       <div class="ui-poptip-body">
         <div class="ui-poptip-title">
@@ -32,7 +32,7 @@ import { isSelfOrParent } from './../utils'
 export default {
   components: { UiIcon, UiPopper, UiButton },
   data() {
-    return { popperVisible: this.value }
+    return { popperVisible: this.value, refElement: null }
   },
   props: {
     trigger: {
@@ -120,6 +120,9 @@ export default {
       this.popperVisible = false
       this.$emit('on-ok')
     }
+  },
+  mounted() {
+    this.refElement = this.$refs.Ref.children[0]
   }
 }
 </script>

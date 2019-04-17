@@ -1,9 +1,9 @@
 <template>
   <div class="ui-tooltip">
-    <div class="ui-tooltip-rel" @mouseenter="handleMouseenter" @mouseleave="handleMouseleave">
+    <div class="ui-tooltip-rel" ref="Ref" @mouseenter="handleMouseenter" @mouseleave="handleMouseleave">
       <slot></slot>
     </div>
-    <ui-popper hasArrow :placement="placement" :visible="always || popperVisible">
+    <ui-popper hasArrow :refElement="refElement" :placement="placement" :visible="always || popperVisible">
       <div class="ui-tooltip-content">
         <slot name="content">{{content}}</slot>
       </div>
@@ -15,7 +15,7 @@ import UiPopper from './popper/Popper'
 export default {
   components: { UiPopper },
   data() {
-    return { popperVisible: false }
+    return { popperVisible: false, refElement: null }
   },
   props: {
     content: [String, Number],
@@ -45,6 +45,9 @@ export default {
       this.popperVisible = false
       this.$emit('on-popper-hide')
     }
+  },
+  mounted() {
+    this.refElement = this.$refs.Ref.children[0]
   }
 }
 </script>

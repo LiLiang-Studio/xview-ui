@@ -1,30 +1,28 @@
 <template>
   <div class="ui-slider" :class="{disabled}">
-    <div class="ui-slider-wrap">
+    <div class="ui-slider-wrap" ref="Bar" @click="update">
       <span class="ui-slider-breakpoint" v-for="item in stopValues" :key="item" :style="{left: `${item}%`}"></span>
       <div class="ui-slider-bar" :style="barStyle">
         <template v-if="range">
-          <ui-tooltip placement="top" v-if="hasTip" :always="isTipAlways">
-            <div slot="content">{{changingValue[0]}}</div>
-            <span class="ui-slider-btn left"
-              @mousedown="handleLeftMousedown" @mousemove="handleLeftMousemove" @mouseup="handleLeftMouseup"></span>
+          <ui-tooltip ref="LeftTooltip" placement="top" v-if="hasTip" :always="leftBtnDown || isTipAlways">
+            <div slot="content">{{inputValue[0]}}</div>
+            <span class="ui-slider-btn left" :class="{down: leftBtnDown}" @mousedown.prevent="handleLeftMousedown"></span>
           </ui-tooltip>
-          <span v-else class="ui-slider-btn left"
-            @mousedown="handleLeftMousedown" @mousemove="handleLeftMousemove" @mouseup="handleLeftMouseup"></span>
+          <span v-else class="ui-slider-btn left" :class="{down: leftBtnDown}" @mousedown.prevent="handleLeftMousedown"></span>
         </template>
-        <ui-tooltip placement="top" v-if="hasTip && rightValue !== null" :always="isTipAlways">
+        <ui-tooltip ref="RightTooltip" placement="top" v-if="hasTip && rightValue !== null" :always="rightBtnDown || isTipAlways">
           <div slot="content">{{rightValue}}</div>
-          <span class="ui-slider-btn right" 
-            @mousedown="handleRightMousedown" @mousemove="handleRightMousemove" @mouseup="handleRightMouseup"></span>
+          <span class="ui-slider-btn right" :class="{down: rightBtnDown}" @mousedown.prevent="handleRightMousedown"></span>
         </ui-tooltip>
-        <span v-else class="ui-slider-btn right" 
-          @mousedown="handleRightMousedown" @mousemove="handleRightMousemove" @mouseup="handleRightMouseup"></span>
+        <span v-else class="ui-slider-btn right" :class="{down: rightBtnDown}" @mousedown.prevent="handleRightMousedown"></span>
       </div>
     </div>
-    <UiInputNumber class="ui-slider-input-number" v-if="hasInputNumber" v-model="inputValue" :min="min" :max="max" :step="step"/>
+    <UiInputNumber class="ui-slider-input-number" v-if="hasInputNumber" 
+      v-model="inputValue" :min="min" :max="max" :step="step" :size="inputSize"/>
   </div>
 </template>
 <script>
+import { getOffset } from './../utils'
 import UiTooltip from './Tooltip'
 import UiInputNumber from './InputNumber'
 export default {
@@ -32,7 +30,8 @@ export default {
   data() {
     return {
       inputValue: this.value,
-      changingValue: this.value
+      rightBtnDown: false,
+      leftBtnDown: false
     }
   },
   props: {
@@ -76,22 +75,25 @@ export default {
     hasTip() {
       return this.showTip !== 'never'
     },
+    val() {
+      return this.max - this.min
+    },
     rightValue() {
-      let value = this.range ? this.changingValue[1] : this.changingValue
+      let value = this.range ? this.inputValue[1] : this.inputValue
       return this.tipFormat ? this.tipFormat(value) : value
     },
     barStyle() {
-      let { min, max, changingValue, range } = this, val = max - min
+      let { min, max, inputValue, range, val } = this
       if (range) {
-        let [a, b] = changingValue
+        let [a, b] = inputValue
         return { left: `${a / val * 100}%`, width: `${(b - a) / val * 100}%` }
       } else {
-        return { width: `${changingValue / val * 100}%` }
+        return { width: `${inputValue / val * 100}%` }
       }
     },
     stopValues() {
       if (!this.showStops) return []
-      let { step, min, max } = this, val = max - min, points = []
+      let { step, min, max, val } = this, points = []
       let start = Math.floor(step / val * 100), p = start
       while (p < 100) {
         points.push(p)
@@ -108,53 +110,66 @@ export default {
       this.inputValue = newVal
     },
     inputValue(newVal) {
-      this.changingValue = newVal
       this.$emit('input', newVal)
       this.$emit('on-change', newVal)
+      this.$nextTick(() => {
+        if (this.leftBtnDown) {
+          this.$refs.LeftTooltip && this.$refs.LeftTooltip.setPosition()
+        } else if (this.rightBtnDown) {
+          this.$refs.RightTooltip && this.$refs.RightTooltip.setPosition()
+        }
+      })
     }
   },
   methods: {
-    /**
-     * 右边按钮鼠标按下
-     * @param {MouseEvent} event
-     */
-    handleRightMousedown(event) {
-
+    getMovingValue(event) {
+      let { left } = getOffset(this.$refs.Bar)
+      let tarVal = (event.clientX - left ) / this.$refs.Bar.offsetWidth * this.val
+      let val = Math.floor(tarVal / this.step) * this.step
+      return Math.max(Math.min(val, this.max), this.min)
     },
-    /**
-     * 右边按钮鼠标移动
-     * @param {MouseEvent} event
-     */
-    handleRightMousemove(event) {
-
+    update(event) {
+      if (this.disabled) return
+      let { left } = getOffset(this.$refs.Bar)
+      let tarVal = (event.clientX - left ) / this.$refs.Bar.offsetWidth * this.val
+      let moveToValue = this.getMovingValue(event)
+      if (this.range) {
+        let [a, b] = this.inputValue
+        if (this.leftBtnDown) {
+          this.inputValue = moveToValue > b ? [moveToValue, moveToValue] : [moveToValue, b]
+        } else if (this.rightBtnDown) {
+          this.inputValue = moveToValue > a ? [a, moveToValue] : [a, a]
+        } else {
+          this.inputValue = moveToValue > a ? [a, moveToValue] : [moveToValue, b]
+        }
+      } else {
+        this.inputValue = moveToValue
+      }
     },
-    /**
-     * 右边按钮鼠标松开
-     * @param {MouseEvent} event
-     */
-    handleRightMouseup(event) {
-
+    handleRightMousedown() {
+      if (this.disabled) return
+      this.rightBtnDown = true
+      this.addWinEvents()
     },
-    /**
-     * 左边按钮鼠标按下
-     * @param {MouseEvent} event
-     */
     handleLeftMousedown(event) {
-
+      if (this.disabled) return
+      this.leftBtnDown = true
+      this.addWinEvents()
     },
-    /**
-     * 左边按钮鼠标移动
-     * @param {MouseEvent} event
-     */
-    handleLeftMousemove(event) {
-
+    addWinEvents() {
+      window.addEventListener('mousemove', this.handleMousemove)
+      window.addEventListener('mouseup', this.handleMouseup)
     },
-    /**
-     * 左边按钮鼠标松开
-     * @param {MouseEvent} event
-     */
-    handleLeftMouseup(event) {
-
+    removeWinEvents() {
+      window.removeEventListener('mousemove', this.handleMousemove)
+      window.removeEventListener('mouseup', this.handleMouseup)
+    },
+    handleMousemove(event) {
+      if (this.rightBtnDown || this.leftBtnDown) this.update(event)
+    },
+    handleMouseup() {
+      this.removeWinEvents()
+      this.rightBtnDown = this.leftBtnDown = false
     }
   }
 }
@@ -219,7 +234,7 @@ export default {
   &.right {
     right: -6px;
   }
-  &:hover {
+  &:hover, &.down {
     cursor: grab;
     transform: scale(1.5);
   }

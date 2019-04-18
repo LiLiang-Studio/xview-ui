@@ -3,7 +3,7 @@
     <div class="ui-tooltip-rel" ref="Ref" @mouseenter="handleMouseenter" @mouseleave="handleMouseleave">
       <slot></slot>
     </div>
-    <ui-popper hasArrow :refElement="refElement" :placement="placement" :visible="always || popperVisible">
+    <ui-popper ref="Popper" hasArrow :refElement="refElement" :placement="placement" :visible="always || popperVisible">
       <div class="ui-tooltip-content">
         <slot name="content">{{content}}</slot>
       </div>
@@ -44,6 +44,9 @@ export default {
       clearTimeout(this.timeout)
       this.popperVisible = false
       this.$emit('on-popper-hide')
+    },
+    setPosition() {
+      this.$refs.Popper.setPosition()
     }
   },
   mounted() {

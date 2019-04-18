@@ -80,6 +80,10 @@ demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://lilia
 59. Poptip
 60. Tree
 61. Table
+62. Slider
+
+#### 0.4.2版本更新（2019年4月18日）
+新增Slider组件
 
 #### 0.4.1版本更新（2019年4月16日）
 新增Table组件，该版本仅实现了部分功能，后续版本会逐步实现所有功能，详见演示地址：[打开Demo](https://liliangabc.github.io/vueui-widgets/#/samples/Table)

@@ -98,6 +98,10 @@ import Tree from './components/tree/Tree'
 import Table from './components/table/Table'
 // 滑块
 import Slider from './components/Slider'
+// 表单
+import Form from './components/form/Form'
+// 表单项
+import FormItem from './components/form/FormItem'
 
 // 消息提示
 import Message from './components/Message'
@@ -169,7 +173,9 @@ const comps = {
   Poptip,
   Tree,
   Table,
-  Slider
+  Slider,
+  Form,
+  FormItem
 }
 
 export default {

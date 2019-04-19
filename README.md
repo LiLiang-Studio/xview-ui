@@ -7,10 +7,10 @@
 demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://liliangabc.github.io/vueui-widgets)
 
 ```javascript
-  import Vue from 'vue'
-  import VueUI from 'vueui-widgets'
-  import 'vueui-widgets/dist/vueui.css'
-  Vue.use(VueUI, { prefix: 'ui' })
+import Vue from 'vue'
+import VueUI from 'vueui-widgets'
+import 'vueui-widgets/dist/vueui.css'
+Vue.use(VueUI, { prefix: 'ui' })
 ```
 
 #### options 目前仅支持 prefix属性，默认值为 'ui'，用来设置组件名字前缀，
@@ -81,6 +81,11 @@ demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://lilia
 60. Tree
 61. Table
 62. Slider
+63. Form
+64. FormItem
+
+#### 0.4.3版本更新（2019年4月19日）
+新增Form，FormItem组件，暂不支持表单验证
 
 #### 0.4.2版本更新（2019年4月18日）
 新增Slider组件
@@ -165,25 +170,25 @@ Select组件新增支持多选和键盘选择，以及本地和远程搜索功�
 + 新增resize，scroll 指令， 二者都绑定一个Function，window大小改变或滚动会调用该Function，用法如下： 
 
 ```javascript
-  <template>
-    <div>
-      <div v-resize="handleResize"></div>
-      <div v-scroll="handleScroll"></div>
-    </div>
-  </template>
+<template>
+  <div>
+    <div v-resize="handleResize"></div>
+    <div v-scroll="handleScroll"></div>
+  </div>
+</template>
 
-  <script>
-    export default {
-      methods: {
-        handleResize(event) {
+<script>
+  export default {
+    methods: {
+      handleResize(event) {
 
-        },
-        handleScroll(event) {
+      },
+      handleScroll(event) {
 
-        }
       }
     }
-  </script>
+  }
+</script>
 ```
 
 #### 0.1.6版本更新（2019年3月22日）
@@ -214,30 +219,30 @@ Select组件新增支持多选和键盘选择，以及本地和远程搜索功�
 
 #### Message用法 (options 为String || Object 类型)
 
-```
-  this.$Message.info(options)
-  this.$Message.success(options)
-  this.$Message.warning(options)
-  this.$Message.error(options)
-  this.$Message.loading(options)
+```javascript
+this.$Message.info(options)
+this.$Message.success(options)
+this.$Message.warning(options)
+this.$Message.error(options)
+this.$Message.loading(options)
 
-  this.$Message.config(options)
-  this.$Message.destroy(options)
+this.$Message.config(options)
+this.$Message.destroy(options)
 ```
 
 #### Notice用法 (options 为String || Object 类型)
 
-```
-  this.$Notice.open(options)
-  this.$Notice.info(options)
-  this.$Notice.success(options)
-  this.$Notice.warning(options)
-  this.$Notice.error(options)
+```javascript
+this.$Notice.open(options)
+this.$Notice.info(options)
+this.$Notice.success(options)
+this.$Notice.warning(options)
+this.$Notice.error(options)
 
-  this.$Notice.config(options)
-  this.$Notice.destroy(options)
+this.$Notice.config(options)
+this.$Notice.destroy(options)
 ```
-***该组件库兼容IE10以上，如果你要考虑IE9的兼容，请谨慎选择！***
+***稳定版将兼容IE10以上和其它浏览器，如果你要考虑IE9的兼容，请谨慎选择！***
 
 很抱歉，因精力有限，目前专注于开发新组件，文档暂时没充足时间编写，
 详细文档请暂时参见iview [http://www.iviewui.com/](http://www.iviewui.com/)

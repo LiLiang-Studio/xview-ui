@@ -83,6 +83,10 @@ Vue.use(VueUI, { prefix: 'ui' })
 62. Slider
 63. Form
 64. FormItem
+65. AutoComplete
+
+#### 0.4.4版本更新（2019年4月23日）
+新增AutoComplete组件，暂不支持自定义slot选项列表
 
 #### 0.4.3版本更新（2019年4月19日）
 新增Form，FormItem组件，暂不支持表单验证

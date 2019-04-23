@@ -8,6 +8,7 @@
 import UiIcon from './../Icon'
 import { findParentByName } from './../../utils'
 export default {
+  name: 'ui-select-option',
   components: { UiIcon },
   data() {
     return {

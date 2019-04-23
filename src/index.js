@@ -102,6 +102,8 @@ import Slider from './components/Slider'
 import Form from './components/form/Form'
 // 表单项
 import FormItem from './components/form/FormItem'
+// 自动补全
+import AutoComplete from './components/AutoComplete'
 
 // 消息提示
 import Message from './components/Message'
@@ -175,7 +177,8 @@ const comps = {
   Table,
   Slider,
   Form,
-  FormItem
+  FormItem,
+  AutoComplete
 }
 
 export default {

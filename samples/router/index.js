@@ -6,6 +6,8 @@ const _require = name => require(`../pages/${name}.vue`).default
 Vue.use(Router)
 
 export const routeArray = [
+  'DatePicker',
+  'TimePicker',
   'AutoComplete',
   'Form',
   'Slider',

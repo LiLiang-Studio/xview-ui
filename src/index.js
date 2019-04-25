@@ -104,6 +104,10 @@ import Form from './components/form/Form'
 import FormItem from './components/form/FormItem'
 // 自动补全
 import AutoComplete from './components/AutoComplete'
+// 日期选择器
+import DatePicker from './components/picker/DatePicker'
+// 时间选择器
+import TimePicker from './components/picker/TimePicker'
 
 // 消息提示
 import Message from './components/Message'
@@ -178,7 +182,9 @@ const comps = {
   Slider,
   Form,
   FormItem,
-  AutoComplete
+  AutoComplete,
+  DatePicker,
+  TimePicker
 }
 
 export default {

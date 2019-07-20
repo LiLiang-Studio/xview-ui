@@ -92,15 +92,8 @@ export function findChildrensByName(vm, name) {
   let rtnArr = [], nochecked = [...vm.$children]
   const checkFunc = vm => vm.$options.name === name
   while (nochecked.length) {
-    let curItem = nochecked.pop()
-    if (checkFunc(curItem)) {
-      rtnArr.push(curItem)
-    } else {
-      curItem.$children.forEach(_ => {
-        nochecked.push(_)
-        if (checkFunc(_)) rtnArr.push(_)
-      })
-    }
+    let curItem = nochecked.shift()
+    checkFunc(curItem) ? rtnArr.push(curItem) : curItem.$children.forEach(_ => nochecked.push(_))
   }
   return rtnArr
 }

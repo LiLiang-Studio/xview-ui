@@ -32,7 +32,9 @@ export default [
       nodeResolve(),
       commonjs(),
       nodeGlobals(),
-      postcss(),
+      postcss({
+        minimize: true
+      }),
       buble({
         objectAssign: true
       })

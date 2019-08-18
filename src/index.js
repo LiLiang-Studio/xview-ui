@@ -5,10 +5,19 @@ import { NoticeManager } from './utils/vueFunc'
 import { createModal } from './components/modal'
 import { createDirectives } from './directives'
 
+/**
+ * 新版本组件导入
+ */
+
+// 图标
+import Icon from './components/icon'
+// 头像
+import Avatar from './components/avatar'
+
+
+
 // 警告提示
 import Alert from './components/Alert.vue'
-// 头像
-import Avator from './components/Avator.vue'
 // // 回到顶部
 import BackTop from './components/BackTop.vue'
 // // 微标
@@ -21,8 +30,7 @@ import Card from './components/Card.vue'
 // // 复选框
 import Checkbox from './components/checkbox/Checkbox.vue'
 import CheckboxGroup from './components/checkbox/CheckboxGroup.vue'
-// // 图标
-import Icon from './components/Icon.vue'
+
 // // 文本输入框
 import Input from './components/Input.vue'
 // // 进度条
@@ -121,8 +129,10 @@ import Spin, { createSpin } from './components/spin'
 import { createLoadingBar } from './components/loading-bar'
 
 const comps = {
+  Icon,
+  Avatar,
+
   Alert,
-  Avator,
   BackTop,
   Badge,
   Button,
@@ -130,7 +140,6 @@ const comps = {
   Card,
   Checkbox,
   CheckboxGroup,
-  Icon,
   Input,
   Progress,
   Tag,

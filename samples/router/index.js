@@ -1,5 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+
+import Icon from '../pages/Icon.vue'
+import Avatar from '../pages/Avatar.vue'
+
+
 import HomeRouter from '../pages/HomeRouter.vue'
 import DatePicker from '../pages/DatePicker.vue'
 import TimePicker from '../pages/TimePicker.vue'
@@ -30,13 +35,11 @@ import Grid from '../pages/Grid.vue'
 import Layout from '../pages/Layout.vue'
 import Swiper from '../pages/Swiper.vue'
 import Alert from '../pages/Alert.vue'
-import Avator from '../pages/Avator.vue'
 import BackTop from '../pages/BackTop.vue'
 import Badge from '../pages/Badge.vue'
 import Button from '../pages/Button.vue'
 import Card from '../pages/Card.vue'
 import Checkbox from '../pages/Checkbox.vue'
-import Icon from '../pages/Icon.vue'
 import Input from '../pages/Input.vue'
 import Message from '../pages/Message.vue'
 import Notice from '../pages/Notice.vue'
@@ -50,6 +53,10 @@ import Breadcrumb from '../pages/Breadcrumb.vue'
 Vue.use(Router)
 
 export const routeComponents = {
+  Icon,
+  Avatar,
+
+
   DatePicker,
   TimePicker,
   AutoComplete,
@@ -79,13 +86,11 @@ export const routeComponents = {
   Layout,
   Swiper,
   Alert,
-  Avator,
   BackTop,
   Badge,
   Button,
   Card,
   Checkbox,
-  Icon,
   Input,
   Message,
   Notice,
@@ -98,14 +103,13 @@ export const routeComponents = {
 }
 
 const router = new Router({
-  mode: 'history',
   routes: [
     { path: '/', redirect: '/samples' },
     {
       path: '/samples',
       component: HomeRouter,
       children: [
-        { path: '', redirect: routeComponents[Object.keys(routeComponents)[0]] },
+        { path: '', redirect: Object.keys(routeComponents)[0] },
         ...Object.keys(routeComponents).map(_ => {
           return {
             path: _, name: _, component: routeComponents[_]

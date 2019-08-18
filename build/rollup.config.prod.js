@@ -1,5 +1,3 @@
-process.env.NODE_ENV = 'production'
-
 import { terser } from 'rollup-plugin-terser'
 import cleanup from 'rollup-plugin-cleanup'
 import filesize from 'rollup-plugin-filesize'

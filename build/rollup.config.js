@@ -7,8 +7,11 @@ import vue from 'rollup-plugin-vue'
 import postcss from 'rollup-plugin-postcss'
 import alias from 'rollup-plugin-alias'
 import url from 'rollup-plugin-url'
+import copy from 'rollup-plugin-copy'
+import json from 'rollup-plugin-json'
 
-const isProductionEnv = process.env.NODE_ENV === 'production'
+import { name as moduleName } from '../package.json'
+const isProd = process.env.NODE_ENV === 'production'
 
 export const resolveFile = filePath => path.join(__dirname, '..', filePath)
 
@@ -16,7 +19,7 @@ export default [
   {
     input: resolveFile('src/index.js'),
     output: {
-      file: resolveFile('dist/index.umd.min.js'),
+      file: resolveFile(`dist/${moduleName}.umd.min.js`),
       format: 'umd',
       name: 'VueUI'
     },
@@ -26,9 +29,15 @@ export default [
         '@': resolveFile('src')
       }),
       url(),
+      copy({
+        targets: [
+          { src: 'src/fonts/*', dest: `${isProd ? 'dist' : 'public'}/fonts` }
+        ]
+      }),
       vue({
         css: false
       }),
+      json(),
       nodeResolve(),
       commonjs(),
       nodeGlobals(),

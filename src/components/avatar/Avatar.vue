@@ -1,5 +1,5 @@
 <template>
-  <span class="ui-avator" :class="[{icon}, shape, size]">
+  <span :class="classes" v-on="$listeners">
     <slot>
       <img v-if="src" :src="src">
       <UiIcon v-else-if="icon" :type="icon"/>
@@ -7,9 +7,13 @@
   </span>
 </template>
 <script>
-import UiIcon from './Icon.vue'
+import UiIcon from '../icon'
 export default {
+  name: 'UiAvatar',
   components: { UiIcon },
+  data() {
+    return { prefix: 'ui-avatar' }
+  },
   props: {
     shape: {
       default: 'circle',
@@ -25,47 +29,57 @@ export default {
     },
     src: String,
     icon: String
+  },
+  computed: {
+    classes() {
+      let { prefix, shape, size, icon, src } = this
+      return [prefix, `${prefix}--${shape}`, `${prefix}--${size}`, { isIcon: icon }]
+    }
   }
 }
 </script>
 <style lang="less">
-.ui-avator {
+.ui-avatar {
   display: inline-block;
   text-align: center;
   background-color: #ccc;
   color: #fff;
   overflow: hidden;
   vertical-align: middle;
-  width: 32px;
-  height: 32px;
-  line-height: 32px;
-  border-radius: 50%;
-  &.square {
-    border-radius: 4px;
-  }
-  &.icon {
+  position: relative;
+  &.isIcon {
     font-size: 18px;
   }
-  img {
-    width: 100%;
-    height: 100%;
+  &--circle {
+    border-radius: 50%;
   }
-  &.large {
+  &--square {
+    border-radius: 4px;
+  }
+  &--default {
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+  }
+  &--large {
     width: 40px;
     height: 40px;
     line-height: 40px;
-    font-size: 18px;
-    &.icon {
+    &.isIcon {
       font-size: 24px;
     }
   }
-  &.small {
+  &--small {
     width: 24px;
     height: 24px;
     line-height: 24px;
-    &.icon {
+    &.isIcon {
       font-size: 14px;
     }
+  }
+  img {
+    width: inherit;
+    height: inherit;
   }
 }
 </style>

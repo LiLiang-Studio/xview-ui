@@ -8,25 +8,27 @@
     "name": "liliang"
   },
   "scripts": {
-    "serve": "rollup -w -c build/rollup.config.dev.js",
-    "build": "rollup -c build/rollup.config.prod.js"
+    "serve": "cross-env NODE_ENV=development rollup -w -c build/rollup.config.dev.js",
+    "build": "cross-env NODE_ENV=production rollup -c build/rollup.config.prod.js"
   },
   "devDependencies": {
     "autoprefixer": "^9.6.1",
+    "cross-env": "^5.2.0",
     "less": "^3.10.1",
     "rollup": "^1.19.4",
     "rollup-plugin-alias": "^1.5.2",
     "rollup-plugin-buble": "^0.19.8",
     "rollup-plugin-cleanup": "^3.1.1",
     "rollup-plugin-commonjs": "^10.0.2",
+    "rollup-plugin-copy": "^3.1.0",
     "rollup-plugin-filesize": "^6.2.0",
+    "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-livereload": "^1.0.1",
     "rollup-plugin-node-globals": "^1.4.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-postcss": "^2.0.3",
     "rollup-plugin-serve": "^1.0.1",
     "rollup-plugin-terser": "^5.1.1",
-    "rollup-plugin-uglify": "^6.0.2",
     "rollup-plugin-url": "^2.2.2",
     "rollup-plugin-vue": "^5.0.1",
     "vue": "^2.6.10",

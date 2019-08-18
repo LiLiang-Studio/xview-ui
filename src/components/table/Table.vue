@@ -7,8 +7,8 @@
   </div>
 </template>
 <script>
-import UiTableHeader from './TableHeader'
-import UiTableBody from './TableBody'
+import UiTableHeader from './TableHeader.vue'
+import UiTableBody from './TableBody.vue'
 export default {
   components: { UiTableHeader, UiTableBody },
   props: {
@@ -58,6 +58,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../../styles/vars.less");
 .ui-table-wrapper {
   max-width: 100%;
   border: 1px solid @divider-color;

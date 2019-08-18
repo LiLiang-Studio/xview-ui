@@ -1,5 +1,5 @@
 
-import UiSpin from './Spin'
+import UiSpin from './Spin.vue'
 import { setMaxZIndex, winScrollLock } from './../../utils'
 
 /**

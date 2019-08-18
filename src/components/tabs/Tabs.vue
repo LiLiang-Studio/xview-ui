@@ -22,8 +22,8 @@
   </div>
 </template>
 <script>
-import UiIcon from './../Icon'
-import UiCloseIconButton from './../CloseIconButton'
+import UiIcon from './../Icon.vue'
+import UiCloseIconButton from './../CloseIconButton.vue'
 import { RenderCell } from './../../utils'
 export default {
   name: 'ui-tabs',
@@ -96,6 +96,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../../styles/vars.less");
 .ui-tabs {
   position: relative;
   overflow: hidden;

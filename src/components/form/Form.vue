@@ -40,6 +40,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../../styles/vars.less");
 .ui-form {
   &.inline {
     .ui-form-item {

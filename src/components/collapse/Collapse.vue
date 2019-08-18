@@ -54,6 +54,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../../styles/vars.less");
 .ui-collapse {
   border-radius: 3px;
   background-color: @bg-color;

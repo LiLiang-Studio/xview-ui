@@ -52,6 +52,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../styles/vars.less");
 .ui-switch {
   width: 48px;
   height: 24px;

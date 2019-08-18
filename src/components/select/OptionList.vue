@@ -63,6 +63,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../../styles/vars.less");
 .ui-select-dropdown {
   max-height: 200px;
   overflow: auto;

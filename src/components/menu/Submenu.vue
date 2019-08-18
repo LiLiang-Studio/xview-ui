@@ -14,8 +14,8 @@
   </li>
 </template>
 <script>
-import UiIcon from './../Icon'
-import UiOptionList from './../select/OptionList'
+import UiIcon from './../Icon.vue'
+import UiOptionList from './../select/OptionList.vue'
 import { findParentByName } from './../../utils'
 export default {
   name: 'ui-menu-submenu',

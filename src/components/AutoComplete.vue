@@ -18,8 +18,8 @@
   </div>
 </template>
 <script>
-import UiInput from './Input'
-import UiDrop from './select/OptionList'
+import UiInput from './Input.vue'
+import UiDrop from './select/OptionList.vue'
 import { isSelfOrParent } from './../utils'
 export default {
   name: 'ui-autocomplete',
@@ -111,6 +111,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../styles/vars.less");
 .ui-autocomplete-select {
   list-style: none;
 }

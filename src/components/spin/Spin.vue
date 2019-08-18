@@ -32,6 +32,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../../styles/vars.less");
 .ui-spin {
   color: @primary-color;
   text-align: center;

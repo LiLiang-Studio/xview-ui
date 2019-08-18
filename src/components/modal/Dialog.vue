@@ -9,9 +9,9 @@
   </UiModalView>
 </template>
 <script>
-import UiIcon from './../Icon'
-import UiButton from './../button/Button'
-import UiModalView from './ModalView'
+import UiIcon from './../Icon.vue'
+import UiButton from './../button/Button.vue'
+import UiModalView from './ModalView.vue'
 import { getDefaultProps } from './modalUntils'
 import { iconTypes } from './../../utils'
 export default {
@@ -54,6 +54,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../../styles/vars.less");
 .ui-dialog {
   .ui-dialog-icon {
     font-size: 36px;

@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import UiTreeNode from './Node'
+import UiTreeNode from './Node.vue'
 let key = 0
 export default {
   name: 'ui-tree',

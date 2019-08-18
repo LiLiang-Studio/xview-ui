@@ -27,6 +27,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../../styles/vars.less");
 .ui-dropdown-item {
   list-style: none;
   line-height: normal;

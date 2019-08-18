@@ -2,7 +2,7 @@
   <UiIcon class="ui-close-icon-button" type="ios-close-empty" @click="$emit('click', $event)"/>
 </template>
 <script>
-import UiIcon from './Icon'
+import UiIcon from './Icon.vue'
 export default {
   components: { UiIcon }
 }

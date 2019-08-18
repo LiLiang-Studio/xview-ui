@@ -18,9 +18,9 @@
   </ul>
 </template>
 <script>
-import UiIcon from './../Icon'
-import UiLoading from './../scroll/Loading'
-import UiCheckbox from './../checkbox/Checkbox'
+import UiIcon from './../Icon.vue'
+import UiLoading from './../scroll/Loading.vue'
+import UiCheckbox from './../checkbox/Checkbox.vue'
 import { findParentByName } from './../../utils'
 export default {
   name: 'ui-tree-node',
@@ -67,6 +67,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../../styles/vars.less");
 .ui-tree-node {
   li {
     list-style: none;

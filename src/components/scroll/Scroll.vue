@@ -6,7 +6,7 @@
   </div>
 </template>
 <script>
-import UiLoading from './Loading'
+import UiLoading from './Loading.vue'
 export default {
   components: { UiLoading },
   data() {

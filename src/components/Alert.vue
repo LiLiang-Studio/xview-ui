@@ -11,8 +11,8 @@
   </transition>
 </template>
 <script>
-import UiIcon from './Icon'
-import UiCloseIconButton from './CloseIconButton'
+import UiIcon from './Icon.vue'
+import UiCloseIconButton from './CloseIconButton.vue'
 import { iconTypes } from '../utils'
 export default {
   components: { UiIcon, UiCloseIconButton },
@@ -49,6 +49,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../styles/vars.less");
 .ui-alert {
   border: 1px solid;
   border-radius: 6px;

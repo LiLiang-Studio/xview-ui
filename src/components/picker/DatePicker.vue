@@ -10,10 +10,10 @@
 <script>
 import { isSelfOrParent } from './../../utils'
 import { propsMixin } from './mixins'
-import UiInput from './../Input'
-import UiDrop from './../select/OptionList'
-import UiDateView from './DateView'
-import UiHeader from './Header'
+import UiInput from './../Input.vue'
+import UiDrop from './../select/OptionList.vue'
+import UiDateView from './DateView.vue'
+import UiHeader from './Header.vue'
 export default {
   name: 'ui-datepicker',
   mixins: [propsMixin],

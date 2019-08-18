@@ -10,7 +10,7 @@
   </div>
 </template>
 <script>
-import UiIcon from './../Icon'
+import UiIcon from './../Icon.vue'
 import { findParentByName } from '../../utils'
 export default {
   components: { UiIcon },
@@ -44,6 +44,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../../styles/vars.less");
 .ui-collapse-item + .ui-collapse-item {
   border-top: 1px solid @border-color;
 }

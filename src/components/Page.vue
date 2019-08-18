@@ -51,10 +51,10 @@
   </div>
 </template>
 <script>
-import UiIcon from './Icon'
-import UiInput from './Input'
-import UiSelect from './select/Select'
-import UiOption from './select/Option'
+import UiIcon from './Icon.vue'
+import UiInput from './Input.vue'
+import UiSelect from './select/Select.vue'
+import UiOption from './select/Option.vue'
 export default {
   components: { UiIcon, UiSelect, UiOption, UiInput },
   data() {
@@ -163,6 +163,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../styles/vars.less");
 .ui-page-list {
   display: inline-block;
   li {

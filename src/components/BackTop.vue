@@ -8,7 +8,7 @@
   </transition>
 </template>
 <script>
-import UiIcon from './Icon'
+import UiIcon from './Icon.vue'
 import { throttle } from '../utils'
 export default {
   components: { UiIcon },

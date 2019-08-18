@@ -5,7 +5,7 @@
   </li>
 </template>
 <script>
-import UiIcon from './../Icon'
+import UiIcon from './../Icon.vue'
 import { findParentByName } from './../../utils'
 export default {
   name: 'ui-select-option',
@@ -46,6 +46,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../../styles/vars.less");
 .ui-select-option {
   padding: 7px 16px;
   list-style: none;

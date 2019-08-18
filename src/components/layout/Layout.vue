@@ -16,6 +16,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../../styles/vars.less");
 .ui-layout {
   display: flex;
   flex-direction: column;

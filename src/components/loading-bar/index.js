@@ -2,7 +2,7 @@
  * 加载条对象
  */
 
-import UiLoadingBar from './LoadingBar'
+import UiLoadingBar from './LoadingBar.vue'
 import { setMaxZIndex } from './../../utils'
 
 /**

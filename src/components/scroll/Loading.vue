@@ -7,8 +7,8 @@
   </div>
 </template>
 <script>
-import UiIcon from './../Icon'
-import UiSpin from './../spin/Spin'
+import UiIcon from './../Icon.vue'
+import UiSpin from './../spin/Spin.vue'
 export default {
   components: { UiIcon, UiSpin },
   props: {

@@ -12,7 +12,7 @@
 </template>
 <script>
 import { isSelfOrParent } from './../../utils'
-import UiOptionList from './../select/OptionList'
+import UiOptionList from './../select/OptionList.vue'
 export default {
   name: 'ui-dropdown',
   components: { UiOptionList },

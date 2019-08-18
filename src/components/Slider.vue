@@ -23,8 +23,8 @@
 </template>
 <script>
 import { getOffset } from './../utils'
-import UiTooltip from './Tooltip'
-import UiInputNumber from './InputNumber'
+import UiTooltip from './Tooltip.vue'
+import UiInputNumber from './InputNumber.vue'
 export default {
   components: { UiTooltip, UiInputNumber },
   data() {
@@ -175,6 +175,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../styles/vars.less");
 .ui-slider {
   display: flex;
   align-items: center;

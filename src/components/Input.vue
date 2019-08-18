@@ -38,7 +38,7 @@
   </div>
 </template>
 <script>
-import UiIcon from './Icon'
+import UiIcon from './Icon.vue'
 import { setAutoHeight } from '../utils'
 export default {
   components: { UiIcon },
@@ -158,6 +158,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../styles/vars.less");
 .ui-input, .ui-input-input {
   display: inline-block;
   width: 100%;

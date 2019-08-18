@@ -16,7 +16,7 @@
   </div>
 </template>
 <script>
-import UiIcon from './Icon'
+import UiIcon from './Icon.vue'
 export default {
   components: { UiIcon },
   props: {
@@ -56,6 +56,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../styles/vars.less");
 .ui-progress {
   .ui-progress-box {
     width: 100%;

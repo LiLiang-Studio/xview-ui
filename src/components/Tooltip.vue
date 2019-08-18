@@ -11,7 +11,7 @@
   </div>
 </template>
 <script>
-import UiPopper from './popper/Popper'
+import UiPopper from './popper/Popper.vue'
 export default {
   components: { UiPopper },
   data() {
@@ -55,6 +55,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../styles/vars.less");
 .ui-tooltip, .ui-tooltip-rel {
   display: inline-block;
 }

@@ -18,7 +18,7 @@
   </div>
 </template>
 <script>
-import UiIcon from './../Icon'
+import UiIcon from './../Icon.vue'
 import { findChildrensByName } from './../../utils'
 export default {
   components: { UiIcon },

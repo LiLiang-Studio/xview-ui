@@ -12,7 +12,7 @@
   </div>
 </template>
 <script>
-import UiButton from './../button/Button'
+import UiButton from './../button/Button.vue'
 import { findParentByName } from './../../utils'
 export default {
   components: { UiButton },
@@ -70,6 +70,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../../styles/vars.less");
 .ui-radio {
   display: inline-block;
   &:not(.isButtonType) + .ui-radio {

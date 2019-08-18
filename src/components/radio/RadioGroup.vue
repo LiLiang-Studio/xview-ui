@@ -7,7 +7,7 @@
   </div>
 </template>
 <script>
-import UiButtonGroup from './../button/ButtonGroup'
+import UiButtonGroup from './../button/ButtonGroup.vue'
 export default {
   name: 'ui-radio-group',
   components: { UiButtonGroup },

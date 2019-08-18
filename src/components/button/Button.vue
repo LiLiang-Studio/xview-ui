@@ -7,7 +7,7 @@
   </button>
 </template>
 <script>
-import UiIcon from './../Icon'
+import UiIcon from './../Icon.vue'
 export default {
   components: { UiIcon },
   data() {
@@ -51,6 +51,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../../styles/vars.less");
 .ui-button {
   -webkit-appearance: button;
   outline: none;

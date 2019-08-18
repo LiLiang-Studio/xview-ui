@@ -21,12 +21,13 @@
   </div>
 </template>
 <script>
-import UiIcon from './../Icon'
+import UiIcon from './../Icon.vue'
 export default {
   components: { UiIcon }
 }
 </script>
 <style lang="less">
+@import url("../../styles/vars.less");
 .ui-datepicker-header {
   height: 32px;
   padding: 0 10px;

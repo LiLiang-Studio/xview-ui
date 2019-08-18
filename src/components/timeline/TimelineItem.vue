@@ -36,6 +36,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../../styles/vars.less");
 .ui-timeline-item {
   padding-bottom: 24px;
   position: relative;

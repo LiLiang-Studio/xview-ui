@@ -46,9 +46,9 @@
   </div>
 </template>
 <script>
-import UiTag from './../Tag'
-import UiIcon from './../Icon'
-import UiOptionList from './OptionList'
+import UiTag from './../Tag.vue'
+import UiIcon from './../Icon.vue'
+import UiOptionList from './OptionList.vue'
 import { hasClassNameOfParent, findParentByClassName, isSelfOrParent } from './../../utils'
 
 // 目标选项列表组件
@@ -421,6 +421,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../../styles/vars.less");
 .ui-select {
   display: inline-block;
   width: 100%;

@@ -7,7 +7,7 @@
   </span>
 </template>
 <script>
-import UiIcon from './../Icon'
+import UiIcon from './../Icon.vue'
 import { findParentByName } from '../../utils'
 export default {
   components: { UiIcon },
@@ -69,6 +69,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../../styles/vars.less");
 .ui-checkbox-group.large .ui-checkbox, .ui-checkbox.large {
   font-size: 14px;
   .ui-checkbox-icon {

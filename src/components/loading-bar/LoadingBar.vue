@@ -38,6 +38,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../../styles/vars.less");
 .ui-loadingbar {
   position: fixed;
   top: 0;

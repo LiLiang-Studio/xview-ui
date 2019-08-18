@@ -34,6 +34,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../../styles/vars.less");
 .ui-breadcrumb-item {
   font-size: 14px;
   color: @content-color;

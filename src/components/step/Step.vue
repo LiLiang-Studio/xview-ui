@@ -13,7 +13,7 @@
   </div>
 </template>
 <script>
-import UiIcon from './../Icon'
+import UiIcon from './../Icon.vue'
 import { findParentByName } from './../../utils'
 export default {
   components: { UiIcon },

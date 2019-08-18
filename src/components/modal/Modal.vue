@@ -10,7 +10,7 @@
   </transition>
 </template>
 <script>
-import UiModalView from './ModalView'
+import UiModalView from './ModalView.vue'
 import { getDefaultProps } from './modalUntils'
 import { setMaxZIndex, winScrollLock } from '../../utils'
 export default {

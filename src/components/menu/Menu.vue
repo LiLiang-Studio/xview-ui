@@ -107,6 +107,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../../styles/vars.less");
 // 主菜单容器
 .ui-menu {
   font-size: 14px;

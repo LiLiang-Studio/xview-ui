@@ -20,8 +20,8 @@
 </template>
 <script>
 import { getDefaultProps } from './modalUntils'
-import UiButton from './../button/Button'
-import UiCloseIconButton from './../CloseIconButton'
+import UiButton from './../button/Button.vue'
+import UiCloseIconButton from './../CloseIconButton.vue'
 export default {
   components: { UiButton, UiCloseIconButton },
   data() {
@@ -54,6 +54,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url("../../styles/vars.less");
 .ui-modal, .ui-modal-mask {
   top: 0;
   right: 0;

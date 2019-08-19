@@ -23,7 +23,7 @@
 </template>
 <script>
 import UiIcon from './../Icon.vue'
-import UiCloseIconButton from './../CloseIconButton.vue'
+import UiCloseIconButton from '../close-icon-button'
 import { RenderCell } from './../../utils'
 export default {
   name: 'ui-tabs',

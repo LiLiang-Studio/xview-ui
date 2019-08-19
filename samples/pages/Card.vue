@@ -6,9 +6,7 @@
       <p slot="title">
         <Icon type="ios-film-outline"></Icon>Classic film
       </p>
-      <a href="#" slot="extra" @click.prevent="changeLimit">
-        <Icon type="ios-loop-strong"></Icon>Change
-      </a>
+      <a href="#" slot="extra" @click.prevent="changeLimit">Change</a>
       <ul>
         <li v-for="item in randomMovieList" :key="item.name">
           <a :href="item.url" target="_blank">{{ item.name }}</a>
@@ -31,8 +29,7 @@
     </div>
 
     <div class="page-sub-title">通过设置属性dis-hover来禁用鼠标悬停显示阴影的效果。</div>
-    <Card dis-hover>
-      <p slot="title">The standard card</p>
+    <Card dis-hover title="The standard card">
       <p>Content of card</p>
       <p>Content of card</p>
       <p>Content of card</p>

@@ -21,7 +21,7 @@
 <script>
 import { getDefaultProps } from './modalUntils'
 import UiButton from './../button/Button.vue'
-import UiCloseIconButton from './../CloseIconButton.vue'
+import UiCloseIconButton from '../close-icon-button'
 export default {
   components: { UiButton, UiCloseIconButton },
   data() {

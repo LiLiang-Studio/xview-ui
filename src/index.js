@@ -9,15 +9,18 @@ import { createDirectives } from './directives'
  * 新版本组件导入
  */
 
+import methods from './methods'
+
 // 图标
 import Icon from './components/icon'
 // 头像
 import Avatar from './components/avatar'
-
-
-
+// 卡片
+import Card from './components/card'
 // 警告提示
-import Alert from './components/Alert.vue'
+import Alert from './components/alert'
+
+
 // // 回到顶部
 import BackTop from './components/BackTop.vue'
 // // 微标
@@ -25,8 +28,6 @@ import Badge from './components/Badge.vue'
 // // 按钮
 import Button from './components/button/Button.vue'
 import ButtonGroup from './components/button/ButtonGroup.vue'
-// // 卡片
-import Card from './components/Card.vue'
 // // 复选框
 import Checkbox from './components/checkbox/Checkbox.vue'
 import CheckboxGroup from './components/checkbox/CheckboxGroup.vue'
@@ -131,13 +132,13 @@ import { createLoadingBar } from './components/loading-bar'
 const comps = {
   Icon,
   Avatar,
-
+  Card,
   Alert,
+
   BackTop,
   Badge,
   Button,
   ButtonGroup,
-  Card,
   Checkbox,
   CheckboxGroup,
   Input,
@@ -203,6 +204,7 @@ export default {
    * @param {Object} options 
    */
   install(Vue, options = {}) {
+    Vue.prototype.$uiTools = methods
     let prefix = typeof options.prefix === 'string' ? options.prefix : 'Ui'
     for (let name in comps) Vue.component(prefix + name, comps[name])
 

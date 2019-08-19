@@ -1,9 +1,10 @@
 <template>
-  <UiIcon class="ui-close-icon-button" type="ios-close-empty" @click="$emit('click', $event)"/>
+  <UiIcon class="ui-close-icon-button" type="ios-close-empty" v-on="$listeners"/>
 </template>
 <script>
-import UiIcon from './Icon.vue'
+import UiIcon from '../icon'
 export default {
+  name: 'UiCloseIconButton',
   components: { UiIcon }
 }
 </script>

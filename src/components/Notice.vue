@@ -12,7 +12,7 @@
 </template>
 <script>
 import UiIcon from './Icon.vue'
-import UiCloseIconButton from './CloseIconButton.vue'
+import UiCloseIconButton from './close-icon-button'
 import { iconTypes, isFunc } from '../utils'
 export default {
   components: { UiIcon, UiCloseIconButton },

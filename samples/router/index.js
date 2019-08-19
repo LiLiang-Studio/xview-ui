@@ -55,6 +55,8 @@ Vue.use(Router)
 export const routeComponents = {
   Icon,
   Avatar,
+  Card,
+  Alert,
 
 
   DatePicker,
@@ -85,11 +87,9 @@ export const routeComponents = {
   Grid,
   Layout,
   Swiper,
-  Alert,
   BackTop,
   Badge,
   Button,
-  Card,
   Checkbox,
   Input,
   Message,

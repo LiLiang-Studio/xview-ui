@@ -23081,9 +23081,6 @@
             //
             //
             //
-            //
-            //
-            //
 
             var script$t = {
               data: function data() {
@@ -23212,11 +23209,7 @@
                         },
                         slot: "extra"
                       },
-                      [
-                        _c("Icon", { attrs: { type: "ios-loop-strong" } }),
-                        _vm._v("Change\n    ")
-                      ],
-                      1
+                      [_vm._v("Change")]
                     ),
                     _vm._v(" "),
                     _c(
@@ -23276,11 +23269,7 @@
                     _vm._v("通过设置属性dis-hover来禁用鼠标悬停显示阴影的效果。")
                   ]),
                   _vm._v(" "),
-                  _c("Card", { attrs: { "dis-hover": "" } }, [
-                    _c("p", { attrs: { slot: "title" }, slot: "title" }, [
-                      _vm._v("The standard card")
-                    ]),
-                    _vm._v(" "),
+                  _c("Card", { attrs: { "dis-hover": "", title: "The standard card" } }, [
                     _c("p", [_vm._v("Content of card")]),
                     _vm._v(" "),
                     _c("p", [_vm._v("Content of card")]),
@@ -25405,6 +25394,8 @@
             var routeComponents = {
               Icon: Icon,
               Avatar: Avatar,
+              Card: Card,
+              Alert: Alert,
 
 
               DatePicker: DatePicker,
@@ -25435,11 +25426,9 @@
               Grid: Grid,
               Layout: Layout,
               Swiper: Swiper,
-              Alert: Alert,
               BackTop: BackTop,
               Badge: Badge,
               Button: Button,
-              Card: Card,
               Checkbox: Checkbox,
               Input: Input,
               Message: Message,
@@ -26172,11 +26161,25 @@
             }
 
             //
+            //
+            //
+
             var script$F = {
-              components: { UiIcon: UiIcon }
+              name: 'UiIcon',
+              props: {
+                type: String,
+                size: [Number, String],
+                color: String
+              },
+              computed: {
+                styles: function styles() {
+                  var fontSize = this.size && ((parseInt(this.size)) + "px");
+                  return { fontSize: fontSize, color: this.color }
+                }
+              }
             };
 
-            var css$y = ".ui-close-icon-button{cursor:pointer;color:#999;font-size:22px;-webkit-transition:color .2s ease;transition:color .2s ease}.ui-close-icon-button:hover{color:#444}";
+            var css$y = ".ui-icon{display:inline-block;font-family:Ionicons;font-style:normal;font-weight:400;font-variant:normal;text-transform:none;text-rendering:auto;line-height:1;-webkit-font-smoothing:antialiased}";
             styleInject(css$y);
 
             /* script */
@@ -26186,15 +26189,13 @@
               var _vm = this;
               var _h = _vm.$createElement;
               var _c = _vm._self._c || _h;
-              return _c("UiIcon", {
-                staticClass: "ui-close-icon-button",
-                attrs: { type: "ios-close-empty" },
-                on: {
-                  click: function($event) {
-                    return _vm.$emit("click", $event)
-                  }
-                }
-              })
+              return _c(
+                "i",
+                _vm._g(
+                  { class: ["ion-" + _vm.type, "ui-icon"], style: _vm.styles },
+                  _vm.$listeners
+                )
+              )
             };
             var __vue_staticRenderFns__$O = [];
             __vue_render__$O._withStripped = true;
@@ -26213,7 +26214,7 @@
               
 
               
-              var UiCloseIconButton = normalizeComponent_1(
+              var Icon$1 = normalizeComponent_1(
                 { render: __vue_render__$O, staticRenderFns: __vue_staticRenderFns__$O },
                 __vue_inject_styles__$O,
                 __vue_script__$F,
@@ -26226,7 +26227,62 @@
 
             //
             var script$G = {
-              components: { UiButton: Button$1, UiCloseIconButton: UiCloseIconButton },
+              name: 'UiCloseIconButton',
+              components: { UiIcon: Icon$1 }
+            };
+
+            var css$z = ".ui-close-icon-button{cursor:pointer;color:#999;font-size:22px;-webkit-transition:color .2s ease;transition:color .2s ease}.ui-close-icon-button:hover{color:#444}";
+            styleInject(css$z);
+
+            /* script */
+            var __vue_script__$G = script$G;
+            /* template */
+            var __vue_render__$P = function() {
+              var _vm = this;
+              var _h = _vm.$createElement;
+              var _c = _vm._self._c || _h;
+              return _c(
+                "UiIcon",
+                _vm._g(
+                  {
+                    staticClass: "ui-close-icon-button",
+                    attrs: { type: "ios-close-empty" }
+                  },
+                  _vm.$listeners
+                )
+              )
+            };
+            var __vue_staticRenderFns__$P = [];
+            __vue_render__$P._withStripped = true;
+
+              /* style */
+              var __vue_inject_styles__$P = undefined;
+              /* scoped */
+              var __vue_scope_id__$P = undefined;
+              /* module identifier */
+              var __vue_module_identifier__$P = undefined;
+              /* functional template */
+              var __vue_is_functional_template__$P = false;
+              /* style inject */
+              
+              /* style inject SSR */
+              
+
+              
+              var CloseIconButton = normalizeComponent_1(
+                { render: __vue_render__$P, staticRenderFns: __vue_staticRenderFns__$P },
+                __vue_inject_styles__$P,
+                __vue_script__$G,
+                __vue_scope_id__$P,
+                __vue_is_functional_template__$P,
+                __vue_module_identifier__$P,
+                undefined,
+                undefined
+              );
+
+            //
+            var script$H = {
+              components: { UiButton: Button$1, UiCloseIconButton: CloseIconButton },
               data: function data() {
                 return { hasTitle: false }
               },
@@ -26256,13 +26312,13 @@
               }
             };
 
-            var css$z = ".ui-modal,.ui-modal-mask{top:0;right:0;bottom:0;left:0}.ui-modal{position:fixed;overflow:auto;padding:12px;will-change:transform,opacity}.ui-modal.middle{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center}.ui-modal.middle .ui-modal-dialog{top:0}.ui-modal-mask{position:absolute;background-color:rgba(0,0,0,.5)}.ui-modal-dialog{background-color:#fff;margin:0 auto;position:relative;top:100px;border-radius:6px}.ui-modal-close{position:absolute;top:8px;right:16px}.ui-modal-close .ui-close-icon-button{font-size:31px}.ui-modal-header{font-size:14px;font-weight:700;color:#1c2438;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:14px 16px;border-bottom:1px solid #e9eaec}.ui-modal-body{padding:16px;font-size:12px;line-height:1.5}.ui-modal-footer{padding:12px 18px;border-top:1px solid #e9eaec;text-align:right}.ui-modal-footer button+button{margin-left:8px}";
-            styleInject(css$z);
+            var css$A = ".ui-modal,.ui-modal-mask{top:0;right:0;bottom:0;left:0}.ui-modal{position:fixed;overflow:auto;padding:12px;will-change:transform,opacity}.ui-modal.middle{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center}.ui-modal.middle .ui-modal-dialog{top:0}.ui-modal-mask{position:absolute;background-color:rgba(0,0,0,.5)}.ui-modal-dialog{background-color:#fff;margin:0 auto;position:relative;top:100px;border-radius:6px}.ui-modal-close{position:absolute;top:8px;right:16px}.ui-modal-close .ui-close-icon-button{font-size:31px}.ui-modal-header{font-size:14px;font-weight:700;color:#1c2438;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:14px 16px;border-bottom:1px solid #e9eaec}.ui-modal-body{padding:16px;font-size:12px;line-height:1.5}.ui-modal-footer{padding:12px 18px;border-top:1px solid #e9eaec;text-align:right}.ui-modal-footer button+button{margin-left:8px}";
+            styleInject(css$A);
 
             /* script */
-            var __vue_script__$G = script$G;
+            var __vue_script__$H = script$H;
             /* template */
-            var __vue_render__$P = function() {
+            var __vue_render__$Q = function() {
               var _vm = this;
               var _h = _vm.$createElement;
               var _c = _vm._self._c || _h;
@@ -26330,17 +26386,17 @@
                 ]
               )
             };
-            var __vue_staticRenderFns__$P = [];
-            __vue_render__$P._withStripped = true;
+            var __vue_staticRenderFns__$Q = [];
+            __vue_render__$Q._withStripped = true;
 
               /* style */
-              var __vue_inject_styles__$P = undefined;
+              var __vue_inject_styles__$Q = undefined;
               /* scoped */
-              var __vue_scope_id__$P = undefined;
+              var __vue_scope_id__$Q = undefined;
               /* module identifier */
-              var __vue_module_identifier__$P = undefined;
+              var __vue_module_identifier__$Q = undefined;
               /* functional template */
-              var __vue_is_functional_template__$P = false;
+              var __vue_is_functional_template__$Q = false;
               /* style inject */
               
               /* style inject SSR */
@@ -26348,18 +26404,18 @@
 
               
               var UiModalView = normalizeComponent_1(
-                { render: __vue_render__$P, staticRenderFns: __vue_staticRenderFns__$P },
-                __vue_inject_styles__$P,
-                __vue_script__$G,
-                __vue_scope_id__$P,
-                __vue_is_functional_template__$P,
-                __vue_module_identifier__$P,
+                { render: __vue_render__$Q, staticRenderFns: __vue_staticRenderFns__$Q },
+                __vue_inject_styles__$Q,
+                __vue_script__$H,
+                __vue_scope_id__$Q,
+                __vue_is_functional_template__$Q,
+                __vue_module_identifier__$Q,
                 undefined,
                 undefined
               );
 
             //
-            var script$H = {
+            var script$I = {
               components: { UiIcon: UiIcon, UiButton: Button$1, UiModalView: UiModalView },
               data: function data() {
                 return {
@@ -26396,13 +26452,13 @@
               }
             };
 
-            var css$A = ".ui-dialog .ui-dialog-icon{font-size:36px;margin-right:12px}.ui-dialog.info .ui-dialog-icon{color:#2d8cf0}.ui-dialog.success .ui-dialog-icon{color:#19be6b}.ui-dialog.warning .ui-dialog-icon{color:#f90}.ui-dialog.error .ui-dialog-icon{color:#ed3f14}.ui-dialog.confirm .ui-dialog-icon{color:#f90}.ui-dialog .ui-dialog-content{display:-webkit-box;display:-ms-flexbox;display:flex}";
-            styleInject(css$A);
+            var css$B = ".ui-dialog .ui-dialog-icon{font-size:36px;margin-right:12px}.ui-dialog.info .ui-dialog-icon{color:#2d8cf0}.ui-dialog.success .ui-dialog-icon{color:#19be6b}.ui-dialog.warning .ui-dialog-icon{color:#f90}.ui-dialog.error .ui-dialog-icon{color:#ed3f14}.ui-dialog.confirm .ui-dialog-icon{color:#f90}.ui-dialog .ui-dialog-content{display:-webkit-box;display:-ms-flexbox;display:flex}";
+            styleInject(css$B);
 
             /* script */
-            var __vue_script__$H = script$H;
+            var __vue_script__$I = script$I;
             /* template */
-            var __vue_render__$Q = function() {
+            var __vue_render__$R = function() {
               var _vm = this;
               var _h = _vm.$createElement;
               var _c = _vm._self._c || _h;
@@ -26455,17 +26511,17 @@
                   )
                 : _vm._e()
             };
-            var __vue_staticRenderFns__$Q = [];
-            __vue_render__$Q._withStripped = true;
+            var __vue_staticRenderFns__$R = [];
+            __vue_render__$R._withStripped = true;
 
               /* style */
-              var __vue_inject_styles__$Q = undefined;
+              var __vue_inject_styles__$R = undefined;
               /* scoped */
-              var __vue_scope_id__$Q = undefined;
+              var __vue_scope_id__$R = undefined;
               /* module identifier */
-              var __vue_module_identifier__$Q = undefined;
+              var __vue_module_identifier__$R = undefined;
               /* functional template */
-              var __vue_is_functional_template__$Q = false;
+              var __vue_is_functional_template__$R = false;
               /* style inject */
               
               /* style inject SSR */
@@ -26473,12 +26529,12 @@
 
               
               var UiDialog = normalizeComponent_1(
-                { render: __vue_render__$Q, staticRenderFns: __vue_staticRenderFns__$Q },
-                __vue_inject_styles__$Q,
-                __vue_script__$H,
-                __vue_scope_id__$Q,
-                __vue_is_functional_template__$Q,
-                __vue_module_identifier__$Q,
+                { render: __vue_render__$R, staticRenderFns: __vue_staticRenderFns__$R },
+                __vue_inject_styles__$R,
+                __vue_script__$I,
+                __vue_scope_id__$R,
+                __vue_is_functional_template__$R,
+                __vue_module_identifier__$R,
                 undefined,
                 undefined
               );
@@ -26665,70 +26721,16 @@
               createEventDirective(Vue)('winclick', window, 'click');
             }
 
-            //
-            //
-            //
-
-            var script$I = {
-              name: 'UiIcon',
-              props: {
-                type: String,
-                size: [Number, String],
-                color: String
-              },
-              computed: {
-                styles: function styles() {
-                  var fontSize = this.size && ((parseInt(this.size)) + "px");
-                  return { fontSize: fontSize, color: this.color }
-                }
+            var methods = {
+              iconTypes: {
+                info: 'information-circled',
+                success: 'checkmark-circled',
+                warning: 'android-alert',
+                error: 'close-circled',
+                loading: 'load-c',
+                confirm: 'help-circled'
               }
             };
-
-            var css$B = ".ui-icon{display:inline-block;font-family:Ionicons;font-style:normal;font-weight:400;font-variant:normal;text-transform:none;text-rendering:auto;line-height:1;-webkit-font-smoothing:antialiased}";
-            styleInject(css$B);
-
-            /* script */
-            var __vue_script__$I = script$I;
-            /* template */
-            var __vue_render__$R = function() {
-              var _vm = this;
-              var _h = _vm.$createElement;
-              var _c = _vm._self._c || _h;
-              return _c(
-                "i",
-                _vm._g(
-                  { class: ["ion-" + _vm.type, "ui-icon"], style: _vm.styles },
-                  _vm.$listeners
-                )
-              )
-            };
-            var __vue_staticRenderFns__$R = [];
-            __vue_render__$R._withStripped = true;
-
-              /* style */
-              var __vue_inject_styles__$R = undefined;
-              /* scoped */
-              var __vue_scope_id__$R = undefined;
-              /* module identifier */
-              var __vue_module_identifier__$R = undefined;
-              /* functional template */
-              var __vue_is_functional_template__$R = false;
-              /* style inject */
-              
-              /* style inject SSR */
-              
-
-              
-              var Icon$1 = normalizeComponent_1(
-                { render: __vue_render__$R, staticRenderFns: __vue_staticRenderFns__$R },
-                __vue_inject_styles__$R,
-                __vue_script__$I,
-                __vue_scope_id__$R,
-                __vue_is_functional_template__$R,
-                __vue_module_identifier__$R,
-                undefined,
-                undefined
-              );
 
             //
             var script$J = {
@@ -26821,40 +26823,44 @@
 
             //
             var script$K = {
-              components: { UiIcon: UiIcon, UiCloseIconButton: UiCloseIconButton },
+              name: 'UiCard',
+              components: { UiIcon: Icon$1 },
               data: function data() {
-                return {
-                  hasDesc: false,
-                  visible: true
-                }
+                return { prefix: 'ui-card', hasHeader: false }
               },
               props: {
-                type: {
-                  default: 'info',
-                  validator: function validator(value) {
-                    return ['info', 'success', 'warning', 'error'].indexOf(value) !== -1
-                  }
+                bordered: {
+                  type: Boolean,
+                  default: true
                 },
-                closable: Boolean,
-                showIcon: Boolean
+                disHover: Boolean,
+                shadow: Boolean,
+                padding: {
+                  type: [Number, String],
+                  default: 16
+                },
+                title: String,
+                icon: String
               },
               computed: {
-                iconType: function iconType() {
-                  return iconTypes[this.type]
-                }
-              },
-              methods: {
-                close: function close(event) {
-                  this.visible = false;
-                  this.$emit('on-close', event);
+                classes: function classes() {
+                  var ref = this;
+                  var prefix = ref.prefix;
+                  var bordered = ref.bordered;
+                  var disHover = ref.disHover;
+                  var shadow = ref.shadow;
+                  return [prefix, { bordered: bordered, disHover: disHover, shadow: shadow }]
                 }
               },
               mounted: function mounted() {
-                this.hasDesc = this.$slots.desc !== undefined;
+                var ref = this.$slots;
+                var title = ref.title;
+                var extra = ref.extra;
+                this.hasHeader = title !== undefined || extra !== undefined || this.icon || this.title;
               }
             };
 
-            var css$D = ".ui-alert{border:1px solid;border-radius:6px;padding:8px 48px 8px 16px;position:relative;margin-bottom:10px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.ui-alert.info{border-color:#d2f0fd;background-color:#ebf8fe}.ui-alert.info .ui-alert-icon{color:#2d8cf0}.ui-alert.success{border-color:#c5f7de;background-color:#dcfaeb}.ui-alert.success .ui-alert-icon{color:#19be6b}.ui-alert.warning{border-color:#ffebcc;background-color:#fff5e5}.ui-alert.warning .ui-alert-icon{color:#f90}.ui-alert.error{border-color:#fcdad1;background-color:#fdede9}.ui-alert.error .ui-alert-icon{color:#ed3f14}.ui-alert.hasDesc{padding:16px}.ui-alert.hasDesc .ui-alert-icon{font-size:28px;margin-right:16px}.ui-alert-icon{font-size:14px;margin-right:8px}.ui-alert-title{color:#1c2438;font-size:14px;word-break:break-all;padding-right:32px;line-height:1.4}.ui-alert-desc{font-size:12px;line-height:1.7;word-break:break-word;margin-top:2px}.ui-alert-close{position:absolute;top:7px;right:7px;width:22px;text-align:center}";
+            var css$D = ".ui-card{background-color:#fff;border-radius:4px;font-size:14px;-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out}.ui-card.bordered:not(.shadow){border:1px solid #e9eaec}.ui-card:hover:not(.disHover):not(.shadow){-webkit-box-shadow:0 1px 6px rgba(0,0,0,.2);box-shadow:0 1px 6px rgba(0,0,0,.2);border-color:#eee}.ui-card.shadow{-webkit-box-shadow:0 1px 1px 0 rgba(0,0,0,.1);box-shadow:0 1px 1px 0 rgba(0,0,0,.1)}.ui-card--header{padding:14px 16px;line-height:1;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;border-bottom:1px solid #e9eaec}.ui-card--title{color:#1c2438;font-weight:700}.ui-card--title .ui-icon{margin-right:6px}";
             styleInject(css$D);
 
             /* script */
@@ -26864,50 +26870,38 @@
               var _vm = this;
               var _h = _vm.$createElement;
               var _c = _vm._self._c || _h;
-              return _c("transition", { attrs: { name: "ui-fade" } }, [
-                _vm.visible
+              return _c("div", { class: _vm.classes }, [
+                _vm.hasHeader
                   ? _c(
                       "div",
-                      {
-                        staticClass: "ui-alert",
-                        class: [
-                          _vm.type,
-                          {
-                            closable: _vm.closable,
-                            showIcon: _vm.showIcon,
-                            hasDesc: _vm.hasDesc
-                          }
-                        ]
-                      },
+                      { class: _vm.prefix + "--header" },
                       [
-                        _vm.showIcon
-                          ? _c("UiIcon", {
-                              staticClass: "ui-alert-icon",
-                              attrs: { type: _vm.iconType }
-                            })
-                          : _vm._e(),
+                        _c(
+                          "div",
+                          { class: _vm.prefix + "--title" },
+                          [
+                            _vm._t("title", [
+                              _vm.icon
+                                ? _c("UiIcon", { attrs: { type: _vm.icon } })
+                                : _vm._e(),
+                              _vm._v("\n        " + _vm._s(_vm.title) + "\n      ")
+                            ])
+                          ],
+                          2
+                        ),
                         _vm._v(" "),
-                        _c("div", { staticClass: "ui-alert-body" }, [
-                          _c(
-                            "p",
-                            { staticClass: "ui-alert-title" },
-                            [_vm._t("default")],
-                            2
-                          ),
-                          _vm._v(" "),
-                          _c("p", { staticClass: "ui-alert-desc" }, [_vm._t("desc")], 2)
-                        ]),
-                        _vm._v(" "),
-                        _vm.closable
-                          ? _c("UiCloseIconButton", {
-                              staticClass: "ui-alert-close",
-                              on: { click: _vm.close }
-                            })
-                          : _vm._e()
+                        _vm._t("extra")
                       ],
-                      1
+                      2
                     )
-                  : _vm._e()
+                  : _vm._e(),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { class: _vm.prefix + "--body", style: { padding: _vm.padding + "px" } },
+                  [_vm._t("default")],
+                  2
+                )
               ])
             };
             var __vue_staticRenderFns__$T = [];
@@ -26927,7 +26921,7 @@
               
 
               
-              var Alert$1 = normalizeComponent_1(
+              var Card$1 = normalizeComponent_1(
                 { render: __vue_render__$T, staticRenderFns: __vue_staticRenderFns__$T },
                 __vue_inject_styles__$T,
                 __vue_script__$K,
@@ -26940,6 +26934,120 @@
 
             //
             var script$L = {
+              name: 'UiAlert',
+              components: { UiIcon: Icon$1, UiCloseIconButton: CloseIconButton },
+              data: function data() {
+                return { prefix: 'ui-alert', hasDesc: false, visible: true }
+              },
+              props: {
+                type: {
+                  default: 'info',
+                  validator: function validator(value) {
+                    return ['info', 'success', 'warning', 'error'].indexOf(value) !== -1
+                  }
+                },
+                closable: Boolean,
+                showIcon: Boolean
+              },
+              computed: {
+                iconType: function iconType() {
+                  return this.$uiTools.iconTypes[this.type]
+                },
+                classes: function classes() {
+                  var ref = this;
+                  var prefix = ref.prefix;
+                  var type = ref.type;
+                  var hasDesc = ref.hasDesc;
+                  return [prefix, (prefix + "--" + type), { hasDesc: hasDesc }]
+                }
+              },
+              methods: {
+                close: function close(event) {
+                  this.visible = false;
+                  this.$emit('on-close', event);
+                }
+              },
+              mounted: function mounted() {
+                this.hasDesc = this.$slots.desc !== undefined;
+              }
+            };
+
+            var css$E = ".ui-alert{border:1px solid;border-radius:6px;padding:8px 48px 8px 16px;position:relative;margin-bottom:10px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-transition:opacity .22s ease-in-out;transition:opacity .22s ease-in-out}.ui-alert--info{border-color:#d2f0fd;background-color:#ebf8fe}.ui-alert--info .ui-alert--icon{color:#2d8cf0}.ui-alert--success{border-color:#c5f7de;background-color:#dcfaeb}.ui-alert--success .ui-alert--icon{color:#19be6b}.ui-alert--warning{border-color:#ffebcc;background-color:#fff5e5}.ui-alert--warning .ui-alert--icon{color:#f90}.ui-alert--error{border-color:#fcdad1;background-color:#fdede9}.ui-alert--error .ui-alert--icon{color:#ed3f14}.ui-alert.hasDesc{padding:16px}.ui-alert.hasDesc .ui-alert--icon{font-size:28px;margin-right:16px}.ui-alert--icon{font-size:14px;margin-right:8px}.ui-alert--title{color:#1c2438;font-size:14px;word-break:break-all;padding-right:32px;line-height:1.4}.ui-alert--desc{font-size:12px;line-height:1.7;word-break:break-word;margin-top:2px}.ui-alert--close{position:absolute;top:7px;right:7px;width:22px;text-align:center}.ui-alert-enter,.ui-alert-leave-to{opacity:0}";
+            styleInject(css$E);
+
+            /* script */
+            var __vue_script__$L = script$L;
+            /* template */
+            var __vue_render__$U = function() {
+              var _vm = this;
+              var _h = _vm.$createElement;
+              var _c = _vm._self._c || _h;
+              return _c("transition", { attrs: { name: _vm.prefix } }, [
+                _vm.visible
+                  ? _c(
+                      "div",
+                      { class: _vm.classes },
+                      [
+                        _vm.showIcon
+                          ? _c("UiIcon", {
+                              class: _vm.prefix + "--icon",
+                              attrs: { type: _vm.iconType }
+                            })
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c("div", { class: _vm.prefix + "--body" }, [
+                          _c(
+                            "p",
+                            { class: _vm.prefix + "--title" },
+                            [_vm._t("default")],
+                            2
+                          ),
+                          _vm._v(" "),
+                          _c("p", { class: _vm.prefix + "--desc" }, [_vm._t("desc")], 2)
+                        ]),
+                        _vm._v(" "),
+                        _vm.closable
+                          ? _c("UiCloseIconButton", {
+                              class: _vm.prefix + "--close",
+                              on: { click: _vm.close }
+                            })
+                          : _vm._e()
+                      ],
+                      1
+                    )
+                  : _vm._e()
+              ])
+            };
+            var __vue_staticRenderFns__$U = [];
+            __vue_render__$U._withStripped = true;
+
+              /* style */
+              var __vue_inject_styles__$U = undefined;
+              /* scoped */
+              var __vue_scope_id__$U = undefined;
+              /* module identifier */
+              var __vue_module_identifier__$U = undefined;
+              /* functional template */
+              var __vue_is_functional_template__$U = false;
+              /* style inject */
+              
+              /* style inject SSR */
+              
+
+              
+              var Alert$1 = normalizeComponent_1(
+                { render: __vue_render__$U, staticRenderFns: __vue_staticRenderFns__$U },
+                __vue_inject_styles__$U,
+                __vue_script__$L,
+                __vue_scope_id__$U,
+                __vue_is_functional_template__$U,
+                __vue_module_identifier__$U,
+                undefined,
+                undefined
+              );
+
+            //
+            var script$M = {
               components: { UiIcon: UiIcon },
               data: function data() {
                 return {
@@ -27006,13 +27114,13 @@
               }
             };
 
-            var css$E = ".ui-back-top{position:fixed;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.ui-back-top .ui-back-top-icon{cursor:pointer;width:48px;height:40px;line-height:40px;text-align:center;border-radius:2px;color:#fff;font-size:24px;background-color:rgba(0,0,0,.6);-webkit-box-shadow:0 1px 3px rgba(0,0,0,.2);box-shadow:0 1px 3px rgba(0,0,0,.2);-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out}.ui-back-top .ui-back-top-icon:hover{background-color:rgba(0,0,0,.7)}";
-            styleInject(css$E);
+            var css$F = ".ui-back-top{position:fixed;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.ui-back-top .ui-back-top-icon{cursor:pointer;width:48px;height:40px;line-height:40px;text-align:center;border-radius:2px;color:#fff;font-size:24px;background-color:rgba(0,0,0,.6);-webkit-box-shadow:0 1px 3px rgba(0,0,0,.2);box-shadow:0 1px 3px rgba(0,0,0,.2);-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out}.ui-back-top .ui-back-top-icon:hover{background-color:rgba(0,0,0,.7)}";
+            styleInject(css$F);
 
             /* script */
-            var __vue_script__$L = script$L;
+            var __vue_script__$M = script$M;
             /* template */
-            var __vue_render__$U = function() {
+            var __vue_render__$V = function() {
               var _vm = this;
               var _h = _vm.$createElement;
               var _c = _vm._self._c || _h;
@@ -27038,17 +27146,17 @@
                   : _vm._e()
               ])
             };
-            var __vue_staticRenderFns__$U = [];
-            __vue_render__$U._withStripped = true;
+            var __vue_staticRenderFns__$V = [];
+            __vue_render__$V._withStripped = true;
 
               /* style */
-              var __vue_inject_styles__$U = undefined;
+              var __vue_inject_styles__$V = undefined;
               /* scoped */
-              var __vue_scope_id__$U = undefined;
+              var __vue_scope_id__$V = undefined;
               /* module identifier */
-              var __vue_module_identifier__$U = undefined;
+              var __vue_module_identifier__$V = undefined;
               /* functional template */
-              var __vue_is_functional_template__$U = false;
+              var __vue_is_functional_template__$V = false;
               /* style inject */
               
               /* style inject SSR */
@@ -27056,12 +27164,12 @@
 
               
               var BackTop$1 = normalizeComponent_1(
-                { render: __vue_render__$U, staticRenderFns: __vue_staticRenderFns__$U },
-                __vue_inject_styles__$U,
-                __vue_script__$L,
-                __vue_scope_id__$U,
-                __vue_is_functional_template__$U,
-                __vue_module_identifier__$U,
+                { render: __vue_render__$V, staticRenderFns: __vue_staticRenderFns__$V },
+                __vue_inject_styles__$V,
+                __vue_script__$M,
+                __vue_scope_id__$V,
+                __vue_is_functional_template__$V,
+                __vue_module_identifier__$V,
                 undefined,
                 undefined
               );
@@ -27076,7 +27184,7 @@
             //
             //
 
-            var script$M = {
+            var script$N = {
               props: {
                 count: [Number, String],
                 overflowCount: {
@@ -27093,13 +27201,13 @@
               }
             };
 
-            var css$F = ".ui-badge{position:relative;display:inline-block;line-height:1;vertical-align:middle}.ui-badge-count,.ui-badge-dot{position:absolute;background-color:#ed3f14;z-index:10;-webkit-box-shadow:0 0 0 1px #fff;box-shadow:0 0 0 1px #fff}.ui-badge-count{-webkit-transform:translateX(50%);transform:translateX(50%);-webkit-transform-origin:-10% center;transform-origin:-10% center;top:-10px;right:0;height:20px;min-width:20px;border-radius:10px;border:1px solid transparent;color:#fff;line-height:18px;text-align:center;padding:0 6px;font-size:12px;white-space:nowrap}.ui-badge-dot{-webkit-transform:translateX(-50%);transform:translateX(-50%);-webkit-transform-origin:0 center;transform-origin:0 center;top:-4px;right:-8px;width:8px;height:8px;border-radius:50%}";
-            styleInject(css$F);
+            var css$G = ".ui-badge{position:relative;display:inline-block;line-height:1;vertical-align:middle}.ui-badge-count,.ui-badge-dot{position:absolute;background-color:#ed3f14;z-index:10;-webkit-box-shadow:0 0 0 1px #fff;box-shadow:0 0 0 1px #fff}.ui-badge-count{-webkit-transform:translateX(50%);transform:translateX(50%);-webkit-transform-origin:-10% center;transform-origin:-10% center;top:-10px;right:0;height:20px;min-width:20px;border-radius:10px;border:1px solid transparent;color:#fff;line-height:18px;text-align:center;padding:0 6px;font-size:12px;white-space:nowrap}.ui-badge-dot{-webkit-transform:translateX(-50%);transform:translateX(-50%);-webkit-transform-origin:0 center;transform-origin:0 center;top:-4px;right:-8px;width:8px;height:8px;border-radius:50%}";
+            styleInject(css$G);
 
             /* script */
-            var __vue_script__$M = script$M;
+            var __vue_script__$N = script$N;
             /* template */
-            var __vue_render__$V = function() {
+            var __vue_render__$W = function() {
               var _vm = this;
               var _h = _vm.$createElement;
               var _c = _vm._self._c || _h;
@@ -27124,78 +27232,6 @@
                 2
               )
             };
-            var __vue_staticRenderFns__$V = [];
-            __vue_render__$V._withStripped = true;
-
-              /* style */
-              var __vue_inject_styles__$V = undefined;
-              /* scoped */
-              var __vue_scope_id__$V = undefined;
-              /* module identifier */
-              var __vue_module_identifier__$V = undefined;
-              /* functional template */
-              var __vue_is_functional_template__$V = false;
-              /* style inject */
-              
-              /* style inject SSR */
-              
-
-              
-              var Badge$1 = normalizeComponent_1(
-                { render: __vue_render__$V, staticRenderFns: __vue_staticRenderFns__$V },
-                __vue_inject_styles__$V,
-                __vue_script__$M,
-                __vue_scope_id__$V,
-                __vue_is_functional_template__$V,
-                __vue_module_identifier__$V,
-                undefined,
-                undefined
-              );
-
-            //
-            //
-            //
-            //
-            //
-
-            var script$N = {
-              props: {
-                size: {
-                  default: 'default',
-                  validator: function validator(value) {
-                    return ['large', 'default', 'small'].indexOf(value) !== -1
-                  }
-                },
-                shape: {
-                  type: String,
-                  validator: function validator(value) {
-                    return !value || ['circle'].indexOf(value) !== -1
-                  }
-                },
-                vertical: Boolean
-              }
-            };
-
-            var css$G = ".ui-button-group{display:inline-block}.ui-button-group.circle .ui-button.isOnlyIcon:first-child,.ui-button-group.circle .ui-button:first-child{border-top-left-radius:36px;border-bottom-left-radius:36px}.ui-button-group.circle .ui-button.isOnlyIcon:last-child,.ui-button-group.circle .ui-button:last-child{border-top-right-radius:36px;border-bottom-right-radius:36px}.ui-button-group .ui-button{position:relative}.ui-button-group .ui-button:hover{z-index:1}.ui-button-group .ui-button.isOnlyIcon{width:auto;padding:0 15px;border-radius:3px}.ui-button-group .ui-button:not(:first-child):not(:last-child){border-radius:0}.ui-button-group .ui-button:first-child{border-top-right-radius:0;border-bottom-right-radius:0}.ui-button-group .ui-button:last-child{border-top-left-radius:0;border-bottom-left-radius:0}.ui-button-group .ui-button:not(:first-child){margin-left:-1px}.ui-button-group.normal .ui-button{height:32px}.ui-button-group.normal .ui-button.isOnlyIcon{font-size:16px}.ui-button-group.large .ui-button{height:36px;font-size:14px}.ui-button-group.large .ui-button.isOnlyIcon{font-size:18px}.ui-button-group.small .ui-button{height:24px}.ui-button-group.small .ui-button.isOnlyIcon{font-size:12px}.ui-button-group.vertical .ui-button{display:block;width:100%;max-width:100%;margin-left:0}.ui-button-group.vertical .ui-button:first-child{border-radius:3px 3px 0 0}.ui-button-group.vertical .ui-button:last-child{border-radius:0 0 3px 3px}.ui-button-group.vertical .ui-button:not(:first-child){margin-top:-1px}.ui-button-group.vertical.circle .ui-button:first-child{border-radius:36px 36px 0 0}.ui-button-group.vertical.circle .ui-button:last-child{border-radius:0 0 36px 36px}";
-            styleInject(css$G);
-
-            /* script */
-            var __vue_script__$N = script$N;
-            /* template */
-            var __vue_render__$W = function() {
-              var _vm = this;
-              var _h = _vm.$createElement;
-              var _c = _vm._self._c || _h;
-              return _c(
-                "div",
-                {
-                  staticClass: "ui-button-group",
-                  class: [_vm.size, _vm.shape, { vertical: _vm.vertical }]
-                },
-                [_vm._t("default")],
-                2
-              )
-            };
             var __vue_staticRenderFns__$W = [];
             __vue_render__$W._withStripped = true;
 
@@ -27213,7 +27249,7 @@
               
 
               
-              var ButtonGroup = normalizeComponent_1(
+              var Badge$1 = normalizeComponent_1(
                 { render: __vue_render__$W, staticRenderFns: __vue_staticRenderFns__$W },
                 __vue_inject_styles__$W,
                 __vue_script__$N,
@@ -27225,36 +27261,30 @@
               );
 
             //
+            //
+            //
+            //
+            //
+
             var script$O = {
-              components: { UiIcon: UiIcon },
-              data: function data() {
-                return {
-                  hasHeader: false
-                }
-              },
               props: {
-                bordered: {
-                  type: Boolean,
-                  default: true
+                size: {
+                  default: 'default',
+                  validator: function validator(value) {
+                    return ['large', 'default', 'small'].indexOf(value) !== -1
+                  }
                 },
-                disHover: Boolean,
-                shadow: Boolean,
-                padding: {
-                  type: [Number, String],
-                  default: 16
+                shape: {
+                  type: String,
+                  validator: function validator(value) {
+                    return !value || ['circle'].indexOf(value) !== -1
+                  }
                 },
-                title: String,
-                icon: String
-              },
-              mounted: function mounted() {
-                var ref = this.$slots;
-                var title = ref.title;
-                var extra = ref.extra;
-                this.hasHeader = title !== undefined || extra !== undefined || this.icon || this.title;
+                vertical: Boolean
               }
             };
 
-            var css$H = ".ui-card{background-color:#fff;border-radius:4px;font-size:14px;-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out}.ui-card.bordered{border:1px solid #e9eaec}.ui-card:hover:not(.disHover):not(.shadow){-webkit-box-shadow:0 1px 6px rgba(0,0,0,.2);box-shadow:0 1px 6px rgba(0,0,0,.2);border-color:#eee}.ui-card.shadow{-webkit-box-shadow:0 1px 1px 0 rgba(0,0,0,.1);box-shadow:0 1px 1px 0 rgba(0,0,0,.1)}.ui-card-header{padding:14px 16px;line-height:1;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;border-bottom:1px solid #e9eaec}.ui-card-title{font-size:14px;color:#1c2438;font-weight:700}";
+            var css$H = ".ui-button-group{display:inline-block}.ui-button-group.circle .ui-button.isOnlyIcon:first-child,.ui-button-group.circle .ui-button:first-child{border-top-left-radius:36px;border-bottom-left-radius:36px}.ui-button-group.circle .ui-button.isOnlyIcon:last-child,.ui-button-group.circle .ui-button:last-child{border-top-right-radius:36px;border-bottom-right-radius:36px}.ui-button-group .ui-button{position:relative}.ui-button-group .ui-button:hover{z-index:1}.ui-button-group .ui-button.isOnlyIcon{width:auto;padding:0 15px;border-radius:3px}.ui-button-group .ui-button:not(:first-child):not(:last-child){border-radius:0}.ui-button-group .ui-button:first-child{border-top-right-radius:0;border-bottom-right-radius:0}.ui-button-group .ui-button:last-child{border-top-left-radius:0;border-bottom-left-radius:0}.ui-button-group .ui-button:not(:first-child){margin-left:-1px}.ui-button-group.normal .ui-button{height:32px}.ui-button-group.normal .ui-button.isOnlyIcon{font-size:16px}.ui-button-group.large .ui-button{height:36px;font-size:14px}.ui-button-group.large .ui-button.isOnlyIcon{font-size:18px}.ui-button-group.small .ui-button{height:24px}.ui-button-group.small .ui-button.isOnlyIcon{font-size:12px}.ui-button-group.vertical .ui-button{display:block;width:100%;max-width:100%;margin-left:0}.ui-button-group.vertical .ui-button:first-child{border-radius:3px 3px 0 0}.ui-button-group.vertical .ui-button:last-child{border-radius:0 0 3px 3px}.ui-button-group.vertical .ui-button:not(:first-child){margin-top:-1px}.ui-button-group.vertical.circle .ui-button:first-child{border-radius:36px 36px 0 0}.ui-button-group.vertical.circle .ui-button:last-child{border-radius:0 0 36px 36px}";
             styleInject(css$H);
 
             /* script */
@@ -27267,44 +27297,11 @@
               return _c(
                 "div",
                 {
-                  staticClass: "ui-card",
-                  class: {
-                    bordered: _vm.bordered,
-                    disHover: _vm.disHover,
-                    shadow: _vm.shadow
-                  }
+                  staticClass: "ui-button-group",
+                  class: [_vm.size, _vm.shape, { vertical: _vm.vertical }]
                 },
-                [
-                  _vm.hasHeader
-                    ? _c(
-                        "div",
-                        { staticClass: "ui-card-header" },
-                        [
-                          _c(
-                            "div",
-                            { staticClass: "ui-card-title" },
-                            [
-                              _vm._t("title", [
-                                _c("UiIcon", { attrs: { type: _vm.icon } }),
-                                _vm._v(_vm._s(_vm.title))
-                              ])
-                            ],
-                            2
-                          ),
-                          _vm._v(" "),
-                          _vm._t("extra")
-                        ],
-                        2
-                      )
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "ui-card-body", style: { padding: _vm.padding + "px" } },
-                    [_vm._t("default")],
-                    2
-                  )
-                ]
+                [_vm._t("default")],
+                2
               )
             };
             var __vue_staticRenderFns__$X = [];
@@ -27324,7 +27321,7 @@
               
 
               
-              var Card$1 = normalizeComponent_1(
+              var ButtonGroup = normalizeComponent_1(
                 { render: __vue_render__$X, staticRenderFns: __vue_staticRenderFns__$X },
                 __vue_inject_styles__$X,
                 __vue_script__$O,
@@ -29707,7 +29704,7 @@
             //
             var script$17 = {
               name: 'ui-tabs',
-              components: { UiIcon: UiIcon, UiCloseIconButton: UiCloseIconButton, RenderCell: RenderCell },
+              components: { UiIcon: UiIcon, UiCloseIconButton: CloseIconButton, RenderCell: RenderCell },
               data: function data() {
                 return {
                   tabPanes: [],
@@ -35912,7 +35909,7 @@
 
             //
             var script$1K = {
-              components: { UiIcon: UiIcon, UiCloseIconButton: UiCloseIconButton },
+              components: { UiIcon: UiIcon, UiCloseIconButton: CloseIconButton },
               props: {
                 content: String,
                 duration: Number,
@@ -36017,7 +36014,7 @@
 
             //
             var script$1L = {
-              components: { UiIcon: UiIcon, UiCloseIconButton: UiCloseIconButton },
+              components: { UiIcon: UiIcon, UiCloseIconButton: CloseIconButton },
               props: {
                 title: String,
                 desc: String,
@@ -36485,13 +36482,13 @@
             var comps = {
               Icon: Icon$1,
               Avatar: Avatar$1,
-
+              Card: Card$1,
               Alert: Alert$1,
+
               BackTop: BackTop$1,
               Badge: Badge$1,
               Button: Button$1,
               ButtonGroup: ButtonGroup,
-              Card: Card$1,
               Checkbox: Checkbox$1,
               CheckboxGroup: CheckboxGroup,
               Input: Input$1,
@@ -36559,6 +36556,7 @@
               install: function install(Vue, options) {
                 if ( options === void 0 ) options = {};
 
+                Vue.prototype.$uiTools = methods;
                 var prefix = typeof options.prefix === 'string' ? options.prefix : 'Ui';
                 for (var name in comps) { Vue.component(prefix + name, comps[name]); }
 

@@ -47,7 +47,7 @@
 </template>
 <script>
 import UiTag from './../Tag.vue'
-import UiIcon from './../Icon.vue'
+import UiIcon from '../icon'
 import UiOptionList from './OptionList.vue'
 import { hasClassNameOfParent, findParentByClassName, isSelfOrParent } from './../../utils'
 

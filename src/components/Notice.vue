@@ -11,7 +11,7 @@
   </transition>
 </template>
 <script>
-import UiIcon from './Icon.vue'
+import UiIcon from './icon'
 import UiCloseIconButton from './close-icon-button'
 import { iconTypes, isFunc } from '../utils'
 export default {

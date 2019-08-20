@@ -7,7 +7,7 @@
   </div>
 </template>
 <script>
-import UiIcon from './../Icon.vue'
+import UiIcon from '../icon'
 import UiSpin from './../spin/Spin.vue'
 export default {
   components: { UiIcon, UiSpin },

@@ -51,7 +51,7 @@
   </div>
 </template>
 <script>
-import UiIcon from './Icon.vue'
+import UiIcon from './icon'
 import UiInput from './Input.vue'
 import UiSelect from './select/Select.vue'
 import UiOption from './select/Option.vue'

@@ -7,7 +7,7 @@
   </button>
 </template>
 <script>
-import UiIcon from './../Icon.vue'
+import UiIcon from '../icon'
 export default {
   components: { UiIcon },
   data() {

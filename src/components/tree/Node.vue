@@ -18,7 +18,7 @@
   </ul>
 </template>
 <script>
-import UiIcon from './../Icon.vue'
+import UiIcon from '../icon'
 import UiLoading from './../scroll/Loading.vue'
 import UiCheckbox from './../checkbox/Checkbox.vue'
 import { findParentByName } from './../../utils'

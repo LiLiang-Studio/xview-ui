@@ -14,7 +14,7 @@
   </li>
 </template>
 <script>
-import UiIcon from './../Icon.vue'
+import UiIcon from '../icon'
 import UiOptionList from './../select/OptionList.vue'
 import { findParentByName } from './../../utils'
 export default {

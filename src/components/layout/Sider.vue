@@ -7,7 +7,7 @@
   </div>
 </template>
 <script>
-import UiIcon from './../Icon.vue'
+import UiIcon from '../icon'
 export default {
   name: 'ui-sider',
   components: { UiIcon },

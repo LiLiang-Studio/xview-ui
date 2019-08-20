@@ -9,7 +9,7 @@
   </UiModalView>
 </template>
 <script>
-import UiIcon from './../Icon.vue'
+import UiIcon from '../icon'
 import UiButton from './../button/Button.vue'
 import UiModalView from './ModalView.vue'
 import { getDefaultProps } from './modalUntils'

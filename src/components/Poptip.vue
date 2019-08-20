@@ -25,7 +25,7 @@
   </div>
 </template>
 <script>
-import UiIcon from './Icon.vue'
+import UiIcon from './icon'
 import UiPopper from './popper/Popper.vue'
 import UiButton from './button/Button.vue'
 import { isSelfOrParent } from './../utils'

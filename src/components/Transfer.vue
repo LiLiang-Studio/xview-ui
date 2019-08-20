@@ -66,7 +66,7 @@
 import UiButton from './button/Button.vue'
 import UiCheckbox from './checkbox/Checkbox.vue'
 import UiInput from './Input.vue'
-import UiIcon from './Icon.vue'
+import UiIcon from './icon'
 export default {
   components: { UiButton, UiCheckbox, UiInput, UiIcon },
   data() {

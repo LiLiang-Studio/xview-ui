@@ -38,7 +38,7 @@
   </div>
 </template>
 <script>
-import UiIcon from './Icon.vue'
+import UiIcon from './icon'
 import { setAutoHeight } from '../utils'
 export default {
   components: { UiIcon },

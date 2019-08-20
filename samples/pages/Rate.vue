@@ -23,6 +23,13 @@
 
     <div class="page-sub-title">设置属性 disabled 开启只读模式，无法交互。</div>
     <Rate disabled v-model="valueDisabled"></Rate>
+
+    <div class="page-sub-title">支持允许或者禁用清除。</div>
+    <Rate clearable v-model="value1" />clearable: true
+    <Rate v-model="value2" />
+clearable: false
+    <div class="page-sub-title">设置 icon 属性，可以自定义图标。</div>
+    <Rate v-model="value5" icon="ios-heart" />
   </div>
 </template>
 <script>
@@ -33,7 +40,12 @@ export default {
       valueHalf: 2.5,
       valueText: 3,
       valueCustomText: 3.8,
-      valueDisabled: 2
+      valueDisabled: 2,
+      value1: 3,
+      value2: 3,
+      value3: 3,
+      value4: 3,
+      value5: 3
     };
   }
 };

@@ -57,6 +57,8 @@ export const routeComponents = {
   Avatar,
   Card,
   Alert,
+  Badge,
+  Rate,
 
 
   DatePicker,
@@ -78,7 +80,6 @@ export const routeComponents = {
   Steps,
   Select,
   InputNumber,
-  Rate,
   Transfer,
   Spin,
   Tabs,
@@ -88,7 +89,6 @@ export const routeComponents = {
   Layout,
   Swiper,
   BackTop,
-  Badge,
   Button,
   Checkbox,
   Input,

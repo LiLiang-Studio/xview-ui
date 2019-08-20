@@ -19,12 +19,14 @@ import Avatar from './components/avatar'
 import Card from './components/card'
 // 警告提示
 import Alert from './components/alert'
+// 微标
+import Badge from './components/badge'
+// 评分
+import Rate from './components/rate'
 
 
 // // 回到顶部
 import BackTop from './components/BackTop.vue'
-// // 微标
-import Badge from './components/Badge.vue'
 // // 按钮
 import Button from './components/button/Button.vue'
 import ButtonGroup from './components/button/ButtonGroup.vue'
@@ -69,8 +71,6 @@ import Tabs from './components/tabs/Tabs.vue'
 import TabPane from './components/tabs/TabPane.vue'
 // // 穿梭框
 import Transfer from './components/Transfer.vue'
-// // 评分
-import Rate from './components/Rate.vue'
 // // 数值输入框
 import InputNumber from './components/InputNumber.vue'
 // // 下拉选择框
@@ -134,9 +134,10 @@ const comps = {
   Avatar,
   Card,
   Alert,
+  Badge,
+  Rate,
 
   BackTop,
-  Badge,
   Button,
   ButtonGroup,
   Checkbox,
@@ -167,7 +168,6 @@ const comps = {
   TabPane,
   Spin,
   Transfer,
-  Rate,
   InputNumber,
   Select,
   Option,

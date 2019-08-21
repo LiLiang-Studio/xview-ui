@@ -1,7 +1,6 @@
 import './styles/ionicons.css'
 import './styles/base.less'
 import './utils/polyfill'
-import { NoticeManager } from './utils/vueFunc'
 import { createModal } from './components/modal'
 import { createDirectives } from './directives'
 
@@ -9,7 +8,8 @@ import { createDirectives } from './directives'
  * 新版本组件导入
  */
 
-import methods from './methods'
+import * as tools from './tools'
+import { createNotice, createMessage } from './components/notice'
 
 // 图标
 import Icon from './components/icon'
@@ -118,10 +118,6 @@ import DatePicker from './components/picker/DatePicker.vue'
 // // 时间选择器
 import TimePicker from './components/picker/TimePicker.vue'
 
-// // 消息提示
-import Message from './components/Message.vue'
-// 通知提醒
-import Notice from './components/Notice.vue'
 // // 模态框
 import Modal from './components/modal/Modal.vue'
 // // 加载中
@@ -204,14 +200,12 @@ export default {
    * @param {Object} options 
    */
   install(Vue, options = {}) {
-    Vue.prototype.$uiTools = methods
+    Vue.prototype.$uiTools = tools
+    Vue.prototype.$Notice = createNotice(Vue)
+    Vue.prototype.$Message = createMessage(Vue)
     let prefix = typeof options.prefix === 'string' ? options.prefix : 'Ui'
     for (let name in comps) Vue.component(prefix + name, comps[name])
 
-    // 消息提醒对象
-    Vue.prototype.$Message = new NoticeManager(Vue, Message, 'ui-message-wrapper')
-    // // 通知提醒对象
-    Vue.prototype.$Notice = new NoticeManager(Vue, Notice, 'ui-notice-wrapper', { duration: 4.5 })
     // // 标准对话框
     Vue.prototype.$Modal = createModal(Vue)
     // // 加载中对象

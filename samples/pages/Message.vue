@@ -6,6 +6,8 @@
     <Button @click="openWarning">警告</Button>
     <Button @click="openError">错误</Button>
     <Button @click="openLoading">加载中</Button>
+    <Button @click="openCanClose">可以关闭</Button>
+    <Button @click="openRenderFns">渲染函数</Button>
   </div>
 </template>
 <script>
@@ -24,7 +26,23 @@ export default {
       this.$Message.error('这是一条错误提示')
     },
     openLoading() {
-      this.$Message.loading('这是一条加载中提示')
+      let cs = this.$Message.loading({
+        content: '这是一条加载中提示'
+      })
+    },
+    openCanClose() {
+      this.$Message.error({
+        content: '这是可以关闭的消息，点击关闭',
+        closable: true
+      })
+    },
+    openRenderFns() {
+      this.$Message.error({
+        closable: true,
+        render: h => {
+          return h('b', '这是渲染函数，可以关闭的消息，点击关闭')
+        }
+      })
     }
   }
 }

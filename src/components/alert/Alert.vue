@@ -17,6 +17,7 @@
 <script>
 import UiIcon from '../icon'
 import UiCloseIconButton from '../close-icon-button'
+import { iconTypes } from '@/tools'
 export default {
   name: 'UiAlert',
   components: { UiIcon, UiCloseIconButton },
@@ -35,7 +36,7 @@ export default {
   },
   computed: {
     iconType() {
-      return this.$uiTools.iconTypes[this.type]
+      return iconTypes[this.type]
     },
     classes() {
       let { prefix, type, hasDesc } = this

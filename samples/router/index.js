@@ -59,6 +59,8 @@ export const routeComponents = {
   Alert,
   Badge,
   Rate,
+  Message,
+  Notice,
 
 
   DatePicker,
@@ -92,8 +94,6 @@ export const routeComponents = {
   Button,
   Checkbox,
   Input,
-  Message,
-  Notice,
   Progress,
   Tag,
   Timeline,

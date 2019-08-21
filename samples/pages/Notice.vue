@@ -13,6 +13,8 @@
     <Button @click="success(true)">Success</Button>
     <Button @click="warning(true)">Warning</Button>
     <Button @click="error(true)">Error</Button>
+    <div class="page-sub-title">渲染函数</div>
+    <Button @click="renderFns(true)">Success</Button>
   </div>
 </template>
 <script>
@@ -55,6 +57,12 @@ export default {
         desc: nodesc
           ? ""
           : "Here is the notification description. Here is the notification description. "
+      })
+    },
+    renderFns() {
+      this.$Notice.success({
+        title: '渲染函数通知',
+        render: h => h('i', 'Here is the notification description. Here is the notification description.')
       })
     }
   }

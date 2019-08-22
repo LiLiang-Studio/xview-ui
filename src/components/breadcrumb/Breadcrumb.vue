@@ -5,7 +5,7 @@
 </template>
 <script>
 export default {
-  name: 'ui-breadcrumb',
+  name: 'UiBreadcrumb',
   props: {
     separator: {
       type: String,

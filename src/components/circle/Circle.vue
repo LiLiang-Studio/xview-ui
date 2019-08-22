@@ -1,16 +1,20 @@
 <template>
-  <div class="ui-icircle" :style="styles">
+  <div :class="prefix" :style="styles">
     <svg viewBox="0 0 100 100">
       <path :d="pathString" :stroke="trailColor" :stroke-width="trailWidth" :fill-opacity="0" :style="trailStyle" />
       <path :d="pathString" :stroke-linecap="strokeLinecap" :stroke="strokeColor" :stroke-width="computedStrokeWidth" fill-opacity="0" :style="pathStyle" />
     </svg>
-    <div class="ui-icircle-inner">
+    <div :class="`${prefix}--inner`">
       <slot></slot>
     </div>
   </div>
 </template>
 <script>
 export default {
+  name: 'UiCircle',
+  data() {
+    return { prefix: 'ui-circle' }
+  },
   props: {
     percent: {
       type: Number,
@@ -39,7 +43,8 @@ export default {
     trailColor: {
       type: String,
       default: '#eaeef2'
-    }
+    },
+    dashboard: Boolean
   },
   computed: {
     styles() {
@@ -61,11 +66,11 @@ export default {
       return Math.PI * 2 * this.radius
     },
     trailStyle() {
-      return this.dashboard ? {
+      return this.dashboard && {
         'stroke-dasharray': `${this.len - 75}px ${this.len}px`,
         'stroke-dashoffset': `-${75 / 2}px`,
         'transition': 'stroke-dashoffset .3s ease 0s, stroke-dasharray .3s ease 0s, stroke .3s'
-      } : {}
+      }
     },
     pathStyle() {
       return this.dashboard ? {
@@ -82,18 +87,17 @@ export default {
 }
 </script>
 <style lang="less">
-.ui-icircle {
-  display: inline-block;
+.ui-circle {
   position: relative;
-}
-
-.ui-icircle-inner {
-  width: 100%;
-  position: absolute;
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%);
-  line-height: 1;
-  text-align: center;
+  display: inline-block;
+  &--inner {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    line-height: 1;
+    text-align: center;
+    transform: translateY(-50%);
+  }
 }
 </style>

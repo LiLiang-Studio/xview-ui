@@ -1,58 +1,57 @@
 <template>
-  <span class="ui-breadcrumb-item">
+  <span :class="prefix">
     <template v-if="to">
-      <router-link v-if="$router" class="ui-breadcrumb-link" :to="to" :replace="replace">
+      <router-link v-if="$router" :class="`${prefix}--link`" :to="to" :replace="replace" :append="append">
         <slot></slot>
       </router-link>
-      <a v-else class="ui-breadcrumb-link" :href="to" :target="target">
+      <a v-else :class="`${prefix}--link`" :href="to" :target="target">
         <slot></slot>
       </a>
     </template>
-    <span v-else class="ui-breadcrumb-link notlink"><slot></slot></span>
-    <span class="ui-breadcrumb-separator" v-html="separator"></span>
+    <span v-else :class="[`${prefix}--link`, 'notlink']"><slot></slot></span>
+    <span :class="`${prefix}--separator`" v-html="separator"></span>
   </span>
 </template>
 <script>
-import { findParentByName } from './../../utils'
+import { findParent } from '../../tools'
 export default {
+  name: 'UiBreadcrumbItem',
   data() {
-    return { separator: '' }
+    return { prefix: 'ui-breadcrumb-item', separator: '' }
   },
   props: {
     replace: Boolean,
-    to: [String, Object]
-  },
-  computed: {
-    target() {
-      return !this.replace && '_blank'
-    }
+    to: [String, Object],
+    target: {
+      type: String,
+      default: '_self'
+    },
+    append: Boolean
   },
   mounted() {
-    let parent = findParentByName(this, 'ui-breadcrumb')
+    let parent = findParent(this, 'UiBreadcrumb')
     if (parent) this.separator = parent.separator
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-breadcrumb-item {
+@prefix: .ui-breadcrumb-item;
+@{prefix} {
   font-size: 14px;
   color: @content-color;
-}
-
-.ui-breadcrumb-link {
-  color: @content-color;
-  &.notlink {
-    font-weight: bold;
+  &--link {
+    color: @content-color;
+    &.notlink {
+      font-weight: bold;
+    }
   }
-}
-
-.ui-breadcrumb-separator {
-  margin: 0 8px;
-  color: @border-color;
-}
-
-.ui-breadcrumb .ui-breadcrumb-item:last-child .ui-breadcrumb-separator {
-  display: none;
+  &--separator {
+    margin: 0 8px;
+    color: @border-color;
+  }
+  &:last-child @{prefix}--separator {
+    display: none;
+  }
 }
 </style>

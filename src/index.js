@@ -9,7 +9,6 @@ import { createDirectives } from './directives'
  */
 
 import * as tools from './tools'
-import { createNotice, createMessage } from './components/notice'
 
 // 图标
 import Icon from './components/icon'
@@ -23,6 +22,12 @@ import Alert from './components/alert'
 import Badge from './components/badge'
 // 评分
 import Rate from './components/rate'
+// 通知和消息提醒
+import { createNotice, createMessage } from './components/notice'
+// 进度环
+import ICircle from './components/circle'
+// 面包屑导航
+import { Breadcrumb, BreadcrumbItem } from './components/breadcrumb'
 
 
 // // 回到顶部
@@ -46,9 +51,6 @@ import TimelineItem from './components/timeline/TimelineItem.vue'
 // // 折叠面板
 import Collapse from './components/collapse/Collapse.vue'
 import Panel from './components/collapse/Panel.vue'
-// // 面包屑导航
-import Breadcrumb from './components/breadcrumb/Breadcrumb.vue'
-import BreadcrumbItem from './components/breadcrumb/BreadcrumbItem.vue'
 // // 轮播切换
 import Swiper from './components/swiper/Swiper.vue'
 import SwiperItem from './components/swiper/SwiperItem.vue'
@@ -80,8 +82,6 @@ import OptionGroup from './components/select/OptionGroup.vue'
 // // 步骤条
 import Step from './components/step/Step.vue'
 import Steps from './components/step/Steps.vue'
-// // 进度环
-import ICircle from './components/ICircle.vue'
 // // 无限滚动
 import Scroll from './components/scroll/Scroll.vue'
 // // 图钉
@@ -132,6 +132,9 @@ const comps = {
   Alert,
   Badge,
   Rate,
+  ICircle,
+  Breadcrumb,
+  BreadcrumbItem,
 
   BackTop,
   Button,
@@ -146,8 +149,6 @@ const comps = {
   Collapse,
   Panel,
   Modal,
-  Breadcrumb,
-  BreadcrumbItem,
   Swiper,
   SwiperItem,
   Row,
@@ -170,7 +171,6 @@ const comps = {
   OptionGroup,
   Step,
   Steps,
-  ICircle,
   Scroll,
   Affix,
   Page,

@@ -13,7 +13,7 @@ import UiIcon from '../icon'
 import UiButton from './../button/Button.vue'
 import UiModalView from './ModalView.vue'
 import { getDefaultProps } from './modalUntils'
-import { iconTypes } from './../../utils'
+import { iconTypes } from '../../tools'
 export default {
   components: { UiIcon, UiButton, UiModalView },
   data() {

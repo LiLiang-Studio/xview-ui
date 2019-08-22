@@ -61,6 +61,8 @@ export const routeComponents = {
   Rate,
   Message,
   Notice,
+  ICircle,
+  Breadcrumb,
 
 
   DatePicker,
@@ -78,7 +80,6 @@ export const routeComponents = {
   LoadingBar,
   Affix,
   Scroll,
-  ICircle,
   Steps,
   Select,
   InputNumber,
@@ -98,8 +99,7 @@ export const routeComponents = {
   Tag,
   Timeline,
   Collapse,
-  Modal,
-  Breadcrumb
+  Modal
 }
 
 const router = new Router({

@@ -21,3 +21,24 @@ export const getMaxZIndex = () => {
   })
   return _maxZIndex
 }
+
+const isFoundByOptions = (vm, query) => {
+  return isStr(query) ? vm.$options.name === query : Object.keys(query).every(_ => vm.$options[_] === query[_])
+}
+
+export const findChildrens = (vm, query) => {
+  let rtnArr = [], nochecked = vm.$children.slice()
+  while (nochecked.length) {
+    let item = nochecked.shift()
+    isFoundByOptions(item, query) ? rtnArr.push(item) : item.$children.forEach(_ => nochecked.push(_))
+  }
+  return rtnArr
+}
+
+export const findParent = (vm, query) => {
+  let par = vm.$parent
+  while (par) {
+    if (isFoundByOptions(par, query)) return par
+    par = par.$parent
+  }
+}

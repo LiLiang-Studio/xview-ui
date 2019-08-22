@@ -5,16 +5,6 @@
 // 最大图层值
 var maxZIndex
 
-// 消息图标类型
-export const iconTypes = {
-  info: 'information-circled',
-  success: 'checkmark-circled',
-  warning: 'android-alert',
-  error: 'close-circled',
-  loading: 'load-c',
-  confirm: 'help-circled'
-}
-
 /**
  * 是否函数
  * @param {Function} f 

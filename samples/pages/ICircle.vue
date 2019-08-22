@@ -44,6 +44,10 @@
         </span>
       </div>
     </ICircle>
+    <div class="page-sub-title">通过设置属性 dashboard，可以很方便地实现仪表盘样式的进度环。</div>
+    <ICircle :percent="80" dashboard>
+        <span class="demo-circle-inner" style="font-size:24px">80%</span>
+    </ICircle>
   </div>
 </template>
 <script>

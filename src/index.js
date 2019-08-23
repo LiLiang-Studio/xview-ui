@@ -1,15 +1,12 @@
 import './styles/ionicons.css'
 import './styles/base.less'
 import './utils/polyfill'
-import { createModal } from './components/modal'
-import { createDirectives } from './directives'
 
 /**
  * 新版本组件导入
  */
 
 import * as tools from './tools'
-
 // 图标
 import Icon from './components/icon'
 // 头像
@@ -28,6 +25,10 @@ import { createNotice, createMessage } from './components/notice'
 import ICircle from './components/circle'
 // 面包屑导航
 import { Breadcrumb, BreadcrumbItem } from './components/breadcrumb'
+// 时间线
+import { Timeline, TimelineItem } from './components/timeline'
+// 加载中
+import Spin, { spinService } from './components/spin'
 
 
 // // 回到顶部
@@ -45,9 +46,6 @@ import Input from './components/Input.vue'
 import Progress from './components/Progress.vue'
 // // 标签
 import Tag from './components/Tag.vue'
-// // 时间线
-import Timeline from './components/timeline/Timeline.vue'
-import TimelineItem from './components/timeline/TimelineItem.vue'
 // // 折叠面板
 import Collapse from './components/collapse/Collapse.vue'
 import Panel from './components/collapse/Panel.vue'
@@ -118,10 +116,10 @@ import DatePicker from './components/picker/DatePicker.vue'
 // // 时间选择器
 import TimePicker from './components/picker/TimePicker.vue'
 
+import { createDirectives } from './directives'
 // // 模态框
+import { createModal } from './components/modal'
 import Modal from './components/modal/Modal.vue'
-// // 加载中
-import Spin, { createSpin } from './components/spin'
 // // 加载条
 import { createLoadingBar } from './components/loading-bar'
 
@@ -135,6 +133,9 @@ const comps = {
   ICircle,
   Breadcrumb,
   BreadcrumbItem,
+  Timeline,
+  TimelineItem,
+  Spin,
 
   BackTop,
   Button,
@@ -144,8 +145,6 @@ const comps = {
   Input,
   Progress,
   Tag,
-  Timeline,
-  TimelineItem,
   Collapse,
   Panel,
   Modal,
@@ -163,7 +162,6 @@ const comps = {
   ISwitch,
   Tabs,
   TabPane,
-  Spin,
   Transfer,
   InputNumber,
   Select,
@@ -203,13 +201,12 @@ export default {
     Vue.prototype.$uiTools = tools
     Vue.prototype.$Notice = createNotice(Vue)
     Vue.prototype.$Message = createMessage(Vue)
+    Vue.prototype.$Spin = spinService(Vue)
     let prefix = typeof options.prefix === 'string' ? options.prefix : 'Ui'
     for (let name in comps) Vue.component(prefix + name, comps[name])
 
     // // 标准对话框
     Vue.prototype.$Modal = createModal(Vue)
-    // // 加载中对象
-    Vue.prototype.$Spin = createSpin(Vue)
     // // 加载条对象
     Vue.LoadingBar = Vue.prototype.$Loading = createLoadingBar(Vue)
     // // 全局指令

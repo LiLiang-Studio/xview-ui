@@ -1,13 +1,11 @@
 <template>
   <span :class="prefix">
-    <template v-if="to">
-      <router-link v-if="$router" :class="`${prefix}--link`" :to="to" :replace="replace" :append="append">
-        <slot></slot>
-      </router-link>
-      <a v-else :class="`${prefix}--link`" :href="to" :target="target">
-        <slot></slot>
-      </a>
-    </template>
+    <router-link v-if="to" :class="`${prefix}--link`" :to="to" :replace="replace" :append="append">
+      <slot></slot>
+    </router-link>
+    <a v-else-if="href" :class="`${prefix}--link`" :href="href" :target="target">
+      <slot></slot>
+    </a>
     <span v-else :class="[`${prefix}--link`, 'notlink']"><slot></slot></span>
     <span :class="`${prefix}--separator`" v-html="separator"></span>
   </span>
@@ -26,6 +24,7 @@ export default {
       type: String,
       default: '_self'
     },
+    href: String,
     append: Boolean
   },
   mounted() {

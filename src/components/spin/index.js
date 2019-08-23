@@ -1,36 +1,39 @@
 
 import UiSpin from './Spin.vue'
-import { setMaxZIndex, winScrollLock } from './../../utils'
+import { getMaxZIndex, winScrollbarLock, isFunc } from '@/tools'
 
 /**
  * 创建加载中组件
  * @param {Vue.VueConstructor} Vue 
  */
-export function createSpin(Vue) {
+export const spinService = Vue => {
   return {
     show(options = {}) {
-      winScrollLock.lock()
-      let props = { ...options, zIndex: setMaxZIndex(), fullscreen: true }
-      this.spin = new Vue({
-        name: 'ui-spin-wrapper',
+      winScrollbarLock.lock()
+      this.vm = new Vue({
         data() {
           return { visible: false }
         },
         render(h) {
-          return this.visible && h(UiSpin, { props })
+          return h(UiSpin, {
+            props: { size: options.size, fix: true },
+            style: { zIndex: getMaxZIndex(), position: 'fixed' },
+            directives: [{ name: 'show', value: this.visible }],
+            on: { leave: () => this.$destroy() }
+          }, isFunc(options.render) ? [options.render(h)] : undefined)
         },
         mounted() {
           document.body.appendChild(this.$el)
           this.visible = true
         },
         beforeDestroy() {
-          this.$el.remove()
-          winScrollLock.unlock()
+          winScrollbarLock.unlock()
+          this.$el.parentNode && this.$el.parentNode.removeChild(this.$el)
         }
       }).$mount()
     },
     hide() {
-      this.spin.visible = false
+      this.vm.visible = false
     }
   }
 }

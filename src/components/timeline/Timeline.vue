@@ -5,15 +5,14 @@
 </template>
 <script>
 export default {
-  props: {
-    pending: Boolean
-  }
+  name: 'UiTimeline',
+  props: { pending: Boolean }
 }
 </script>
 <style lang="less">
 .ui-timeline {
   list-style: none;
-  &.pending .ui-timeline-item:nth-last-of-type(2) .ui-timeline-item-tail {
+  &.pending &-item:nth-last-of-type(2) &-item--tail {
     border-left-style: dotted;
   }
 }

@@ -63,6 +63,8 @@ export const routeComponents = {
   Notice,
   ICircle,
   Breadcrumb,
+  Timeline,
+  Spin,
 
 
   DatePicker,
@@ -84,7 +86,6 @@ export const routeComponents = {
   Select,
   InputNumber,
   Transfer,
-  Spin,
   Tabs,
   Switch,
   Radio,
@@ -97,7 +98,6 @@ export const routeComponents = {
   Input,
   Progress,
   Tag,
-  Timeline,
   Collapse,
   Modal
 }

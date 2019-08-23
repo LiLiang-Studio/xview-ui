@@ -4,7 +4,6 @@
   </ul>
 </template>
 <script>
-import { findChildrensByName } from './../../utils'
 export default {
   name: 'ui-menu',
   data() {

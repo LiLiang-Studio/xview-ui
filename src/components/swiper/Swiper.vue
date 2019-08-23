@@ -19,7 +19,7 @@
 </template>
 <script>
 import UiIcon from '../icon'
-import { findChildrensByName } from './../../utils'
+import { findChildrens } from './../../tools'
 export default {
   components: { UiIcon },
   data() {
@@ -135,7 +135,7 @@ export default {
       clearInterval(this.tid)
     },
     setTrackStyle() {
-      this.children = findChildrensByName(this, 'ui-swiper-item')
+      this.children = findChildrens(this, 'ui-swiper-item')
       let len = this.children.length
       this.trackStyle = { ...this.trackStyle, width: `${100 * len}%` }
       this.children.forEach(item => item.$el.style.width = `${(1 / len) * 100}%`)

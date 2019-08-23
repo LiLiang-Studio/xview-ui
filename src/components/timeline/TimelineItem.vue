@@ -1,20 +1,19 @@
 <template>
-  <li class="ui-timeline-item">
-    <span class="ui-timeline-item-tail"></span>
-    <span class="ui-timeline-item-dot" :class="{[color]: clsName, custom}" :style="styles">
+  <li :class="prefix">
+    <span :class="`${prefix}--tail`"></span>
+    <span :class="[`${prefix}--dot`, {[color]: clsName, custom}]" :style="styles">
       <slot name="dot"></slot>
     </span>
-    <div class="ui-timeline-item-content">
+    <div :class="`${prefix}--content`">
       <slot></slot>
     </div>
   </li>
 </template>
 <script>
 export default {
+  name: 'UiTimelineItem',
   data() {
-    return {
-      custom: false
-    }
+    return { prefix: 'ui-timeline-item', custom: false }
   },
   props: {
     color: {
@@ -27,7 +26,7 @@ export default {
       return ['blue', 'red', 'green'].indexOf(this.color) !== -1
     },
     styles() {
-      return !this.clsName && this.color ? { borderColor: this.color } : {}
+      return !this.clsName && { color: this.color }
     }
   },
   mounted() {
@@ -40,53 +39,46 @@ export default {
 .ui-timeline-item {
   padding-bottom: 24px;
   position: relative;
-  &:last-child .ui-timeline-item-tail {
+  &:last-child &--tail {
     display: none;
   }
-}
-
-.ui-timeline-item-tail, .ui-timeline-item-dot {
-  position: absolute;
-  top: 0;
-}
-
-.ui-timeline-item-tail {
-  height: 100%;
-  left: 6px;
-  border-left: 1px solid @divider-color;
-}
-
-.ui-timeline-item-dot {
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-  border: 1px solid;
-  background-color: #fff;
-  &.blue {
-    color: @primary-color;
-    border-color: @primary-color;
+  &--tail, &--dot {
+    position: absolute;
+    top: 0;
   }
-  &.green {
-    color: @success-color;
-    border-color: @success-color;
+  &--tail {
+    height: 100%;
+    left: 6px;
+    border-left: 1px solid @divider-color;
   }
-  &.red {
-    color: @error-color;
-    border-color: @error-color;
-  }
-  &.custom {
-    text-align: center;
+  &--dot {
+    width: 13px;
+    height: 13px;
     line-height: 1;
-    border: none;
-    border-radius: 0;
     font-size: 14px;
+    border-radius: 50%;
+    text-align: center;
+    border: 1px solid currentColor;
+    background-color: #fff;
+    &.blue {
+      color: @primary-color;
+    }
+    &.green {
+      color: @success-color;
+    }
+    &.red {
+      color: @error-color;
+    }
+    &.custom {
+      border: none;
+      border-radius: 0;
+    }
   }
-}
-
-.ui-timeline-item-content {
-  padding: 1px 0 0 24px;
-  font-size: 12px;
-  position: relative;
-  top: -3px;
+  &--content {
+    padding: 1px 0 0 24px;
+    font-size: 12px;
+    position: relative;
+    top: -3px;
+  }
 }
 </style>

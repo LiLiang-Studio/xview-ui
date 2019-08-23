@@ -42,3 +42,25 @@ export const findParent = (vm, query) => {
     par = par.$parent
   }
 }
+
+export const winScrollbarLock = {
+  getScrollbarWidth() {
+    let p = document.createElement('p')
+    let styles = { width: '100px', height: '100px', overflowY: 'scroll' }
+    for (let key in styles) p.style[key] = styles[key]
+    document.body.appendChild(p)
+    let scrollbarWidth = p.offsetWidth - p.clientWidth
+    p.remove()
+    return scrollbarWidth
+  },
+  lock() {
+    let winHeight = window.innerHeight
+    let { scrollHeight } = document.body
+    if (winHeight > scrollHeight) return
+    document.body.style.paddingRight = `${this.getScrollbarWidth()}px`
+    document.body.style.overflow = 'hidden'
+  },
+  unlock() {
+    document.body.style.paddingRight = document.body.style.overflow = ''
+  }
+}

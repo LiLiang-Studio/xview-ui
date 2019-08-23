@@ -1,0 +1,11 @@
+/docs
+/src
+/samples
+/public
+.devbase
+.firebase
+.firebaserc
+firebase.json
+vue.config.js
+babel.config.js
+package-lock.json

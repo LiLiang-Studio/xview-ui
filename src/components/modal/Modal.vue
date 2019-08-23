@@ -12,12 +12,12 @@
 <script>
 import UiModalView from './ModalView.vue'
 import { getDefaultProps } from './modalUntils'
-import { setMaxZIndex, winScrollLock } from '../../utils'
+import { getMaxZIndex, winScrollbarLock } from '../../tools'
 export default {
   components: { UiModalView },
   data() {
     return {
-      zIndex: setMaxZIndex(),
+      zIndex: getMaxZIndex(),
       visible: this.value,
       isLoading: false
     }
@@ -27,10 +27,10 @@ export default {
     value(newVal) {
       this.visible = newVal
       if (newVal) {
-        winScrollLock.lock()
-        this.zIndex = setMaxZIndex()
+        winScrollbarLock.lock()
+        this.zIndex = getMaxZIndex()
       } else {
-        winScrollLock.unlock()
+        winScrollbarLock.unlock()
         this.isLoading = false
       }
     }

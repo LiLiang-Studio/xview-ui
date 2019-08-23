@@ -6,13 +6,15 @@
 
 demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://liliangabc.github.io/vueui-widgets)
 
+```
+0.5.0版本开始采用Rollup构建，比之前体积更小，目前css已构建进js中，1.0.0版本发布之前，不建议商用；
+```
+
 ```javascript
 import Vue from 'vue'
 import VueUI from 'vueui-widgets'
-import 'vueui-widgets/dist/vueui.css'
 Vue.use(VueUI, { prefix: 'ui' })
 ```
-
 #### options 目前仅支持 prefix属性，默认值为 'ui'，用来设置组件名字前缀，
 #### 如果为空字符串，则不带前缀使用组件，这样iview官方例子基本可以直接拿来用
 

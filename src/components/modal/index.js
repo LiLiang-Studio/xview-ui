@@ -3,7 +3,7 @@
  */
 
 import UiDialog from './Dialog.vue'
-import { setMaxZIndex, isFunc, winScrollLock } from './../../utils'
+import { getMaxZIndex, isFunc, winScrollbarLock } from './../../tools'
 
 /**
  * 创建对话框
@@ -12,7 +12,7 @@ import { setMaxZIndex, isFunc, winScrollLock } from './../../utils'
 export function createModal(Vue) {
   return {
     create(type, options = {}) {
-      winScrollLock.lock()
+      winScrollbarLock.lock()
       let { onOk, onCancel, ...props } = options
       this.instance = new Vue({
         data() {
@@ -20,13 +20,13 @@ export function createModal(Vue) {
             visible: true,
             loading: options.loading,
             isLoading: false,
-            zIndex: setMaxZIndex()
+            zIndex: getMaxZIndex()
           }
         },
         watch: {
           visible(newVal) {
             if (newVal) return
-            winScrollLock.unlock()
+            winScrollbarLock.unlock()
             this.isLoading = false
           }
         },

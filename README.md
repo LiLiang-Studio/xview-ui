@@ -7,7 +7,10 @@
 demo地址(不完善) [https://liliangabc.github.io/vueui-widgets](https://liliangabc.github.io/vueui-widgets)
 
 ```
-0.5.0版本开始采用Rollup构建，比之前体积更小，目前css已构建进js中，1.0.0版本发布之前，不建议商用；
+0.5.0版本开始采用Rollup构建，比之前体积更小
+全部开发完成，压缩版体积将控制在280kb内，目前205kb
+目前css已构建进js中，1.0.0版本发布之前，不建议商用；
+当然，可供学习交流之用，欢迎大家下载体验；
 ```
 
 ```javascript
@@ -18,74 +21,8 @@ Vue.use(VueUI, { prefix: 'ui' })
 #### options 目前仅支持 prefix属性，默认值为 'ui'，用来设置组件名字前缀，
 #### 如果为空字符串，则不带前缀使用组件，这样iview官方例子基本可以直接拿来用
 
-
-目前已完成的组件如下：
-
-1. Alert
-2. Avator
-3. BackTop
-4. Badge
-5. Button
-6. ButtonGroup
-7. Icon
-8. Input
-9. Tag
-10. Message
-11. Notice
-12. Checkbox
-13. CheckboxGroup
-14. Card
-15. Timeline
-16. TimelineItem
-17. Progress
-18. Collapse
-19. Panel
-20. Modal
-21. breadcrumb
-22. breadcrumbItem
-23. Swiper
-24. SwiperItem
-25. Row
-26. Col
-27. Layout
-28. Header
-29. Content
-30. Footer
-31. Sider
-32. Radio
-33. RadioGroup
-34. ISwitch
-35. Tabs
-36. TabPane
-37. Spin
-38. Transfer
-39. Rate
-40. InputNumber
-41. Select
-42. Option
-43. OptionGroup
-44. Scroll
-45. ICircle
-46. Step
-47. Steps
-48. Affix
-49. LoadingBar
-50. Page
-51. Dropdown
-52. DropdownMenu
-53. DropdownItem
-54. Menu
-55. MenuItem
-56. Submenu
-57. MenuGroup
-58. Tooltip
-59. Poptip
-60. Tree
-61. Table
-62. Slider
-63. Form
-64. FormItem
-65. AutoComplete
+#### 0.5.2版本更新（2019年8月24日）
+webpack切换到Rollup构建，优化了15个组件，压缩版体积较4.x版本减小了近100kb
 
 #### 0.4.4版本更新（2019年4月23日）
 新增AutoComplete组件，暂不支持自定义slot选项列表

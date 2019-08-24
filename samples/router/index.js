@@ -67,6 +67,7 @@ export const routeComponents = {
   Spin,
   Steps,
   Affix,
+  Grid,
 
 
   DatePicker,
@@ -89,7 +90,6 @@ export const routeComponents = {
   Tabs,
   Switch,
   Radio,
-  Grid,
   Layout,
   Swiper,
   BackTop,

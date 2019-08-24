@@ -86,3 +86,12 @@ export const debounce = (fn, gapTime = 16) => {
     timerId = setTimeout(fn, gapTime)
   }
 }
+
+export const addStylesheet = (id, styleStr) => {
+  let styleEl = document.getElementById(id)
+  if (styleEl) return
+  styleEl = document.createElement('style')
+  styleEl.id = id
+  styleEl.innerHTML = styleStr
+  document.head.appendChild(styleEl)
+}

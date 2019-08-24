@@ -33,6 +33,8 @@ import Spin, { spinService } from './components/spin'
 import { Steps, Step } from './components/step'
 // 图钉
 import Affix from './components/affix'
+// 网格布局
+import { Row, Col } from './components/grid'
 
 // // 回到顶部
 import BackTop from './components/BackTop.vue'
@@ -55,9 +57,7 @@ import Panel from './components/collapse/Panel.vue'
 // // 轮播切换
 import Swiper from './components/swiper/Swiper.vue'
 import SwiperItem from './components/swiper/SwiperItem.vue'
-// // 网格布局
-import Row from './components/grid/Row.vue'
-import Col from './components/grid/Col.vue'
+
 // // 布局
 import Layout from './components/layout/Layout.vue'
 import Header from './components/layout/Header.vue'
@@ -137,6 +137,8 @@ const comps = {
   Step,
   Steps,
   Affix,
+  Row,
+  Col,
 
   BackTop,
   Button,
@@ -151,8 +153,6 @@ const comps = {
   Modal,
   Swiper,
   SwiperItem,
-  Row,
-  Col,
   Layout,
   Header,
   Content,

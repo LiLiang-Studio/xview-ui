@@ -1,12 +1,11 @@
 <template>
-  <div class="ui-row" :class="classes" :style="styles">
+  <div :class="classes" :style="styles">
     <slot></slot>
   </div>
 </template>
 <script>
-const prefix = 'ui-row'
 export default {
-  name: prefix,
+  name: 'UiRow',
   props: {
     gutter: {
       type: Number,
@@ -21,19 +20,15 @@ export default {
       validator(value) {
         return ['start', 'end', 'center', 'space-around', 'space-between'].indexOf(value) !== -1
       }
-    },
-    className: String
+    }
   },
   computed: {
     classes() {
-      let arr = [this.className, { gutter: this.gutter }]
-      if (this.align) arr.push(`${prefix}-${this.align}`)
-      if (this.justify) arr.push(`${prefix}-${this.justify}`)
-      return arr
+      let prefix = 'ui-row', { align, justify, gutter } = this
+      return [prefix, align && `${prefix}-${align}`, justify && `${prefix}-${justify}`, { gutter }].filter(_ => _)
     },
     styles() {
-      let margin = `-${this.gutter / 2}px`
-      return this.gutter ? { marginLeft: margin, marginRight: margin } : {}
+      return this.gutter && { margin: `0 -${this.gutter / 2}px` }
     }
   }
 }

@@ -65,6 +65,7 @@ export const routeComponents = {
   Breadcrumb,
   Timeline,
   Spin,
+  Steps,
 
 
   DatePicker,
@@ -82,7 +83,6 @@ export const routeComponents = {
   LoadingBar,
   Affix,
   Scroll,
-  Steps,
   Select,
   InputNumber,
   Transfer,

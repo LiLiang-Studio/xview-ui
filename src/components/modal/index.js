@@ -3,7 +3,7 @@
  */
 
 import UiDialog from './Dialog.vue'
-import { getMaxZIndex, isFunc, winScrollbarLock } from './../../tools'
+import { getMaxZIndex, isFunc, winScrollbarLock } from '@/tools'
 
 /**
  * 创建对话框

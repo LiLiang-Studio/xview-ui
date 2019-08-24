@@ -6,14 +6,6 @@
 var maxZIndex
 
 /**
- * 是否函数
- * @param {Function} f 
- */
-export function isFunc(f) {
-  return typeof f === 'function'
-}
-
-/**
  * 获取对象的类型
  * @param {any} obj 
  */

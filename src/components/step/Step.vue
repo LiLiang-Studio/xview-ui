@@ -1,24 +1,23 @@
 <template>
-  <div class="ui-steps-item" :style="{width}" :class="statusClass">
-    <div class="ui-steps-tail"></div>
-    <span class="ui-steps-head" :class="{icon}">
-      <UiIcon v-if="icon" :type="icon"/>
-      <b class="ui-steps-index" v-else-if="isCurrent">{{index + 1}}</b>
-      <UiIcon v-else type="ios-checkmark-empty"/>
+  <div :class="[prefix, state.status]" :style="{width: state.width}">
+    <div :class="`${prefix}--tail`"></div>
+    <span :class="[`${prefix}--head`, {icon}]">
+      <UiIcon v-if="iconType" :type="iconType"/>
+      <b v-else>{{state.index + 1}}</b>
     </span>
-    <div class="ui-steps-main">
-      <div class="ui-steps-title">{{title}}</div>
-      <div v-if="content" class="ui-steps-content">{{content}}</div>
+    <div :class="`${prefix}--main`">
+      <div :class="`${prefix}--title`">{{title}}</div>
+      <div v-if="content" :class="`${prefix}--content`">{{content}}</div>
     </div>
   </div>
 </template>
 <script>
 import UiIcon from '../icon'
-import { findParentByName } from './../../utils'
 export default {
+  name: 'UiStep',
   components: { UiIcon },
   data() {
-    return { parent: null }
+    return { prefix: 'ui-step', state: {} }
   },
   props: {
     title: String,
@@ -26,25 +25,15 @@ export default {
     icon: String
   },
   computed: {
-    width() {
-      return this.parent && this.parent.direction === 'horizontal' && `${1 / this.parent.getCount() * 100}%`
-    },
-    index() {
-      return this.parent ? this.parent.getIndex(this) : -1
-    },
-    isCurrent() {
-      return this.parent && this.index === this.parent.current
-    },
-    statusClass() {
-      return this.parent && (this.isCurrent ? this.parent.status || 'process' : this.index < this.parent.current ? 'finish' : 'wait')
+    iconType() {
+      let { status } = this.state
+      return this.icon || (status === 'finish' && 'ios-checkmark-empty') || (status === 'error' && 'ios-close-empty')
     }
   },
-  mounted() {
-    this.parent = findParentByName(this, 'ui-steps')
-    this.parent && this.parent.addChild(this)
-  },
-  beforeDestroy() {
-    this.parent && this.parent.removeChild(this)
+  methods: {
+    setState(state) {
+      this.state = Object.assign({}, this.state, state)
+    }
   }
 }
 </script>

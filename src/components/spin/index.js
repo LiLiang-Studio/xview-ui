@@ -8,18 +8,22 @@ import { getMaxZIndex, winScrollbarLock, isFunc } from '@/tools'
  */
 export const spinService = Vue => {
   return {
-    show(options = {}) {
-      winScrollbarLock.lock()
-      this.vm = new Vue({
+    getVM(options = {}) {
+      let that = this
+      return this.vm || new Vue({
         data() {
           return { visible: false }
+        },
+        watch: {
+          visible(newval) {
+            if (!newval) winScrollbarLock.unlock()
+          }
         },
         render(h) {
           return h(UiSpin, {
             props: { size: options.size, fix: true },
             style: { zIndex: getMaxZIndex(), position: 'fixed' },
             directives: [{ name: 'show', value: this.visible }],
-            on: { leave: () => this.$destroy() }
           }, isFunc(options.render) ? [options.render(h)] : undefined)
         },
         mounted() {
@@ -27,13 +31,26 @@ export const spinService = Vue => {
           this.visible = true
         },
         beforeDestroy() {
-          winScrollbarLock.unlock()
+          that.vm = null
           this.$el.parentNode && this.$el.parentNode.removeChild(this.$el)
+        },
+        methods: {
+          show(visible = true) {
+            this.visible = visible
+          }
         }
       }).$mount()
     },
+    show(options) {
+      winScrollbarLock.lock()
+      this.vm = this.getVM(options)
+      this.vm.show()
+    },
     hide() {
-      this.vm.visible = false
+      this.vm.show(false)
+    },
+    destroy() {
+      this.vm.$destroy()
     }
   }
 }

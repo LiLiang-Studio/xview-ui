@@ -1,5 +1,5 @@
 <template>
-  <transition :name="prefix" @afterLeave="$emit('leave')">
+  <transition :name="prefix">
     <div :class="[prefix, {fix}]">
       <div>
         <slot><div :class="[`${prefix}--dot`, size]"></div></slot>

@@ -29,6 +29,8 @@ import { Breadcrumb, BreadcrumbItem } from './components/breadcrumb'
 import { Timeline, TimelineItem } from './components/timeline'
 // 加载中
 import Spin, { spinService } from './components/spin'
+// 步骤条
+import { Steps, Step } from './components/step'
 
 
 // // 回到顶部
@@ -77,9 +79,6 @@ import InputNumber from './components/InputNumber.vue'
 import Select from './components/select/Select.vue'
 import Option from './components/select/Option.vue'
 import OptionGroup from './components/select/OptionGroup.vue'
-// // 步骤条
-import Step from './components/step/Step.vue'
-import Steps from './components/step/Steps.vue'
 // // 无限滚动
 import Scroll from './components/scroll/Scroll.vue'
 // // 图钉
@@ -136,6 +135,8 @@ const comps = {
   Timeline,
   TimelineItem,
   Spin,
+  Step,
+  Steps,
 
   BackTop,
   Button,
@@ -167,8 +168,6 @@ const comps = {
   Select,
   Option,
   OptionGroup,
-  Step,
-  Steps,
   Scroll,
   Affix,
   Page,

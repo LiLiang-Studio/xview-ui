@@ -69,6 +69,7 @@ export const routeComponents = {
   Affix,
   Grid,
   BackTop,
+  Progress,
 
 
   DatePicker,
@@ -96,7 +97,6 @@ export const routeComponents = {
   Button,
   Checkbox,
   Input,
-  Progress,
   Tag,
   Collapse,
   Modal

@@ -11,6 +11,7 @@
 import UiIcon from '../icon'
 import { throttle } from '@/tools'
 export default {
+  name: 'UiBackTop',
   components: { UiIcon },
   data() {
     return { prefix: 'ui-backTop', visible: false }

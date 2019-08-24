@@ -6,6 +6,7 @@
 <script>
 import { findParent } from '@/tools'
 export default {
+  name: 'UiCol',
   props: {
     span: [Number, String],
     order: [Number, String],

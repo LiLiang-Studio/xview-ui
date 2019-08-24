@@ -37,6 +37,8 @@ import Affix from './components/affix'
 import { Row, Col } from './components/grid'
 // 回到顶部
 import BackTop from './components/back-top'
+// 进度条
+import Progress from './components/progress'
 
 // // 按钮
 import Button from './components/button/Button.vue'
@@ -47,8 +49,6 @@ import CheckboxGroup from './components/checkbox/CheckboxGroup.vue'
 
 // // 文本输入框
 import Input from './components/Input.vue'
-// // 进度条
-import Progress from './components/Progress.vue'
 // // 标签
 import Tag from './components/Tag.vue'
 // // 折叠面板
@@ -140,13 +140,13 @@ const comps = {
   Row,
   Col,
   BackTop,
+  Progress,
 
   Button,
   ButtonGroup,
   Checkbox,
   CheckboxGroup,
   Input,
-  Progress,
   Tag,
   Collapse,
   Panel,

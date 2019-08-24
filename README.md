@@ -173,29 +173,6 @@ Select组件新增支持多选和键盘选择，以及本地和远程搜索功�
 #### 0.1.7版本更新（2019年3月23日）
 
 + 新增breadcrumb， breadcrumbItem导航组件
-+ 新增resize，scroll 指令， 二者都绑定一个Function，window大小改变或滚动会调用该Function，用法如下： 
-
-```javascript
-<template>
-  <div>
-    <div v-resize="handleResize"></div>
-    <div v-scroll="handleScroll"></div>
-  </div>
-</template>
-
-<script>
-  export default {
-    methods: {
-      handleResize(event) {
-
-      },
-      handleScroll(event) {
-
-      }
-    }
-  }
-</script>
-```
 
 #### 0.1.6版本更新（2019年3月22日）
 

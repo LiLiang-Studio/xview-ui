@@ -72,7 +72,5 @@ export function createEventDirective(Vue) {
  * @param {Vue.VueConstructor} Vue 
  */
 export function createDirectives(Vue) {
-  createEventDirective(Vue)('resize', window, 'resize')
-  createEventDirective(Vue)('scroll', window, 'scroll')
   createEventDirective(Vue)('winclick', window, 'click')
 }

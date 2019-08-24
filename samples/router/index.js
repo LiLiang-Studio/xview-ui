@@ -66,6 +66,7 @@ export const routeComponents = {
   Timeline,
   Spin,
   Steps,
+  Affix,
 
 
   DatePicker,
@@ -81,7 +82,6 @@ export const routeComponents = {
   Dropdown,
   Page,
   LoadingBar,
-  Affix,
   Scroll,
   Select,
   InputNumber,

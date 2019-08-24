@@ -1,6 +1,6 @@
 <template>
   <transition name="ui-dropdown">
-    <div class="ui-select-dropdown" v-resize="updatePosition" v-show="visible" :class="{multiple}" :style="styles">
+    <div class="ui-select-dropdown" v-show="visible" :class="{multiple}" :style="styles">
       <div class="ui-select-empty">
         <slot name="empty"></slot>
       </div>
@@ -53,11 +53,13 @@ export default {
   mounted() {
     document.body.appendChild(this.$el)
     this.parent = findParentByName(this, this.parentName || 'ui-select')
+    window.addEventListener('resize', this.updatePosition)
   },
   /**
    * 注销之前，移除挂载元素
    */
   beforeDestroy() {
+    window.removeEventListener('resize', this.updatePosition)
     this.$el.parentNode && this.$el.parentNode.removeChild(this.$el)
   }
 }

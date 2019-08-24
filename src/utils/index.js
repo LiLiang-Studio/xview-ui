@@ -65,22 +65,6 @@ export function findParentByName(vm, name) {
   }
 }
 
-/**
- * 节流控制
- * @param {Function} fn
- * @param {Number} gapTime
- */
-export function throttle(fn, gapTime = 20) {
-  let lastTime = null
-  return () => {
-    let nowTime = Date.now()
-    if (nowTime - lastTime > gapTime || !lastTime) {
-        fn()
-        lastTime = nowTime
-    }
-  }
-}
-
 export const RenderCell = {
   name: 'ui-render',
   functional: true,

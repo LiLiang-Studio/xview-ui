@@ -31,7 +31,8 @@ import { Timeline, TimelineItem } from './components/timeline'
 import Spin, { spinService } from './components/spin'
 // 步骤条
 import { Steps, Step } from './components/step'
-
+// 图钉
+import Affix from './components/affix'
 
 // // 回到顶部
 import BackTop from './components/BackTop.vue'
@@ -81,8 +82,6 @@ import Option from './components/select/Option.vue'
 import OptionGroup from './components/select/OptionGroup.vue'
 // // 无限滚动
 import Scroll from './components/scroll/Scroll.vue'
-// // 图钉
-import Affix from './components/Affix.vue'
 // // 分页器
 import Page from './components/Page.vue'
 // // 下拉菜单
@@ -137,6 +136,7 @@ const comps = {
   Spin,
   Step,
   Steps,
+  Affix,
 
   BackTop,
   Button,
@@ -169,7 +169,6 @@ const comps = {
   Option,
   OptionGroup,
   Scroll,
-  Affix,
   Page,
   Dropdown,
   DropdownMenu,

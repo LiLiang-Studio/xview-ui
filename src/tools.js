@@ -64,3 +64,25 @@ export const winScrollbarLock = {
     document.body.style.paddingRight = document.body.style.overflow = ''
   }
 }
+
+export const throttle = (fn, gapTime = 16) => {
+  let lastTime = null
+  return () => {
+    let nowTime = Date.now()
+    if (!lastTime ||  nowTime - lastTime > gapTime) {
+      fn()
+      lastTime = nowTime
+    }
+  }
+}
+
+export const debounce = (fn, gapTime = 16) => {
+  let timerId = null
+  return () => {
+    if (timerId) {
+      clearTimeout(timerId)
+      return timerId = null
+    }
+    timerId = setTimeout(fn, gapTime)
+  }
+}

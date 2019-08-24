@@ -9,7 +9,7 @@
 </template>
 <script>
 import UiIcon from './icon'
-import { throttle } from '../utils'
+import { throttle } from '@/tools'
 export default {
   components: { UiIcon },
   data() {

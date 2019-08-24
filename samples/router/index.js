@@ -68,6 +68,7 @@ export const routeComponents = {
   Steps,
   Affix,
   Grid,
+  BackTop,
 
 
   DatePicker,
@@ -92,7 +93,6 @@ export const routeComponents = {
   Radio,
   Layout,
   Swiper,
-  BackTop,
   Button,
   Checkbox,
   Input,

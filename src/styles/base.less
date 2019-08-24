@@ -44,26 +44,6 @@ body {
   transform: scaleY(0);
 }
 
-// 消息提示 Y轴平移 and 淡入淡出
-.message-enter-active, .message-leave-active  {
-  transition: transform .3s, opacity .3s;
-}
-
-.message-enter, .message-leave-to {
-  opacity: 0;
-  transform: translateY(-24px);
-}
-
-// 通知 X轴平移 and 淡入淡出
-.notice-enter-active, .notice-leave-active  {
-  transition: transform .3s, opacity .3s;
-}
-
-.notice-enter, .notice-leave-to {
-  opacity: 0;
-  transform: translateX(100%);
-}
-
 // 模态框动画
 .ui-modal-enter-active {
   transition: transform .3s cubic-bezier(0.465, 0.183, 0.153, 0.946),

@@ -1,21 +1,19 @@
 <template>
-  <transition name="ui-fade">
-    <div v-if="visible" class="ui-back-top" :style="styles" @click="handleClick">
+  <transition :name="prefix">
+    <div v-show="visible" :class="prefix" :style="styles" @click="handleClick">
       <slot>
-        <UiIcon class="ui-back-top-icon" type="ios-arrow-up"/>
+        <UiIcon :class="`${prefix}--icon`" type="ios-arrow-up"/>
       </slot>
     </div>
   </transition>
 </template>
 <script>
-import UiIcon from './icon'
+import UiIcon from '../icon'
 import { throttle } from '@/tools'
 export default {
   components: { UiIcon },
   data() {
-    return {
-      visible: false
-    }
+    return { prefix: 'ui-backTop', visible: false }
   },
   props: {
     height: {
@@ -37,47 +35,48 @@ export default {
   },
   computed: {
     styles() {
-      return {
-        right: `${parseInt(this.right)}px`,
-        bottom: `${parseInt(this.bottom)}px`
-      }
+      return { right: `${+this.right}px`, bottom: `${+this.bottom}px` }
     }
   },
   methods: {
-    handleClick(event) {
+    handleClick() {
       if (this.timer) return
-      let x = window.scrollX
-      let y = window.scrollY
-      let ms = 16
-      let moveCount = this.duration / ms
-      let step = y / moveCount
-      let dis = y
+      let x = window.scrollX, y = window.scrollY, ms = 16
+      let step = y / (this.duration / ms)
       this.timer = setInterval(() => {
-        if (dis > 0) {
-          dis -= step
+        if (y > 0) {
+          y -= step
         } else {
-          dis = 0
           clearInterval(this.timer)
           this.timer = null
         }
-        window.scrollTo(x, dis)
+        window.scrollTo(x, y)
       }, ms)
+    },
+    onScroll() {
+      this.visible = window.scrollY > this.height
     }
   },
   mounted() {
-    this.handleWinScroll = throttle(() => this.visible = window.scrollY > this.height, 50)
-    window.addEventListener('scroll', this.handleWinScroll)
+    window.addEventListener('scroll', this.onScroll)
   },
   beforeDestroy() {
-    window.removeEventListener('scroll', this.handleWinScroll)
+    window.removeEventListener('scroll', this.onScroll)
   }
 }
 </script>
 <style lang="less">
-.ui-back-top {
+.ui-backTop {
   position: fixed;
   user-select: none;
-  .ui-back-top-icon {
+  &-enter, &-leave-to {
+    opacity: 0;
+    transform: scale(0);
+  }
+  &, &--icon {
+    transition: all .2s ease-in-out;
+  }
+  &--icon {
     cursor: pointer;
     width: 48px;
     height: 40px;
@@ -88,7 +87,6 @@ export default {
     font-size: 24px;
     background-color: rgba(0, 0, 0, .6);
     box-shadow: 0 1px 3px rgba(0,0,0,.2);
-    transition: all .2s ease-in-out;
     &:hover {
       background-color: rgba(0, 0, 0, .7);
     }

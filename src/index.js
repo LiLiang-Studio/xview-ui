@@ -35,9 +35,9 @@ import { Steps, Step } from './components/step'
 import Affix from './components/affix'
 // 网格布局
 import { Row, Col } from './components/grid'
+// 回到顶部
+import BackTop from './components/back-top'
 
-// // 回到顶部
-import BackTop from './components/BackTop.vue'
 // // 按钮
 import Button from './components/button/Button.vue'
 import ButtonGroup from './components/button/ButtonGroup.vue'
@@ -139,8 +139,8 @@ const comps = {
   Affix,
   Row,
   Col,
-
   BackTop,
+
   Button,
   ButtonGroup,
   Checkbox,

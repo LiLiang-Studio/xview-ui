@@ -2,34 +2,12 @@
  * 通用工具模块
  */
 
-// 最大图层值
-var maxZIndex
-
 /**
  * 获取对象的类型
  * @param {any} obj 
  */
 export function getType(obj) {
   return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase()
-}
-
-/**
- * 设置最大图层值
- */
-export function setMaxZIndex() {
-  if (maxZIndex) {
-    maxZIndex += 2
-    return maxZIndex
-  }
-  let zIndex = 1000
-  let elements = document.querySelectorAll('body>*')
-  let elementArray = Array.prototype.slice.call(elements)
-  elementArray.forEach(el => {
-    let elZIndex = window.getComputedStyle(el, null).zIndex
-    if (!isNaN(elZIndex)) zIndex = Math.max(zIndex, elZIndex)
-  })
-  maxZIndex = zIndex + 2
-  return maxZIndex
 }
 
 /**

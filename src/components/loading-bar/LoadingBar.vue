@@ -1,12 +1,16 @@
 <template>
-  <transition name="ui-loadingbar" @afterLeave="handleLeave">
-    <div class="ui-loadingbar" v-show="visible" :style="styles">
-      <div class="ui-loadingbar-inner" :class="status" :style="innerStyles"></div>
+  <transition :name="prefix">
+    <div :class="prefix" :style="styles">
+      <div :class="[`${prefix}-inner`, status]" :style="innerStyles"></div>
     </div>
   </transition>
 </template>
 <script>
 export default {
+  name: 'UiLoadingBar',
+  data() {
+    return { prefix: 'ui-loadingBar' }
+  },
   props: {
     color: String,
     failedColor: String,
@@ -15,57 +19,39 @@ export default {
       default: 2
     },
     percent: Number,
-    status: String,
-    zIndex: Number,
-    visible: Boolean
+    status: String
   },
   computed: {
     styles() {
-      return { height: `${this.height}px`, zIndex: this.zIndex }
+      return { height: `${this.height}px` }
     },
     innerStyles() {
       return { transform: `scaleX(${this.percent / 100})`, backgroundColor: this.status === 'error' ? this.failedColor : this.color }
     }
-  },
-  methods: {
-    handleLeave() {
-      this.$emit('leave')
-    }
-  },
-  mounted() {
-    document.body.insertBefore(this.$el, document.body.firstChild)
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-loadingbar {
+.ui-loadingBar {
   position: fixed;
   top: 0;
   right: 0;
   left: 0;
-  width: 100%;
-}
-
-.ui-loadingbar-inner {
-  height: 100%;
-  transform-origin: 0 0;
-  transition: transform .2s;
-  background-color: @primary-color;
-  &.error {
-    background-color: @error-color;
+  &-leave-active {
+    transition: opacity .3s ease-in-out .5s;
   }
-}
-
-.ui-loadingbar-enter-active {
-  transition: opacity ease-in-out .5s;
-}
-
-.ui-loadingbar-leave-active {
-  transition: opacity .2s ease-in-out .5s;
-}
-
-.ui-loadingbar-enter, .ui-loadingbar-leave-to {
-  opacity: 0;
+  &-leave-to {
+    opacity: 0;
+  }
+  &-inner {
+    height: 100%;
+    transform-origin: 0 0;
+    transition: transform .2s;
+    background-color: @primary-color;
+    &.error {
+      background-color: @error-color;
+    }
+  }
 }
 </style>

@@ -5,7 +5,6 @@ import './utils/polyfill'
 /**
  * 新版本组件导入
  */
-
 import * as tools from './tools'
 // 图标
 import Icon from './components/icon'
@@ -39,6 +38,8 @@ import { Row, Col } from './components/grid'
 import BackTop from './components/back-top'
 // 进度条
 import Progress from './components/progress'
+// 加载条
+import loadingBarService from './components/loading-bar'
 
 // // 按钮
 import Button from './components/button/Button.vue'
@@ -118,8 +119,6 @@ import { createDirectives } from './directives'
 // // 模态框
 import { createModal } from './components/modal'
 import Modal from './components/modal/Modal.vue'
-// // 加载条
-import { createLoadingBar } from './components/loading-bar'
 
 const comps = {
   Icon,
@@ -200,13 +199,12 @@ export default {
     Vue.prototype.$Notice = createNotice(Vue)
     Vue.prototype.$Message = createMessage(Vue)
     Vue.prototype.$Spin = spinService(Vue)
+    Vue.LoadingBar = Vue.prototype.$Loading = loadingBarService(Vue)
     let prefix = typeof options.prefix === 'string' ? options.prefix : 'Ui'
     for (let name in comps) Vue.component(prefix + name, comps[name])
 
     // // 标准对话框
     Vue.prototype.$Modal = createModal(Vue)
-    // // 加载条对象
-    Vue.LoadingBar = Vue.prototype.$Loading = createLoadingBar(Vue)
     // // 全局指令
     createDirectives(Vue)
   }

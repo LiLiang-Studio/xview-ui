@@ -7,7 +7,8 @@
 </transition>
 </template>
 <script>
-import { setMaxZIndex, getOffset } from './../../utils'
+import { getOffset } from './../../utils'
+import { getMaxZIndex } from '@/tools'
 export default {
   data() {
     return { zIndex: 0, styles: {} }
@@ -77,7 +78,7 @@ export default {
     },
     updatePosition() {
       if (!this.visible) return
-      this.zIndex = setMaxZIndex()
+      this.zIndex = getMaxZIndex()
       this.$nextTick(this.setPosition)
     }
   },

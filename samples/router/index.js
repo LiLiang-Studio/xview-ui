@@ -70,7 +70,7 @@ export const routeComponents = {
   Grid,
   BackTop,
   Progress,
-
+  LoadingBar,
 
   DatePicker,
   TimePicker,
@@ -84,7 +84,6 @@ export const routeComponents = {
   Menu,
   Dropdown,
   Page,
-  LoadingBar,
   Scroll,
   Select,
   InputNumber,

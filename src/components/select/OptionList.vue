@@ -9,7 +9,8 @@
   </transition>
 </template>
 <script>
-import { setMaxZIndex, findParentByName, getOffset } from './../../utils'
+import { getOffset } from './../../utils'
+import { getMaxZIndex, findParent } from '@/tools'
 export default {
   data() {
     return { styles: {}, parent: null }
@@ -26,7 +27,7 @@ export default {
      */
     visible(newVal) {
       if (!newVal) return
-      this.styles = { zIndex: setMaxZIndex(), ...this.getPosition() }
+      this.styles = { zIndex: getMaxZIndex(), ...this.getPosition() }
     }
   },
   methods: {
@@ -52,7 +53,7 @@ export default {
    */
   mounted() {
     document.body.appendChild(this.$el)
-    this.parent = findParentByName(this, this.parentName || 'ui-select')
+    this.parent = findParent(this, this.parentName || 'ui-select')
     window.addEventListener('resize', this.updatePosition)
   },
   /**

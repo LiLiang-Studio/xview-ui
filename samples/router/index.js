@@ -49,6 +49,7 @@ import Timeline from '../pages/Timeline.vue'
 import Collapse from '../pages/Collapse.vue'
 import Modal from '../pages/Modal.vue'
 import Breadcrumb from '../pages/Breadcrumb.vue'
+import Divider from '../pages/Divider.vue'
 
 Vue.use(Router)
 
@@ -72,6 +73,7 @@ export const routeComponents = {
   Progress,
   LoadingBar,
   Button,
+  Divider,
 
   DatePicker,
   TimePicker,

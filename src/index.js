@@ -42,80 +42,80 @@ import Progress from './components/progress'
 import loadingBarService from './components/loading-bar'
 // 按钮
 import { Button, ButtonGroup } from './components/button'
+// 分割线
+import Divider from './components/divider'
 
-// // 复选框
+// 复选框
 import Checkbox from './components/checkbox/Checkbox.vue'
 import CheckboxGroup from './components/checkbox/CheckboxGroup.vue'
-
-// // 文本输入框
+// 文本输入框
 import Input from './components/Input.vue'
-// // 标签
+// 标签
 import Tag from './components/Tag.vue'
-// // 折叠面板
+// 折叠面板
 import Collapse from './components/collapse/Collapse.vue'
 import Panel from './components/collapse/Panel.vue'
-// // 轮播切换
+// 轮播切换
 import Swiper from './components/swiper/Swiper.vue'
 import SwiperItem from './components/swiper/SwiperItem.vue'
-
-// // 布局
+// 布局
 import Layout from './components/layout/Layout.vue'
 import Header from './components/layout/Header.vue'
 import Content from './components/layout/Content.vue'
 import Footer from './components/layout/Footer.vue'
 import Sider from './components/layout/Sider.vue'
-// // 单选按钮
+// 单选按钮
 import Radio from './components/radio/Radio.vue'
 import RadioGroup from './components/radio/RadioGroup.vue'
-// // 开关
+// 开关
 import ISwitch from './components/ISwitch.vue'
-// // 标签页
+// 标签页
 import Tabs from './components/tabs/Tabs.vue'
 import TabPane from './components/tabs/TabPane.vue'
-// // 穿梭框
+// 穿梭框
 import Transfer from './components/Transfer.vue'
-// // 数值输入框
+// 数值输入框
 import InputNumber from './components/InputNumber.vue'
-// // 下拉选择框
+// 下拉选择框
 import Select from './components/select/Select.vue'
 import Option from './components/select/Option.vue'
 import OptionGroup from './components/select/OptionGroup.vue'
-// // 无限滚动
+// 无限滚动
 import Scroll from './components/scroll/Scroll.vue'
-// // 分页器
+// 分页器
 import Page from './components/Page.vue'
-// // 下拉菜单
+// 下拉菜单
 import Dropdown from './components/dropdown/Dropdown.vue'
 import DropdownMenu from './components/dropdown/DropdownMenu.vue'
 import DropdownItem from './components/dropdown/DropdownItem.vue'
-// // 菜单
+// 菜单
 import Menu from './components/menu/Menu.vue'
 import MenuItem from './components/menu/MenuItem.vue'
 import Submenu from './components/menu/Submenu.vue'
 import MenuGroup from './components/menu/MenuGroup.vue'
-// // 文字提示
+// 文字提示
 import Tooltip from './components/Tooltip.vue'
-// // 气泡提示
+// 气泡提示
 import Poptip from './components/Poptip.vue'
-// // 树形控件
+// 树形控件
 import Tree from './components/tree/Tree.vue'
-// // 表格
+// 表格
 import Table from './components/table/Table.vue'
-// // 滑块
+// 滑块
 import Slider from './components/Slider.vue'
-// // 表单
+// 表单
 import Form from './components/form/Form.vue'
-// // 表单项
+// 表单项
 import FormItem from './components/form/FormItem.vue'
-// // 自动补全
+// 自动补全
 import AutoComplete from './components/AutoComplete.vue'
-// // 日期选择器
+// 日期选择器
 import DatePicker from './components/picker/DatePicker.vue'
-// // 时间选择器
+// 时间选择器
 import TimePicker from './components/picker/TimePicker.vue'
 
 import { createDirectives } from './directives'
-// // 模态框
+// 模态框
 import { createModal } from './components/modal'
 import Modal from './components/modal/Modal.vue'
 
@@ -139,9 +139,10 @@ const comps = {
   Col,
   BackTop,
   Progress,
-
   Button,
   ButtonGroup,
+  Divider,
+
   Checkbox,
   CheckboxGroup,
   Input,

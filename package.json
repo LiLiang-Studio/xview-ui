@@ -10,7 +10,8 @@
   },
   "scripts": {
     "serve": "cross-env NODE_ENV=development rollup -w -c",
-    "build": "cross-env NODE_ENV=production rollup -c"
+    "build": "cross-env NODE_ENV=production rollup -c",
+    "build:docs": "cross-env NODE_ENV=production OUTPUT_ENV=docs rollup -c"
   },
   "devDependencies": {
     "autoprefixer": "^9.6.1",
@@ -23,6 +24,7 @@
     "rollup-plugin-commonjs": "^10.0.2",
     "rollup-plugin-copy": "^3.1.0",
     "rollup-plugin-filesize": "^6.2.0",
+    "rollup-plugin-fill-html": "^1.1.0",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-livereload": "^1.0.1",
     "rollup-plugin-node-resolve": "^5.2.0",

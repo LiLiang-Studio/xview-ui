@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "netlify",
+    "public": ".docs",
     "ignore": [
       "firebase.json",
       "**/.*",

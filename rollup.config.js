@@ -13,11 +13,13 @@ import copy from 'rollup-plugin-copy'
 import { terser } from 'rollup-plugin-terser'
 import filesize from 'rollup-plugin-filesize'
 import replace from 'rollup-plugin-replace'
+import html from 'rollup-plugin-fill-html'
 import del from 'del'
-import pkg from './package.json'
+import { name as pkgName } from './package.json'
 
+const outputEnv = process.env.OUTPUT_ENV
 const isProd = process.env.NODE_ENV === 'production'
-const buildDir = 'dist'
+const buildDir = ({ docs: '.docs' })[outputEnv] || 'dist'
 const devBase = '.devbase'
 const banner = `
   var process = {
@@ -33,18 +35,25 @@ const basePlugins = [
     resolve: ['.js', '.vue', '.css', '.less']
   }),
   url(),
-  copy({
-    targets: [
-      { src: 'src/styles/fonts/*', dest: `${isProd ? buildDir : devBase}/fonts` },
-      !isProd && { src: 'public/*', dest: devBase }
-    ].filter(_ => _)
-  }),
   json(),
   vue({ css: false }),
   postcss({ minimize: isProd }),
   buble({ objectAssign: true }),
   nodeResolve(),
   commonjs()
+]
+
+const prodPlugins = [
+  copy({
+    targets: [{ src: 'src/styles/fonts/*', dest: `${buildDir}/fonts` }]
+  }),
+  replace({
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+  }),
+  terser({
+    include: [/^.+\.min\.js$/]
+  }),
+  filesize({ showMinifiedSize: false })
 ]
 
 const createDevConfig = () => {
@@ -54,10 +63,17 @@ const createDevConfig = () => {
     output: {
       banner,
       format: 'umd',
-      name: pkg.name,
+      name: pkgName,
       file: path.resolve(`${devBase}/bundle.js`)
     },
     plugins: basePlugins.concat([
+      html({
+        template: 'public/index.html',
+        filename: 'index.html'
+      }),
+      copy({
+        targets: [{ src: 'src/styles/fonts/*', dest: `${devBase}/fonts` }]
+      }),
       serve({
         contentBase: [devBase],
         historyApiFallback: true,
@@ -68,40 +84,38 @@ const createDevConfig = () => {
   }
 }
 
+const createDocsConfig = () => {
+  del.sync(`${buildDir}/**`)
+  return {
+    input: path.resolve('samples/main.js'),
+    output: {
+      format: 'umd',
+      name: pkgName,
+      file: path.resolve(`${buildDir}/bundle.[hash].min.js`)
+    },
+    plugins: [
+      ...basePlugins,
+      html({
+        template: 'public/index.html'
+      }),
+      ...prodPlugins
+    ]
+  }
+}
+
 const createPordConfig = () => {
   del.sync(`${buildDir}/**`)
   return {
     input: path.resolve('src/index.js'),
-    output: [
-      {
-        format: 'umd',
-        name: pkg.name,
-        file: path.resolve(`${buildDir}/${pkg.name}.umd.js`)
-      },
-      {
-        format: 'umd',
-        name: pkg.name,
-        file: path.resolve(`${buildDir}/${pkg.name}.umd.min.js`)
-      },
-      {
-        format: 'cjs',
-        file: path.resolve(`${buildDir}/${pkg.name}.common.js`)
-      },
-      {
-        format: 'es',
-        file: path.resolve(`${buildDir}/${pkg.name}.es.js`)
+    output: [['umd'], ['umd', true], ['cjs'], ['es']].map(([format, zip]) => {
+      return {
+        format,
+        name: pkgName,
+        file: path.resolve(`${buildDir}/${pkgName}.${format === 'cjs' ? 'common' : format}${zip ? '.min' : ''}.js`)
       }
-    ],
-    plugins: basePlugins.concat([
-      replace({
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-      }),
-      terser({
-        include: [/^.+\.min\.js$/]
-      }),
-      filesize({ showMinifiedSize: false })
-    ])
+    }),
+    plugins: [...basePlugins, ...prodPlugins]
   }
 }
 
-export default isProd ? createPordConfig() : createDevConfig()
+export default outputEnv ? createDocsConfig() : isProd ? createPordConfig() : createDevConfig()

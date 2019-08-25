@@ -2,6 +2,7 @@
 /src
 /samples
 /public
+.docs
 .devbase
 .firebase
 .firebaserc

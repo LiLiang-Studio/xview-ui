@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import { findParentByName } from './../../utils'
+import { findParent } from '@/tools'
 export default {
   data() {
     return {
@@ -28,7 +28,7 @@ export default {
     }
   },
   mounted() {
-    this.parent = findParentByName(this, 'ui-tabs')
+    this.parent = findParent(this, 'ui-tabs')
     if (this.parent) {
       this.parent.addPane(this)
     }

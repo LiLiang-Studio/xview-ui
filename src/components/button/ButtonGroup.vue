@@ -1,10 +1,14 @@
 <template>
-  <div class="ui-button-group" :class="[size, shape, { vertical }]">
+  <div :class="[prefix, `${prefix}-${size}`, `${prefix}-${shape}`, { vertical }]">
     <slot></slot>
   </div>
 </template>
 <script>
 export default {
+  name: 'UiButtonGroup',
+  data() {
+    return { prefix: 'ui-btn-group' }
+  },
   props: {
     size: {
       default: 'default',
@@ -13,9 +17,8 @@ export default {
       }
     },
     shape: {
-      type: String,
       validator(value) {
-        return !value || ['circle'].indexOf(value) !== -1
+        return value === 'circle'
       }
     },
     vertical: Boolean
@@ -24,24 +27,10 @@ export default {
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-button-group {
+.ui-btn-group {
   display: inline-block;
-  &.circle {
-    .ui-button {
-      &, &.isOnlyIcon {
-        &:first-child {
-          border-top-left-radius: @form-control-large;
-          border-bottom-left-radius: @form-control-large;
-        }
-        &:last-child {
-          border-top-right-radius: @form-control-large;
-          border-bottom-right-radius: @form-control-large;
-        }
-      }
-    }
-  }
-  .ui-button {
-    position: relative;
+  .ui-btn {
+    float: left;
     &:hover {
       z-index: 1;
     }
@@ -65,48 +54,37 @@ export default {
       margin-left: -1px;
     }
   }
-  &.normal .ui-button {
-    height: @form-control-normal;
-    &.isOnlyIcon {
-      font-size: 16px;
+  &.vertical .ui-btn {
+    float: none;
+    display: flex;
+    width: 100%;
+    margin-left: 0;
+    &:first-child {
+      border-radius: 3px 3px 0 0;
+    }
+    &:last-child {
+      border-radius: 0 0 3px 3px;
+    }
+    &:not(:first-child) {
+      margin-top: -1px;
     }
   }
-  &.large .ui-button {
-    height: @form-control-large;
-    font-size: 14px;
-    &.isOnlyIcon {
-      font-size: 18px;
+  &-circle {
+    .ui-btn:first-child {
+      border-top-left-radius: @size-large;
+      border-bottom-left-radius: @size-large;
     }
-  }
-  &.small .ui-button {
-    height: @form-control-small;
-    &.isOnlyIcon {
-      font-size: 12px;
+    .ui-btn:last-child {
+      border-top-right-radius: @size-large;
+      border-bottom-right-radius: @size-large;
     }
-  }
-  &.vertical {
-    .ui-button {
-      display: block;
-      width: 100%;
-      max-width: 100%;
-      margin-left: 0;
-      &:first-child {
-        border-radius: 3px 3px 0 0;
-      }
-      &:last-child {
-        border-radius: 0 0 3px 3px;
-      }
-      &:not(:first-child) {
-        margin-top: -1px;
-      }
-    }
-    &.circle {
-      .ui-button {
+    &.vertical {
+      .ui-btn {
         &:first-child {
-          border-radius: @form-control-large @form-control-large 0 0;
+          border-radius: @size-large @size-large 0 0;
         }
         &:last-child {
-          border-radius: 0 0 @form-control-large @form-control-large;
+          border-radius: 0 0 @size-large @size-large;
         }
       }
     }

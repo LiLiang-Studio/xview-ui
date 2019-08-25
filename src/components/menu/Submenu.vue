@@ -16,7 +16,7 @@
 <script>
 import UiIcon from '../icon'
 import UiOptionList from './../select/OptionList.vue'
-import { findParentByName } from './../../utils'
+import { findParent } from '@/tools'
 export default {
   name: 'ui-menu-submenu',
   components: { UiIcon, UiOptionList },
@@ -73,7 +73,7 @@ export default {
     }
   },
   mounted() {
-    this.parent = findParentByName(this, 'ui-menu')
+    this.parent = findParent(this, 'ui-menu')
   }
 }
 </script>

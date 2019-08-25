@@ -71,6 +71,7 @@ export const routeComponents = {
   BackTop,
   Progress,
   LoadingBar,
+  Button,
 
   DatePicker,
   TimePicker,
@@ -93,7 +94,6 @@ export const routeComponents = {
   Radio,
   Layout,
   Swiper,
-  Button,
   Checkbox,
   Input,
   Tag,

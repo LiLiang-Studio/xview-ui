@@ -6,7 +6,7 @@
 </template>
 <script>
 import UiIcon from '../icon'
-import { findParentByName } from './../../utils'
+import { findParent } from '@/tools'
 export default {
   name: 'ui-select-option',
   components: { UiIcon },
@@ -37,7 +37,7 @@ export default {
     }
   },
   mounted() {
-    this.parent = findParentByName(this, 'ui-select')
+    this.parent = findParent(this, 'ui-select')
     this.parent && this.parent.addChild(this)
   },
   beforeDestroy() {

@@ -2310,29 +2310,27 @@
 
   //
   var script$o = {
+    name: 'UiButton',
     components: { UiIcon: Icon },
     data: function data() {
-      return {
-        isOnlyIcon: false
-      }
+      return { prefix: 'ui-btn', isOnlyIcon: false }
     },
     props: {
       type: {
         default: 'default',
         validator: function validator(value) {
-          return ['default', 'primary', 'ghost', 'dashed', 'text', 'info', 'success', 'warning', 'error'].indexOf(value) !== -1
+          return ['default', 'primary', 'dashed', 'text', 'info', 'success', 'warning', 'error'].indexOf(value) !== -1
         }
       },
+      ghost: Boolean,
       size: {
-        default: 'normal',
         validator: function validator(value) {
-          return ['large', 'normal', 'small'].indexOf(value) !== -1
+          return ['large', 'default', 'small'].indexOf(value) !== -1
         }
       },
       shape: {
-        type: String,
         validator: function validator(value) {
-          return !value || ['circle'].indexOf(value) !== -1
+          return value === 'circle'
         }
       },
       long: Boolean,
@@ -2344,20 +2342,52 @@
       },
       disabled: Boolean,
       loading: Boolean,
-      icon: String
+      icon: String,
+      to: [String, Object],
+      replace: Boolean,
+      target: String,
+      append: Boolean
+    },
+    computed: {
+      classes: function classes() {
+        return [
+          this.prefix,
+          this.type && ((this.prefix) + "-" + (this.type)),
+          this.size && ((this.prefix) + "-" + (this.size)),
+          this.shape && ((this.prefix) + "-" + (this.shape)),
+          { long: this.long, ghost: this.ghost, isOnlyIcon: this.isOnlyIcon, loading: this.loading, disabled: this.disabled }
+        ]
+      },
+      listeners: function listeners() {
+        var that = this;
+        return Object.assign({}, this.$listeners, {
+          click: function click(event) {
+            !that.disabled && that.$emit('click', event);
+          }
+        })
+      },
+      root: function root() {
+        if (this.to) {
+          if (!this.target && this.$router) {
+            return { name: 'RouterLink', attrs: { to: this.to, replace: this.replace, append: this.append } }
+          }
+          return { name: 'a', attrs: { target: this.target, href: this.to } }
+        }
+        return { name: 'button', attrs: { disabled: this.disabled, type: this.htmlType } }
+      }
     },
     mounted: function mounted() {
-      this.isOnlyIcon = Object.keys(this.$slots).length === 0;
+      this.isOnlyIcon = this.$slots.default === undefined;
     }
   };
 
-  var css$o = ".ui-button{-webkit-appearance:button;outline:0;padding:0 15px;border-radius:3px;border:1px solid #dddee1;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;font-size:12px;cursor:pointer;white-space:nowrap;color:#495060;background-color:#f8f8f9;display:inline-block;text-align:center;vertical-align:middle;position:relative;transition:background-color .2s,border-color .2s,color .2s,box-shadow .2s}.ui-button:before{position:absolute;top:-1px;right:-1px;bottom:-1px;left:-1px;background-color:#fff;opacity:.35;content:\"\";border-radius:inherit;z-index:1;transition:opacity .2s;display:none}.ui-button.loading{pointer-events:none}.ui-button.loading .icon-load-loop{-webkit-animation:ani-load-loop 1s linear infinite;animation:ani-load-loop 1s linear infinite}.ui-button.loading:before{display:block}.ui-button.isOnlyIcon{padding:0;border-radius:50%}.ui-button.long{width:100%}.ui-button.normal{height:32px}.ui-button.normal.circle{border-radius:16px}.ui-button.normal.isOnlyIcon{width:32px;font-size:16px}.ui-button.large{height:36px;font-size:14px}.ui-button.large.circle{border-radius:18px}.ui-button.large.isOnlyIcon{width:36px;font-size:18px}.ui-button.small{height:24px;padding:2px 7px}.ui-button.small.circle{border-radius:48px}.ui-button.small.isOnlyIcon{width:24px;font-size:12px}.ui-button.default:hover:not(:disabled){background-color:#fff;color:#53a1f3;border-color:#53a1f3}.ui-button.default:active:not(:disabled){color:#1077e4;border-color:#1077e4}.ui-button.dashed,.ui-button.ghost{background-color:transparent}.ui-button.dashed:hover:not(:disabled),.ui-button.ghost:hover:not(:disabled){border-color:#53a1f3;color:#53a1f3}.ui-button.dashed:active:not(:disabled),.ui-button.ghost:active:not(:disabled){border-color:#1077e4;color:#1077e4}.ui-button.dashed{border-style:dashed}.ui-button.text{border-color:transparent;background-color:transparent}.ui-button.text:hover:not(:disabled){color:#53a1f3}.ui-button.text:active:not(:disabled){color:#1077e4}.ui-button.dashed:focus:not(:disabled),.ui-button.default:focus:not(:disabled),.ui-button.ghost:focus:not(:disabled),.ui-button.text:focus:not(:disabled){box-shadow:0 0 0 2px rgba(45,140,240,.2)}.ui-button.error,.ui-button.info,.ui-button.primary,.ui-button.success,.ui-button.warning{color:#fff}.ui-button.primary{border-color:#2d8cf0;background-color:#2d8cf0}.ui-button.primary:hover:not(:disabled){border-color:#53a1f3;background-color:#53a1f3}.ui-button.primary:active:not(:disabled){border-color:#1077e4;background-color:#1077e4}.ui-button.primary:focus:not(:disabled){box-shadow:0 0 0 2px rgba(45,140,240,.2)}.ui-button.info{border-color:#2db7f5;background-color:#2db7f5}.ui-button.info:hover:not(:disabled){border-color:#54c4f7;background-color:#54c4f7}.ui-button.info:active:not(:disabled){border-color:#0ba8ee;background-color:#0ba8ee}.ui-button.info:focus:not(:disabled){box-shadow:0 0 0 2px rgba(45,183,245,.2)}.ui-button.success{border-color:#19be6b;background-color:#19be6b}.ui-button.success:hover:not(:disabled){border-color:#1ee17f;background-color:#1ee17f}.ui-button.success:active:not(:disabled){border-color:#149a57;background-color:#149a57}.ui-button.success:focus:not(:disabled){box-shadow:0 0 0 2px rgba(25,190,107,.2)}.ui-button.warning{border-color:#f90;background-color:#f90}.ui-button.warning:hover:not(:disabled){border-color:#ffa929;background-color:#ffa929}.ui-button.warning:active:not(:disabled){border-color:#d68100;background-color:#d68100}.ui-button.warning:focus:not(:disabled){box-shadow:0 0 0 2px rgba(255,153,0,.2)}.ui-button.error{border-color:#ed3f14;background-color:#ed3f14}.ui-button.error:hover:not(:disabled){border-color:#f05e3a;background-color:#f05e3a}.ui-button.error:active:not(:disabled){border-color:#c9340f;background-color:#c9340f}.ui-button.error:focus:not(:disabled){box-shadow:0 0 0 2px rgba(237,63,20,.2)}.ui-button:disabled{color:#bbbec4;cursor:not-allowed}.ui-button:disabled:not(.text){border-color:#dddee1;background-color:#f8f8f9}.ui-button .ui-icon+span{margin-left:8px}";
+  var css$o = ".ui-btn{outline:0;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;height:32px;font-size:12px;padding:0 15px;border-radius:3px;border:1px solid;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;position:relative;transition:all .2s ease-in-out}.ui-btn:after{content:\"\";position:absolute;top:-1px;right:-1px;bottom:-1px;left:-1px;z-index:1;opacity:0;border-radius:inherit;background-color:currentColor;transition:opacity .2s ease-in-out}.ui-btn.loading{pointer-events:none}.ui-btn.loading .icon-loading{-webkit-animation:ani-load-loop 1s linear infinite;animation:ani-load-loop 1s linear infinite}.ui-btn.loading:after{opacity:.38}.ui-btn.long{width:100%}.ui-btn-circle{border-radius:36px}.ui-btn.isOnlyIcon{padding:0;font-size:16px;border-radius:50%;width:32px;min-width:32px}.ui-btn-group-large .ui-btn,.ui-btn-large{font-size:14px;height:36px}.ui-btn-group-large .ui-btn.isOnlyIcon,.ui-btn-large.isOnlyIcon{font-size:18px;width:36px;min-width:36px}.ui-btn-group-small .ui-btn,.ui-btn-small{height:24px}.ui-btn-group-small .ui-btn.isOnlyIcon,.ui-btn-small.isOnlyIcon{font-size:12px;width:24px;min-width:24px}.ui-btn-dashed,.ui-btn-default{background-color:#fff;border-color:#dddee1}.ui-btn-dashed.ghost,.ui-btn-dashed:not(.disabled):hover,.ui-btn-default.ghost,.ui-btn-default:not(.disabled):hover{border-color:currentColor}.ui-btn-dashed,.ui-btn-default,.ui-btn-text{color:#495060}.ui-btn-dashed.ghost,.ui-btn-default.ghost,.ui-btn-text.ghost{color:#fff}.ui-btn-dashed:not(.disabled):hover,.ui-btn-default:not(.disabled):hover,.ui-btn-text:not(.disabled):hover{color:#2d8cf0}.ui-btn-dashed:not(.disabled):focus,.ui-btn-default:not(.disabled):focus,.ui-btn-text:not(.disabled):focus{box-shadow:0 0 0 2px rgba(45,140,240,.2)}.ui-btn-dashed{border-style:dashed}.ui-btn-text{border-color:transparent;background-color:transparent}.ui-btn-error,.ui-btn-info,.ui-btn-primary,.ui-btn-success,.ui-btn-warning{color:#fff}.ui-btn-error.ghost,.ui-btn-info.ghost,.ui-btn-primary.ghost,.ui-btn-success.ghost,.ui-btn-warning.ghost{border-color:currentColor}.ui-btn-error.ghost:not(.disabled):hover,.ui-btn-info.ghost:not(.disabled):hover,.ui-btn-primary.ghost:not(.disabled):hover,.ui-btn-success.ghost:not(.disabled):hover,.ui-btn-warning.ghost:not(.disabled):hover{background-color:hsla(0,0%,100%,.5)}.ui-btn-error:not(.ghost):not(.disabled):hover,.ui-btn-info:not(.ghost):not(.disabled):hover,.ui-btn-primary:not(.ghost):not(.disabled):hover,.ui-btn-success:not(.ghost):not(.disabled):hover,.ui-btn-warning:not(.ghost):not(.disabled):hover{color:#fff}.ui-btn-error:not(.ghost):not(.disabled):focus:after,.ui-btn-error:not(.ghost):not(.disabled):hover:after,.ui-btn-info:not(.ghost):not(.disabled):focus:after,.ui-btn-info:not(.ghost):not(.disabled):hover:after,.ui-btn-primary:not(.ghost):not(.disabled):focus:after,.ui-btn-primary:not(.ghost):not(.disabled):hover:after,.ui-btn-success:not(.ghost):not(.disabled):focus:after,.ui-btn-success:not(.ghost):not(.disabled):hover:after,.ui-btn-warning:not(.ghost):not(.disabled):focus:after,.ui-btn-warning:not(.ghost):not(.disabled):hover:after{opacity:.1}.ui-btn-error:not(.ghost):not(.disabled):active:after,.ui-btn-info:not(.ghost):not(.disabled):active:after,.ui-btn-primary:not(.ghost):not(.disabled):active:after,.ui-btn-success:not(.ghost):not(.disabled):active:after,.ui-btn-warning:not(.ghost):not(.disabled):active:after{opacity:.3}.ui-btn-primary{border-color:#2d8cf0;background-color:#2d8cf0}.ui-btn-primary.ghost{color:#2d8cf0}.ui-btn-primary:not(.disabled):focus{box-shadow:0 0 0 2px rgba(45,140,240,.2)}.ui-btn-info{border-color:#2db7f5;background-color:#2db7f5}.ui-btn-info.ghost{color:#2db7f5}.ui-btn-info:not(.disabled):focus{box-shadow:0 0 0 2px rgba(45,183,245,.2)}.ui-btn-success{border-color:#19be6b;background-color:#19be6b}.ui-btn-success.ghost{color:#19be6b}.ui-btn-success:not(.disabled):focus{box-shadow:0 0 0 2px rgba(25,190,107,.2)}.ui-btn-warning{border-color:#f90;background-color:#f90}.ui-btn-warning.ghost{color:#f90}.ui-btn-warning:not(.disabled):focus{box-shadow:0 0 0 2px rgba(255,153,0,.2)}.ui-btn-error{border-color:#ed3f14;background-color:#ed3f14}.ui-btn-error.ghost{color:#ed3f14}.ui-btn-error:not(.disabled):focus{box-shadow:0 0 0 2px rgba(237,63,20,.2)}.ui-btn.ghost{background-color:transparent}.ui-btn.disabled{pointer-events:painted;color:#bbbec4;cursor:not-allowed}.ui-btn.disabled:not(.text){border-color:#dddee1;background-color:#f8f8f9}.ui-btn .ui-icon+span{margin-left:8px}";
   styleInject(css$o);
 
   /* script */
   var __vue_script__$o = script$o;
   /* template */
-  var __vue_render__$o = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('button',{staticClass:"ui-button",class:[_vm.type, _vm.size, _vm.shape, { long: _vm.long, isOnlyIcon: _vm.isOnlyIcon, loading: _vm.loading }],attrs:{"disabled":_vm.disabled,"type":_vm.htmlType},on:{"click":function($event){return _vm.$emit('click', $event)}}},[(_vm.loading)?_c('UiIcon',{staticClass:"icon-load-loop",attrs:{"type":"load-c"}}):(_vm.icon)?_c('UiIcon',{attrs:{"type":_vm.icon}}):_vm._e(),_vm._v(" "),(!_vm.isOnlyIcon)?_c('span',[_vm._t("default")],2):_vm._e()],1)};
+  var __vue_render__$o = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c(_vm.root.name,_vm._g(_vm._b({tag:"a",class:_vm.classes},'a',_vm.root.attrs,false),_vm.listeners),[(_vm.loading)?_c('UiIcon',{staticClass:"icon-loading",attrs:{"type":"load-c"}}):(_vm.icon)?_c('UiIcon',{attrs:{"type":_vm.icon}}):_vm._e(),_vm._v(" "),(!_vm.isOnlyIcon)?_c('span',[_vm._t("default")],2):_vm._e()],1)};
   var __vue_staticRenderFns__$o = [];
 
     /* style */
@@ -2374,7 +2404,7 @@
     
 
     
-    var Button = normalizeComponent_1(
+    var UiButton = normalizeComponent_1(
       { render: __vue_render__$o, staticRenderFns: __vue_staticRenderFns__$o },
       __vue_inject_styles__$o,
       __vue_script__$o,
@@ -2392,6 +2422,10 @@
   //
 
   var script$p = {
+    name: 'UiButtonGroup',
+    data: function data() {
+      return { prefix: 'ui-btn-group' }
+    },
     props: {
       size: {
         default: 'default',
@@ -2400,22 +2434,21 @@
         }
       },
       shape: {
-        type: String,
         validator: function validator(value) {
-          return !value || ['circle'].indexOf(value) !== -1
+          return value === 'circle'
         }
       },
       vertical: Boolean
     }
   };
 
-  var css$p = ".ui-button-group{display:inline-block}.ui-button-group.circle .ui-button.isOnlyIcon:first-child,.ui-button-group.circle .ui-button:first-child{border-top-left-radius:36px;border-bottom-left-radius:36px}.ui-button-group.circle .ui-button.isOnlyIcon:last-child,.ui-button-group.circle .ui-button:last-child{border-top-right-radius:36px;border-bottom-right-radius:36px}.ui-button-group .ui-button{position:relative}.ui-button-group .ui-button:hover{z-index:1}.ui-button-group .ui-button.isOnlyIcon{width:auto;padding:0 15px;border-radius:3px}.ui-button-group .ui-button:not(:first-child):not(:last-child){border-radius:0}.ui-button-group .ui-button:first-child{border-top-right-radius:0;border-bottom-right-radius:0}.ui-button-group .ui-button:last-child{border-top-left-radius:0;border-bottom-left-radius:0}.ui-button-group .ui-button:not(:first-child){margin-left:-1px}.ui-button-group.normal .ui-button{height:32px}.ui-button-group.normal .ui-button.isOnlyIcon{font-size:16px}.ui-button-group.large .ui-button{height:36px;font-size:14px}.ui-button-group.large .ui-button.isOnlyIcon{font-size:18px}.ui-button-group.small .ui-button{height:24px}.ui-button-group.small .ui-button.isOnlyIcon{font-size:12px}.ui-button-group.vertical .ui-button{display:block;width:100%;max-width:100%;margin-left:0}.ui-button-group.vertical .ui-button:first-child{border-radius:3px 3px 0 0}.ui-button-group.vertical .ui-button:last-child{border-radius:0 0 3px 3px}.ui-button-group.vertical .ui-button:not(:first-child){margin-top:-1px}.ui-button-group.vertical.circle .ui-button:first-child{border-radius:36px 36px 0 0}.ui-button-group.vertical.circle .ui-button:last-child{border-radius:0 0 36px 36px}";
+  var css$p = ".ui-btn-group{display:inline-block}.ui-btn-group .ui-btn{float:left}.ui-btn-group .ui-btn:hover{z-index:1}.ui-btn-group .ui-btn.isOnlyIcon{width:auto;padding:0 15px;border-radius:3px}.ui-btn-group .ui-btn:not(:first-child):not(:last-child){border-radius:0}.ui-btn-group .ui-btn:first-child{border-top-right-radius:0;border-bottom-right-radius:0}.ui-btn-group .ui-btn:last-child{border-top-left-radius:0;border-bottom-left-radius:0}.ui-btn-group .ui-btn:not(:first-child){margin-left:-1px}.ui-btn-group.vertical .ui-btn{float:none;display:flex;width:100%;margin-left:0}.ui-btn-group.vertical .ui-btn:first-child{border-radius:3px 3px 0 0}.ui-btn-group.vertical .ui-btn:last-child{border-radius:0 0 3px 3px}.ui-btn-group.vertical .ui-btn:not(:first-child){margin-top:-1px}.ui-btn-group-circle .ui-btn:first-child{border-top-left-radius:36px;border-bottom-left-radius:36px}.ui-btn-group-circle .ui-btn:last-child{border-top-right-radius:36px;border-bottom-right-radius:36px}.ui-btn-group-circle.vertical .ui-btn:first-child{border-radius:36px 36px 0 0}.ui-btn-group-circle.vertical .ui-btn:last-child{border-radius:0 0 36px 36px}";
   styleInject(css$p);
 
   /* script */
   var __vue_script__$p = script$p;
   /* template */
-  var __vue_render__$p = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ui-button-group",class:[_vm.size, _vm.shape, { vertical: _vm.vertical }]},[_vm._t("default")],2)};
+  var __vue_render__$p = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:[_vm.prefix, (_vm.prefix + "-" + _vm.size), (_vm.prefix + "-" + _vm.shape), { vertical: _vm.vertical }]},[_vm._t("default")],2)};
   var __vue_staticRenderFns__$p = [];
 
     /* style */
@@ -2432,7 +2465,7 @@
     
 
     
-    var ButtonGroup = normalizeComponent_1(
+    var UiButtonGroup = normalizeComponent_1(
       { render: __vue_render__$p, staticRenderFns: __vue_staticRenderFns__$p },
       __vue_inject_styles__$p,
       __vue_script__$p,
@@ -2443,117 +2476,8 @@
       undefined
     );
 
-  /**
-   * 通用工具模块
-   */
-
-  /**
-   * 获取对象的类型
-   * @param {any} obj 
-   */
-  function getType(obj) {
-    return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase()
-  }
-
-  /**
-   * 设置文本域自动高度
-   * @param {HTMLTextAreaElement} textarea
-   * @param {Number} minRows
-   * @param {Number} maxRows
-   */
-  function setAutoHeight(textarea, minRows, maxRows) {
-    var style = window.getComputedStyle(textarea, null);
-    var borderWidth = parseInt(style.borderTopWidth) + parseInt(style.borderBottomWidth);
-    var padding = parseInt(style.paddingTop) + parseInt(style.paddingBottom);
-    var lineHeight = parseInt(style.lineHeight);
-    var matches = textarea.value.match(/\n/gm);
-    var lbCount = matches ? matches.length : 0;
-    var compare = borderWidth + padding + lineHeight * lbCount < textarea.scrollHeight;
-    if (typeof minRows === 'number' && (!compare && lbCount <= minRows)) { return }
-    if (typeof maxRows === 'number' && lbCount >= maxRows) { return }
-    textarea.style.height = 'auto';
-    textarea.style.height = (textarea.scrollHeight + borderWidth) + "px";
-  }
-
-  /**
-   * 通过组件名字查找父组件
-   * @param {Vue.default} vm 
-   * @param {String} name 
-   */
-  function findParentByName(vm, name) {
-    var par = vm.$parent;
-    while (par) {
-      if (par.$options.name === name) { return par }
-      par = par.$parent;
-    }
-  }
-
-  var RenderCell = {
-    name: 'ui-render',
-    functional: true,
-    props: {
-      render: Function
-    },
-    render: function (h, ctx) { return ctx.props.render(h); }
-  };
-
-  /**
-   * 判断一个元素是否另一个元素的父元素或者自身
-   * @param {HTMLElement} par 
-   * @param {HTMLElement} el 
-   */
-  function isSelfOrParent(par, el) {
-    do {
-      if (el === par) { return true }
-      el = el.parentNode;
-    } while (el && el !== document.body)
-    return false
-  }
-
-  /**
-   * 判断一个元素的父元素是否有指定的类
-   * @param {HTMLElement} el 
-   * @param {String} clsName 
-   */
-  function hasClassNameOfParent(el, clsName) {
-    return !!findParentByClassName(el, clsName)
-  }
-
-  /**
-   * 通过类名查找父元素
-   * @param {HTMLElement} el 
-   * @param {String} clsName 
-   */
-  function findParentByClassName(el, clsName) {
-    do {
-      if (el.classList.contains(clsName)) { return el }
-      el = el.parentNode;
-    } while (el && el !== document.body)
-    return null
-  }
-
-  /**
-   * 获取元素在页面中的偏移位置
-   * @param {HTMLElement} el
-   */
-  function getOffset(el) {
-    var offset = {
-      top: 0,
-      right: 0,
-      bottom: 0,
-      left: 0,
-      width: el.offsetWidth,
-      height: el.offsetHeight
-    };
-    while (el) {
-      offset.top += el.offsetTop;
-      offset.left += el.offsetLeft;
-      el = el.offsetParent;
-    }
-    offset.right = offset.left + offset.width;
-    offset.bottom = offset.top + offset.height;
-    return offset
-  }
+  var Button = UiButton;
+  var ButtonGroup = UiButtonGroup;
 
   //
   var script$q = {
@@ -2605,7 +2529,7 @@
       }
     },
     mounted: function mounted() {
-      this.parent = findParentByName(this, 'ui-checkbox-group');
+      this.parent = findParent(this, 'ui-checkbox-group');
       if (this.parent) {
         var checkedArray = this.parent.getValues();
         this.isChecked = checkedArray.indexOf(this.label) !== -1;
@@ -2726,6 +2650,105 @@
       undefined,
       undefined
     );
+
+  /**
+   * 通用工具模块
+   */
+
+  /**
+   * 获取对象的类型
+   * @param {any} obj 
+   */
+  function getType(obj) {
+    return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase()
+  }
+
+  /**
+   * 设置文本域自动高度
+   * @param {HTMLTextAreaElement} textarea
+   * @param {Number} minRows
+   * @param {Number} maxRows
+   */
+  function setAutoHeight(textarea, minRows, maxRows) {
+    var style = window.getComputedStyle(textarea, null);
+    var borderWidth = parseInt(style.borderTopWidth) + parseInt(style.borderBottomWidth);
+    var padding = parseInt(style.paddingTop) + parseInt(style.paddingBottom);
+    var lineHeight = parseInt(style.lineHeight);
+    var matches = textarea.value.match(/\n/gm);
+    var lbCount = matches ? matches.length : 0;
+    var compare = borderWidth + padding + lineHeight * lbCount < textarea.scrollHeight;
+    if (typeof minRows === 'number' && (!compare && lbCount <= minRows)) { return }
+    if (typeof maxRows === 'number' && lbCount >= maxRows) { return }
+    textarea.style.height = 'auto';
+    textarea.style.height = (textarea.scrollHeight + borderWidth) + "px";
+  }
+
+  var RenderCell = {
+    name: 'ui-render',
+    functional: true,
+    props: {
+      render: Function
+    },
+    render: function (h, ctx) { return ctx.props.render(h); }
+  };
+
+  /**
+   * 判断一个元素是否另一个元素的父元素或者自身
+   * @param {HTMLElement} par 
+   * @param {HTMLElement} el 
+   */
+  function isSelfOrParent(par, el) {
+    do {
+      if (el === par) { return true }
+      el = el.parentNode;
+    } while (el && el !== document.body)
+    return false
+  }
+
+  /**
+   * 判断一个元素的父元素是否有指定的类
+   * @param {HTMLElement} el 
+   * @param {String} clsName 
+   */
+  function hasClassNameOfParent(el, clsName) {
+    return !!findParentByClassName(el, clsName)
+  }
+
+  /**
+   * 通过类名查找父元素
+   * @param {HTMLElement} el 
+   * @param {String} clsName 
+   */
+  function findParentByClassName(el, clsName) {
+    do {
+      if (el.classList.contains(clsName)) { return el }
+      el = el.parentNode;
+    } while (el && el !== document.body)
+    return null
+  }
+
+  /**
+   * 获取元素在页面中的偏移位置
+   * @param {HTMLElement} el
+   */
+  function getOffset(el) {
+    var offset = {
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+      width: el.offsetWidth,
+      height: el.offsetHeight
+    };
+    while (el) {
+      offset.top += el.offsetTop;
+      offset.left += el.offsetLeft;
+      el = el.offsetParent;
+    }
+    offset.right = offset.left + offset.width;
+    offset.bottom = offset.top + offset.height;
+    return offset
+  }
 
   //
   //
@@ -3124,7 +3147,7 @@
       }
     },
     mounted: function mounted() {
-      this.parent = findParentByName(this, 'ui-collapse');
+      this.parent = findParent(this, 'ui-collapse');
       if (this.parent) {
         this.parent.addChild(this);
         this.isExpanded = this.parent.includes(this.name);
@@ -3600,7 +3623,7 @@
 
   //
   var script$A = {
-    components: { UiButton: Button },
+    components: { UiButton: UiButton },
     data: function data() {
       return { checked: false, parent: null }
     },
@@ -3644,7 +3667,7 @@
       }
     },
     mounted: function mounted() {
-      this.parent = findParentByName(this, 'ui-radio-group');
+      this.parent = findParent(this, 'ui-radio-group');
       if (this.parent) {
         this.parent.addChild(this);
         this.checked = this.parent.value === this.label;
@@ -3691,7 +3714,7 @@
   //
   var script$B = {
     name: 'ui-radio-group',
-    components: { UiButtonGroup: ButtonGroup },
+    components: { UiButtonGroup: UiButtonGroup },
     data: function data() {
       return { checkedValue: this.value, children: [] }
     },
@@ -3988,7 +4011,7 @@
       }
     },
     mounted: function mounted() {
-      this.parent = findParentByName(this, 'ui-tabs');
+      this.parent = findParent(this, 'ui-tabs');
       if (this.parent) {
         this.parent.addPane(this);
       }
@@ -4033,7 +4056,7 @@
 
   //
   var script$F = {
-    components: { UiButton: Button, UiCheckbox: Checkbox, UiInput: Input, UiIcon: Icon },
+    components: { UiButton: UiButton, UiCheckbox: Checkbox, UiInput: Input, UiIcon: Icon },
     data: function data() {
       return {
         selectAllOfLeft: false,
@@ -4899,7 +4922,7 @@
       }
     },
     mounted: function mounted() {
-      this.parent = findParentByName(this, 'ui-select');
+      this.parent = findParent(this, 'ui-select');
       this.parent && this.parent.addChild(this);
     },
     beforeDestroy: function beforeDestroy() {
@@ -5450,7 +5473,7 @@
       }
     },
     mounted: function mounted() {
-      this.parent = findParentByName(this, 'ui-dropdown');
+      this.parent = findParent(this, 'ui-dropdown');
     }
   };
 
@@ -5664,8 +5687,8 @@
       }
     },
     mounted: function mounted() {
-      this.menuRoot = findParentByName(this, 'ui-menu');
-      this.parent = findParentByName(this, 'ui-menu-submenu');
+      this.menuRoot = findParent(this, 'ui-menu');
+      this.parent = findParent(this, 'ui-menu-submenu');
     }
   };
 
@@ -5758,7 +5781,7 @@
       }
     },
     mounted: function mounted() {
-      this.parent = findParentByName(this, 'ui-menu');
+      this.parent = findParent(this, 'ui-menu');
     }
   };
 
@@ -6047,7 +6070,7 @@
 
   //
   var script$W = {
-    components: { UiIcon: Icon, UiPopper: UiPopper, UiButton: Button },
+    components: { UiIcon: Icon, UiPopper: UiPopper, UiButton: UiButton },
     data: function data() {
       return { popperVisible: this.value, refElement: null }
     },
@@ -6218,7 +6241,7 @@
       }
     },
     mounted: function mounted() {
-      this.parent = findParentByName(this, 'ui-tree');
+      this.parent = findParent(this, 'ui-tree');
     }
   };
 
@@ -6946,7 +6969,7 @@
       }
     },
     mounted: function mounted() {
-      this.parent = findParentByName(this, 'ui-form');
+      this.parent = findParent(this, 'ui-form');
     }
   };
 
@@ -7490,7 +7513,7 @@
 
   //
   var script$18 = {
-    components: { UiButton: Button, UiCloseIconButton: CloseIconButton },
+    components: { UiButton: UiButton, UiCloseIconButton: CloseIconButton },
     data: function data() {
       return { hasTitle: false }
     },
@@ -7556,7 +7579,7 @@
 
   //
   var script$19 = {
-    components: { UiIcon: Icon, UiButton: Button, UiModalView: UiModalView },
+    components: { UiIcon: Icon, UiButton: UiButton, UiModalView: UiModalView },
     data: function data() {
       return {
         visible: false

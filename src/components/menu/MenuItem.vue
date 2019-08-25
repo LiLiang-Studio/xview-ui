@@ -4,7 +4,7 @@
   </li>
 </template>
 <script>
-import { findParentByName } from './../../utils'
+import { findParent } from '@/tools'
 export default {
   data() {
     return {
@@ -37,8 +37,8 @@ export default {
     }
   },
   mounted() {
-    this.menuRoot = findParentByName(this, 'ui-menu')
-    this.parent = findParentByName(this, 'ui-menu-submenu')
+    this.menuRoot = findParent(this, 'ui-menu')
+    this.parent = findParent(this, 'ui-menu-submenu')
   }
 }
 </script>

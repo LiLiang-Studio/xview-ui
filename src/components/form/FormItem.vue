@@ -12,7 +12,7 @@
   </div>
 </template>
 <script>
-import { findParentByName } from './../../utils'
+import { findParent } from '@/tools'
 export default {
   data() {
     return {
@@ -47,7 +47,7 @@ export default {
     }
   },
   mounted() {
-    this.parent = findParentByName(this, 'ui-form')
+    this.parent = findParent(this, 'ui-form')
   }
 }
 </script>

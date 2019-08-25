@@ -21,7 +21,7 @@
 import UiIcon from '../icon'
 import UiLoading from './../scroll/Loading.vue'
 import UiCheckbox from './../checkbox/Checkbox.vue'
-import { findParentByName } from './../../utils'
+import { findParent } from '@/tools'
 export default {
   name: 'ui-tree-node',
   components: { UiIcon, UiLoading, UiCheckbox },
@@ -62,7 +62,7 @@ export default {
     }
   },
   mounted() {
-    this.parent = findParentByName(this, 'ui-tree')
+    this.parent = findParent(this, 'ui-tree')
   }
 }
 </script>

@@ -8,7 +8,7 @@
 </template>
 <script>
 import UiIcon from '../icon'
-import { findParentByName } from '../../utils'
+import { findParent } from '@/tools'
 export default {
   components: { UiIcon },
   data() {
@@ -58,7 +58,7 @@ export default {
     }
   },
   mounted() {
-    this.parent = findParentByName(this, 'ui-checkbox-group')
+    this.parent = findParent(this, 'ui-checkbox-group')
     if (this.parent) {
       let checkedArray = this.parent.getValues()
       this.isChecked = checkedArray.indexOf(this.label) !== -1

@@ -13,7 +13,7 @@
 </template>
 <script>
 import UiButton from './../button/Button.vue'
-import { findParentByName } from './../../utils'
+import { findParent } from '@/tools'
 export default {
   components: { UiButton },
   data() {
@@ -59,7 +59,7 @@ export default {
     }
   },
   mounted() {
-    this.parent = findParentByName(this, 'ui-radio-group')
+    this.parent = findParent(this, 'ui-radio-group')
     if (this.parent) {
       this.parent.addChild(this)
       this.checked = this.parent.value === this.label

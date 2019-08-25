@@ -40,10 +40,9 @@ import BackTop from './components/back-top'
 import Progress from './components/progress'
 // 加载条
 import loadingBarService from './components/loading-bar'
+// 按钮
+import { Button, ButtonGroup } from './components/button'
 
-// // 按钮
-import Button from './components/button/Button.vue'
-import ButtonGroup from './components/button/ButtonGroup.vue'
 // // 复选框
 import Checkbox from './components/checkbox/Checkbox.vue'
 import CheckboxGroup from './components/checkbox/CheckboxGroup.vue'

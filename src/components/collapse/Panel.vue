@@ -11,7 +11,7 @@
 </template>
 <script>
 import UiIcon from '../icon'
-import { findParentByName } from '../../utils'
+import { findParent } from '@/tools'
 export default {
   components: { UiIcon },
   data() {
@@ -35,7 +35,7 @@ export default {
     }
   },
   mounted() {
-    this.parent = findParentByName(this, 'ui-collapse')
+    this.parent = findParent(this, 'ui-collapse')
     if (this.parent) {
       this.parent.addChild(this)
       this.isExpanded = this.parent.includes(this.name)

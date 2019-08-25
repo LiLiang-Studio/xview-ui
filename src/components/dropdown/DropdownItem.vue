@@ -4,7 +4,7 @@
   </li>
 </template>
 <script>
-import { findParentByName } from './../../utils'
+import { findParent } from '@/tools'
 export default {
   data() {
     return { parent: null }
@@ -22,7 +22,7 @@ export default {
     }
   },
   mounted() {
-    this.parent = findParentByName(this, 'ui-dropdown')
+    this.parent = findParent(this, 'ui-dropdown')
   }
 }
 </script>

@@ -30,19 +30,6 @@ export function setAutoHeight(textarea, minRows, maxRows) {
   textarea.style.height = `${textarea.scrollHeight + borderWidth}px`
 }
 
-/**
- * 通过组件名字查找父组件
- * @param {Vue.default} vm 
- * @param {String} name 
- */
-export function findParentByName(vm, name) {
-  let par = vm.$parent
-  while (par) {
-    if (par.$options.name === name) return par
-    par = par.$parent
-  }
-}
-
 export const RenderCell = {
   name: 'ui-render',
   functional: true,

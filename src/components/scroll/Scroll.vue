@@ -1,19 +1,17 @@
 <template>
-  <div class="ui-scroll" :style="scrollerStyles" @scroll="handleScroll" @mousewheel="handleMouseWheel">
-    <UiLoading v-if="hasTopLoading" :loadingText="loadingText" :loading="topLoading"/>
+  <div class="ui-scroll" :style="styles" @scroll="onScroll" @mousewheel="onMouseWheel">
+    <UiLoading v-if="topHandlers.length" :loadingText="loadingText" :loading="topLoading"/>
     <slot></slot>
-    <UiLoading v-if="hasBottomLoading" :loadingText="loadingText" :loading="bottomLoading"/>
+    <UiLoading v-if="bottomHandlers.length" :loadingText="loadingText" :loading="bottomLoading"/>
   </div>
 </template>
 <script>
 import UiLoading from './Loading.vue'
 export default {
+  name: 'UiScroll',
   components: { UiLoading },
   data() {
-    return {
-      topLoading: false,
-      bottomLoading: false
-    }
+    return { topLoading: false, bottomLoading: false }
   },
   props: {
     height: {
@@ -33,17 +31,11 @@ export default {
     }
   },
   computed: {
-    scrollerStyles() {
+    styles() {
       return { height: isNaN(this.height) ? this.height : `${this.height}px` }
     },
     edge() {
       return this.distanceToEdge instanceof Array ? this.distanceToEdge : [this.distanceToEdge, this.distanceToEdge]
-    },
-    hasTopLoading() {
-      return this.onReachTop || this.onReachEdge
-    },
-    hasBottomLoading() {
-      return this.onReachBottom || this.onReachEdge
     },
     topHandlers() {
       return [this.onReachTop, this.onReachEdge].filter(_ => _)
@@ -53,31 +45,26 @@ export default {
     }
   },
   methods: {
-    /**
-     * 滚动事件处理
-     */
-    handleScroll() {
+    onScroll() {
       let { scrollTop, scrollHeight, clientHeight } = this.$el
-      // 到达底部
-      if (scrollTop + clientHeight >= scrollHeight - this.edge[1]) {
+      if (scrollTop + clientHeight >= scrollHeight - this.edge[1]) { // 到达底部
         if (this.bottomLoading) return
-        if (this.hasBottomLoading) this.bottomLoading = true
+        if (this.bottomHandlers.length) this.bottomLoading = true
         Promise.all(this.bottomHandlers.map(_ => _())).finally(() => this.bottomLoading = false)
-      // 到达顶部
-      } else if (scrollTop <= this.edge[0]) {
+      } else if (scrollTop <= this.edge[0]) { // 到达顶部
         if (this.topLoading) return
-        if (this.hasTopLoading) this.topLoading = true
-        Promise.all(this.topHandlers.map(_ => _())).finally(() => this.topLoading = false)
+        if (this.topHandlers.length) this.topLoading = true
+        Promise.all(this.topHandlers.map(_ => _())).then(() => {
+          this.$nextTick(() => {
+            this.$el.scrollTop = this.$el.scrollHeight - scrollHeight + this.$el.scrollTop
+          })
+        }).finally(() => this.topLoading = false)
       }
     },
-    /**
-     * 鼠标滚轮事件处理
-     * @param {WheelEvent} event
-     */
-    handleMouseWheel(event) {
+    onMouseWheel(event) {
       if (this.topHandlers.length && this.$el.scrollTop <= 0 && event.deltaY < 0) {
         event.preventDefault()
-        this.handleScroll()
+        this.onScroll()
       }
     }
   }
@@ -85,6 +72,6 @@ export default {
 </script>
 <style lang="less">
 .ui-scroll {
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 </style>

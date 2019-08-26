@@ -29,7 +29,7 @@ import Rate from '../pages/Rate.vue'
 import Transfer from '../pages/Transfer.vue'
 import Spin from '../pages/Spin.vue'
 import Tabs from '../pages/Tabs.vue'
-import Switch from '../pages/Switch.vue'
+import ISwitch from '../pages/Switch.vue'
 import Radio from '../pages/Radio.vue'
 import Grid from '../pages/Grid.vue'
 import Layout from '../pages/Layout.vue'
@@ -74,6 +74,8 @@ export const routeComponents = {
   LoadingBar,
   Button,
   Divider,
+  ISwitch,
+  Scroll,
 
   DatePicker,
   TimePicker,
@@ -87,12 +89,10 @@ export const routeComponents = {
   Menu,
   Dropdown,
   Page,
-  Scroll,
   Select,
   InputNumber,
   Transfer,
   Tabs,
-  Switch,
   Radio,
   Layout,
   Swiper,

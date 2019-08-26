@@ -4,6 +4,7 @@
     <p>在两种状态间切换时用到的开关选择器。</p>
     <div class="page-sub-title">基本用法，状态切换时会触发事件。</div>
     <ISwitch v-model="switch1" @on-change="change"></ISwitch>
+    <ISwitch v-model="switch2" true-value="1" false-value="0" @on-change="change"></ISwitch>
 
     <div class="page-sub-title">设置size为 large 或 small 使用大号和小号的开关。</div>
     <div class="switchbox">
@@ -41,8 +42,9 @@
 export default {
   data() {
     return {
-      switch1: false,
-      disabled: true
+      switch1: true,
+      disabled: true,
+      switch2: '0'
     };
   },
   methods: {

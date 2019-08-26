@@ -44,6 +44,10 @@ import loadingBarService from './components/loading-bar'
 import { Button, ButtonGroup } from './components/button'
 // 分割线
 import Divider from './components/divider'
+// 开关
+import ISwitch from './components/switch'
+// 无限滚动
+import Scroll from './components/scroll'
 
 // 复选框
 import Checkbox from './components/checkbox/Checkbox.vue'
@@ -67,8 +71,6 @@ import Sider from './components/layout/Sider.vue'
 // 单选按钮
 import Radio from './components/radio/Radio.vue'
 import RadioGroup from './components/radio/RadioGroup.vue'
-// 开关
-import ISwitch from './components/ISwitch.vue'
 // 标签页
 import Tabs from './components/tabs/Tabs.vue'
 import TabPane from './components/tabs/TabPane.vue'
@@ -80,8 +82,6 @@ import InputNumber from './components/InputNumber.vue'
 import Select from './components/select/Select.vue'
 import Option from './components/select/Option.vue'
 import OptionGroup from './components/select/OptionGroup.vue'
-// 无限滚动
-import Scroll from './components/scroll/Scroll.vue'
 // 分页器
 import Page from './components/Page.vue'
 // 下拉菜单
@@ -142,6 +142,7 @@ const comps = {
   Button,
   ButtonGroup,
   Divider,
+  ISwitch,
 
   Checkbox,
   CheckboxGroup,
@@ -159,7 +160,6 @@ const comps = {
   Sider,
   Radio,
   RadioGroup,
-  ISwitch,
   Tabs,
   TabPane,
   Transfer,

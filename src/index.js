@@ -143,6 +143,7 @@ const comps = {
   ButtonGroup,
   Divider,
   ISwitch,
+  Scroll,
 
   Checkbox,
   CheckboxGroup,
@@ -167,7 +168,6 @@ const comps = {
   Select,
   Option,
   OptionGroup,
-  Scroll,
   Page,
   Dropdown,
   DropdownMenu,

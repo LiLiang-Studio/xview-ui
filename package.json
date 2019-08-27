@@ -59,10 +59,10 @@
     "framework"
   ],
   "description": "基于Vuejs的高性能轻量级组件库",
-  "homepage": "https://github.com/liliangabc/vueui-widgets",
+  "homepage": "https://github.com/vueui-widgets/vueui-widgets",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/liliangabc/vueui-widgets.git"
+    "url": "git+https://github.com/vueui-widgets/vueui-widgets.git"
   },
   "license": "MIT"
 }

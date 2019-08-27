@@ -1,7 +1,7 @@
 <template>
-  <span class="ui-checkbox" :class="[{isChecked, disabled}, size]" @click="handleClick">
-    <span class="ui-checkbox-button" tabindex="-1">
-      <UiIcon class="ui-checkbox-icon" type="checkmark"/>
+  <span :class="[prefix, size, {checked: checked || indeterminate, disabled}]" @click="onClick">
+    <span :class="`${prefix}-btn`" tabindex="0">
+      <UiIcon :class="[`${prefix}-icon`, {indeterminate}]" type="checkmark"/>
     </span>
     <slot>{{label}}</slot>
   </span>
@@ -10,24 +10,19 @@
 import UiIcon from '../icon'
 import { findParent } from '@/tools'
 export default {
+  name: 'UiCheckbox',
   components: { UiIcon },
   data() {
-    return {
-      parent: null,
-      isChecked: false
-    }
+    return { prefix: 'ui-checkbox' }
   },
   props: {
     value: [String, Number, Boolean],
-    label: {
-      type: [String, Number, Boolean],
-      default: ''
-    },
+    label: [String, Number, Boolean],
     disabled: Boolean,
     indeterminate: Boolean,
     size: {
       validator(value) {
-        return !value || ['small', 'default', 'large'].indexOf(value) !== -1
+        return ['small', 'default', 'large'].indexOf(value) !== -1
       }
     },
     trueValue: {
@@ -39,99 +34,92 @@ export default {
       default: false
     }
   },
+  computed: {
+    checked() {
+      let parent = findParent(this, 'UiCheckboxGroup')
+      return parent ? parent.includes(this.label) : this.value === this.trueValue
+    }
+  },
   watch: {
-    value(newVal) {
-      if (this.parent) return
-      this.isChecked = newVal === this.trueValue
+    checked(newVal) {
+      this.$emit('on-change', newVal)
     }
   },
   methods: {
-    handleClick(event) {
+    onClick(event) {
       if (this.disabled) return
-      this.isChecked = !this.isChecked
-      if (this.parent) {
-        this.parent.updateValue(this.label)
+      let parent = findParent(this, 'UiCheckboxGroup')
+      if (parent) {
+        parent.updateValue(this.label)
       } else {
-        this.$emit('input', this.isChecked ? this.trueValue : this.falseValue)
+        this.$emit('input', this.checked ? this.falseValue : this.trueValue)
       }
-      this.$emit('on-change', this.isChecked)
-    }
-  },
-  mounted() {
-    this.parent = findParent(this, 'ui-checkbox-group')
-    if (this.parent) {
-      let checkedArray = this.parent.getValues()
-      this.isChecked = checkedArray.indexOf(this.label) !== -1
-    } else {
-      this.isChecked = this.value === this.trueValue
     }
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-checkbox-group.large .ui-checkbox, .ui-checkbox.large {
-  font-size: 14px;
-  .ui-checkbox-icon {
-    width: 18px;
-    height: 18px;
-    line-height: 18px;
-  }
-}
-
 .ui-checkbox {
   cursor: pointer;
   display: inline-block;
   position: relative;
   margin-right: 8px;
   font-size: 12px;
-  &.isChecked:not(.disabled) .ui-checkbox-button {
+  &-btn {
+    outline: none;
+    display: inline-block;
+    box-sizing: content-box;
+    text-align: center;
+    margin-right: 6px;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+    border-radius: 2px;
+    background-color: #fff;
+    border: 1px solid @border-color;
+    transition: all .2s ease-in-out;
+  }
+  &-icon {
+    color: #fff;
+    transform: scale(0);
+    transition: all .2s ease-in-out;
+    &.indeterminate {
+      width: 70%;
+      vertical-align: middle;
+      border-bottom: 2px solid currentColor;
+      &:before {
+        content: '';
+      }
+    }
+  }
+  &-group.large &, &.large {
+    font-size: 14px;
+  }
+  &-group.large &-btn, &.large &-btn {
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+  }
+  &.checked:not(.disabled) &-btn {
     border-color: @primary-color;
     background-color: @primary-color;
   }
-  &.isChecked .ui-checkbox-icon {
+  &.checked &-icon {
     transform: scale(1);
   }
-  &.disabled {
+  &.disabled, &.disabled &-icon {
     cursor: not-allowed;
     color: @disabled-color;
-    .ui-checkbox-button {
-      background-color: @disabled-bg-color;
-    }
-    .ui-checkbox-icon {
-      color: @disabled-color;
-    }
   }
-  &:not(.disabled) {
-    .ui-checkbox-button:focus {
-      .form-control-shadow(@primary-color);
-    }
-    &:hover {
-      border-color: darken(@border-color, 10%);
-    }
+  &.disabled &-btn {
+    background-color: @disabled-bg-color;
   }
-}
-
-.ui-checkbox-button {
-  background-color: #fff;
-  display: inline-block;
-  border: 1px solid @border-color;
-  text-align: center;
-  margin-right: 6px;
-  line-height: 1;
-  border-radius: 2px;
-  outline: none;
-  will-change: border-color, background-color, box-shadow;
-  transition: border-color .2s, background-color .2s, box-shadow .2s;
-}
-
-.ui-checkbox-icon {
-  color: #fff;
-  width: 14px;
-  height: 14px;
-  line-height: 14px;
-  transform: scale(0);
-  will-change: transform;
-  transition: transform .2s;
+  &:not(.disabled) &-btn:focus {
+    .form-control-shadow(@primary-color);
+  }
+  &:not(.disabled):not(.checked) &-btn:hover {
+    border-color: darken(@border-color, 10%);
+  }
 }
 </style>

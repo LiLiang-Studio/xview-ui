@@ -48,10 +48,11 @@ import Divider from './components/divider'
 import ISwitch from './components/switch'
 // 无限滚动
 import Scroll from './components/scroll'
-
 // 复选框
-import Checkbox from './components/checkbox/Checkbox.vue'
-import CheckboxGroup from './components/checkbox/CheckboxGroup.vue'
+import { Checkbox, CheckboxGroup } from './components/checkbox'
+// 布局
+import { Layout, Header, Content, Footer, Sider } from './components/layout'
+
 // 文本输入框
 import Input from './components/Input.vue'
 // 标签
@@ -62,12 +63,6 @@ import Panel from './components/collapse/Panel.vue'
 // 轮播切换
 import Swiper from './components/swiper/Swiper.vue'
 import SwiperItem from './components/swiper/SwiperItem.vue'
-// 布局
-import Layout from './components/layout/Layout.vue'
-import Header from './components/layout/Header.vue'
-import Content from './components/layout/Content.vue'
-import Footer from './components/layout/Footer.vue'
-import Sider from './components/layout/Sider.vue'
 // 单选按钮
 import Radio from './components/radio/Radio.vue'
 import RadioGroup from './components/radio/RadioGroup.vue'
@@ -144,9 +139,14 @@ const comps = {
   Divider,
   ISwitch,
   Scroll,
-
   Checkbox,
   CheckboxGroup,
+  Layout,
+  Header,
+  Content,
+  Footer,
+  Sider,
+
   Input,
   Tag,
   Collapse,
@@ -154,11 +154,6 @@ const comps = {
   Modal,
   Swiper,
   SwiperItem,
-  Layout,
-  Header,
-  Content,
-  Footer,
-  Sider,
   Radio,
   RadioGroup,
   Tabs,

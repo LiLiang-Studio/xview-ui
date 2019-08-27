@@ -68,7 +68,7 @@
             <div style="min-height: 200px;">Content</div>
           </Card>
         </Content>
-        <Footer class="layout-footer-center">2011-2016 &copy; TalkingData</Footer>
+        <Footer class="layout-footer-center">2011-2019 &copy; vueui-widgets</Footer>
       </Layout>
     </div>
 
@@ -112,7 +112,7 @@
             </Layout>
           </Content>
         </Layout>
-        <Footer class="layout-footer-center">2011-2016 &copy; TalkingData</Footer>
+        <Footer class="layout-footer-center">2011-2016 &copy; vueui-widgets</Footer>
       </Layout>
     </div>
 
@@ -127,7 +127,9 @@
     </p>
     <div class="layout" style="height: 360px; overflow:auto;">
       <Layout :style="{minHeight: '100vh'}">
-        <Sider hide-trigger collapsible :collapsed-width="78" v-model="isCollapsed"></Sider>
+        <Sider collapsible :collapsed-width="78" v-model="isCollapsed">
+          <p style="color:#fff;padding: 24px;">边栏内容</p>
+        </Sider>
         <Layout>
           <Header :style="{background: '#fff', boxShadow: '0 2px 3px 2px rgba(0,0,0,.1)'}"></Header>
           <Content :style="{padding: '0 16px 16px'}">

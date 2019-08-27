@@ -1,20 +1,19 @@
 <template>
-  <div class="ui-layout-sider" :style="styles">
+  <div :class="prefix" :style="styles">
     <slot></slot>
-    <div v-if="showTrigger" class="ui-layout-sider-trigger" :style="{width: styles.width}" @click="toggleCollapse">
-      <UiIcon class="ui-layout-sider-trigger-icon" :class="{isCollapsed}" type="ios-arrow-back"/>
+    <div v-if="showTrigger" :class="`${prefix}-trigger`" :style="{width: styles.width}" @click="toggleCollapse">
+      <UiIcon :class="[`${prefix}-trigger-icon`, {isCollapsed}]" type="ios-arrow-back"/>
     </div>
   </div>
 </template>
 <script>
 import UiIcon from '../icon'
+import { parseSize } from '@/tools'
 export default {
-  name: 'ui-sider',
+  name: 'UiSider',
   components: { UiIcon },
   data() {
-    return {
-      isCollapsed: this.value || this.defaultCollapsed
-    }
+    return { prefix: 'ui-layout-sider', isCollapsed: this.value || this.defaultCollapsed }
   },
   props: {
     value: Boolean,
@@ -24,7 +23,7 @@ export default {
     },
     collapsible: Boolean,
     collapsedWidth: {
-      type: Number,
+      type: [Number, String],
       default: 64
     },
     hideTrigger: Boolean,
@@ -33,8 +32,8 @@ export default {
   },
   computed: {
     styles() {
-      let condition = this.defaultCollapsed ? true : this.collapsible
-      let size = `${condition && this.isCollapsed ? this.collapsedWidth : this.width}px`
+      let condition = this.defaultCollapsed || this.collapsible
+      let size = parseSize(condition && this.isCollapsed ? this.collapsedWidth : this.width)
       return { width: size, minWidth: size, maxWidth: size, flex: `0 0 ${size}` }
     },
     showTrigger() {

@@ -95,3 +95,5 @@ export const addStylesheet = (id, styleStr) => {
   styleEl.innerHTML = styleStr
   document.head.appendChild(styleEl)
 }
+
+export const parseSize = size => isNaN(size) ? size : `${+size}px`

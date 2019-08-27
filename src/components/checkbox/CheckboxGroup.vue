@@ -5,11 +5,9 @@
 </template>
 <script>
 export default {
-  name: 'ui-checkbox-group',
+  name: 'UiCheckboxGroup',
   data() {
-    return {
-      checkedArray: this.value
-    }
+    return { checkedArray: this.value }
   },
   props: {
     value: {
@@ -18,7 +16,7 @@ export default {
     },
     size: {
       validator(value) {
-        return !value || ['small', 'default', 'large'].indexOf(value) !== -1
+        return ['small', 'default', 'large'].indexOf(value) !== -1
       }
     }
   },
@@ -30,16 +28,16 @@ export default {
   methods: {
     updateValue(value) {
       let index = this.checkedArray.indexOf(value)
-      if (index !== -1) {
-        this.checkedArray.splice(index, 1)
-      } else {
+      if (index === -1) {
         this.checkedArray.push(value)
+      } else {
+        this.checkedArray.splice(index, 1)
       }
       this.$emit('input', this.checkedArray)
       this.$emit('on-change', this.checkedArray)
     },
-    getValues() {
-      return this.checkedArray
+    includes(label) {
+      return this.checkedArray.indexOf(label) !== -1
     }
   }
 }

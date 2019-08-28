@@ -1,29 +1,22 @@
 <template>
   <transition v-if="fade" name="ui-fade">
-    <div class="ui-tag" @click="handleClick">
-      <div class="ui-tag-wrapper" :class="[colorClass, type, {isChecked}]" :style="{backgroundColor}">
-        <span v-if="type === 'dot'" class="ui-tag-dot"></span>
-        <slot></slot>
-        <UiIcon v-if="closable" type="ios-close-empty" @click.native.stop="handleClose"/>
-      </div>
+    <div :class="classes" :style="styles" @click="handleClick">
+      <slot></slot>
+      <UiIcon v-if="closable" :class="`${prefix}-close`" type="ios-close-empty" @click.stop="handleClose"/>
     </div>
   </transition>
-  <div v-else class="ui-tag" @click="handleClick">
-    <div class="ui-tag-wrapper" :class="[colorClass, type, {isChecked}]" :style="{backgroundColor}">
-      <span v-if="type === 'dot'" class="ui-tag-dot"></span>
-      <slot></slot>
-      <UiIcon v-if="closable" type="ios-close-empty" @click.native.stop="handleClose"/>
-    </div>
+  <div v-else :class="classes" :style="styles" @click="handleClick">
+    <slot></slot>
+    <UiIcon v-if="closable" :class="`${prefix}-close`" type="ios-close-empty" @click.stop="handleClose"/>
   </div>
 </template>
 <script>
 import UiIcon from '../icon'
 export default {
+  name: 'UiTag',
   components: { UiIcon },
   data() {
-    return {
-      isChecked: this.checked
-    }
+    return { prefix: 'ui-tag', isChecked: this.checked }
   },
   props: {
     closable: Boolean,
@@ -33,9 +26,8 @@ export default {
       default: true
     },
     type: {
-      default: 'default',
       validator(value) {
-        return ['default', 'dot'].indexOf(value) !== -1
+        return ['border', 'dot'].indexOf(value) !== -1
       }
     },
     color: String,
@@ -46,12 +38,18 @@ export default {
   },
   computed: {
     colorClass() {
-      const colors = ['blue', 'green', 'red', 'yellow']
-      let index = colors.indexOf(this.color)
-      return index !== -1 && colors[index]
+      return ['primary', 'success', 'warning', 'error'].find(_ => _ === this.color)
     },
-    backgroundColor() {
-      return !this.colorClass && this.color
+    classes() {
+      return [
+        this.prefix, 
+        this.colorClass && `${this.prefix}-${this.colorClass}`,
+        this.type && `${this.prefix}-${this.type}`,
+        { checked: this.isChecked }
+      ]
+    },
+    styles() {
+      return !this.colorClass && { color: this.color, borderColor: this.color }
     }
   },
   watch: {
@@ -74,74 +72,76 @@ export default {
 <style lang="less">
 @import url("../../styles/vars.less");
 .ui-tag {
-  display: inline-block;
-  margin: 2px 4px 2px 0;
-  cursor: pointer;
-  font-size: 12px;
-  color: @content-color;
-}
-
-.ui-tag-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  margin-right: 8px;
-  background-color: @divider-color;
-}
-
-.ui-tag-wrapper {
-  display: flex;
-  height: 22px;
+  display: inline-flex;
   align-items: center;
+  cursor: pointer;
+  position: relative;
+  height: 22px;
+  margin: 2px 4px 2px 0;
   padding: 0 8px;
-  border: 1px solid @border-color;
-  background-color: @bg-color;
+  font-size: 12px;
   border-radius: 3px;
-  &:hover {
-    opacity: .85;
+  color: @content-color;
+  background-color: @bg-color;
+  border: 1px solid @border-color;
+  &-primary, &-success, &-error, &-warning {
+    color: #fff;
   }
-  &.blue, &.green, &.red, &.yellow {
-    border: none;
-    background-color: #fff;
+  &-primary {
+    border-color: @primary-color;
+    background-color: @primary-color;
   }
-  &.isChecked:not(.dot) {
-    &.blue, &.green, &.red, &.yellow {
-      color: #fff;
-    }
-    &.blue {
-      background-color: @info-color;
-    }
-    &.green {
-      background-color: @success-color;
-    }
-    &.red {
-      background-color: @error-color;
-    }
-    &.yellow {
-      background-color: @warning-color;
-    }
+  &-success {
+    border-color: @success-color;
+    background-color: @success-color;
   }
-  &.dot {
+  &-error {
+    border-color: @error-color;
+    background-color: @error-color;
+  }
+  &-warning {
+    border-color: @warning-color;
+    background-color: @warning-color;
+  }
+  &-dot {
     height: 32px;
     background-color: #fff;
     border: 1px solid @divider-color;
-    &.blue .ui-tag-dot {
-      background-color: @info-color;
-    }
-    &.green .ui-tag-dot {
-      background-color: @success-color;
-    }
-    &.red .ui-tag-dot {
-      background-color: @error-color;
-    }
-    &.yellow .ui-tag-dot {
-      background-color: @warning-color;
-    }
   }
-  .ion-ios-close-empty {
+  &-dot:before {
+    content: '';
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+    background-color: @divider-color;
+  }
+  &-dot&-primary, &-dot&-success, &-dot&-error, &-dot&-warning {
+    color: @content-color;
+  }
+  &-dot&-primary:before {
+    background-color: @primary-color;
+  }
+  &-dot&-success:before {
+    background-color: @success-color;
+  }
+  &-dot&-error:before {
+    background-color: @error-color;
+  }
+  &-dot&-warning:before {
+    background-color: @warning-color;
+  }
+  &:hover {
+    opacity: .85;
+  }
+  &-close {
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
     font-size: 18px;
-    margin-left: 8px;
+    margin-left: 2px;
     opacity: .66;
+    text-align: center;
     &:hover {
       opacity: 1;
     }

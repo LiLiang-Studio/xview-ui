@@ -1,10 +1,10 @@
 <template>
-  <div class="ui-collapse-item">
-    <div class="ui-collapse-item-header" :class="{isExpanded}" @click="handleHeaderClick">
-      <UiIcon class="ui-collapse-item-icon" type="arrow-right-b"/>
+  <div :class="prefix">
+    <div :class="`${prefix}-header`" @click="onHeaderClick">
+      <UiIcon v-if="!hideArrow" :class="[`${prefix}-icon`, {isExpanded}]" type="ios-arrow-forward"/>
       <slot></slot>
     </div>
-    <div v-show="isExpanded" class="ui-collapse-item-content">
+    <div v-show="isExpanded" :class="`${prefix}-content`">
       <slot name="content"></slot>
     </div>
   </div>
@@ -13,62 +13,28 @@
 import UiIcon from '../icon'
 import { findParent } from '@/tools'
 export default {
+  name: 'UiPanel',
   components: { UiIcon },
   data() {
-    return {
-      parent: null,
-      isExpanded: false
-    }
+    return { prefix: 'ui-collapse-item', isExpanded: false }
   },
   props: {
-    name: String
+    name: String,
+    hideArrow: Boolean
   },
   methods: {
-    handleHeaderClick() {
+    onHeaderClick() {
       this.isExpanded = !this.isExpanded
-      if (this.parent) {
-        this.parent.updateModel(this.name)
-      }
+      this.parent.updateModel(this)
     },
     fold() {
       this.isExpanded = false
     }
   },
   mounted() {
-    this.parent = findParent(this, 'ui-collapse')
-    if (this.parent) {
-      this.parent.addChild(this)
-      this.isExpanded = this.parent.includes(this.name)
-    }
+    this.parent = findParent(this, 'UiCollapse')
+    this.parent.addChild(this)
+    this.isExpanded = this.parent.isExpand(this)
   }
 }
 </script>
-<style lang="less">
-@import url("../../styles/vars.less");
-.ui-collapse-item + .ui-collapse-item {
-  border-top: 1px solid @border-color;
-}
-
-.ui-collapse-item-header {
-  height: 38px;
-  padding-left: 32px;
-  color: #666;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  &.isExpanded .ui-collapse-item-icon {
-    transform: rotateZ(90deg);
-  }
-}
-
-.ui-collapse-item-icon {
-  margin-right: 3px;
-  transition: transform .2s ease-in-out;
-}
-
-.ui-collapse-item-content {
-  background-color: #fff;
-  padding: 16px;
-  overflow: hidden;
-}
-</style>

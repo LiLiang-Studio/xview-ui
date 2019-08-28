@@ -1,54 +1,48 @@
 <template>
-  <div class="ui-collapse">
+  <div :class="['ui-collapse', {simple}]">
     <slot></slot>
   </div>
 </template>
 <script>
-import { getType } from '../../utils'
+import { isArr } from '@/tools'
 export default {
-  name: 'ui-collapse',
+  name: 'UiCollapse',
   data() {
-    return {
-      childrens: [],
-      names: this.initModel()
-    }
+    return { childs: [], names: this.syncModel() }
   },
   props: {
     accordion: Boolean,
-    value: [Array, String]
+    value: [Array, String],
+    simple: Boolean
   },
   watch: {
     value(newVal) {
-      this.names = this.initModel()
+      this.names = this.syncModel()
+    },
+    names(newval) {
+      this.$emit('input', newval)
+      this.$emit('on-change', newval)
     }
   },
   methods: {
-    includes(name) {
-      return this.names.indexOf(name) !== -1
+    isExpand(vm) {
+      return this.names.indexOf(vm.name || this.childs.indexOf(vm)) !== -1
     },
-    initModel() {
-      return getType(this.value) === 'array' ? this.value : [this.value]
+    syncModel() {
+      return isArr(this.value) ? this.value : [this.value]
     },
-    updateModel(name) {
-        let index = this.names.indexOf(name)
-        if (this.accordion) {
-          this.names = index === -1 ? [name] : []
-          this.childrens.forEach(_ => {
-            if (_.name !== name) _.fold()
-          })
-        } else {
-          if (index === -1) {
-            this.names.push(name)
-          } else {
-            this.names.splice(index, 1)
-          }
-        }
-      
-      this.$emit('input', this.names)
-      this.$emit('on-change', this.names)
+    updateModel(vm) {
+      let name = vm.name || this.childs.indexOf(vm)
+      let index = this.names.indexOf(name)
+      if (this.accordion) {
+        this.names = index === -1 ? [name] : []
+        return this.childs.forEach(_ => _.name !== name && _.fold())
+      }
+      if (index === -1) return this.names.push(name)
+      this.names.splice(index, 1)
     },
     addChild(vm) {
-      this.childrens.push(vm)
+      this.childs.push(vm)
     }
   }
 }
@@ -59,5 +53,33 @@ export default {
   border-radius: 3px;
   background-color: @bg-color;
   border: 1px solid @border-color;
+  &.simple {
+    border-left: none;
+    border-right: none;
+    background-color: #fff;
+  }
+  &-item + &-item {
+    border-top: 1px solid @border-color;
+  }
+  &-item-header {
+    height: 38px;
+    padding-left: 32px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  &-item-icon {
+    margin-right: 14px;
+    transition: transform .2s ease-in-out;
+    &.isExpanded {
+      transform: rotateZ(90deg);
+    }
+  }
+  &-item-content {
+    padding: 16px;
+    overflow: hidden;
+    background-color: #fff;
+  }
 }
 </style>

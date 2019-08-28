@@ -1,16 +1,4 @@
 /**
- * 通用工具模块
- */
-
-/**
- * 获取对象的类型
- * @param {any} obj 
- */
-export function getType(obj) {
-  return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase()
-}
-
-/**
  * 设置文本域自动高度
  * @param {HTMLTextAreaElement} textarea
  * @param {Number} minRows

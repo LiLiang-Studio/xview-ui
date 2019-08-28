@@ -54,12 +54,11 @@ import { Checkbox, CheckboxGroup } from './components/checkbox'
 import { Layout, Header, Content, Footer, Sider } from './components/layout'
 // 标签
 import Tag from './components/tag'
+// 折叠面板
+import { Collapse, Panel } from './components/collapse'
 
 // 文本输入框
 import Input from './components/Input.vue'
-// 折叠面板
-import Collapse from './components/collapse/Collapse.vue'
-import Panel from './components/collapse/Panel.vue'
 // 轮播切换
 import Swiper from './components/swiper/Swiper.vue'
 import SwiperItem from './components/swiper/SwiperItem.vue'
@@ -147,10 +146,10 @@ const comps = {
   Footer,
   Sider,
   Tag,
-
-  Input,
   Collapse,
   Panel,
+
+  Input,
   Modal,
   Swiper,
   SwiperItem,

@@ -11,6 +11,10 @@ export const isFunc = f => typeof f === 'function'
 
 export const isStr = s => typeof s === 'string'
 
+export const isArr = arr => arr instanceof Array
+
+export const getType = obj => Object.prototype.toString.call(obj).slice(8, -1).toLowerCase()
+
 let _maxZIndex = 0
 export const getMaxZIndex = () => {
   if (_maxZIndex) return _maxZIndex += 2

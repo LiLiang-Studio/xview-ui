@@ -17,7 +17,7 @@
   </div>
 </template>
 <script>
-import UiIcon from './icon'
+import UiIcon from '../icon'
 export default {
   components: { UiIcon },
   data() {
@@ -72,7 +72,7 @@ export default {
 }
 </script>
 <style lang="less">
-@import url("../styles/vars.less");
+@import url("../../styles/vars.less");
 .ui-tag {
   display: inline-block;
   margin: 2px 4px 2px 0;

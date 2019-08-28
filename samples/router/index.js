@@ -78,6 +78,7 @@ export const routeComponents = {
   Scroll,
   Checkbox,
   Layout,
+  Tag,
 
   DatePicker,
   TimePicker,
@@ -98,7 +99,6 @@ export const routeComponents = {
   Radio,
   Swiper,
   Input,
-  Tag,
   Collapse,
   Modal
 }

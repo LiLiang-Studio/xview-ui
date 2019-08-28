@@ -52,11 +52,11 @@ import Scroll from './components/scroll'
 import { Checkbox, CheckboxGroup } from './components/checkbox'
 // 布局
 import { Layout, Header, Content, Footer, Sider } from './components/layout'
+// 标签
+import Tag from './components/tag'
 
 // 文本输入框
 import Input from './components/Input.vue'
-// 标签
-import Tag from './components/Tag.vue'
 // 折叠面板
 import Collapse from './components/collapse/Collapse.vue'
 import Panel from './components/collapse/Panel.vue'
@@ -146,9 +146,9 @@ const comps = {
   Content,
   Footer,
   Sider,
+  Tag,
 
   Input,
-  Tag,
   Collapse,
   Panel,
   Modal,

@@ -56,15 +56,16 @@ import { Layout, Header, Content, Footer, Sider } from './components/layout'
 import Tag from './components/tag'
 // 折叠面板
 import { Collapse, Panel } from './components/collapse'
+// 单元格
+import { Cell, CellGroup } from './components/cell'
+// 单选按钮
+import { Radio, RadioGroup } from './components/radio'
 
 // 文本输入框
 import Input from './components/Input.vue'
 // 轮播切换
 import Swiper from './components/swiper/Swiper.vue'
 import SwiperItem from './components/swiper/SwiperItem.vue'
-// 单选按钮
-import Radio from './components/radio/Radio.vue'
-import RadioGroup from './components/radio/RadioGroup.vue'
 // 标签页
 import Tabs from './components/tabs/Tabs.vue'
 import TabPane from './components/tabs/TabPane.vue'
@@ -148,13 +149,15 @@ const comps = {
   Tag,
   Collapse,
   Panel,
+  Cell,
+  CellGroup,
+  Radio,
+  RadioGroup,
 
   Input,
   Modal,
   Swiper,
   SwiperItem,
-  Radio,
-  RadioGroup,
   Tabs,
   TabPane,
   Transfer,

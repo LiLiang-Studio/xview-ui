@@ -50,6 +50,7 @@ import Collapse from '../pages/Collapse.vue'
 import Modal from '../pages/Modal.vue'
 import Breadcrumb from '../pages/Breadcrumb.vue'
 import Divider from '../pages/Divider.vue'
+import Cell from '../pages/Cell.vue'
 
 Vue.use(Router)
 
@@ -80,6 +81,8 @@ export const routeComponents = {
   Layout,
   Tag,
   Collapse,
+  Cell,
+  Radio,
 
   DatePicker,
   TimePicker,
@@ -97,7 +100,6 @@ export const routeComponents = {
   InputNumber,
   Transfer,
   Tabs,
-  Radio,
   Swiper,
   Input,
   Modal

@@ -1,41 +1,24 @@
 <template>
-  <div class="ui-radio" :class="{isButtonType}">
-    <UiButton class="ui-radio-button" :class="{checked}" v-if="isButtonType" :disabled="disabled" @click="handleClick">
-      <slot>{{label}}</slot>
-    </UiButton>
-    <div v-else class="ui-radio-inner" tabindex="-1" :class="[{disabled}, size]" @click="handleClick">
-      <span class="ui-radio-box" :class="{checked}"></span>
-      <span class="ui-radio-label">
-        <slot>{{label}}</slot>
-      </span>
-    </div>
+  <UiButton v-if="isButtonType" :class="[`${prefix}-btn`, {checked}]" :disabled="disabled" @click="onClick">
+    <slot>{{label}}</slot>
+  </UiButton>
+  <div v-else tabindex="0" :class="[prefix, {disabled}]" @click="onClick">
+    <span :class="[`${prefix}-box`, {checked}]"></span>
+    <span><slot>{{label}}</slot></span>
   </div>
 </template>
 <script>
-import UiButton from './../button/Button.vue'
 import { findParent } from '@/tools'
+import { Button as UiButton } from '../button'
 export default {
+  name: 'UiRadio',
   components: { UiButton },
   data() {
-    return { checked: false, parent: null }
+    return { prefix: 'ui-radio', checked: false, parent: null }
   },
   props: {
-    value: Boolean,
     label: [String, Number],
-    disabled: Boolean,
-    size: {
-      validator(value) {
-        return ['large', 'small', 'default'].indexOf(value) !== -1
-      }
-    },
-    trueValue: {
-      type: [String, Number, Boolean],
-      default: true
-    },
-    falseValue: {
-      type: [String, Number, Boolean],
-      default: false
-    }
+    disabled: Boolean
   },
   watch: {
     checked(newVal) {
@@ -44,127 +27,93 @@ export default {
   },
   computed: {
     isButtonType() {
-      return this.parent && this.parent.isButtonType
+      return this.parent && this.parent.type === 'button'
     }
   },
   methods: {
-    handleClick() {
+    onClick() {
       if (this.disabled) return
-      if (this.parent) {
-        this.parent.updateValue(this)
-      } else {
-        this.checked = true
-        this.$emit('input', this.trueValue)
-      }
+      this.parent.updateValue(this)
     }
   },
   mounted() {
-    this.parent = findParent(this, 'ui-radio-group')
-    if (this.parent) {
-      this.parent.addChild(this)
-      this.checked = this.parent.value === this.label
-    } else {
-      this.checked = this.value === this.trueValue
-    }
+    this.parent = findParent(this, 'UiRadioGroup')
+    this.parent.addChild(this)
+    this.checked = this.parent.value === this.label
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
 .ui-radio {
-  display: inline-block;
-  &:not(.isButtonType) + .ui-radio {
-    margin-left: 10px;
-  }
-}
-
-.ui-radio-group {
-  .isVertical {
-    .ui-radio {
-      width: 100%;
-      margin-left: 0;
-    }
-    .ui-radio-inner {
-      float: left;
-    }
-  }
-  &.isButtonType {
-    + .ui-radio-group {
-      margin-left: 10px;
-    }
-  }
-}
-
-.ui-radio-group.large .ui-radio-inner, .ui-radio-inner.large {
-  font-size: 14px;
-  .ui-radio-box {
-    width: 18px;
-    height: 18px;
-    margin-right: 6px;
-    &:before {
-      width: 10px;
-      height: 10px;
-    }
-  }
-}
-
-.ui-radio-button.ui-button:not(:disabled) {
-  background-color: #fff;
-  &:hover {
-    border-color: @border-color;
-  }
-  &.checked {
-    border-color: @primary-color;
-  }
-}
-
-.ui-radio-inner {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  outline: none;
   font-size: 12px;
-  &.disabled {
-    cursor: not-allowed;
-    .ui-radio-box {
-      border-color: @border-color;
-      background-color: #f3f3f3;
+  margin-right: 8px;
+  outline: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  &-box {
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+    margin-right: 8px;
+    position: relative;
+    border: 1px solid @border-color;
+    &, &:before {
+      border-radius: 50%;
+      transition: all .2s ease-in-out;
+    }
+    &:before {
+      content: '';
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      bottom: 2px;
+      left: 2px;
+      transform: scale(0);
+      background-color: @primary-color;
+    }
+    &.checked {
+      border-color: @primary-color;
       &:before {
-        background-color: #ccc;
+        transform: scale(1);
       }
     }
   }
-  &:focus:not(.disabled) .ui-radio-box {
-    .form-control-shadow(@primary-color);
+  &-group.vertical {
+    display: inline-block;
   }
-}
-
-.ui-radio-box {
-  width: 14px;
-  height: 14px;
-  min-width: 14px;
-  border-radius: 50%;
-  margin-right: 4px;
-  padding: 2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid @border-color;
-  transition: all .3s ease;
-  &:before {
-    content: '';
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    transform: scale(0);
-    transition: all .3s ease;
-    background-color: @primary-color;
+  &-group.vertical & {
+    display: flex;
+    margin-right: 0;
+    height: 30px;
   }
-  &.checked {
-    border-color: @primary-color;
+  &-group.isButtonType {
+    margin-right: 10px;
+  }
+  &-group &-btn:hover {
+    border-color: @border-color;
+  }
+  &-btn.checked:not(:disabled) {
+    z-index: 2;
+    color: @primary-color;
+    border-color: currentColor;
+  }
+  &-btn.checked:disabled {
+    background-color: #e6e6e6;
+  }
+  &.disabled {
+    cursor: not-allowed;
+  }
+  &.disabled &-box {
+    border-color: @border-color;
+    background-color: @disabled-bg-color;
     &:before {
-      transform: scale(1);
+      background-color: #ccc;
     }
+  }
+  &:focus:not(.disabled) &-box {
+    .form-control-shadow(@primary-color);
   }
 }
 </style>

@@ -1,18 +1,11 @@
 <template>
   <div>
     <div class="page-title">Radio 单选框</div>
-    <div class="page-sub-title">基本组件-单选框。主要用于一组可选项单项选择，或者单独用于切换到选中状态。</div>
-    <p>
-      使用RadioGroup实现一组互斥的选项组。在组合使用时，Radio 使用 label 来自动判断。
-      每个 Radio 的内容可以自定义，如不填写则默认使用 label 的值。
-    </p>
-    <div class="page-sub-title">单独使用</div>
-    <p>使用 v-model 可以双向绑定数据。</p>
-    <Radio v-model="single">Radio</Radio>
+    <div class="page-sub-title">基本组件-单选框。主要用于一组可选项单项选择。</div>
 
-    <div class="page-sub-title">组合使用</div>
+    <div class="page-sub-title">使用</div>
     <p>
-      使用RadioGroup实现一组互斥的选项组。在组合使用时，Radio 使用 label 来自动判断。
+      使用RadioGroup实现一组互斥的选项组。Radio 使用 label 来自动判断。
       每个 Radio 的内容可以自定义，如不填写则默认使用 label 的值
     </p>
     <RadioGroup v-model="phone">
@@ -37,7 +30,6 @@
 
     <div class="page-sub-title">不可用</div>
     <p>通过设置disabled属性来禁用单选框。</p>
-    <Radio v-model="disabledSingle" disabled>Radio</Radio>
     <RadioGroup v-model="disabledGroup">
       <Radio label="金斑蝶" disabled></Radio>
       <Radio label="爪哇犀牛"></Radio>
@@ -69,18 +61,21 @@
       <Radio label="深圳"></Radio>
       <Radio label="杭州"></Radio>
     </RadioGroup>
+    <p>{{button1}}</p>
     <RadioGroup v-model="button2" type="button">
       <Radio label="北京"></Radio>
       <Radio label="上海" disabled></Radio>
       <Radio label="深圳"></Radio>
       <Radio label="杭州"></Radio>
     </RadioGroup>
+    <p>{{button2}}</p>
     <RadioGroup v-model="button3" type="button">
       <Radio label="北京" disabled></Radio>
       <Radio label="上海" disabled></Radio>
       <Radio label="深圳" disabled></Radio>
       <Radio label="杭州" disabled></Radio>
     </RadioGroup>
+    <p>{{button3}}</p>
 
     <div class="page-sub-title">尺寸</div>
     <p>通过设置属性size为large或small将按钮样式设置为大和小尺寸，不设置为默认(中)尺寸。</p>
@@ -108,10 +103,8 @@
 export default {
   data() {
     return {
-      single: true,
       phone: "apple",
       animal: "爪哇犀牛",
-      disabledSingle: true,
       disabledGroup: "爪哇犀牛",
       vertical: "apple",
       button1: "北京",

@@ -1,18 +1,18 @@
 <template>
-  <UiButtonGroup class="ui-radio-group" :class="[{isButtonType}, size]" v-if="isButtonType">
+  <ButtonGroup v-if="type === 'button'" class="ui-radio-group isButtonType" :size="size">
     <slot></slot>
-  </UiButtonGroup>
-  <div v-else class="ui-radio-group" :class="[{isVertical}, size]">
+  </ButtonGroup>
+  <div v-else class="ui-radio-group" :class="{vertical}">
     <slot></slot>
   </div>
 </template>
 <script>
-import UiButtonGroup from './../button/ButtonGroup.vue'
+import { ButtonGroup } from '../button'
 export default {
-  name: 'ui-radio-group',
-  components: { UiButtonGroup },
+  name: 'UiRadioGroup',
+  components: { ButtonGroup },
   data() {
-    return { checkedValue: this.value, children: [] }
+    return { checkedValue: this.value, childs: [] }
   },
   props: {
     value: [String, Number],
@@ -28,14 +28,6 @@ export default {
     },
     vertical: Boolean
   },
-  computed: {
-    isButtonType() {
-      return this.type === 'button'
-    },
-    isVertical() {
-      return this.vertical && !this.isButtonType
-    }
-  },
   watch: {
     value(newVal) {
       this.checkedValue = newVal
@@ -43,14 +35,14 @@ export default {
   },
   methods: {
     addChild(vm) {
-      this.children.push(vm)
+      this.childs.push(vm)
     },
     updateValue(vm) {
-      this.children.forEach(_ => _.checked = false)
+      this.childs.forEach(_ => _.checked = false)
       vm.checked = true
       this.checkedValue = vm.label
-      this.$emit('input', vm.label)
-      this.$emit('on-change', vm.label)
+      this.$emit('input', this.checkedValue)
+      this.$emit('on-change', this.checkedValue)
     }
   }
 }

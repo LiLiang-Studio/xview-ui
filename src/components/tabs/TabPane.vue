@@ -1,16 +1,14 @@
 <template>
-  <div class="ui-tab-pane" :style="styles">
+  <div class="ui-tabs-pane" :style="styles">
     <slot></slot>
   </div>
 </template>
 <script>
 import { findParent } from '@/tools'
 export default {
+  name: 'UiTabPane',
   data() {
-    return {
-      key: this.name,
-      parent: null
-    }
+    return { key: this.name, parent: null }
   },
   props: {
     name: String,
@@ -24,18 +22,16 @@ export default {
   },
   computed: {
     styles() {
-      return this.parent ? { width: `${(1 / this.parent.tabPanes.length) * 100}%` } : {}
+      return this.parent && { width: `${(1 / this.parent.childs.length) * 100}%` }
     }
   },
   mounted() {
-    this.parent = findParent(this, 'ui-tabs')
-    if (this.parent) {
-      this.parent.addPane(this)
-    }
+    this.parent = findParent(this, 'UiTabs')
+    let len = this.parent.addItem(this)
+    this.key = this.name || len - 1
   },
   beforeDestroy() {
-    this.$el.remove()
-    this.parent && this.parent.removePane(this)
+    this.parent.removeItem(this)
   }
 }
 </script>

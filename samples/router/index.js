@@ -83,6 +83,7 @@ export const routeComponents = {
   Collapse,
   Cell,
   Radio,
+  Tabs,
 
   DatePicker,
   TimePicker,
@@ -99,7 +100,6 @@ export const routeComponents = {
   Select,
   InputNumber,
   Transfer,
-  Tabs,
   Swiper,
   Input,
   Modal

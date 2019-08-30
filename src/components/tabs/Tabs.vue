@@ -1,22 +1,29 @@
 <template>
-  <div class="ui-tabs" :class="[size, type]">
-    <div class="ui-tabs-bar">
-      <ul class="ui-tabs-nav">
-        <li class="ui-tabs-nav-item"
-          v-for="item in tabPanes"
-          :key="item.key"
-          :class="{active: item.key === activeTab, disabled: item.disabled}"
-          @click="handleNavItemClick(item)">
-          <UiIcon v-if="item.icon" class="ui-tabs-icon" :type="item.icon"/>
-          <template v-if="isRenderFunc(item.label)" functional :render="item.label"></template>
-          <RenderCell v-if="isRenderFunc(item.label)" :render="item.label"/>
-          <template v-else>{{item.label}}</template>
-          <UiCloseIconButton class="ui-tabs-close" v-if="canClose(item)" @click.native.stop="deleteItem(item)"/>
-        </li>
-      </ul>
-      <div class="ui-tabs-extra"><slot name="extra"></slot></div>
+  <div :class="[prefix, `${prefix}-${size}`, `${prefix}-${type}`]">
+    <div :class="`${prefix}-bar`">
+      <div :class="[`${prefix}-nav-wrap`, {showNavBtns}]">
+        <ul ref="scrollView" :class="`${prefix}-nav`">
+          <li v-for="item in childs" :key="item.key"
+            :class="[`${prefix}-nav-item`, {active: item.key === activeTab, disabled: item.disabled}]"
+            @click="onNavItemClick(item)">
+            <ui-icon v-if="item.icon" :class="`${prefix}-icon`" :type="item.icon"/>
+            <UiRender v-if="isFunc(item.label)" :render="item.label"/>
+            <template v-else>{{item.label}}</template>
+            <ui-close-icon-button :class="`${prefix}-close`" v-if="canClose(item)" @click.stop="deleteItem(item)"/>
+          </li>
+        </ul>
+        <template v-if="showNavBtns">
+          <span :class="`${prefix}-nav-prev`" @click="onNavPrev">
+            <ui-icon type="ios-arrow-back"/>
+          </span>
+          <span :class="`${prefix}-nav-next`" @click="onNavNext">
+            <ui-icon type="ios-arrow-forward"/>
+          </span>
+        </template>
+      </div>
+      <div :class="`${prefix}-extra`"><slot name="extra"></slot></div>
     </div>
-    <div class="ui-tabs-content" :class="{animated}" :style="contentStyle">
+    <div :class="[`${prefix}-content`, {animated}]" :style="contentStyle">
       <slot></slot>
     </div>
   </div>
@@ -24,15 +31,12 @@
 <script>
 import UiIcon from '../icon'
 import UiCloseIconButton from '../close-icon-button'
-import { RenderCell } from './../../utils'
+import { UiRender, isFunc } from '@/tools'
 export default {
-  name: 'ui-tabs',
-  components: { UiIcon, UiCloseIconButton, RenderCell },
+  name: 'UiTabs',
+  components: { UiIcon, UiCloseIconButton, UiRender },
   data() {
-    return {
-      tabPanes: [],
-      activeTab: this.value
-    }
+    return { prefix: 'ui-tabs', childs: [], activeTab: this.value, showNavBtns: false }
   },
   props: {
     value: String,
@@ -52,45 +56,97 @@ export default {
       type: Boolean,
       default: true
     },
-    captureFocus: Boolean
+    beforeRemove: Function
   },
   computed: {
     contentStyle() {
-      let len = this.tabPanes.length, styles = { width: `${len * 100}%` }
-      let index = this.tabPanes.findIndex(_ => _.key === this.activeTab)
-      return index === -1 ? styles : { ...styles, transform: `translateX(${-index / len * 100}%)` }
+      let len = this.childs.length, styles = { width: `${len * 100}%` }
+      let index = this.childs.findIndex(_ => _.key === this.activeTab)
+      return index < 1 ? styles : { ...styles, transform: `translateX(${-index / len * 100}%)` }
     }
   },
   watch: {
-    value(newVal) {
-      this.activeTab = newVal
+    value(newval) {
+      this.activeTab = newval
     },
-    tabPanes(newVal) {
-      if ((this.activeTab === undefined || newVal.every(_ => _.key !== this.activeTab)) && newVal.length) {
-        this.activeTab = newVal[0].key
+    activeTab(newval) {
+      this.$emit('input', newval)
+    },
+    childs(newval) {
+      if (newval.length) {
+        if (this.activeTab === undefined) this.activeTab = this.childs[0].key
+      } else {
+        this.activeTab = undefined
       }
     }
   },
+  mounted() {
+    this.onWinResize()
+    window.addEventListener('resize', this.onWinResize)
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.onWinResize)
+  },
   methods: {
-    addPane(vm) {
-      this.tabPanes.push(vm)
-      if (vm.key === undefined) vm.key = this.tabPanes.length - 1
+    addItem(vm) {
+      this.$nextTick(() => this.onWinResize())
+      return this.childs.push(vm)
     },
-    removePane(vm) {
-      this.tabPanes.splice(this.tabPanes.indexOf(vm), 1)
-    },
-    handleNavItemClick(item) {
-      this.activeTab = item.key
-      this.$emit('input', this.activeTab)
+    removeItem(vm) {
+      let i = this.childs.indexOf(vm)
+      this.childs.splice(i, 1)
+      if (vm.key === this.activeTab && this.childs.length) this.activeTab = this.childs[i > 0 ? i - 1 : 0].key
     },
     deleteItem(item) {
       this.$emit('on-tab-remove', item.key)
     },
-    isRenderFunc(label) {
-      return typeof label === 'function'
+    onNavItemClick(item) {
+      this.activeTab = item.key
+    },
+    isFunc(label) {
+      return isFunc(label)
     },
     canClose(item) {
       return item.closable === false ? false : this.closable && this.type === 'card'
+    },
+    stopAnimate() {
+      cancelAnimationFrame(this.rafId)
+      this.rafId = null
+    },
+    onNavPrev() {
+      const { scrollView } = this.$refs
+      if (this.rafId) this.stopAnimate()
+      let start = scrollView.scrollLeft
+      let width = scrollView.clientWidth
+      let step = width / 30
+      const animateFunc = () => {
+        scrollView.scrollLeft -= step
+        if (scrollView.scrollLeft <= start - width) {
+          this.stopAnimate()
+        } else {
+          this.rafId = requestAnimationFrame(animateFunc)
+        }
+      }
+      requestAnimationFrame(animateFunc)
+    },
+    onNavNext() {
+      const { scrollView } = this.$refs
+      if (this.rafId) this.stopAnimate()
+      let start = scrollView.scrollLeft
+      let width = scrollView.clientWidth
+      let step = width / 30
+      const animateFunc = () => {
+        if (scrollView.scrollLeft >= start + width) {
+          this.stopAnimate()
+        } else {
+          scrollView.scrollLeft += step
+          this.rafId = requestAnimationFrame(animateFunc)
+        }
+      }
+      requestAnimationFrame(animateFunc)
+    },
+    onWinResize() {
+      this.showNavBtns = this.$refs.scrollView.clientWidth < this.$refs.scrollView.scrollWidth
     }
   }
 }
@@ -98,97 +154,109 @@ export default {
 <style lang="less">
 @import url("../../styles/vars.less");
 .ui-tabs {
-  position: relative;
   overflow: hidden;
-  &.line.small {
-    .ui-tabs-nav {
-      font-size: 12px;
-    }
-  }
-  &.card {
-    .ui-tabs-nav-item {
-      background-color: @bg-color;
-      border: 1px solid @border-color;
-      border-radius: 4px 4px 0 0;
-      + .ui-tabs-nav-item {
-        margin-left: 4px;
-      }
-      &.active {
-        background-color: #fff;
-        border-bottom-color: transparent;
-      }
-    }
-  }
-}
-
-.ui-tabs-bar {
   position: relative;
-  margin-bottom: 16px;
-  border-bottom: 1px solid @border-color;
-}
-
-.ui-tabs-nav {
-  display: inline-block;
   font-size: 14px;
-  list-style: none;
-  position: relative;
-  bottom: -1px;
-}
-
-.ui-tabs-nav-item {
-  display: inline-block;
-  padding: 7px 16px;
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: color .3s ease-in-out;
-  + .ui-tabs-nav-item {
-    margin-left: 16px;
+  &-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    border-bottom: 1px solid @border-color;
   }
-  &:hover, &.active {
-    color: @primary-color;
-  }
-  &.active {
-    border-bottom-color: @primary-color;
-  }
-  &.disabled {
-    pointer-events: none;
-    color: #ccc;
-  }
-  &.active, &:hover {
-    .ui-tabs-close {
-      width: 14px;
+  &-nav-wrap {
+    position: relative;
+    bottom: -1px;
+    flex: 1;
+    width: 0;
+    &.showNavBtns {
+      padding: 0 14px;
     }
   }
-}
-
-.ui-tabs-icon {
-  margin-right: 8px;
-}
-
-.ui-tabs-close {
-  width: 0;
-  height: 22px;
-  overflow: hidden;
-  text-align: right;
-  vertical-align: middle;
-  position: relative;
-  top: -1px;
-  transition: width .3s;
-}
-
-.ui-tabs-content {
-  overflow: hidden;
-  &.animated {
-    transition: transform .3s ease-in-out;
+  &-nav {
+    list-style: none;
+    overflow: hidden;
+    max-width: 100%;
+    white-space: nowrap;
+    transition: all .3s ease-in-out;
   }
-}
-
-.ui-tabs-extra {
-  float: right;
-  margin-left: 5px;
-}
-
-.ui-tab-pane {
-  float: left;
+  &-nav-prev, &-nav-next {
+    position: absolute;
+    top: 0;
+    bottom: 1px;
+    width: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+  }
+  &-nav-prev {
+    left: 0;
+  }
+  &-nav-next {
+    right: 0;
+  }
+  &-nav-item {
+    cursor: pointer;
+    display: inline-block;
+    padding: 7px 16px;
+    border-bottom: 2px solid transparent;
+    transition: color .3s ease-in-out;
+    + li {
+      margin-left: 16px;
+    }
+    &:hover, &.active {
+      color: @primary-color;
+    }
+    &.active {
+      border-bottom-color: @primary-color;
+    }
+    &.disabled {
+      color: #ccc;
+      pointer-events: none;
+    }
+  }
+  &-nav-item:hover &-close, &-nav-item.active &-close {
+    width: 14px;
+  }
+  &-icon {
+    margin-right: 8px;
+  }
+  &-close {
+    width: 0;
+    height: 22px;
+    overflow: hidden;
+    text-align: right;
+    vertical-align: middle;
+    transition: width .3s ease-in-out;
+  }
+  &-content {
+    overflow: hidden;
+    &.animated {
+      transition: transform .3s ease-in-out;
+    }
+  }
+  &-extra {
+    margin-left: 5px;
+  }
+  &-pane {
+    float: left;
+  }
+  &-line&-small {
+    font-size: 12px;
+  }
+  &-card &-nav-item {
+    border-radius: 4px 4px 0 0;
+    background-color: @bg-color;
+    border: 1px solid @border-color;
+    + li {
+      margin-left: 4px;
+    }
+    &.active {
+      background-color: #fff;
+      border-bottom-color: transparent;
+    }
+  }
 }
 </style>

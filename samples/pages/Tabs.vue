@@ -61,7 +61,7 @@
     <div class="page-sub-title">设置 slot extra 可以在页签右边添加附加操作。</div>
     <Tabs type="card">
       <TabPane v-for="tab in tabs" :key="tab" :label="'标签' + tab">标签{{ tab }}</TabPane>
-      <Button type="ghost" @click="handleTabsAdd" size="small" slot="extra">增加</Button>
+      <Button @click="handleTabsAdd" size="small" slot="extra">增加</Button>
     </Tabs>
 
     <div class="page-sub-title">通过设置属性 animated 为 false 可以禁用动画。</div>

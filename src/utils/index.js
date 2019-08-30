@@ -18,15 +18,6 @@ export function setAutoHeight(textarea, minRows, maxRows) {
   textarea.style.height = `${textarea.scrollHeight + borderWidth}px`
 }
 
-export const RenderCell = {
-  name: 'ui-render',
-  functional: true,
-  props: {
-    render: Function
-  },
-  render: (h, ctx) => ctx.props.render(h)
-}
-
 /**
  * 判断一个元素是否另一个元素的父元素或者自身
  * @param {HTMLElement} par 

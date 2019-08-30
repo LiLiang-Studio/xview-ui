@@ -60,15 +60,14 @@ import { Collapse, Panel } from './components/collapse'
 import { Cell, CellGroup } from './components/cell'
 // 单选按钮
 import { Radio, RadioGroup } from './components/radio'
+// 标签页
+import { Tabs, TabPane } from './components/tabs'
 
 // 文本输入框
 import Input from './components/Input.vue'
 // 轮播切换
 import Swiper from './components/swiper/Swiper.vue'
 import SwiperItem from './components/swiper/SwiperItem.vue'
-// 标签页
-import Tabs from './components/tabs/Tabs.vue'
-import TabPane from './components/tabs/TabPane.vue'
 // 穿梭框
 import Transfer from './components/Transfer.vue'
 // 数值输入框
@@ -153,13 +152,13 @@ const comps = {
   CellGroup,
   Radio,
   RadioGroup,
+  Tabs,
+  TabPane,
 
   Input,
   Modal,
   Swiper,
   SwiperItem,
-  Tabs,
-  TabPane,
   Transfer,
   InputNumber,
   Select,

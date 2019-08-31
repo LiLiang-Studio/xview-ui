@@ -2,10 +2,8 @@
   <div :class="[prefix, `${prefix}-${size}`, `${prefix}-${type}`]">
     <div :class="`${prefix}-bar`">
       <div :class="[`${prefix}-nav-wrap`, {showNavBtns}]">
-        <ul ref="scrollView" :class="`${prefix}-nav`">
-          <li v-for="item in childs" :key="item.key"
-            :class="[`${prefix}-nav-item`, {active: item.key === activeTab, disabled: item.disabled}]"
-            @click="onNavItemClick(item)">
+        <ul ref="scrollView" :class="`${prefix}-nav`" :style="{transform: `translateX(${translateX}px)`}">
+          <li v-for="item in childs" :key="item.key" :ref="item.key" :class="navItemClasses(item)" @click="onNavItemClick(item)">
             <ui-icon v-if="item.icon" :class="`${prefix}-icon`" :type="item.icon"/>
             <UiRender v-if="isFunc(item.label)" :render="item.label"/>
             <template v-else>{{item.label}}</template>
@@ -13,19 +11,17 @@
           </li>
         </ul>
         <template v-if="showNavBtns">
-          <span :class="`${prefix}-nav-prev`" @click="onNavPrev">
+          <span :class="`${prefix}-nav-prev`" @click="onNavPrev()">
             <ui-icon type="ios-arrow-back"/>
           </span>
-          <span :class="`${prefix}-nav-next`" @click="onNavNext">
+          <span :class="`${prefix}-nav-next`" @click="onNavNext()">
             <ui-icon type="ios-arrow-forward"/>
           </span>
         </template>
       </div>
-      <div :class="`${prefix}-extra`"><slot name="extra"></slot></div>
+      <slot name="extra"></slot>
     </div>
-    <div :class="[`${prefix}-content`, {animated}]" :style="contentStyle">
-      <slot></slot>
-    </div>
+    <div :class="[`${prefix}-content`, {animated}]" :style="contentStyle"><slot></slot></div>
   </div>
 </template>
 <script>
@@ -36,10 +32,16 @@ export default {
   name: 'UiTabs',
   components: { UiIcon, UiCloseIconButton, UiRender },
   data() {
-    return { prefix: 'ui-tabs', childs: [], activeTab: this.value, showNavBtns: false }
+    return {
+      prefix: 'ui-tabs',
+      childs: [],
+      activeTab: this.value,
+      showNavBtns: false,
+      translateX: 0
+    }
   },
   props: {
-    value: String,
+    value: [String, Number],
     type: {
       default: 'line',
       validator(value) {
@@ -55,14 +57,12 @@ export default {
     animated: {
       type: Boolean,
       default: true
-    },
-    beforeRemove: Function
+    }
   },
   computed: {
     contentStyle() {
-      let len = this.childs.length, styles = { width: `${len * 100}%` }
-      let index = this.childs.findIndex(_ => _.key === this.activeTab)
-      return index < 1 ? styles : { ...styles, transform: `translateX(${-index / len * 100}%)` }
+      let i = this.childs.map(_ => _.key).indexOf(this.activeTab)
+      return i > 0 && { transform: `translateX(${-i * 100}%)` }
     }
   },
   watch: {
@@ -88,6 +88,9 @@ export default {
     window.removeEventListener('resize', this.onWinResize)
   },
   methods: {
+    navItemClasses(item) {
+      return [`${this.prefix}-nav-item`, { active: item.key === this.activeTab, disabled: item.disabled }]
+    },
     addItem(vm) {
       this.$nextTick(() => this.onWinResize())
       return this.childs.push(vm)
@@ -102,6 +105,15 @@ export default {
     },
     onNavItemClick(item) {
       this.activeTab = item.key
+      const { scrollView } = this.$refs
+      const target = this.$refs[item.key][0]
+      let targetRect = target.getBoundingClientRect()
+      let scrollViewLeft = scrollView.getBoundingClientRect().left + Math.abs(this.translateX)
+      if (scrollViewLeft + scrollView.clientWidth < targetRect.right) {
+        this.onNavNext(target.clientWidth)
+      } else if (scrollViewLeft > targetRect.left) {
+        this.onNavPrev(target.clientWidth)
+      }
     },
     isFunc(label) {
       return isFunc(label)
@@ -109,44 +121,22 @@ export default {
     canClose(item) {
       return item.closable === false ? false : this.closable && this.type === 'card'
     },
-    stopAnimate() {
-      cancelAnimationFrame(this.rafId)
-      this.rafId = null
+    onNavPrev(dis) {
+      let { clientWidth, scrollWidth } = this.$refs.scrollView
+      let maxDis = Math.min(Math.abs(this.translateX), dis || Infinity)
+      this.translateX += Math.min(clientWidth, maxDis > 0 ? maxDis : 0)
     },
-    onNavPrev() {
-      const { scrollView } = this.$refs
-      if (this.rafId) this.stopAnimate()
-      let start = scrollView.scrollLeft
-      let width = scrollView.clientWidth
-      let step = width / 30
-      const animateFunc = () => {
-        scrollView.scrollLeft -= step
-        if (scrollView.scrollLeft <= start - width) {
-          this.stopAnimate()
-        } else {
-          this.rafId = requestAnimationFrame(animateFunc)
-        }
-      }
-      requestAnimationFrame(animateFunc)
-    },
-    onNavNext() {
-      const { scrollView } = this.$refs
-      if (this.rafId) this.stopAnimate()
-      let start = scrollView.scrollLeft
-      let width = scrollView.clientWidth
-      let step = width / 30
-      const animateFunc = () => {
-        if (scrollView.scrollLeft >= start + width) {
-          this.stopAnimate()
-        } else {
-          scrollView.scrollLeft += step
-          this.rafId = requestAnimationFrame(animateFunc)
-        }
-      }
-      requestAnimationFrame(animateFunc)
+    onNavNext(dis) {
+      let { clientWidth, scrollWidth } = this.$refs.scrollView
+      let maxDis = Math.min(scrollWidth - clientWidth - Math.abs(this.translateX), dis || Infinity)
+      this.translateX -= Math.min(clientWidth, maxDis > 0 ? maxDis : 0)
     },
     onWinResize() {
-      this.showNavBtns = this.$refs.scrollView.clientWidth < this.$refs.scrollView.scrollWidth
+      let { clientWidth, scrollWidth } = this.$refs.scrollView
+      if (clientWidth + Math.abs(this.translateX) > scrollWidth) {
+        this.translateX = -scrollWidth + clientWidth
+      }
+      this.showNavBtns = clientWidth < scrollWidth
     }
   }
 }
@@ -167,29 +157,27 @@ export default {
   &-nav-wrap {
     position: relative;
     bottom: -1px;
-    flex: 1;
-    width: 0;
+    overflow: hidden;
+    white-space: nowrap;
     &.showNavBtns {
-      padding: 0 14px;
+      padding: 0 16px;
     }
   }
   &-nav {
     list-style: none;
-    overflow: hidden;
-    max-width: 100%;
-    white-space: nowrap;
     transition: all .3s ease-in-out;
   }
   &-nav-prev, &-nav-next {
     position: absolute;
     top: 0;
-    bottom: 1px;
-    width: 14px;
+    bottom: 0;
+    width: 16px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: #fff;
+    border-bottom: 1px solid @border-color;
   }
   &-nav-prev {
     left: 0;
@@ -229,19 +217,17 @@ export default {
     overflow: hidden;
     text-align: right;
     vertical-align: middle;
-    transition: width .3s ease-in-out;
+    transition: all .3s ease-in-out;
   }
   &-content {
-    overflow: hidden;
+    white-space: nowrap;
     &.animated {
-      transition: transform .3s ease-in-out;
+      transition: all .3s ease-in-out;
     }
   }
-  &-extra {
-    margin-left: 5px;
-  }
   &-pane {
-    float: left;
+    width: 100%;
+    display: inline-block;
   }
   &-line&-small {
     font-size: 12px;

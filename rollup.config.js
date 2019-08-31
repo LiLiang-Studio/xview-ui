@@ -37,7 +37,10 @@ const basePlugins = [
   url(),
   json(),
   vue({ css: false }),
-  postcss({ minimize: isProd }),
+  postcss({
+    minimize: isProd,
+    extract: isProd ? outputEnv ? `${buildDir}/main.[hash].css` : `${buildDir}/index.css` : false
+  }),
   buble({ objectAssign: true }),
   nodeResolve(),
   commonjs()

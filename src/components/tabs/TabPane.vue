@@ -1,5 +1,5 @@
 <template>
-  <div class="ui-tabs-pane" :style="styles">
+  <div class="ui-tabs-pane">
     <slot></slot>
   </div>
 </template>
@@ -18,11 +18,6 @@ export default {
     closable: {
       type: Boolean,
       default: null
-    }
-  },
-  computed: {
-    styles() {
-      return this.parent && { width: `${(1 / this.parent.childs.length) * 100}%` }
     }
   },
   mounted() {

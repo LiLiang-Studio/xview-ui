@@ -171,7 +171,7 @@ export default {
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 16px;
+    width: 15px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -220,14 +220,13 @@ export default {
     transition: all .3s ease-in-out;
   }
   &-content {
-    white-space: nowrap;
+    display: flex;
     &.animated {
       transition: all .3s ease-in-out;
     }
   }
   &-pane {
-    width: 100%;
-    display: inline-block;
+    min-width: 100%;
   }
   &-line&-small {
     font-size: 12px;

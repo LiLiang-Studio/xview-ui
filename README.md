@@ -1,6 +1,11 @@
 # vueui-widgets
 
-### 基于Vuejs的高性能轻量级组件库
+[![npm package](https://img.shields.io/npm/v/vueui-widgets.svg)](https://www.npmjs.org/package/vueui-widgets)
+![JS gzip size](http://img.badgesize.io/https://unpkg.com/vueui-widgets/dist/vueui-widgets.umd.min.js?compression=gzip&label=gzip:%20JS)
+![CSS gzip size](http://img.badgesize.io/https://unpkg.com/vueui-widgets/dist/index.css?compression=gzip&label=gzip:%20CSS)
+![License: MIT](https://img.shields.io/npm/l/vueui-widgets)
+
+### 基于Vuejs的高性能超轻量级组件库
 
 ### 与iview功能和用法几乎一样，但这更轻量级，性能更有优势；
 
@@ -8,7 +13,6 @@ demo地址(暂不完善) [vueui-widgets](https://vueui-widgets.web.app)
 
 ```
 0.5.0版本开始采用Rollup构建，比之前体积更小
-全部开发完成，压缩版体积将控制在280kb内，目前206kb
 1.0.0版本发布之前，不建议商用；
 当然，可供学习交流之用，欢迎大家下载体验；
 ```
@@ -16,22 +20,23 @@ demo地址(暂不完善) [vueui-widgets](https://vueui-widgets.web.app)
 ```javascript
 import Vue from 'vue'
 import VueUI from 'vueui-widgets'
+import 'vueui-widgets/dist/index.css'
 Vue.use(VueUI, { prefix: 'ui' })
 ```
 #### options 目前仅支持 prefix属性，默认值为 'ui'，用来设置组件名字前缀，
 #### 如果为空字符串，则不带前缀使用组件，这样iview官方例子基本可以直接拿来用
 
 #### 0.6.0版本更新（2019年8月31日）
-已新增或优化了29个组件，目前压缩版体积206kb
+已新增或优化了29个组件
 
 #### 0.5.9版本更新（2019年8月29日）
-已新增或优化了28个组件，目前压缩版体积207kb
+已新增或优化了28个组件
 
 #### 0.5.8版本更新（2019年8月28日）
-已新增或优化了26个组件，目前压缩版体积206kb
+已新增或优化了26个组件
 
 #### 0.5.6版本更新（2019年8月26日）
-已新增或优化了22个组件，目前压缩版体积205kb
+已新增或优化了22个组件
 
 #### 0.5.2版本更新（2019年8月24日）
 webpack切换到Rollup构建，优化了15个组件，压缩版体积较4.x版本减小了近100kb

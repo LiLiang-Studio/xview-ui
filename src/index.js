@@ -64,45 +64,51 @@ import { Radio, RadioGroup } from './components/radio'
 import { Tabs, TabPane } from './components/tabs'
 
 // 文本输入框
-import Input from './components/Input.vue'
+import Input from './components/input'
+// 上传
+import Upload from './components/upload'
+// 数值输入框
+import InputNumber from './components/input-number'
+// 穿梭框
+import Transfer from './components/transfer'
+// 颜色选择器
+import ColorPicker from './components/color-picker'
+// 级联选择
+import Cascader from './components/cascader'
+// 下拉菜单
+import { Dropdown, DropdownItem, DropdownMenu } from './components/dropdown'
+// 表单
+import { Form, FormItem } from './components/form'
+// 菜单
+import { Menu, Submenu, MenuItem, MenuGroup } from './components/menu'
+// 下拉选择框
+import { Option, OptionGroup, Select } from './components/select'
+// 气泡提示
+import Poptip from './components/poptip'
+// 文字提示
+import Tooltip from './components/tooltip'
+// 滑块
+import Slider from './components/slider'
+// 分页器
+import Page from './components/page'
+// 自动完成
+import AutoComplete from './components/auto-complete'
+// 面板分割
+import Split from './components/split'
+// 锚点
+import { Anchor, AnchorLink } from './components/anchor'
+// 抽屉
+import Drawer from './components/drawer'
+// 相对时间
+import Time from './components/time'
+
 // 轮播切换
 import Swiper from './components/swiper/Swiper.vue'
 import SwiperItem from './components/swiper/SwiperItem.vue'
-// 穿梭框
-import Transfer from './components/Transfer.vue'
-// 数值输入框
-import InputNumber from './components/InputNumber.vue'
-// 下拉选择框
-import Select from './components/select/Select.vue'
-import Option from './components/select/Option.vue'
-import OptionGroup from './components/select/OptionGroup.vue'
-// 分页器
-import Page from './components/Page.vue'
-// 下拉菜单
-import Dropdown from './components/dropdown/Dropdown.vue'
-import DropdownMenu from './components/dropdown/DropdownMenu.vue'
-import DropdownItem from './components/dropdown/DropdownItem.vue'
-// 菜单
-import Menu from './components/menu/Menu.vue'
-import MenuItem from './components/menu/MenuItem.vue'
-import Submenu from './components/menu/Submenu.vue'
-import MenuGroup from './components/menu/MenuGroup.vue'
-// 文字提示
-import Tooltip from './components/Tooltip.vue'
-// 气泡提示
-import Poptip from './components/Poptip.vue'
 // 树形控件
 import Tree from './components/tree/Tree.vue'
 // 表格
 import Table from './components/table/Table.vue'
-// 滑块
-import Slider from './components/Slider.vue'
-// 表单
-import Form from './components/form/Form.vue'
-// 表单项
-import FormItem from './components/form/FormItem.vue'
-// 自动补全
-import AutoComplete from './components/AutoComplete.vue'
 // 日期选择器
 import DatePicker from './components/picker/DatePicker.vue'
 // 时间选择器
@@ -155,6 +161,14 @@ const comps = {
   Tabs,
   TabPane,
 
+  Time,
+  Drawer,
+  Anchor,
+  AnchorLink,
+  Split,
+  Cascader,
+  ColorPicker,
+  Upload,
   Input,
   Modal,
   Swiper,

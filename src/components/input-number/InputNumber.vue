@@ -13,8 +13,8 @@
   </div>
 </template>
 <script>
-import UiIcon from './icon'
-import UiInput from './Input.vue'
+import UiIcon from '../icon'
+import UiInput from '../input'
 export default {
   components: { UiIcon, UiInput },
   data() {
@@ -123,7 +123,7 @@ export default {
 }
 </script>
 <style lang="less">
-@import url("../styles/vars.less");
+@import url("../../styles/vars.less");
 .ui-input-number {
   display: inline-block;
   width: 80px;

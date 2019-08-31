@@ -38,8 +38,8 @@
   </div>
 </template>
 <script>
-import UiIcon from './icon'
-import { setAutoHeight } from '../utils'
+import UiIcon from '../icon'
+import { setAutoHeight } from '@/utils/index'
 export default {
   components: { UiIcon },
   data() {
@@ -158,7 +158,7 @@ export default {
 }
 </script>
 <style lang="less">
-@import url("../styles/vars.less");
+@import url("../../styles/vars.less");
 .ui-input, .ui-input-input {
   display: inline-block;
   width: 100%;

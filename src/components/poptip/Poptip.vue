@@ -25,10 +25,10 @@
   </div>
 </template>
 <script>
-import UiIcon from './icon'
-import UiPopper from './popper/Popper.vue'
-import UiButton from './button/Button.vue'
-import { isSelfOrParent } from './../utils'
+import UiIcon from '../icon'
+import UiPopper from '../popper'
+import { Button as UiButton } from '../button'
+import { isSelfOrParent } from '@/utils/index'
 export default {
   components: { UiIcon, UiPopper, UiButton },
   data() {
@@ -127,7 +127,7 @@ export default {
 }
 </script>
 <style lang="less">
-@import url("../styles/vars.less");
+@import url("../../styles/vars.less");
 .ui-poptip, .ui-poptip-rel {
   display: inline-block;
 }

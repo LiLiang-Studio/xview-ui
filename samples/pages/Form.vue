@@ -74,7 +74,7 @@
       </FormItem>
       <FormItem>
         <Button type="primary">Submit</Button>
-        <Button type="ghost" style="margin-left: 8px">Cancel</Button>
+        <Button style="margin-left: 8px">Cancel</Button>
       </FormItem>
     </Form>
 

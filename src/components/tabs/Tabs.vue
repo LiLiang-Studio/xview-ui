@@ -99,6 +99,7 @@ export default {
       let i = this.childs.indexOf(vm)
       this.childs.splice(i, 1)
       if (vm.key === this.activeTab && this.childs.length) this.activeTab = this.childs[i > 0 ? i - 1 : 0].key
+      this.$nextTick(() => this.onWinResize())
     },
     deleteItem(item) {
       this.$emit('on-tab-remove', item.key)
@@ -132,7 +133,9 @@ export default {
       this.translateX -= Math.min(clientWidth, maxDis > 0 ? maxDis : 0)
     },
     onWinResize() {
-      let { clientWidth, scrollWidth } = this.$refs.scrollView
+      let { scrollView } = this.$refs
+      if (!scrollView) return
+      let { clientWidth, scrollWidth } = scrollView
       if (clientWidth + Math.abs(this.translateX) > scrollWidth) {
         this.translateX = -scrollWidth + clientWidth
       }

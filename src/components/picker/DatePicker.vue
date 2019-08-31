@@ -10,7 +10,7 @@
 <script>
 import { isSelfOrParent } from './../../utils'
 import { propsMixin } from './mixins'
-import UiInput from './../Input.vue'
+import UiInput from '../input'
 import UiDrop from './../select/OptionList.vue'
 import UiDateView from './DateView.vue'
 import UiHeader from './Header.vue'

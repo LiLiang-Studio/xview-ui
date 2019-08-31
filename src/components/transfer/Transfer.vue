@@ -63,10 +63,10 @@
   </div>
 </template>
 <script>
-import UiButton from './button/Button.vue'
-import UiCheckbox from './checkbox/Checkbox.vue'
-import UiInput from './Input.vue'
-import UiIcon from './icon'
+import UiIcon from '../icon'
+import UiInput from '../input'
+import { Button as UiButton } from '../button'
+import { Checkbox as UiCheckbox } from '../checkbox'
 export default {
   components: { UiButton, UiCheckbox, UiInput, UiIcon },
   data() {
@@ -225,7 +225,7 @@ export default {
 }
 </script>
 <style lang="less">
-@import url("../styles/vars.less");
+@import url("../../styles/vars.less");
 .ui-transfer .ui-checkbox-button {
   margin-right: 12px;
 }

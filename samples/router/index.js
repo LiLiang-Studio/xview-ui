@@ -51,6 +51,7 @@ import Modal from '../pages/Modal.vue'
 import Breadcrumb from '../pages/Breadcrumb.vue'
 import Divider from '../pages/Divider.vue'
 import Cell from '../pages/Cell.vue'
+import Drawer from '../pages/Drawer.vue'
 
 Vue.use(Router)
 
@@ -85,6 +86,7 @@ export const routeComponents = {
   Radio,
   Tabs,
   Input,
+  Drawer,
 
   DatePicker,
   TimePicker,

@@ -3824,27 +3824,31 @@ var script$H = {
     autosize: [Boolean, Object]
   },
   computed: {
-    hasSlot: function hasSlot() {
-      return this.$attrs.type === 'text'
+    hasPrefix: function hasPrefix() {
+      return this.prefix || this.$slots.prefix
+    },
+    hasSuffix: function hasSuffix() {
+      return this.suffix || this.$slots.suffix
+    },
+    hasAppend: function hasAppend() {
+      return this.$slots.append
+    },
+    hasSearchAppend: function hasSearchAppend() {
+      return this.search && this.enterButton
     },
     isArea: function isArea() {
       return this.$attrs.type === 'textarea'
     },
     bindProps: function bindProps() {
       var ref = this;
-      var autosize = ref.autosize;
+      var autosize = ref.autosize; if ( autosize === void 0 ) autosize = false;
       var rows = ref.rows;
-      if (typeof autosize === 'object') {
-        if (autosize.minRows && autosize.minRows > rows) {
-          rows = autosize.minRows;
-        } else if (autosize.maxRows && autosize.maxRows < rows) {
-          rows = autosize.maxRows;
-        }
+      if (autosize.minRows && autosize.minRows > rows) {
+        rows = autosize.minRows;
+      } else if (autosize.maxRows && autosize.maxRows < rows) {
+        rows = autosize.maxRows;
       }
-      return Object.assign({}, this.$attrs, {rows: rows, ref: 'input'})
-    },
-    showClearIcon: function showClearIcon() {
-      return this.clearable && !this.icon && this.value
+      return Object.assign({}, this.$attrs, {rows: rows, ref: 'Input', value: this.value})
     },
     listeners: function listeners() {
       var that = this;
@@ -3870,7 +3874,10 @@ var script$H = {
         },
         keyup: function keyup(event) {
           that.$emit('on-keyup', event);
-          if (event.keyCode === 13) { that.$emit('on-enter'); }
+          if (event.keyCode === 13) {
+            that.$emit('on-enter');
+            if (that.search) { that.onSearch(); }
+          }
         },
         keydown: function keydown(event) {
           that.$emit('on-keydown', event);
@@ -3883,13 +3890,17 @@ var script$H = {
   },
   methods: {
     focus: function focus() {
-      this.$refs.input.focus();
+      this.$refs.Input.focus();
     },
     clear: function clear() {
       this.$emit('input', '');
     },
-    handleIconClick: function handleIconClick(event) {
-      this.$emit('on-click', event);
+    onIconClick: function onIconClick() {
+      this.$emit('on-click');
+    },
+    onSearch: function onSearch() {
+      this.focus();
+      this.$emit('on-search', this.$refs.Input.value);
     }
   }
 };
@@ -3897,7 +3908,7 @@ var script$H = {
 /* script */
 var __vue_script__$H = script$H;
 /* template */
-var __vue_render__$K = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:[_vm.prefixCls, (_vm.prefixCls + "-" + _vm.size)]},[(_vm.$slots.prepend)?_c('div',{class:(_vm.prefixCls + "-prepend")},[_vm._t("prepend")],2):_vm._e(),_vm._v(" "),_c('div',{class:[(_vm.prefixCls + "-box"), {hasAppend: _vm.$slots.append}]},[(_vm.isArea)?_c('textarea',_vm._g(_vm._b({class:(_vm.prefixCls + "-input textarea"),domProps:{"value":_vm.value}},'textarea',_vm.bindProps,false),_vm.listeners)):[(_vm.icon)?_c('UiIcon',{class:(_vm.prefixCls + "-icon"),attrs:{"type":_vm.icon},on:{"click":_vm.handleIconClick}}):_vm._e(),_vm._v(" "),(_vm.showClearIcon)?_c('UiIcon',{class:(_vm.prefixCls + "-icon clear"),attrs:{"type":"ios-close"},on:{"click":_vm.clear}}):_vm._e(),_vm._v(" "),_c('input',_vm._g(_vm._b({class:(_vm.prefixCls + "-input"),domProps:{"value":_vm.value}},'input',_vm.bindProps,false),_vm.listeners))]],2),_vm._v(" "),(_vm.$slots.append)?_c('div',{class:(_vm.prefixCls + "-append")},[_vm._t("append")],2):_vm._e()])};
+var __vue_render__$K = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:[_vm.prefixCls, !_vm.isArea && (_vm.prefixCls + "-" + _vm.size)]},[(_vm.$slots.prepend)?_c('div',{class:(_vm.prefixCls + "-prepend")},[_vm._t("prepend")],2):_vm._e(),_vm._v(" "),_c('div',{class:[(_vm.prefixCls + "-box"), {hasAppend: _vm.hasAppend || _vm.hasSearchAppend}]},[(_vm.isArea)?_c('textarea',_vm._g(_vm._b({class:(_vm.prefixCls + "-input textarea")},'textarea',_vm.bindProps,false),_vm.listeners)):[(_vm.hasPrefix)?_c('span',{class:(_vm.prefixCls + "-prefix")},[_vm._t("prefix",[_c('ui-icon',{attrs:{"type":_vm.prefix}})])],2):_vm._e(),_vm._v(" "),(_vm.hasSuffix)?_c('span',{class:(_vm.prefixCls + "-suffix")},[_vm._t("suffix",[_c('ui-icon',{attrs:{"type":_vm.suffix}})])],2):(_vm.icon)?_c('span',{class:(_vm.prefixCls + "-suffix"),on:{"click":_vm.onIconClick}},[_c('ui-icon',{attrs:{"type":_vm.icon}})],1):(_vm.search && !_vm.enterButton)?_c('span',{class:(_vm.prefixCls + "-suffix search"),on:{"click":_vm.onSearch}},[_c('ui-icon',{attrs:{"type":"ios-search"}})],1):(_vm.clearable && _vm.value)?_c('span',{class:(_vm.prefixCls + "-suffix clear"),on:{"click":_vm.clear}},[_c('ui-icon',{attrs:{"type":"ios-close"}})],1):_vm._e(),_vm._v(" "),_c('input',_vm._g(_vm._b({class:(_vm.prefixCls + "-input")},'input',_vm.bindProps,false),_vm.listeners))]],2),_vm._v(" "),(_vm.hasAppend)?_c('div',{class:(_vm.prefixCls + "-append")},[_vm._t("append")],2):(_vm.hasSearchAppend)?_c('div',{class:(_vm.prefixCls + "-search"),on:{"click":_vm.onSearch}},[(_vm.enterButton === true)?_c('ui-icon',{attrs:{"type":"ios-search"}}):[_vm._v(_vm._s(_vm.enterButton))]],2):_vm._e()])};
 var __vue_staticRenderFns__$K = [];
 
   /* style */

@@ -1,18 +1,40 @@
 <template>
-  <div :class="[prefixCls, `${prefixCls}-${size}`]">
+  <div :class="[prefixCls, !isArea && `${prefixCls}-${size}`]">
     <div v-if="$slots.prepend" :class="`${prefixCls}-prepend`">
       <slot name="prepend"></slot>
     </div>
-    <div :class="[`${prefixCls}-box`, {hasAppend: $slots.append}]">
-      <textarea v-if="isArea" v-bind="bindProps" :value="value" :class="`${prefixCls}-input textarea`" v-on="listeners"></textarea>
+    <div :class="[`${prefixCls}-box`, {hasAppend: hasAppend || hasSearchAppend}]">
+      <textarea v-if="isArea" v-bind="bindProps" :class="`${prefixCls}-input textarea`" v-on="listeners"></textarea>
       <template v-else>
-        <UiIcon v-if="icon" :class="`${prefixCls}-icon`" :type="icon" @click="handleIconClick"/>
-        <UiIcon v-if="showClearIcon" :class="`${prefixCls}-icon clear`" type="ios-close" @click="clear"/>
-        <input v-bind="bindProps" :class="`${prefixCls}-input`" :value="value" v-on="listeners">
+        <span v-if="hasPrefix" :class="`${prefixCls}-prefix`">
+          <slot name="prefix">
+            <ui-icon :type="prefix"/>
+          </slot>
+        </span>
+        <span v-if="hasSuffix" :class="`${prefixCls}-suffix`">
+          <slot name="suffix">
+            <ui-icon :type="suffix"/>
+          </slot>
+        </span>
+        <span v-else-if="icon" :class="`${prefixCls}-suffix`" @click="onIconClick">
+          <ui-icon :type="icon"/>
+        </span>
+        <span v-else-if="search && !enterButton" :class="`${prefixCls}-suffix search`" @click="onSearch">
+          <ui-icon type="ios-search"/>
+        </span>
+        <span v-else-if="clearable && value" :class="`${prefixCls}-suffix clear`" @click="clear">
+          <ui-icon type="ios-close"/>
+        </span>
+        <input v-bind="bindProps" :class="`${prefixCls}-input`" v-on="listeners">
       </template>
     </div>
-    <div v-if="$slots.append" :class="`${prefixCls}-append`">
-      <slot name="append"></slot>
+    <div v-if="hasAppend" :class="`${prefixCls}-append`">
+      <slot name="append">
+      </slot>
+    </div>
+    <div v-else-if="hasSearchAppend" :class="`${prefixCls}-search`" @click="onSearch">
+      <ui-icon v-if="enterButton === true" type="ios-search"/>
+      <template v-else>{{enterButton}}</template>
     </div>
   </div>
 </template>
@@ -46,25 +68,29 @@ export default {
     autosize: [Boolean, Object]
   },
   computed: {
-    hasSlot() {
-      return this.$attrs.type === 'text'
+    hasPrefix() {
+      return this.prefix || this.$slots.prefix
+    },
+    hasSuffix() {
+      return this.suffix || this.$slots.suffix
+    },
+    hasAppend() {
+      return this.$slots.append
+    },
+    hasSearchAppend() {
+      return this.search && this.enterButton
     },
     isArea() {
       return this.$attrs.type === 'textarea'
     },
     bindProps() {
-      let { autosize, rows } = this
-      if (typeof autosize === 'object') {
-        if (autosize.minRows && autosize.minRows > rows) {
-          rows = autosize.minRows
-        } else if (autosize.maxRows && autosize.maxRows < rows) {
-          rows = autosize.maxRows
-        }
+      let { autosize = false, rows } = this
+      if (autosize.minRows && autosize.minRows > rows) {
+        rows = autosize.minRows
+      } else if (autosize.maxRows && autosize.maxRows < rows) {
+        rows = autosize.maxRows
       }
-      return { ...this.$attrs, rows, ref: 'input' }
-    },
-    showClearIcon() {
-      return this.clearable && !this.icon && this.value
+      return { ...this.$attrs, rows, ref: 'Input', value: this.value }
     },
     listeners() {
       const that = this
@@ -90,7 +116,10 @@ export default {
         },
         keyup(event) {
           that.$emit('on-keyup', event)
-          if (event.keyCode === 13) that.$emit('on-enter')
+          if (event.keyCode === 13) {
+            that.$emit('on-enter')
+            if (that.search) that.onSearch()
+          }
         },
         keydown(event) {
           that.$emit('on-keydown', event)
@@ -103,13 +132,17 @@ export default {
   },
   methods: {
     focus() {
-      this.$refs.input.focus()
+      this.$refs.Input.focus()
     },
     clear() {
       this.$emit('input', '')
     },
-    handleIconClick(event) {
-      this.$emit('on-click', event)
+    onIconClick() {
+      this.$emit('on-click')
+    },
+    onSearch() {
+      this.focus()
+      this.$emit('on-search', this.$refs.Input.value)
     }
   }
 }
@@ -161,8 +194,8 @@ export default {
     color: @content-color;
     border: 1px solid @border-color;
     border-radius: 4px;
-    transition: all .2s ease-in-out;
     font-family: inherit;
+    transition: border .2s ease-in-out, box-shadow .2s ease-in-out;
     &.textarea {
       height: auto;
       padding: 4px 7px;
@@ -182,23 +215,30 @@ export default {
       background-color: @disabled-bg-color;
     }
   }
-  &-icon {
+  &-prefix, &-suffix {
     position: absolute;
     top: 0;
-    right: 0;
     bottom: 0;
     z-index: 1;
     font-size: 16px;
-    cursor: pointer;
     color: @sub-color;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+  }
+  &-prefix {
+    left: 0;
+  }
+  &-suffix {
+    right: 0;
+    &.search {
+      cursor: pointer;
+    }
     &.clear {
       display: none;
     }
   }
-  &-box:hover &-icon.clear {
+  &-box:hover &-suffix.clear {
     display: inline-flex;
   }
   &-prepend + &-box &-input {
@@ -218,23 +258,50 @@ export default {
   &-large &-input {
     height: @size-large;
   }
-  &-default &-icon {
+  &-default &-prefix, &-default &-suffix {
     width: @size-normal;
   }
-  &-small &-icon {
+  &-small &-prefix, &-small &-suffix {
     width: @size-small;
   }
-  &-large &-icon {
+  &-large &-prefix, &-large &-suffix {
     width: @size-large;
   }
-  &-default &-icon + &-input {
+  &-default &-prefix + &-input {
+    padding-left: @size-normal;
+  }
+  &-small &-prefix + &-input {
+    padding-left: @size-small;
+  }
+  &-large &-prefix + &-input {
+    padding-left: @size-large;
+  }
+  &-default &-suffix + &-input {
     padding-right: @size-normal;
   }
-  &-small &-icon + &-input {
+  &-small &-suffix + &-input {
     padding-right: @size-small;
   }
-  &-large &-icon + &-input {
+  &-large &-suffix + &-input {
     padding-right: @size-large;
+  }
+  &-search {
+    padding: 0 16px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border-radius: 0 4px 4px 0;
+    transition: all .2s ease-in-out;
+    &:hover {
+      background-color: lighten(@primary-color, 8%);
+    }
+    &, &:active {
+      background-color: @primary-color;
+    }
+    i {
+      font-size: 16px;
+    }
   }
 }
 </style>

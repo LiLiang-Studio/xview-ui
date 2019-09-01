@@ -28,6 +28,7 @@
       icon="ios-clock-outline"
       placeholder="Enter something..."
       style="width: 200px"
+      @on-click="onIconClick"
     />
 
     <div class="page-sub-title">前缀和后缀图标</div>
@@ -51,13 +52,13 @@
 
     <div class="page-sub-title">搜索框</div>
     <p>开启 search 属性，可以设置为搜索型输入框。</p>
-    <Input search placeholder="Enter something..." />
+    <Input search placeholder="Enter something..." @on-search="onSearch"/>
     <br />
     <br />
-    <Input search enter-button placeholder="Enter something..." />
+    <Input search enter-button placeholder="Enter something..." @on-search="onSearch"/>
     <br />
     <br />
-    <Input search enter-button="Search" placeholder="Enter something..." />
+    <Input search enter-button="Search" placeholder="Enter something..." @on-search="onSearch"/>
 
     <div class="page-sub-title">文本域</div>
     <p>通过设置属性 type 为 textarea 来使用文本域，用于多行输入。通过设置属性 rows 控制文本域默认显示的行数。</p>
@@ -117,7 +118,7 @@
     <div class="page-sub-title">输入时格式化展示</div>
     <p>结合 Poptip 组件，实现一个数值输入框，方便内容超长时的全量展现。</p>
     <Poptip trigger="focus">
-      <Input v-model="value15" prefix="logo-usd" placeholder="Enter number" style="width: 120px" />
+      <Input v-model="value15" prefix="social-usd" placeholder="Enter number" style="width: 120px" />
       <div slot="content">{{ formatNumber }}</div>
     </Poptip>
   </div>
@@ -155,6 +156,14 @@ export default {
         return str.replace(re, ",");
       }
       return parseNumber(this.value15);
+    }
+  },
+  methods: {
+    onIconClick() {
+      alert('你点击了图标')
+    },
+    onSearch(value) {
+      console.log(`你输入的值是：${value}`)
     }
   }
 };

@@ -84,6 +84,7 @@ export const routeComponents = {
   Cell,
   Radio,
   Tabs,
+  Input,
 
   DatePicker,
   TimePicker,
@@ -101,7 +102,6 @@ export const routeComponents = {
   InputNumber,
   Transfer,
   Swiper,
-  Input,
   Modal
 }
 

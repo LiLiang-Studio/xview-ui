@@ -62,9 +62,9 @@ import { Cell, CellGroup } from './components/cell'
 import { Radio, RadioGroup } from './components/radio'
 // 标签页
 import { Tabs, TabPane } from './components/tabs'
-
 // 文本输入框
 import Input from './components/input'
+
 // 上传
 import Upload from './components/upload'
 // 数值输入框
@@ -160,6 +160,7 @@ const comps = {
   RadioGroup,
   Tabs,
   TabPane,
+  Input,
 
   Time,
   Drawer,
@@ -169,7 +170,6 @@ const comps = {
   Cascader,
   ColorPicker,
   Upload,
-  Input,
   Modal,
   Swiper,
   SwiperItem,

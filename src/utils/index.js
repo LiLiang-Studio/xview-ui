@@ -1,24 +1,4 @@
 /**
- * 设置文本域自动高度
- * @param {HTMLTextAreaElement} textarea
- * @param {Number} minRows
- * @param {Number} maxRows
- */
-export function setAutoHeight(textarea, minRows, maxRows) {
-  let style = window.getComputedStyle(textarea, null)
-  let borderWidth = parseInt(style.borderTopWidth) + parseInt(style.borderBottomWidth)
-  let padding = parseInt(style.paddingTop) + parseInt(style.paddingBottom)
-  let lineHeight = parseInt(style.lineHeight)
-  let matches = textarea.value.match(/\n/gm)
-  let lbCount = matches ? matches.length : 0
-  let compare = borderWidth + padding + lineHeight * lbCount < textarea.scrollHeight
-  if (typeof minRows === 'number' && (!compare && lbCount <= minRows)) return
-  if (typeof maxRows === 'number' && lbCount >= maxRows) return
-  textarea.style.height = 'auto'
-  textarea.style.height = `${textarea.scrollHeight + borderWidth}px`
-}
-
-/**
  * 判断一个元素是否另一个元素的父元素或者自身
  * @param {HTMLElement} par 
  * @param {HTMLElement} el 

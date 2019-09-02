@@ -58,6 +58,7 @@ export const winScrollbarLock = {
     return scrollbarWidth
   },
   lock() {
+    this.locked = true
     let winHeight = window.innerHeight
     let { scrollHeight } = document.body
     if (winHeight > scrollHeight) return
@@ -65,6 +66,7 @@ export const winScrollbarLock = {
     document.body.style.overflow = 'hidden'
   },
   unlock() {
+    this.locked = false
     document.body.style.paddingRight = document.body.style.overflow = ''
   }
 }

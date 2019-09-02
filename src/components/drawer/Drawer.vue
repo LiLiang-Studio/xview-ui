@@ -24,12 +24,12 @@
 <script>
 import UiOverlay from '../overlay'
 import UiCloseIconButton from '../close-icon-button'
-import { parseSize, winScrollbarLock, getMaxZIndex, findChildrens } from '@/tools'
+import { parseSize, winScrollbarLock, getMaxZIndex } from '@/tools'
 export default {
   name: 'UiDrawer',
   components: { UiOverlay, UiCloseIconButton },
   data() {
-    return { prefix: 'ui-drawer', visible: this.value, zIndex: 1 }
+    return { prefix: 'ui-drawer', visible: this.value, zIndex: 1, isCallLock: false }
   },
   props: {
     value: Boolean,
@@ -79,9 +79,10 @@ export default {
     },
     visible(newval) {
       this.$emit('input', newval)
-      if (newval) {
+      this.zIndex = getMaxZIndex()
+      if (newval && !winScrollbarLock.locked) {
         winScrollbarLock.lock()
-        this.zIndex = getMaxZIndex()
+        this.isCallLock = true
       }
     }
   },
@@ -100,8 +101,9 @@ export default {
       if (this.maskClosable) this.show(false)
     },
     onLeave() {
-      const childs = findChildrens(this.$root, this.$options.name)
-      if (childs.every(_ => !_.visible)) winScrollbarLock.unlock()
+      if (!this.isCallLock) return
+      winScrollbarLock.unlock()
+      this.isCallLock = false
     }
   }
 }

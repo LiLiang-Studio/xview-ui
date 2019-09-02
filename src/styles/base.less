@@ -45,22 +45,6 @@ body {
   transform: scaleY(0);
 }
 
-// 模态框动画
-.ui-modal-enter-active {
-  transition: transform .3s cubic-bezier(0.465, 0.183, 0.153, 0.946),
-    opacity .3s cubic-bezier(0.465, 0.183, 0.153, 0.946);
-}
-
-.ui-modal-leave-active {
-  transition: transform .1s cubic-bezier(0.465, 0.183, 0.153, 0.946),
-  opacity .1s cubic-bezier(0.465, 0.183, 0.153, 0.946);
-}
-
-.ui-modal-enter, .ui-modal-leave-to {
-  opacity: 0;
-  transform: scale(1.15);
-}
-
 // 加载中动画
 @keyframes ani-load-loop {
   0% {

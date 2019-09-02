@@ -79,11 +79,11 @@ export default {
     },
     visible(newval) {
       this.$emit('input', newval)
+      if (!newval) return
       this.zIndex = getMaxZIndex()
-      if (newval && !winScrollbarLock.locked) {
-        winScrollbarLock.lock()
-        this.isCallLock = true
-      }
+      if (winScrollbarLock.locked) return
+      winScrollbarLock.lock()
+      this.isCallLock = true
     }
   },
   mounted() {

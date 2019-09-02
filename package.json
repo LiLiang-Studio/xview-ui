@@ -1,6 +1,6 @@
 {
   "name": "vueui-widgets",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "private": false,
   "main": "dist/vueui-widgets.common.js",
   "module": "dist/vueui-widgets.es.js",
@@ -59,10 +59,10 @@
     "framework"
   ],
   "description": "基于Vuejs的高性能轻量级组件库",
-  "homepage": "https://github.com/vueui-widgets/vueui-widgets",
+  "homepage": "https://github.com/LiLiang-Studio/vueui-widgets",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vueui-widgets/vueui-widgets.git"
+    "url": "git+https://github.com/LiLiang-Studio/vueui-widgets.git"
   },
   "license": "MIT"
 }

@@ -1,96 +1,46 @@
-/**
- * 通用对话框模块
- */
-
+import UiModal from './Modal.vue'
 import UiDialog from './Dialog.vue'
-import { getMaxZIndex, isFunc, winScrollbarLock } from '@/tools'
-
 /**
  * 创建对话框
  * @param {Vue.VueConstructor} Vue 
  */
-export function createModal(Vue) {
-  return {
-    create(type, options = {}) {
-      winScrollbarLock.lock()
-      let { onOk, onCancel, ...props } = options
-      this.instance = new Vue({
-        data() {
-          return {
-            visible: true,
-            loading: options.loading,
-            isLoading: false,
-            zIndex: getMaxZIndex()
-          }
-        },
-        watch: {
-          visible(newVal) {
-            if (newVal) return
-            winScrollbarLock.unlock()
-            this.isLoading = false
-          }
-        },
-        render(h) {
-          return this.visible && h('transition', {
-            props: { name: 'ui-modal' },
-            on: {
-              afterLeave: () => this.$destroy()
-            }
-          }, [
-            h(UiDialog, {
-              props: { ...props, type, loading: this.isLoading },
-              style: { zIndex: this.zIndex },
-              on: {
-                ok: () => {
-                  isFunc(onOk) && onOk()
-                  if (this.loading) return this.isLoading = true
-                  this.close()
-                },
-                close: this.close,
-                cancel: () => {
-                  this.close()
-                  isFunc(onCancel) && onCancel()
-                }
-              }
-            })
-          ])
-        },
-        methods: {
-          close() {
-            this.visible = false
-          }
-        },
-        mounted() {
-          document.body.appendChild(this.$el)
-        },
-        beforeDestroy() {
-          this.$el.remove()
+export const modalService = Vue => {
+  let vm
+  const getVM = () => vm || (vm = new Vue({
+    data() {
+      return { options: {} }
+    },
+    render(h) {
+      return h(UiDialog, {
+        props: this.options,
+        on: {
+          ok: () => this.show(false),
+          input: val => this.show(val),
+          leave: () => this.destroy()
         }
-      }).$mount()
+      })
     },
-  
-    info(options) {
-      return this.create('info', options)
-    },
-  
-    success(options) {
-      return this.create('success', options)
-    },
-  
-    warning(options) {
-      return this.create('warning', options)
-    },
-  
-    error(options) {
-      return this.create('error', options)
-    },
-  
-    confirm(options) {
-      return this.create('confirm', options)
-    },
-  
+    methods: {
+      show(visible) {
+        this.$set(this.options, 'value', visible)
+      },
+      setOptions(options) {
+        this.options = options
+      },
+      destroy() {
+        this.$destroy()
+        vm = null
+      }
+    }
+  }).$mount())
+  const openDialog = (type, options) => getVM().setOptions({ ...options, type, value: true })
+  return {
+    ...['info', 'success', 'warning', 'error', 'confirm'].reduce((acc, _) => {
+      return { ...acc, [_](options) { openDialog(_, options) } }
+    }, {}),
     remove() {
-      this.instance && (this.instance.visible = false)
+      vm && vm.show(false)
     }
   }
 }
+export default UiModal

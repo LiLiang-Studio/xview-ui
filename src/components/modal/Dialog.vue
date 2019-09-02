@@ -1,28 +1,26 @@
 <template>
-  <UiModalView v-if="visible" class="ui-dialog" v-bind="this.$props" :class="[type]" :maskClosable="false"
-    @ok="handleOK" @close="handleClose" @cancel="handleCancel">
-    <div class="ui-dialog-content">
-      <UiIcon class="ui-dialog-icon" :type="iconType"/>
+  <ui-modal :className="prefix" v-bind="$props" :maskClosable="false" v-on="$listeners">
+    <div :class="`${prefix}-content`">
+      <ui-icon :class="[`${prefix}-icon`, type]" :type="icon"/>
       <div v-html="content"></div>
     </div>
-    <UiButton v-if="!isNormal" slot="footer" type="primary" size="large" @click="handleOK">{{okText || '确定'}}</UiButton>
-  </UiModalView>
+    <ui-button v-if="isNoNormal" slot="footer" type="primary" @click="onOK">{{okText}}</ui-button>
+  </ui-modal>
 </template>
 <script>
 import UiIcon from '../icon'
-import UiButton from './../button/Button.vue'
-import UiModalView from './ModalView.vue'
-import { getDefaultProps } from './modalUntils'
-import { iconTypes } from '../../tools'
+import UiModal from './Modal.vue'
+import { Button as UiButton } from '../button'
+import { iconTypes } from '@/tools'
 export default {
-  components: { UiIcon, UiButton, UiModalView },
+  name: 'UiDialog',
+  components: { UiIcon, UiModal, UiButton },
   data() {
-    return {
-      visible: false
-    }
+    return { prefix: 'ui-dialog' }
   },
   props: {
-    ...getDefaultProps(),
+    ...UiModal.props,
+    content: String,
     type: {
       validator(value) {
         return ['info', 'success', 'warning', 'error', 'confirm'].indexOf(value) !== -1
@@ -30,63 +28,41 @@ export default {
     }
   },
   computed: {
-    iconType() {
+    icon() {
       return iconTypes[this.type]
     },
-    isNormal() {
-      return this.type === 'confirm'
+    isNoNormal() {
+      return this.type !== 'confirm'
     }
   },
   methods: {
-    handleOK() {
+    onOK() {
       this.$emit('ok')
-    },
-    handleClose() {
-      this.$emit('close')
-    },
-    handleCancel() {
-      this.$emit('cancel')
     }
-  },
-  mounted() {
-    this.visible = true
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
 .ui-dialog {
-  .ui-dialog-icon {
+  &-content {
+    display: flex;
+  }
+  &-icon {
     font-size: 36px;
     margin-right: 12px;
-  }
-  &.info {
-    .ui-dialog-icon {
+    &.info {
       color: @primary-color;
     }
-  }
-  &.success {
-    .ui-dialog-icon {
+    &.success {
       color: @success-color;
     }
-  }
-  &.warning {
-    .ui-dialog-icon {
+    &.warning, &.confirm {
       color: @warning-color;
     }
-  }
-  &.error {
-    .ui-dialog-icon {
+    &.error {
       color: @error-color;
     }
-  }
-  &.confirm {
-    .ui-dialog-icon {
-      color: @warning-color;
-    }
-  }
-  .ui-dialog-content {
-    display: flex;
   }
 }
 </style>

@@ -64,6 +64,10 @@ import { Radio, RadioGroup } from './components/radio'
 import { Tabs, TabPane } from './components/tabs'
 // 文本输入框
 import Input from './components/input'
+// 抽屉
+import Drawer from './components/drawer'
+// 模态框
+import Modal, { modalService } from './components/modal'
 
 // 上传
 import Upload from './components/upload'
@@ -97,8 +101,6 @@ import AutoComplete from './components/auto-complete'
 import Split from './components/split'
 // 锚点
 import { Anchor, AnchorLink } from './components/anchor'
-// 抽屉
-import Drawer from './components/drawer'
 // 相对时间
 import Time from './components/time'
 
@@ -115,9 +117,6 @@ import DatePicker from './components/picker/DatePicker.vue'
 import TimePicker from './components/picker/TimePicker.vue'
 
 import { createDirectives } from './directives'
-// 模态框
-import { createModal } from './components/modal'
-import Modal from './components/modal/Modal.vue'
 
 const comps = {
   Icon,
@@ -161,16 +160,16 @@ const comps = {
   Tabs,
   TabPane,
   Input,
+  Drawer,
+  Modal,
 
   Time,
-  Drawer,
   Anchor,
   AnchorLink,
   Split,
   Cascader,
   ColorPicker,
   Upload,
-  Modal,
   Swiper,
   SwiperItem,
   Transfer,
@@ -209,13 +208,12 @@ export default {
     Vue.prototype.$Notice = createNotice(Vue)
     Vue.prototype.$Message = createMessage(Vue)
     Vue.prototype.$Spin = spinService(Vue)
+    Vue.prototype.$Modal = modalService(Vue)
     Vue.LoadingBar = Vue.prototype.$Loading = loadingBarService(Vue)
     let prefix = typeof options.prefix === 'string' ? options.prefix : 'Ui'
     for (let name in comps) Vue.component(prefix + name, comps[name])
 
-    // // 标准对话框
-    Vue.prototype.$Modal = createModal(Vue)
-    // // 全局指令
+    // 全局指令
     createDirectives(Vue)
   }
 }

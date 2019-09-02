@@ -87,6 +87,7 @@ export const routeComponents = {
   Tabs,
   Input,
   Drawer,
+  Modal,
 
   DatePicker,
   TimePicker,
@@ -103,8 +104,7 @@ export const routeComponents = {
   Select,
   InputNumber,
   Transfer,
-  Swiper,
-  Modal
+  Swiper
 }
 
 const router = new Router({

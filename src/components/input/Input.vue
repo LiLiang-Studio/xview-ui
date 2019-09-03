@@ -105,8 +105,8 @@ export default {
           }
           that.$emit('input', event.target.value)
         },
-        focus() {
-          that.$emit('on-focus')
+        focus(event) {
+          that.$emit('on-focus', event)
         },
         blur() {
           that.$emit('on-blur')

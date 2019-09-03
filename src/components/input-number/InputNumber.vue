@@ -1,6 +1,6 @@
 <template>
   <div :class="[prefix, {disabled}]">
-    <ui-input v-model="inputValue" v-bind="inputProps" @on-keydown="onKeydown" @on-blur="onBlur"/>
+    <ui-input v-model="inputValue" v-bind="inputProps" @on-keydown="onKeydown" @on-blur="onBlur" @on-focus="onFocus"/>
     <div :class="`${prefix}-btns`" v-if="!disabled">
       <a :class="[`${prefix}-btn`, {disabled: disAdd}]" @click="add">
         <ui-icon type="ios-arrow-up"/>
@@ -70,6 +70,7 @@ export default {
   },
   watch: {
     value(newval) {
+      this.$emit('on-change', newval)
       this.inputValue = this.parseValue(newval)
     },
     inputValue() {
@@ -103,7 +104,11 @@ export default {
       }
     },
     onBlur() {
+      this.$emit('on-blur')
       if (isNaN(this.parseInputValue())) this.inputValue = this.parseValue(this.value)
+    },
+    onFocus(e) {
+      this.$emit('on-focus', e)
     }
   }
 }

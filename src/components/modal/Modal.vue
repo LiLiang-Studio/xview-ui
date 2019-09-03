@@ -88,6 +88,7 @@ export default {
       this.$emit('input', newval)
       this.$emit('on-visible-change', newval)
       if (!newval) return
+      this.isLoading = false
       this.zIndex = getMaxZIndex()
       if (winScrollbarLock.locked) return
       winScrollbarLock.lock()

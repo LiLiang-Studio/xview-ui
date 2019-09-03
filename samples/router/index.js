@@ -88,6 +88,7 @@ export const routeComponents = {
   Input,
   Drawer,
   Modal,
+  InputNumber,
 
   DatePicker,
   TimePicker,
@@ -102,7 +103,6 @@ export const routeComponents = {
   Dropdown,
   Page,
   Select,
-  InputNumber,
   Transfer,
   Swiper
 }

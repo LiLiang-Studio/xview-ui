@@ -68,11 +68,11 @@ import Input from './components/input'
 import Drawer from './components/drawer'
 // 模态框
 import Modal, { modalService } from './components/modal'
+// 数值输入框
+import InputNumber from './components/input-number'
 
 // 上传
 import Upload from './components/upload'
-// 数值输入框
-import InputNumber from './components/input-number'
 // 穿梭框
 import Transfer from './components/transfer'
 // 颜色选择器
@@ -162,6 +162,7 @@ const comps = {
   Input,
   Drawer,
   Modal,
+  InputNumber,
 
   Time,
   Anchor,
@@ -173,7 +174,6 @@ const comps = {
   Swiper,
   SwiperItem,
   Transfer,
-  InputNumber,
   Select,
   Option,
   OptionGroup,

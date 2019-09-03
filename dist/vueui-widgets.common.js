@@ -4156,6 +4156,7 @@ var script$K = {
       this.$emit('input', newval);
       this.$emit('on-visible-change', newval);
       if (!newval) { return }
+      this.isLoading = false;
       this.zIndex = getMaxZIndex();
       if (winScrollbarLock.locked) { return }
       winScrollbarLock.lock();
@@ -4336,51 +4337,11 @@ var modalService = function (Vue) {
 };
 
 //
-//
-//
-
 var script$M = {
-  
-};
-
-/* script */
-var __vue_script__$M = script$M;
-/* template */
-var __vue_render__$P = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')};
-var __vue_staticRenderFns__$P = [];
-
-  /* style */
-  var __vue_inject_styles__$P = undefined;
-  /* scoped */
-  var __vue_scope_id__$P = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$P = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$P = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-
-  
-  var Upload = normalizeComponent_1(
-    { render: __vue_render__$P, staticRenderFns: __vue_staticRenderFns__$P },
-    __vue_inject_styles__$P,
-    __vue_script__$M,
-    __vue_scope_id__$P,
-    __vue_is_functional_template__$P,
-    __vue_module_identifier__$P,
-    undefined,
-    undefined
-  );
-
-//
-var script$N = {
+  name: 'UiInputNumber',
   components: { UiIcon: Icon, UiInput: Input },
   data: function data() {
-    return {
-      inputValue: this.setValue(this.value)
-    }
+    return { prefix: 'ui-inputNumber', inputValue: this.parseValue(this.value) }
   },
   props: {
     max: {
@@ -4405,7 +4366,6 @@ var script$N = {
       }
     },
     disabled: Boolean,
-    placeholder: String,
     formatter: Function,
     parser: Function,
     readonly: Boolean,
@@ -4413,15 +4373,17 @@ var script$N = {
       type: Boolean,
       default: true
     },
-    precision: Number,
-    elementId: String
+    precision: Number
   },
   computed: {
-    disabledAdd: function disabledAdd() {
-      return +this.inputValue + this.step > this.max
+    inputProps: function inputProps() {
+      return { size: this.size, disabled: this.disabled, readonly: this.readonly || !this.editable }
     },
-    disabledMinus: function disabledMinus() {
-      return +this.inputValue - this.step < this.min
+    disAdd: function disAdd() {
+      return +this.value + this.step > this.max
+    },
+    disMinus: function disMinus() {
+      return +this.value - this.step < this.min
     },
     prec: function prec() {
       var s = this.step.toString().split('.')[1];
@@ -4430,65 +4392,88 @@ var script$N = {
     }
   },
   watch: {
-    inputValue: function inputValue(newVal, oldVal) {
-      var this$1 = this;
-
-      if (!newVal) { return }
-      if (newVal.toString().split('').reverse()[0] === '.') { return }
-      this.$nextTick(function () { return this$1.$refs.UiInput.$el.querySelector('input').value = newVal; });
-      this.$emit('input', +newVal);
+    value: function value(newval) {
+      this.inputValue = this.parseValue(newval);
     },
-    value: function value(newVal) {
-      this.inputValue = this.setValue(newVal);
+    inputValue: function inputValue() {
+      var val = this.parseInputValue();
+      if (!isNaN(val)) { this.$emit('input', val); }
     }
   },
   methods: {
-    setValue: function setValue(val) {
-      return Math.min(Math.max(+val, this.min), this.max)
+    parseValue: function parseValue(val) {
+      val = Math.min(Math.max(+val, this.min), this.max);
+      return this.formatter ? this.formatter(val) : val
+    },
+    parseInputValue: function parseInputValue() {
+      return this.parser ? this.parser(this.inputValue) : this.inputValue
     },
     add: function add() {
-      if (this.readonly) { return }
-      if (+this.inputValue + this.step <= this.max) {
-        this.inputValue = (+this.inputValue + this.step).toFixed(this.prec);
-      }
+      if (this.readonly || this.disAdd) { return }
+      this.$emit('input', (+this.value + this.step).toFixed(this.prec));
     },
     minus: function minus() {
-      if (this.readonly) { return }
-      if (+this.inputValue - this.step >= this.min) {
-        this.inputValue = (+this.inputValue - this.step).toFixed(this.prec);
-      }
+      if (this.readonly || this.disMinus) { return }
+      this.$emit('input', (+this.value - this.step).toFixed(this.prec));
     },
-    handleKeydown: function handleKeydown(event) {
-      if (event.keyCode === 40) {
-        event.preventDefault();
+    onKeydown: function onKeydown(e) {
+      if (e.keyCode === 40) {
+        e.preventDefault();
         this.minus();
-      } else if (event.keyCode === 38) {
-        event.preventDefault();
+      } else if (e.keyCode === 38) {
+        e.preventDefault();
         this.add();
       }
     },
-    handleKeypress: function handleKeypress(event) {
-      var ref = event.target;
-      var value = ref.value;
-      if (event.keyCode === 46) {
-        if (value.length === 0 || value.indexOf('.') !== -1) {
-          return event.preventDefault()
-        }
-      }
-      if (event.keyCode && (event.keyCode < 48 || event.keyCode > 57) && event.keyCode != 8 && event.keyCode != 46) {
-        return event.preventDefault()
-      }
-    },
-    handleBlur: function handleBlur() {
-      this.inputValue = this.setValue(this.inputValue);
+    onBlur: function onBlur() {
+      if (isNaN(this.parseInputValue())) { this.inputValue = this.parseValue(this.value); }
     }
   }
 };
 
 /* script */
+var __vue_script__$M = script$M;
+/* template */
+var __vue_render__$P = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:[_vm.prefix, {disabled: _vm.disabled}]},[_c('ui-input',_vm._b({on:{"on-keydown":_vm.onKeydown,"on-blur":_vm.onBlur},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v;},expression:"inputValue"}},'ui-input',_vm.inputProps,false)),_vm._v(" "),(!_vm.disabled)?_c('div',{class:(_vm.prefix + "-btns")},[_c('a',{class:[(_vm.prefix + "-btn"), {disabled: _vm.disAdd}],on:{"click":_vm.add}},[_c('ui-icon',{attrs:{"type":"ios-arrow-up"}})],1),_vm._v(" "),_c('a',{class:[(_vm.prefix + "-btn"), {disabled: _vm.disMinus}],on:{"click":_vm.minus}},[_c('ui-icon',{attrs:{"type":"ios-arrow-down"}})],1)]):_vm._e()],1)};
+var __vue_staticRenderFns__$P = [];
+
+  /* style */
+  var __vue_inject_styles__$P = undefined;
+  /* scoped */
+  var __vue_scope_id__$P = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$P = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$P = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+
+  
+  var InputNumber = normalizeComponent_1(
+    { render: __vue_render__$P, staticRenderFns: __vue_staticRenderFns__$P },
+    __vue_inject_styles__$P,
+    __vue_script__$M,
+    __vue_scope_id__$P,
+    __vue_is_functional_template__$P,
+    __vue_module_identifier__$P,
+    undefined,
+    undefined
+  );
+
+//
+//
+//
+
+var script$N = {
+  
+};
+
+/* script */
 var __vue_script__$N = script$N;
 /* template */
-var __vue_render__$Q = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ui-input-number"},[_c('UiInput',{ref:"UiInput",attrs:{"elementId":_vm.elementId,"size":_vm.size,"disabled":_vm.disabled,"readonly":_vm.readonly||!_vm.editable},on:{"on-keydown":_vm.handleKeydown,"on-keypress":_vm.handleKeypress,"on-blur":_vm.handleBlur},model:{value:(_vm.inputValue),callback:function ($$v) {_vm.inputValue=$$v;},expression:"inputValue"}}),_vm._v(" "),(!_vm.disabled)?_c('div',{staticClass:"ui-input-number-actions"},[_c('a',{staticClass:"ui-input-number-action",class:{disabled: _vm.disabledAdd},on:{"click":_vm.add}},[_c('UiIcon',{attrs:{"type":"ios-arrow-up"}})],1),_vm._v(" "),_c('a',{staticClass:"ui-input-number-action",class:{disabled: _vm.disabledMinus},on:{"click":_vm.minus}},[_c('UiIcon',{attrs:{"type":"ios-arrow-down"}})],1)]):_vm._e()],1)};
+var __vue_render__$Q = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')};
 var __vue_staticRenderFns__$Q = [];
 
   /* style */
@@ -4505,7 +4490,7 @@ var __vue_staticRenderFns__$Q = [];
   
 
   
-  var InputNumber = normalizeComponent_1(
+  var Upload = normalizeComponent_1(
     { render: __vue_render__$Q, staticRenderFns: __vue_staticRenderFns__$Q },
     __vue_inject_styles__$Q,
     __vue_script__$N,
@@ -8092,6 +8077,7 @@ var comps = {
   Input: Input,
   Drawer: Drawer,
   Modal: UiModal,
+  InputNumber: InputNumber,
 
   Time: Time,
   Anchor: Anchor,
@@ -8103,7 +8089,6 @@ var comps = {
   Swiper: Swiper,
   SwiperItem: SwiperItem,
   Transfer: Transfer,
-  InputNumber: InputNumber,
   Select: Select,
   Option: Option,
   OptionGroup: OptionGroup,

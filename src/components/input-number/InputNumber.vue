@@ -1,13 +1,12 @@
 <template>
-  <div class="ui-input-number">
-    <UiInput ref="UiInput" v-model="inputValue" :elementId="elementId" :size="size" :disabled="disabled" :readonly="readonly||!editable"
-      @on-keydown="handleKeydown" @on-keypress="handleKeypress" @on-blur="handleBlur"/>
-    <div class="ui-input-number-actions" v-if="!disabled">
-      <a class="ui-input-number-action" :class="{disabled: disabledAdd}" @click="add">
-        <UiIcon type="ios-arrow-up"/>
+  <div :class="[prefix, {disabled}]">
+    <ui-input v-model="inputValue" v-bind="inputProps" @on-keydown="onKeydown" @on-blur="onBlur"/>
+    <div :class="`${prefix}-btns`" v-if="!disabled">
+      <a :class="[`${prefix}-btn`, {disabled: disAdd}]" @click="add">
+        <ui-icon type="ios-arrow-up"/>
       </a>
-      <a class="ui-input-number-action" :class="{disabled: disabledMinus}" @click="minus">
-        <UiIcon type="ios-arrow-down"/>
+      <a :class="[`${prefix}-btn`, {disabled: disMinus}]" @click="minus">
+        <ui-icon type="ios-arrow-down"/>
       </a>
     </div>
   </div>
@@ -16,11 +15,10 @@
 import UiIcon from '../icon'
 import UiInput from '../input'
 export default {
+  name: 'UiInputNumber',
   components: { UiIcon, UiInput },
   data() {
-    return {
-      inputValue: this.setValue(this.value)
-    }
+    return { prefix: 'ui-inputNumber', inputValue: this.parseValue(this.value) }
   },
   props: {
     max: {
@@ -45,7 +43,6 @@ export default {
       }
     },
     disabled: Boolean,
-    placeholder: String,
     formatter: Function,
     parser: Function,
     readonly: Boolean,
@@ -53,15 +50,17 @@ export default {
       type: Boolean,
       default: true
     },
-    precision: Number,
-    elementId: String
+    precision: Number
   },
   computed: {
-    disabledAdd() {
-      return +this.inputValue + this.step > this.max
+    inputProps() {
+      return { size: this.size, disabled: this.disabled, readonly: this.readonly || !this.editable }
     },
-    disabledMinus() {
-      return +this.inputValue - this.step < this.min
+    disAdd() {
+      return +this.value + this.step > this.max
+    },
+    disMinus() {
+      return +this.value - this.step < this.min
     },
     prec() {
       let s = this.step.toString().split('.')[1]
@@ -70,102 +69,84 @@ export default {
     }
   },
   watch: {
-    inputValue(newVal, oldVal) {
-      if (!newVal) return
-      if (newVal.toString().split('').reverse()[0] === '.') return
-      this.$nextTick(() => this.$refs.UiInput.$el.querySelector('input').value = newVal)
-      this.$emit('input', +newVal)
+    value(newval) {
+      this.inputValue = this.parseValue(newval)
     },
-    value(newVal) {
-      this.inputValue = this.setValue(newVal)
+    inputValue() {
+      let val = this.parseInputValue()
+      if (!isNaN(val)) this.$emit('input', val)
     }
   },
   methods: {
-    setValue(val) {
-      return Math.min(Math.max(+val, this.min), this.max)
+    parseValue(val) {
+      val = Math.min(Math.max(+val, this.min), this.max)
+      return this.formatter ? this.formatter(val) : val
+    },
+    parseInputValue() {
+      return this.parser ? this.parser(this.inputValue) : this.inputValue
     },
     add() {
-      if (this.readonly) return
-      if (+this.inputValue + this.step <= this.max) {
-        this.inputValue = (+this.inputValue + this.step).toFixed(this.prec)
-      }
+      if (this.readonly || this.disAdd) return
+      this.$emit('input', (+this.value + this.step).toFixed(this.prec))
     },
     minus() {
-      if (this.readonly) return
-      if (+this.inputValue - this.step >= this.min) {
-        this.inputValue = (+this.inputValue - this.step).toFixed(this.prec)
-      }
+      if (this.readonly || this.disMinus) return
+      this.$emit('input', (+this.value - this.step).toFixed(this.prec))
     },
-    handleKeydown(event) {
-      if (event.keyCode === 40) {
-        event.preventDefault()
+    onKeydown(e) {
+      if (e.keyCode === 40) {
+        e.preventDefault()
         this.minus()
-      } else if (event.keyCode === 38) {
-        event.preventDefault()
+      } else if (e.keyCode === 38) {
+        e.preventDefault()
         this.add()
       }
     },
-    handleKeypress(event) {
-      let { value } = event.target
-      if (event.keyCode === 46) {
-        if (value.length === 0 || value.indexOf('.') !== -1) {
-          return event.preventDefault()
-        }
-      }
-      if (event.keyCode && (event.keyCode < 48 || event.keyCode > 57) && event.keyCode != 8 && event.keyCode != 46) {
-        return event.preventDefault()
-      }
-    },
-    handleBlur() {
-      this.inputValue = this.setValue(this.inputValue)
+    onBlur() {
+      if (isNaN(this.parseInputValue())) this.inputValue = this.parseValue(this.value)
     }
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-input-number {
-  display: inline-block;
+.ui-inputNumber {
   width: 80px;
-  background-color: #fff;
   position: relative;
-  &:hover {
-    .ui-input input {
-      border-color: @primary-color;
-    }
-    .ui-input-number-actions {
-      opacity: 1;
-    }
-  }
-}
-
-.ui-input-number-actions {
-  position: absolute;
-  top: 1px;
-  right: 1px;
-  bottom: 1px;
-  width: 22px;
-  border-radius: 0 4px 4px 0;
-  border-left: 1px solid @border-color;
-  opacity: 0;
+  display: inline-block;
   background-color: #fff;
-  transition: opacity .2s ease-in-out;
-}
-
-.ui-input-number-action {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 50%;
-  color: #999;
-  font-size: 14px;
-  + .ui-input-number-action {
-    border-top: 1px solid @border-color;
+  &:hover &-btns {
+    opacity: 1;
   }
-  &.disabled {
-    opacity: .72;
-    color: #ccc;
-    cursor: not-allowed;
+  &:not(.disabled):hover input {
+    border-color: @primary-color;
+  }
+  &-btns {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    bottom: 1px;
+    width: 22px;
+    opacity: 0;
+    border-radius: 0 4px 4px 0;
+    border-left: 1px solid @border-color;
+    transition: opacity .2s ease-in-out;
+  }
+  &-btn {
+    height: 50%;
+    color: #999;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:last-child {
+      border-top: 1px solid @border-color;
+    }
+    &.disabled {
+      opacity: .72;
+      color: #ccc;
+      cursor: not-allowed;
+    }
   }
 }
 </style>

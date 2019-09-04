@@ -19,8 +19,9 @@
     </ul>
 
     <div
-      class="page-sub-title"
-    >基本用法，展示了 data、target-keys、每行的渲染函数 render-format 以及回调函数 on-change 的用法。</div>
+      class="page-sub-title">基本用法</div>
+    <p>展示了 data、target-keys、每行的渲染函数 render-format 以及回调函数 on-change 的用法。</p>
+    <br>
     <Transfer
       :data="data1"
       :target-keys="targetKeys1"
@@ -28,7 +29,9 @@
       @on-change="handleChange1"
     ></Transfer>
 
-    <div class="page-sub-title">通过设置属性 filterable 可以进行搜索，可以自定义搜索函数。</div>
+    <div class="page-sub-title">搜索</div>
+    <p>通过设置属性 filterable 可以进行搜索，可以自定义搜索函数。</p>
+    <br>
     <Transfer
       :data="data2"
       :target-keys="targetKeys2"
@@ -37,7 +40,9 @@
       @on-change="handleChange2"
     ></Transfer>
 
-    <div class="page-sub-title">穿梭框高级用法，可以自定义两列的宽高、操作文案，以及底部自定义操作，更多配置见 API。</div>
+    <div class="page-sub-title">高级用法</div>
+    <p>穿梭框高级用法，可以自定义两列的宽高、操作文案，以及底部自定义操作，更多配置见 API。</p>
+    <br>
     <Transfer
       :data="data3"
       :target-keys="targetKeys3"
@@ -53,7 +58,9 @@
       </div>
     </Transfer>
 
-    <div class="page-sub-title">可以通过 render-format 来渲染复杂的数据。</div>
+    <div class="page-sub-title">自定义渲染行数据</div>
+    <p>可以通过 render-format 来渲染复杂的数据。</p>
+    <br>
     <Transfer
       :data="data4"
       :target-keys="targetKeys4"

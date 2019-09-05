@@ -11,7 +11,10 @@
             <ui-icon :type="prefix"/>
           </slot>
         </span>
-        <span v-if="hasSuffix" :class="`${prefixCls}-suffix`">
+        <span v-if="clearable && value" :class="`${prefixCls}-suffix clear`" @click="clear">
+          <ui-icon type="ios-close"/>
+        </span>
+        <span v-else-if="hasSuffix" :class="`${prefixCls}-suffix`">
           <slot name="suffix">
             <ui-icon :type="suffix"/>
           </slot>
@@ -21,9 +24,6 @@
         </span>
         <span v-else-if="search && !enterButton" :class="`${prefixCls}-suffix search`" @click="onSearch">
           <ui-icon type="ios-search"/>
-        </span>
-        <span v-else-if="clearable && value" :class="`${prefixCls}-suffix clear`" @click="clear">
-          <ui-icon type="ios-close"/>
         </span>
         <input v-bind="bindProps" :class="`${prefixCls}-input`" v-on="listeners">
       </template>
@@ -298,9 +298,6 @@ export default {
     }
     &, &:active {
       background-color: @primary-color;
-    }
-    i {
-      font-size: 16px;
     }
   }
 }

@@ -1,6 +1,7 @@
 <template>
   <div :class="prefix">
-    <ui-box v-bind="boxProps" :title="titles[0]" :data="convertData.left" @on-selected-change="onSourceSelectedChange">
+    <ui-box v-model="selectedData.left" v-bind="boxProps" :title="titles[0]" :data="convertData.left"
+      @on-selected-change="onSelectedChange">
       <slot></slot>
     </ui-box>
     <div :class="`${prefix}-btns`">
@@ -13,7 +14,8 @@
       </ui-button>
       <ui-button v-else type="primary" size="small" icon="ios-arrow-right" :disabled="disRight" @click="moveToRight"/>
     </div>
-    <ui-box v-bind="boxProps" :title="titles[1]" :data="convertData.right" @on-selected-change="onTargetSelectedChange">
+    <ui-box v-model="selectedData.right" v-bind="boxProps" :title="titles[1]" :data="convertData.right"
+      @on-selected-change="onSelectedChange">
       <slot></slot>
     </ui-box>
   </div>
@@ -37,10 +39,6 @@ export default {
       default: () => []
     },
     renderFormat: Function,
-    selectedKeys: {
-      type: Array,
-      default: () => []
-    },
     listStyle: {
       type: Object,
       default: () => ({})
@@ -67,18 +65,18 @@ export default {
   computed: {
     boxProps() {
       return {
-        listStyle: this.listStyle,
+        style: this.listStyle,
         filterable: this.filterable,
         filterMethod: this.filterMethod,
         renderFormat: this.renderFormat,
+        notFoundText: this.notFoundText,
         filterPlaceholder: this.filterPlaceholder
       }
     },
     convertData() {
       let rtnData = { left: [], right: [] }
       this.data.forEach(_ => {
-        let item = { ..._, checked: this.selectedKeys.indexOf(_.key) !== -1 }
-        rtnData[this.targetKeys.indexOf(_.key) === -1 ? 'left' : 'right'].push(item)
+        rtnData[this.targetKeys.indexOf(_.key) === -1 ? 'left' : 'right'].push(_)
       })
       return rtnData
     },
@@ -102,11 +100,8 @@ export default {
       let targetKeys = this.convertData.right.map(_ => _.key).concat(moveKeys)
       this.$emit('on-change', targetKeys, 'right', moveKeys)
     },
-    onSourceSelectedChange(keys) {
-      this.selectedData.left = keys
-    },
-    onTargetSelectedChange(keys) {
-      this.selectedData.right = keys
+    onSelectedChange() {
+      this.$emit('on-selected-change', this.selectedData.left, this.selectedData.right)
     }
   }
 }

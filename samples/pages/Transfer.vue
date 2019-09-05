@@ -27,6 +27,7 @@
       :target-keys="targetKeys1"
       :render-format="render1"
       @on-change="handleChange1"
+      @on-selected-change="handleSelectedChange"
     ></Transfer>
 
     <div class="page-sub-title">搜索</div>
@@ -46,7 +47,6 @@
     <Transfer
       :data="data3"
       :target-keys="targetKeys3"
-      :boxStyle="boxStyle"
       :list-style="listStyle"
       :render-format="render3"
       :operations="['To left','To right']"
@@ -82,9 +82,7 @@ export default {
       data4: this.getMockData(),
       targetKeys4: this.getTargetKeys(),
       listStyle: {
-        height: "250px"
-      },
-      boxStyle: {
+        height: "300px",
         width: "250px"
       }
     };
@@ -137,6 +135,9 @@ export default {
     },
     render4(item) {
       return item.label + " - " + item.description;
+    },
+    handleSelectedChange(sourceSelectedKeys, targetSelectedKeys) {
+      console.log('选中项发生变化：', sourceSelectedKeys, targetSelectedKeys)
     }
   }
 };

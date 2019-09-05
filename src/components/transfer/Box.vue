@@ -7,16 +7,15 @@
     <div v-if="filterable" :class="`${prefix}-search`">
       <ui-input v-model.trim="searchValue" size="small" search clearable :placeholder="filterPlaceholder"/>
     </div>
-    <ui-checkbox-group v-model="checkedKeys">
-      <ul :class="`${prefix}-list`" :style="listStyle">
-        <li v-for="item in showedData" :key="item.key">
-          <ui-checkbox :class="`${prefix}-checkbox`" :label="item.key" :disabled="item.disabled">
-            {{renderItem(item)}}
-          </ui-checkbox>
-        </li>
-        <li v-if="!showedData.length" :class="`${prefix}-empty`">{{notFoundText}}</li>
-      </ul>
-    </ui-checkbox-group>
+    <div :class="`${prefix}-list`">
+      <ui-checkbox-group v-model="selectedKeys">
+        <ui-checkbox v-for="item in showedData" :key="item.key" :title="renderItem(item)"
+          :class="`${prefix}-item`" :label="item.key" :disabled="item.disabled">
+          {{renderItem(item)}}
+        </ui-checkbox>
+      </ui-checkbox-group>
+      <p v-if="!showedData.length" :class="`${prefix}-empty`">{{notFoundText}}</p>
+    </div>
     <footer v-if="hasFooter" :class="`${prefix}-footer`">
       <slot></slot>
     </footer>
@@ -32,21 +31,20 @@ export default {
     return {
       prefix: 'ui-transferBox',
       checkAll: false,
-      checkedKeys: [],
+      selectedKeys: this.value,
       searchValue: ''
     }
   },
   props: {
+    value: {
+      type: Array,
+      default: () => []
+    },
     data: {
       type: Array,
       default: () => []
     },
     renderFormat: Function,
-    selectedKeys: {
-      type: Array,
-      default: () => []
-    },
-    listStyle: Object,
     title: String,
     filterable: Boolean,
     filterPlaceholder: String,
@@ -66,14 +64,18 @@ export default {
       return this.$slots.default !== undefined
     },
     countText() {
-      let total = this.data.length, checkedCount = this.checkedKeys.length
+      let total = this.data.length, checkedCount = this.selectedKeys.length
       return checkedCount ? `${checkedCount}/${total}` : total
     }
   },
   watch: {
-    checkedKeys(newval) {
+    selectedKeys(newval) {
+      this.$emit('input', newval)
       this.$emit('on-selected-change', newval)
-      this.checkAll = newval.length === this.data.filter(_ => !_.disabled).length
+      this.checkAll = newval.length && newval.length === this.showedData.filter(_ => !_.disabled).length
+    },
+    value(newval) {
+      this.selectedKeys = newval
     }
   },
   methods: {
@@ -81,7 +83,8 @@ export default {
       return this.renderFormat ? this.renderFormat(item) : item.label || item.key
     },
     onCheckAllClick() {
-      this.checkedKeys = this.checkAll ? this.data.filter(_ => !_.disabled).map(_ => _.key) : []
+      if (this.disSelectAll) return
+      this.selectedKeys = this.checkAll ? this.showedData.filter(_ => !_.disabled).map(_ => _.key) : []
     }
   }
 }
@@ -90,10 +93,12 @@ export default {
 @import url("../../styles/vars.less");
 .ui-transferBox {
   width: 180px;
+  height: 210px;
   font-size: 12px;
   border-radius: 3px;
   overflow: hidden;
-  display: inline-block;
+  display: inline-flex;
+  flex-direction: column;
   vertical-align: middle;
   border: 1px solid @border-color;
   &-header {
@@ -108,12 +113,11 @@ export default {
     padding: 8px 8px 3px;
   }
   &-list {
-    height: 180px;
+    flex: 1;
     padding: 4px 0;
     overflow: auto;
-    list-style: none;
   }
-  &-checkbox {
+  &-item {
     width: 100%;
     padding: 7px 16px;
     margin-right: 0;
@@ -126,6 +130,7 @@ export default {
     }
   }
   &-empty {
+    font-size: 12px;
     text-align: center;
     color: @disabled-color;
   }

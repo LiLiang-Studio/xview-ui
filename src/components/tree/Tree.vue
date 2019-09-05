@@ -1,19 +1,16 @@
 <template>
-  <div class="ui-tree">
-    <UiTreeNode :data="data"/>
+  <div class="ui-tree" :class="{showCheckbox}">
+    <ui-node :data="data" :render="render"/>
   </div>
 </template>
 <script>
-import UiTreeNode from './Node.vue'
+import UiNode from './Node.vue'
 let key = 0
 export default {
-  name: 'ui-tree',
-  components: { UiTreeNode },
+  name: 'UiTree',
+  components: { UiNode },
   data() {
-    return {
-      flatState: [],
-      selectedNodes: []
-    }
+    return { flatState: this.getFlatState(), selectedNodes: [] }
   },
   props: {
     data: {
@@ -28,51 +25,43 @@ export default {
     },
     loadData: Function,
     render: Function,
-    childrenKey: {
-      type: String,
-      default: 'children'
-    }
+    checkStrictly: Boolean
   },
   watch: {
-    data: {
-      deep: true,
-      handler(newVal) {
-        this.convertData()
-      }
+    data() {
+      this.flatState = this.getFlatState()
     }
   },
   methods: {
-    /**
-     * 转换数据，增加唯一标识的key
-     */
-    convertData() {
+    // 将树形数据转化为一维数组
+    getFlatState() {
       let flatState = [], { data } = this
       while (data.length) {
         let arr = []
         data.forEach(_ => {
-          _.nodeKey = key++
+          if (_.nodeKey === undefined) _.nodeKey = ++key
           flatState.push(_)
           _.children && arr.push(..._.children)
         })
         data = arr
       }
-      this.flatState = flatState
+      return flatState
     },
-    /**
-     * 更新选择的节点
-     */
+    // 更新选中的节点
     updateSeleckedNodes(item) {
-      if (this.multiple) {
-        this.$set(item, 'selected', !item.selected)
-      } else {
-        this.flatState.forEach(_ => this.$set(_, 'selected', false))
-        this.$set(item, 'selected', true)
-      }
+      let { selected } = item
+      if (!this.multiple) this.flatState.forEach(_ => this.$set(_, 'selected', false))
+      this.$set(item, 'selected', !selected)
       this.$emit('on-select-change', this.getSelectedNodes())
     },
-    /**
-     * 更新选中的节点
-     */
+    // 获取被选中的节点
+    getSelectedNodes() {
+      return this.flatState.filter(_ => _.selected).map(_ => {
+        let { children, ...data } = _
+        return data
+      })
+    },
+    // 更新勾选的节点
     updateCheckedNodes(item) {
       let eachData = item.children || []
       while (eachData.length) {
@@ -90,28 +79,22 @@ export default {
       })
       this.$emit('on-check-change', this.getCheckedNodes())
     },
-    /**
-     * 获取选中的节点
-     */
+    // 获取被勾选的节点
     getCheckedNodes() {
       return this.flatState.filter(_ => _.checked).map(_ => {
         let { children: __, ...data } = _
         return data
       })
     },
-    /**
-     * 获取选择的节点
-     */
-    getSelectedNodes() {
-      return this.flatState.filter(_ => _.selected).map(_ => {
+    // 获取选中及半选节点
+    getCheckedAndIndeterminateNodes() {
+      return this.flatState.filter(_ => _.checked || _.indeterminate).map(_ => {
         let { children: __, ...data } = _
         return data
       })
     },
-    /**
-     * 切换折叠和展开子节点
-     */
     toggleExpand(item) {
+      this.$set(item, 'expand', !item.expand)
       if (!item.children.length && this.loadData) {
         this.$set(item, 'loading', true)
         this.loadData(item, data => {
@@ -121,9 +104,6 @@ export default {
       }
       this.$emit('on-toggle-expand', item)
     }
-  },
-  mounted() {
-    this.convertData()
   }
 }
 </script>

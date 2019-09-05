@@ -1,129 +1,114 @@
 <template>
-  <ul class="ui-tree-node">
-    <li class="ui-tree-node-item" v-for="(item, index) in data" :key="index">
-      <div class="ui-tree-node-title">
-        <div v-if="item.loading" class="ui-tree-node-loading">
-          <UiLoading iconClass="ui-tree-node-loading-icon" loading/>
-        </div>
-        <template v-else>
-          <UiIcon type="arrow-right-b" class="ui-tree-node-arrow" v-if="item.children" 
-            :class="{expand: item.expand}" @click="toggleExpand(item)"/>
-        </template>
-        <UiCheckbox v-if="showCheckbox" 
-          :disabled="item.disableCheckbox || item.disabled"  v-model="item.checked" @on-change="handleCheckedChange(item)"/>
-        <span class="ui-tree-node-text" :class="{selected: item.selected}" @click="handleTextClick(item)">{{item.title}}</span>
+  <ul :class="prefix">
+    <li :class="`${prefix}-item`" v-for="(item, index) in data" :key="index">
+      <div :class="`${prefix}-title`">
+        <ui-loading v-if="item.loading" :class="`${prefix}-loading`" :iconClass="`${prefix}-loading-icon`" loading/>
+        <ui-icon type="ios-arrow-forward" v-else-if="item.children" :class="[`${prefix}-arrow`, {expand: item.expand}]" 
+          @click="toggleExpand(item)"/>
+        <ui-checkbox :class="`${prefix}-checkbox`"
+          :disabled="item.disableCheckbox || item.disabled" v-model="item.checked" @click.native="onCheckboxClick(item)"/>
+        <span :class="[`${prefix}-text`, {selected: item.selected}]" @click="onTextClick(item)">{{item.title}}</span>
       </div>
-      <ui-tree-node v-if="item.children && item.expand" :data="item.children" :showCheckbox="showCheckbox"></ui-tree-node>
+      <ui-tree-node :class="`${prefix}-child`" v-if="item.children && item.expand" :data="item.children" :render="render"/>
     </li>
   </ul>
 </template>
 <script>
 import UiIcon from '../icon'
 import UiLoading from './../scroll/Loading.vue'
-import UiCheckbox from './../checkbox/Checkbox.vue'
+import { Checkbox as UiCheckbox } from '../checkbox'
 import { findParent } from '@/tools'
 export default {
-  name: 'ui-tree-node',
+  name: 'UiTreeNode',
   components: { UiIcon, UiLoading, UiCheckbox },
   data() {
-    return { parent: null }
+    return { prefix: 'ui-tree-node', parent: null }
   },
   props: {
     data: {
       type: Array,
       default: () => []
-    }
-  },
-  computed: {
-    showCheckbox() {
-      return this.parent && this.parent.showCheckbox
-    }
+    },
+    render: Function
   },
   methods: {
-    /**
-     * 选择当前节点
-     */
-    handleTextClick(item) {
+    onTextClick(item) {
       if (item.disabled) return
-      this.parent && this.parent.updateSeleckedNodes(item)
+      this.parent.updateSeleckedNodes(item)
     },
-    /**
-     * 复选框选中状态改变
-     */
-    handleCheckedChange(item) {
+    onCheckboxClick(item) {
+      if (item.disabled) return
       this.parent.updateCheckedNodes(item)
     },
-    /**
-     * 切换折叠和展开子节点
-     */
     toggleExpand(item) {
-      this.$set(item, 'expand', !item.expand)
-      this.parent && this.parent.toggleExpand(item)
+      this.parent.toggleExpand(item)
     }
   },
   mounted() {
-    this.parent = findParent(this, 'ui-tree')
+    this.parent = findParent(this, 'UiTree')
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
 .ui-tree-node {
-  li {
-    list-style: none;
+  &-item {
     font-size: 14px;
+    list-style: none;
   }
-}
-
-.ui-tree-node-title {
-  display: flex;
-  align-items: center;
-  padding: 6px 0;
-  .ui-checkbox {
-    margin-right: 0;
-  }
-}
-
-.ui-tree-node-loading-icon, .ui-tree-node-arrow {
-  width: 14px;
-}
-
-.ui-tree-node-arrow {
-  cursor: pointer;
-  transition: transform .2s ease-in-out;
-  &.expand {
+  &-title {
+    padding: 6px 0;
     display: flex;
-    justify-content: center;
-    transform: rotate(90deg);
+    align-items: center;
   }
-}
-
-.ui-tree-node-loading-icon {
-  font-size: 14px !important;
-  color: @content-color;
-}
-
-.ui-tree-node-loading {
-  position: relative;
-  display: inline-block;
-  .ui-scroll-loading {
+  &-loading-icon, &-arrow {
+    width: 14px;
+  }
+  &-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    vertical-align: middle;
+    transition: transform .2s ease-in-out;
+    &.expand {
+      display: flex;
+      justify-content: center;
+      transform: rotate(90deg);
+    }
+  }
+  &-loading-icon {
+    font-size: 14px !important;
+    color: @content-color;
+  }
+  &-loading {
     height: auto;
     width: 14px;
   }
-}
-
-.ui-tree-node-item {
-  padding-left: 2em;
-}
-
-.ui-tree-node-text {
-  padding: 0 4px;
-  cursor: pointer;
-  &:hover {
-    background-color: lighten(@info-color, 39%);
+  &-child {
+    padding-left: 2em;
   }
-  &.selected {
-    background-color: lighten(@info-color, 33%);
+  &-text {
+    padding: 0 4px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all .2s ease-in-out;
+    &:hover {
+      background-color: lighten(@info-color, 39%);
+    }
+    &.selected {
+      background-color: lighten(@info-color, 33%);
+    }
+  }
+  &-checkbox {
+    display: none;
+    margin-right: 0;
+    margin-left: 6px;
+  }
+}
+.ui-tree {
+  &.showCheckbox &-node-checkbox {
+    display: inline-block;
   }
 }
 </style>

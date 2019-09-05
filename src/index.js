@@ -72,6 +72,8 @@ import Modal, { modalService } from './components/modal'
 import InputNumber from './components/input-number'
 // 穿梭框
 import Transfer from './components/transfer'
+// 树形控件
+import Tree from './components/tree'
 
 // 上传
 import Upload from './components/upload'
@@ -107,8 +109,6 @@ import Time from './components/time'
 // 轮播切换
 import Swiper from './components/swiper/Swiper.vue'
 import SwiperItem from './components/swiper/SwiperItem.vue'
-// 树形控件
-import Tree from './components/tree/Tree.vue'
 // 表格
 import Table from './components/table/Table.vue'
 // 日期选择器
@@ -164,6 +164,7 @@ const comps = {
   Modal,
   InputNumber,
   Transfer,
+  Tree,
 
   Time,
   Anchor,
@@ -187,7 +188,6 @@ const comps = {
   MenuGroup,
   Tooltip,
   Poptip,
-  Tree,
   Table,
   Slider,
   Form,

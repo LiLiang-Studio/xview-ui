@@ -90,6 +90,7 @@ export const routeComponents = {
   Modal,
   InputNumber,
   Transfer,
+  Tree,
 
   DatePicker,
   TimePicker,
@@ -97,7 +98,6 @@ export const routeComponents = {
   Form,
   Slider,
   Table,
-  Tree,
   Poptip,
   Tooltip,
   Menu,

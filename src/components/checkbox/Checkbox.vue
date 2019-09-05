@@ -3,7 +3,7 @@
     <span :class="`${prefix}-btn`" tabindex="0">
       <UiIcon :class="[`${prefix}-icon`, {indeterminate}]" type="checkmark"/>
     </span>
-    <slot>{{label}}</slot>
+    <slot>{{labelText}}</slot>
   </span>
 </template>
 <script>
@@ -38,6 +38,9 @@ export default {
     checked() {
       let parent = findParent(this, 'UiCheckboxGroup')
       return parent ? parent.includes(this.label) : this.value === this.trueValue
+    },
+    labelText() {
+      return typeof this.label === 'boolean' ? '' : this.label
     }
   },
   watch: {

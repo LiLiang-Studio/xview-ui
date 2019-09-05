@@ -124,13 +124,13 @@ export default {
   }
   &-circle {
     border-radius: 36px;
-  }
-  &.isOnlyIcon {
-    padding: 0;
-    font-size: 16px;
-    border-radius: 50%;
-    width: @size-normal;
-    min-width: @size-normal;
+    &.isOnlyIcon {
+      padding: 0;
+      font-size: 16px;
+      border-radius: 50%;
+      width: @size-normal;
+      min-width: @size-normal;
+    }
   }
   &-large, &-group-large & {
     font-size: 14px;

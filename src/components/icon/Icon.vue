@@ -27,6 +27,7 @@ export default {
   text-transform: none;
   text-rendering: auto;
   line-height: 1;
+  vertical-align: middle;
   -webkit-font-smoothing: antialiased;
 }
 </style>

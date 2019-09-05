@@ -14,7 +14,7 @@
     <div class="page-sub-title">可勾选</div>
     <p>设置属性 show-checkbox 可以对节点进行勾选。</p>
     <b></b>
-    <Tree :data="data2" show-checkbox></Tree>
+    <Tree :data="data2" check-directly show-checkbox></Tree>
 
     <div class="page-sub-title">异步加载子节点</div>
     <p>
@@ -35,19 +35,30 @@
     <div class="page-sub-title">自定义节点内容</div>
     <p>
       使用强大的 Render 函数可以自定义节点显示内容和交互，比如添加图标，按钮等。
-      <br>Render 函数的第二个参数，包含三个字段：
+      <br>Render 函数的第二个参数，包含两个字段：
     </p>
     <ul style="padding-left:3em;line-height:2;">
-      <li>root {Array}：树的根节点</li>
-      <li>node {Object}：当前节点</li>
+      <li><strong>为了减少不必要的的更新和状态维护，以提供更好的性能，这里与iview不同，不需要node参数</strong></li>
+      <li><strong>如果你不需要使用node和root参数，则与iview用法完全一致</strong></li>
+      <li>root {Array}：根节点树形数据打平后的一维数组（<strong>此处与iview不同</strong>）</li>
       <li>data {Object}：当前节点的数据</li>
     </ul>
     <p>
-      通过合理地使用 root、node 和 data 可以实现各种效果，
-      <br>其中，iView 给每个节点都设置了一个 nodeKey 字段，用来标识节点的 id。
+      通过合理地使用 root 和 data 可以实现各种效果，
+      <br>每个节点都设置了一个 nodeKey 字段，用来标识节点的 id。
       <br>Render 函数分两种，一种是给当前树的每个节点都设置同样的渲染内容，此 render 通过 Tree 组件的属性 render 传递；
       另一种是单独给某个节点设置，在该节点的 render 字段内设置；同时设置时，会优先使用当前节点的 Render 函数。
     </p>
+    <br>
+    <p><b>删除节点代码如下：</b></p>
+    <pre>
+      <code>
+        remove(root, data) {
+          const parent = root.find(_ => _.children && _.children.includes(data))
+          parent.children.splice(parent.children.indexOf(data), 1)
+        }
+      </code>
+    </pre>
     <Tree :data="data5" :render="renderContent"></Tree>
   </div>
 </template>
@@ -202,7 +213,7 @@ export default {
                         type: "primary"
                       }),
                       style: {
-                        width: "52px"
+                        width: "72px"
                       },
                       on: {
                         click: () => {
@@ -248,7 +259,6 @@ export default {
         }
       ],
       buttonProps: {
-        type: "ghost",
         size: "small"
       }
     };
@@ -271,7 +281,7 @@ export default {
         callback(data);
       }, 1000);
     },
-    renderContent(h, { root, node, data }) {
+    renderContent(h, { root, data }) {
       return h(
         "span",
         {
@@ -321,7 +331,7 @@ export default {
                 }),
                 on: {
                   click: () => {
-                    this.remove(root, node, data);
+                    this.remove(root, data);
                   }
                 }
               })
@@ -338,11 +348,9 @@ export default {
       });
       this.$set(data, "children", children);
     },
-    remove(root, node, data) {
-      const parentKey = root.find(el => el === node).parent;
-      const parent = root.find(el => el.nodeKey === parentKey).node;
-      const index = parent.children.indexOf(data);
-      parent.children.splice(index, 1);
+    remove(root, data) {
+      const parent = root.find(_ => _.children && _ !== data && _.children.includes(data))
+      parent.children.splice(parent.children.indexOf(data), 1)
     }
   }
 };

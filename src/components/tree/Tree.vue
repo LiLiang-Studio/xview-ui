@@ -1,6 +1,6 @@
 <template>
   <div class="ui-tree" :class="{showCheckbox}">
-    <ui-node :data="data" :render="render"/>
+    <ui-node v-for="item in data" :key="item.nodeKey" :data="item" :render="render"/>
   </div>
 </template>
 <script>
@@ -10,7 +10,7 @@ export default {
   name: 'UiTree',
   components: { UiNode },
   data() {
-    return { flatState: this.getFlatState(), selectedNodes: [] }
+    return { selectedNodes: [] }
   },
   props: {
     data: {
@@ -27,10 +27,13 @@ export default {
     render: Function,
     checkStrictly: Boolean
   },
-  watch: {
-    data() {
-      this.flatState = this.getFlatState()
+  computed: {
+    flatState() {
+      return this.getFlatState()
     }
+  },
+  mounted() {
+    this.updateCheckedNodes()
   },
   methods: {
     // 将树形数据转化为一维数组
@@ -52,7 +55,7 @@ export default {
       let { selected } = item
       if (!this.multiple) this.flatState.forEach(_ => this.$set(_, 'selected', false))
       this.$set(item, 'selected', !selected)
-      this.$emit('on-select-change', this.getSelectedNodes())
+      this.$emit('on-select-change', this.getSelectedNodes(), item)
     },
     // 获取被选中的节点
     getSelectedNodes() {
@@ -62,7 +65,8 @@ export default {
       })
     },
     // 更新勾选的节点
-    updateCheckedNodes(item) {
+    updateCheckedNodes(item = {}) {
+      if (this.checkStrictly) return this.$emit('on-check-change', this.getCheckedNodes(), item)
       let eachData = item.children || []
       while (eachData.length) {
         let arr = []
@@ -75,9 +79,14 @@ export default {
       let data = [...this.flatState]
       data.reverse()
       data.forEach(_ => {
-        _.children && this.$set(_, 'checked', _.children.every(__ => __.checked))
+        if (_.children && _.children.length) {
+          let checkeds = _.children.filter(__ => __.checked)
+          let hasIndeterminate = _.children.some(__ => __.indeterminate)
+          this.$set(_, 'checked', checkeds.length === _.children.length)
+          this.$set(_, 'indeterminate', hasIndeterminate || (checkeds.length > 0 && checkeds.length < _.children.length))
+        }
       })
-      this.$emit('on-check-change', this.getCheckedNodes())
+      this.$emit('on-check-change', this.getCheckedNodes(), item)
     },
     // 获取被勾选的节点
     getCheckedNodes() {
@@ -93,11 +102,13 @@ export default {
         return data
       })
     },
+    // 节点的展开和收起
     toggleExpand(item) {
       this.$set(item, 'expand', !item.expand)
       if (!item.children.length && this.loadData) {
         this.$set(item, 'loading', true)
         this.loadData(item, data => {
+          data.forEach(_ => _.checked = item.checked)
           item.children = data
           this.$set(item, 'loading', false)
         })

@@ -52,6 +52,7 @@ import Breadcrumb from '../pages/Breadcrumb.vue'
 import Divider from '../pages/Divider.vue'
 import Cell from '../pages/Cell.vue'
 import Drawer from '../pages/Drawer.vue'
+import Time from '../pages/Time.vue'
 
 Vue.use(Router)
 
@@ -91,6 +92,7 @@ export const routeComponents = {
   InputNumber,
   Transfer,
   Tree,
+  Time,
 
   DatePicker,
   TimePicker,

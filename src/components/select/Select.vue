@@ -245,7 +245,7 @@ export default {
      * @param {String|Number} value
      */
     removeSelectedItemByValue(value) {
-      let index = this.selectedItems.findIndex(_ => _.value === value)
+      let index = this.selectedItems.map(_ => _.value).indexOf(value)
       this.selectedItems.splice(index, 1)
     },
     /**
@@ -351,7 +351,7 @@ export default {
       let arr = this.children.filter(_ => !_.isDelete)
       let len = arr.length
       if (!len) return
-      let focusIndex = arr.findIndex(_ => _.focus)
+      let focusIndex = arr.map(_ => _.focus).indexOf(true)
       this.children.forEach(_ => _.$data.focus = false)
       if (dir === 'down') {
         if (focusIndex < len - 1) {

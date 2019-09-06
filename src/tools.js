@@ -82,17 +82,6 @@ export const throttle = (fn, gapTime = 16) => {
   }
 }
 
-export const debounce = (fn, gapTime = 16) => {
-  let timerId = null
-  return () => {
-    if (timerId) {
-      clearTimeout(timerId)
-      return timerId = null
-    }
-    timerId = setTimeout(fn, gapTime)
-  }
-}
-
 export const addStylesheet = (id, styleStr) => {
   let styleEl = document.getElementById(id)
   if (styleEl) return
@@ -127,4 +116,41 @@ export const setAutoHeight = (textarea, minRows, maxRows) => {
   if (typeof maxRows === 'number' && lbCount >= maxRows) return
   textarea.style.height = 'auto'
   textarea.style.height = `${textarea.scrollHeight + borderWidth}px`
+}
+
+/**
+ * 格式化日期
+ * @param {Date|String} date 
+ * @param {String} format 
+ */
+export const dateFormat = (date, format = 'yyyy-MM-dd hh:mm:ss') => {
+  if (typeof date === 'string') {
+    let mts = date.match(/(\/Date\((\d+)\)\/)/)
+    if (mts && mts.length >= 3) date = parseInt(mts[2])
+  }
+  date = new Date(date)
+  if (!date || date.toUTCString() === 'Invalid Date') return ''
+  let map = {
+    M: date.getMonth() + 1,
+    d: date.getDate(),
+    h: date.getHours(),
+    m: date.getMinutes(),
+    s: date.getSeconds(),
+    q: Math.floor((date.getMonth() + 3) / 3),
+    S: date.getMilliseconds()
+  }
+  format = format.replace(/([yMdhmsqS])+/g, (all, t) => {
+    let v = map[t]
+    if (v !== undefined) {
+      if (all.length > 1) {
+        v = '0' + v
+        v = v.substr(v.length - 2)
+      }
+      return v
+    } else if (t === 'y') {
+      return (date.getFullYear() + '').substr(4 - all.length)
+    }
+    return all
+  })
+  return format
 }

@@ -24,32 +24,6 @@ if (!Array.prototype.find) {
   });
 }
 
-// 数组findIndex方法
-if (!Array.prototype.findIndex) {
-  Object.defineProperty(Array.prototype, 'findIndex', {
-    value: function(predicate) {
-      if (this == null) {
-        throw new TypeError('"this" is null or not defined')
-      }
-      var o = Object(this);
-      var len = o.length >>> 0;
-      if (typeof predicate !== 'function') {
-        throw new TypeError('predicate must be a function');
-      }
-      var thisArg = arguments[1];
-      var k = 0;
-      while (k < len) {
-        var kValue = o[k];
-        if (predicate.call(thisArg, kValue, k, o)) {
-          return k
-        }
-        k++;
-      }
-      return -1
-    }
-  });
-}
-
 var iconTypes = {
   info: 'information-circled',
   success: 'checkmark-circled',
@@ -138,19 +112,6 @@ var throttle = function (fn, gapTime) {
   }
 };
 
-var debounce = function (fn, gapTime) {
-  if ( gapTime === void 0 ) gapTime = 16;
-
-  var timerId = null;
-  return function () {
-    if (timerId) {
-      clearTimeout(timerId);
-      return timerId = null
-    }
-    timerId = setTimeout(fn, gapTime);
-  }
-};
-
 var addStylesheet = function (id, styleStr) {
   var styleEl = document.getElementById(id);
   if (styleEl) { return }
@@ -187,6 +148,45 @@ var setAutoHeight = function (textarea, minRows, maxRows) {
   textarea.style.height = (textarea.scrollHeight + borderWidth) + "px";
 };
 
+/**
+ * 格式化日期
+ * @param {Date|String} date 
+ * @param {String} format 
+ */
+var dateFormat = function (date, format) {
+  if ( format === void 0 ) format = 'yyyy-MM-dd hh:mm:ss';
+
+  if (typeof date === 'string') {
+    var mts = date.match(/(\/Date\((\d+)\)\/)/);
+    if (mts && mts.length >= 3) { date = parseInt(mts[2]); }
+  }
+  date = new Date(date);
+  if (!date || date.toUTCString() === 'Invalid Date') { return '' }
+  var map = {
+    M: date.getMonth() + 1,
+    d: date.getDate(),
+    h: date.getHours(),
+    m: date.getMinutes(),
+    s: date.getSeconds(),
+    q: Math.floor((date.getMonth() + 3) / 3),
+    S: date.getMilliseconds()
+  };
+  format = format.replace(/([yMdhmsqS])+/g, function (all, t) {
+    var v = map[t];
+    if (v !== undefined) {
+      if (all.length > 1) {
+        v = '0' + v;
+        v = v.substr(v.length - 2);
+      }
+      return v
+    } else if (t === 'y') {
+      return (date.getFullYear() + '').substr(4 - all.length)
+    }
+    return all
+  });
+  return format
+};
+
 var tools = /*#__PURE__*/Object.freeze({
   iconTypes: iconTypes,
   isFunc: isFunc,
@@ -198,11 +198,11 @@ var tools = /*#__PURE__*/Object.freeze({
   findParent: findParent,
   winScrollbarLock: winScrollbarLock,
   throttle: throttle,
-  debounce: debounce,
   addStylesheet: addStylesheet,
   parseSize: parseSize,
   UiRender: UiRender,
-  setAutoHeight: setAutoHeight
+  setAutoHeight: setAutoHeight,
+  dateFormat: dateFormat
 });
 
 //
@@ -6188,7 +6188,7 @@ var script$13 = {
      * @param {String|Number} value
      */
     removeSelectedItemByValue: function removeSelectedItemByValue(value) {
-      var index = this.selectedItems.findIndex(function (_) { return _.value === value; });
+      var index = this.selectedItems.map(function (_) { return _.value; }).indexOf(value);
       this.selectedItems.splice(index, 1);
     },
     /**
@@ -6296,7 +6296,7 @@ var script$13 = {
       var arr = this.children.filter(function (_) { return !_.isDelete; });
       var len = arr.length;
       if (!len) { return }
-      var focusIndex = arr.findIndex(function (_) { return _.focus; });
+      var focusIndex = arr.map(function (_) { return _.focus; }).indexOf(true);
       this.children.forEach(function (_) { return _.$data.focus = false; });
       if (dir === 'down') {
         if (focusIndex < len - 1) {
@@ -7290,10 +7290,74 @@ var __vue_staticRenderFns__$1g = [];
 var Anchor = UiAnchor;
 var AnchorLink = UiAnchorLink;
 
-/* script */
+//
+var script$1a = {
+  name: 'UiTime',
+  data: function data() {
+    return { convertedValue: '' }
+  },
+  props: {
+    time: [Number, Date, String],
+    type: {
+      default: 'relative',
+      validator: function validator(value) {
+        return ['relative', 'date', 'datetime'].indexOf(value) !== -1
+      }
+    },
+    interval: {
+      type: Number,
+      default: 60
+    },
+    hash: String
+  },
+  computed: {
+    tag: function tag() {
+      return this.hash ? 'a' : 'span'
+    }
+  },
+  mounted: function mounted() {
+    this.update();
+  },
+  beforeDestroy: function beforeDestroy() {
+    clearInterval(this.tid);
+  },
+  methods: {
+    update: function update() {
+      var this$1 = this;
 
+      this.convert();
+      if (this.type !== 'relative') { return }
+      this.tid = setInterval(function () { return this$1.convert(); }, this.interval * 1000);
+    },
+    convert: function convert() {
+      this.convertedValue = ({
+        relative: this.convertRelTime(),
+        date: dateFormat(this.time, 'yyyy-MM-dd'),
+        datetime: dateFormat(this.time, 'yyyy-MM-dd hh:mm:ss')
+      })[this.type];
+    },
+    convertRelTime: function convertRelTime() {
+      var ms = (Date.now() - new Date(this.time)) / 1000;
+      if (ms < 60) {
+        return ((~~ms) + "秒前")
+      } else if (ms < 3600) {
+        return ((~~(ms / 60)) + "分钟前")
+      } else if (ms < 86400) {
+        return ((~~(ms / 3600)) + "小时前")
+      } else if (ms < 2592000) {
+        return ((~~(ms / 86400)) + "天前")
+      } else if (ms < 31104000) {
+        return ((~~(ms / 2592000)) + "个月前")
+      }
+      return ((~~(ms / 31104000)) + "年前")
+    }
+  }
+};
+
+/* script */
+var __vue_script__$1a = script$1a;
 /* template */
-var __vue_render__$1h = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')};
+var __vue_render__$1h = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c(_vm.tag,{tag:"span",staticClass:"ui-time",attrs:{"href":_vm.hash}},[_vm._v(_vm._s(_vm.convertedValue))])};
 var __vue_staticRenderFns__$1h = [];
 
   /* style */
@@ -7313,7 +7377,7 @@ var __vue_staticRenderFns__$1h = [];
   var Time = normalizeComponent_1(
     { render: __vue_render__$1h, staticRenderFns: __vue_staticRenderFns__$1h },
     __vue_inject_styles__$1h,
-    {},
+    __vue_script__$1a,
     __vue_scope_id__$1h,
     __vue_is_functional_template__$1h,
     __vue_module_identifier__$1h,
@@ -7322,7 +7386,7 @@ var __vue_staticRenderFns__$1h = [];
   );
 
 //
-var script$1a = {
+var script$1b = {
   components: { UiIcon: Icon },
   data: function data() {
     return {
@@ -7452,7 +7516,7 @@ var script$1a = {
 };
 
 /* script */
-var __vue_script__$1a = script$1a;
+var __vue_script__$1b = script$1b;
 /* template */
 var __vue_render__$1i = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ui-swiper",class:_vm.arrow,on:{"mouseenter":_vm.stopTimer,"mouseleave":_vm.startTimer}},[_c('button',{staticClass:"ui-swiper-arrow prev",attrs:{"disabled":_vm.disabledPrev},on:{"click":_vm.toPrev}},[_c('UiIcon',{attrs:{"type":"chevron-left"}})],1),_vm._v(" "),_c('div',{staticClass:"ui-swiper-list"},[_c('div',{style:(_vm.trackStyle)},[_vm._t("default")],2)]),_vm._v(" "),_c('button',{staticClass:"ui-swiper-arrow next",attrs:{"disabled":_vm.disabledNext},on:{"click":_vm.toNext}},[_c('UiIcon',{attrs:{"type":"chevron-right"}})],1),_vm._v(" "),_c('ul',{staticClass:"ui-swiper-dots",class:[_vm.dots, {circle: _vm.radiusDot}]},_vm._l((_vm.children.length),function(i){return _c('li',{key:i,class:{active: _vm.curIndex === i - 1},on:{"click":function($event){return _vm.handleDotEvent(i - 1, $event)},"mouseover":function($event){return _vm.handleDotEvent(i - 1, $event)}}})}),0)])};
 var __vue_staticRenderFns__$1i = [];
@@ -7474,7 +7538,7 @@ var __vue_staticRenderFns__$1i = [];
   var Swiper = normalizeComponent_1(
     { render: __vue_render__$1i, staticRenderFns: __vue_staticRenderFns__$1i },
     __vue_inject_styles__$1i,
-    __vue_script__$1a,
+    __vue_script__$1b,
     __vue_scope_id__$1i,
     __vue_is_functional_template__$1i,
     __vue_module_identifier__$1i,
@@ -7486,12 +7550,12 @@ var __vue_staticRenderFns__$1i = [];
 //
 //
 
-var script$1b = {
+var script$1c = {
   name: 'ui-swiper-item'
 };
 
 /* script */
-var __vue_script__$1b = script$1b;
+var __vue_script__$1c = script$1c;
 
 /* template */
 var __vue_render__$1j = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ui-swiper-item"},[_vm._t("default")],2)};
@@ -7514,7 +7578,7 @@ var __vue_staticRenderFns__$1j = [];
   var SwiperItem = normalizeComponent_1(
     { render: __vue_render__$1j, staticRenderFns: __vue_staticRenderFns__$1j },
     __vue_inject_styles__$1j,
-    __vue_script__$1b,
+    __vue_script__$1c,
     __vue_scope_id__$1j,
     __vue_is_functional_template__$1j,
     __vue_module_identifier__$1j,
@@ -7539,14 +7603,14 @@ var __vue_staticRenderFns__$1j = [];
 //
 //
 
-var script$1c = {
+var script$1d = {
   props: {
     columns: Array
   }
 };
 
 /* script */
-var __vue_script__$1c = script$1c;
+var __vue_script__$1d = script$1d;
 
 /* template */
 var __vue_render__$1k = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ui-table-header"},[_c('table',[_c('colgroup',_vm._l((_vm.columns),function(item){return _c('col',{key:item.key})}),0),_vm._v(" "),_c('thead',[_c('tr',_vm._l((_vm.columns),function(item){return _c('th',{key:item.key},[_c('div',{staticClass:"ui-table-cell"},[_vm._v(_vm._s(item.title))])])}),0)])])])};
@@ -7569,7 +7633,7 @@ var __vue_staticRenderFns__$1k = [];
   var UiTableHeader = normalizeComponent_1(
     { render: __vue_render__$1k, staticRenderFns: __vue_staticRenderFns__$1k },
     __vue_inject_styles__$1k,
-    __vue_script__$1c,
+    __vue_script__$1d,
     __vue_scope_id__$1k,
     __vue_is_functional_template__$1k,
     __vue_module_identifier__$1k,
@@ -7591,7 +7655,7 @@ var __vue_staticRenderFns__$1k = [];
 //
 //
 
-var script$1d = {
+var script$1e = {
   props: {
     data: Array,
     columns: Array,
@@ -7610,7 +7674,7 @@ var script$1d = {
 };
 
 /* script */
-var __vue_script__$1d = script$1d;
+var __vue_script__$1e = script$1e;
 
 /* template */
 var __vue_render__$1l = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ui-table-body"},[_c('table',[_c('tbody',_vm._l((_vm.data),function(row,index){return _c('tr',{key:index,class:_vm.setRowClassName(row, index)},_vm._l((_vm.columns),function(col){return _c('td',{key:col.key,class:_vm.setColClassName(row, col)},[_c('div',{staticClass:"ui-table-cell"},[_vm._v(_vm._s(row[col.key]))])])}),0)}),0)])])};
@@ -7633,7 +7697,7 @@ var __vue_staticRenderFns__$1l = [];
   var UiTableBody = normalizeComponent_1(
     { render: __vue_render__$1l, staticRenderFns: __vue_staticRenderFns__$1l },
     __vue_inject_styles__$1l,
-    __vue_script__$1d,
+    __vue_script__$1e,
     __vue_scope_id__$1l,
     __vue_is_functional_template__$1l,
     __vue_module_identifier__$1l,
@@ -7642,7 +7706,7 @@ var __vue_staticRenderFns__$1l = [];
   );
 
 //
-var script$1e = {
+var script$1f = {
   components: { UiTableHeader: UiTableHeader, UiTableBody: UiTableBody },
   props: {
     data: {
@@ -7691,7 +7755,7 @@ var script$1e = {
 };
 
 /* script */
-var __vue_script__$1e = script$1e;
+var __vue_script__$1f = script$1f;
 /* template */
 var __vue_render__$1m = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ui-table-wrapper",class:[{stripe: _vm.stripe, border: _vm.border}]},[_c('div',{staticClass:"ui-table"},[_c('UiTableHeader',{attrs:{"columns":_vm.columns}}),_vm._v(" "),_c('UiTableBody',{style:(_vm.bodyStyle),attrs:{"data":_vm.data,"columns":_vm.columns,"rowClassName":_vm.rowClassName}})],1)])};
 var __vue_staticRenderFns__$1m = [];
@@ -7713,7 +7777,7 @@ var __vue_staticRenderFns__$1m = [];
   var Table = normalizeComponent_1(
     { render: __vue_render__$1m, staticRenderFns: __vue_staticRenderFns__$1m },
     __vue_inject_styles__$1m,
-    __vue_script__$1e,
+    __vue_script__$1f,
     __vue_scope_id__$1m,
     __vue_is_functional_template__$1m,
     __vue_module_identifier__$1m,
@@ -7759,7 +7823,7 @@ var propsMixin = {
 };
 
 //
-var script$1f = {
+var script$1g = {
   data: function data() {
     return {
       weeks: ['日', '一', '二', '三', '四', '五', '六']
@@ -7784,7 +7848,7 @@ var script$1f = {
 };
 
 /* script */
-var __vue_script__$1f = script$1f;
+var __vue_script__$1g = script$1g;
 /* template */
 var __vue_render__$1n = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ui-datepicker-dateview"},[_vm._l((_vm.weeks),function(cell){return _c('span',{key:cell,staticClass:"ui-datepicker-dateview-cell disabled"},[_c('span',[_vm._v(_vm._s(cell))])])}),_vm._v(" "),_vm._l((_vm.dayCount),function(cell){return _c('span',{key:cell,staticClass:"ui-datepicker-dateview-cell"},[_c('span',[_vm._v(_vm._s(cell))])])})],2)};
 var __vue_staticRenderFns__$1n = [];
@@ -7806,7 +7870,7 @@ var __vue_staticRenderFns__$1n = [];
   var UiDateView = normalizeComponent_1(
     { render: __vue_render__$1n, staticRenderFns: __vue_staticRenderFns__$1n },
     __vue_inject_styles__$1n,
-    __vue_script__$1f,
+    __vue_script__$1g,
     __vue_scope_id__$1n,
     __vue_is_functional_template__$1n,
     __vue_module_identifier__$1n,
@@ -7815,12 +7879,12 @@ var __vue_staticRenderFns__$1n = [];
   );
 
 //
-var script$1g = {
+var script$1h = {
   components: { UiIcon: Icon }
 };
 
 /* script */
-var __vue_script__$1g = script$1g;
+var __vue_script__$1h = script$1h;
 /* template */
 var __vue_render__$1o = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"ui-datepicker-header"},[_c('span',{staticClass:"ui-datepicker-header-icon"},[_c('UiIcon',{attrs:{"type":"ios-arrow-left"}}),_vm._v(" "),_c('UiIcon',{attrs:{"type":"ios-arrow-left"}})],1),_vm._v(" "),_c('span',{staticClass:"ui-datepicker-header-icon"},[_c('UiIcon',{attrs:{"type":"ios-arrow-left"}})],1),_vm._v(" "),_vm._m(0),_vm._v(" "),_c('span',{staticClass:"ui-datepicker-header-icon"},[_c('UiIcon',{attrs:{"type":"ios-arrow-right"}})],1),_vm._v(" "),_c('span',{staticClass:"ui-datepicker-header-icon"},[_c('UiIcon',{attrs:{"type":"ios-arrow-right"}}),_vm._v(" "),_c('UiIcon',{attrs:{"type":"ios-arrow-right"}})],1)])};
 var __vue_staticRenderFns__$1o = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span',{staticClass:"ui-datepicker-header-labels"},[_c('span',{staticClass:"ui-datepicker-header-label"},[_vm._v("2019年")]),_vm._v(" "),_c('span',{staticClass:"ui-datepicker-header-label"},[_vm._v("4月")])])}];
@@ -7842,7 +7906,7 @@ var __vue_staticRenderFns__$1o = [function () {var _vm=this;var _h=_vm.$createEl
   var UiHeader$1 = normalizeComponent_1(
     { render: __vue_render__$1o, staticRenderFns: __vue_staticRenderFns__$1o },
     __vue_inject_styles__$1o,
-    __vue_script__$1g,
+    __vue_script__$1h,
     __vue_scope_id__$1o,
     __vue_is_functional_template__$1o,
     __vue_module_identifier__$1o,
@@ -7851,7 +7915,7 @@ var __vue_staticRenderFns__$1o = [function () {var _vm=this;var _h=_vm.$createEl
   );
 
 //
-var script$1h = {
+var script$1i = {
   name: 'ui-datepicker',
   mixins: [propsMixin],
   components: { UiInput: Input, UiDrop: UiDrop, UiDateView: UiDateView, UiHeader: UiHeader$1 },
@@ -7893,7 +7957,7 @@ var script$1h = {
 };
 
 /* script */
-var __vue_script__$1h = script$1h;
+var __vue_script__$1i = script$1i;
 /* template */
 var __vue_render__$1p = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{directives:[{name:"winclick",rawName:"v-winclick",value:(_vm.handleWinClick),expression:"handleWinClick"}],staticClass:"ui-datepicker",on:{"click":_vm.handleClick}},[_c('UiInput',{attrs:{"icon":"ios-calendar-outline"}}),_vm._v(" "),_c('ui-drop',{ref:"UiDrop",staticClass:"ui-datepicker-dropdown",attrs:{"visible":_vm.dropVisible,"parentName":_vm.$options.name}},[_c('UiHeader'),_vm._v(" "),_c('UiDateView')],1)],1)};
 var __vue_staticRenderFns__$1p = [];
@@ -7915,7 +7979,7 @@ var __vue_staticRenderFns__$1p = [];
   var DatePicker = normalizeComponent_1(
     { render: __vue_render__$1p, staticRenderFns: __vue_staticRenderFns__$1p },
     __vue_inject_styles__$1p,
-    __vue_script__$1h,
+    __vue_script__$1i,
     __vue_scope_id__$1p,
     __vue_is_functional_template__$1p,
     __vue_module_identifier__$1p,
@@ -7924,7 +7988,7 @@ var __vue_staticRenderFns__$1p = [];
   );
 
 //
-var script$1i = {
+var script$1j = {
   mixins: [propsMixin],
   props: {
     type: {
@@ -7945,7 +8009,7 @@ var script$1i = {
 };
 
 /* script */
-var __vue_script__$1i = script$1i;
+var __vue_script__$1j = script$1j;
 /* template */
 var __vue_render__$1q = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')};
 var __vue_staticRenderFns__$1q = [];
@@ -7967,7 +8031,7 @@ var __vue_staticRenderFns__$1q = [];
   var TimePicker = normalizeComponent_1(
     { render: __vue_render__$1q, staticRenderFns: __vue_staticRenderFns__$1q },
     __vue_inject_styles__$1q,
-    __vue_script__$1i,
+    __vue_script__$1j,
     __vue_scope_id__$1q,
     __vue_is_functional_template__$1q,
     __vue_module_identifier__$1q,

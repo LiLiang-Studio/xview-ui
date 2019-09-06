@@ -53,6 +53,7 @@ import Divider from '../pages/Divider.vue'
 import Cell from '../pages/Cell.vue'
 import Drawer from '../pages/Drawer.vue'
 import Time from '../pages/Time.vue'
+import Split from '../pages/Split.vue'
 
 Vue.use(Router)
 
@@ -93,6 +94,7 @@ export const routeComponents = {
   Transfer,
   Tree,
   Time,
+  Split,
 
   DatePicker,
   TimePicker,

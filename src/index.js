@@ -74,6 +74,10 @@ import InputNumber from './components/input-number'
 import Transfer from './components/transfer'
 // 树形控件
 import Tree from './components/tree'
+// 相对时间
+import Time from './components/time'
+// 面板分割
+import Split from './components/split'
 
 // 上传
 import Upload from './components/upload'
@@ -99,12 +103,8 @@ import Slider from './components/slider'
 import Page from './components/page'
 // 自动完成
 import AutoComplete from './components/auto-complete'
-// 面板分割
-import Split from './components/split'
 // 锚点
 import { Anchor, AnchorLink } from './components/anchor'
-// 相对时间
-import Time from './components/time'
 
 // 轮播切换
 import Swiper from './components/swiper/Swiper.vue'
@@ -165,11 +165,11 @@ const comps = {
   InputNumber,
   Transfer,
   Tree,
-
   Time,
+  Split,
+
   Anchor,
   AnchorLink,
-  Split,
   Cascader,
   ColorPicker,
   Upload,

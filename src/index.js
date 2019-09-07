@@ -78,6 +78,8 @@ import Tree from './components/tree'
 import Time from './components/time'
 // 面板分割
 import Split from './components/split'
+// 走马灯
+import { Carousel, CarouselItem } from './components/carousel'
 
 // 上传
 import Upload from './components/upload'
@@ -106,9 +108,6 @@ import AutoComplete from './components/auto-complete'
 // 锚点
 import { Anchor, AnchorLink } from './components/anchor'
 
-// 轮播切换
-import Swiper from './components/swiper/Swiper.vue'
-import SwiperItem from './components/swiper/SwiperItem.vue'
 // 表格
 import Table from './components/table/Table.vue'
 // 日期选择器
@@ -167,14 +166,14 @@ const comps = {
   Tree,
   Time,
   Split,
+  Carousel,
+  CarouselItem,
 
   Anchor,
   AnchorLink,
   Cascader,
   ColorPicker,
   Upload,
-  Swiper,
-  SwiperItem,
   Select,
   Option,
   OptionGroup,

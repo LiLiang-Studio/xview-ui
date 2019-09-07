@@ -33,7 +33,6 @@ import ISwitch from '../pages/Switch.vue'
 import Radio from '../pages/Radio.vue'
 import Grid from '../pages/Grid.vue'
 import Layout from '../pages/Layout.vue'
-import Swiper from '../pages/Swiper.vue'
 import Alert from '../pages/Alert.vue'
 import BackTop from '../pages/BackTop.vue'
 import Badge from '../pages/Badge.vue'
@@ -54,6 +53,7 @@ import Cell from '../pages/Cell.vue'
 import Drawer from '../pages/Drawer.vue'
 import Time from '../pages/Time.vue'
 import Split from '../pages/Split.vue'
+import Carousel from '../pages/Carousel.vue'
 
 Vue.use(Router)
 
@@ -95,6 +95,7 @@ export const routeComponents = {
   Tree,
   Time,
   Split,
+  Carousel,
 
   DatePicker,
   TimePicker,
@@ -107,8 +108,7 @@ export const routeComponents = {
   Menu,
   Dropdown,
   Page,
-  Select,
-  Swiper
+  Select
 }
 
 const router = new Router({

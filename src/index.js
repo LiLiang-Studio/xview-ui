@@ -80,6 +80,8 @@ import Time from './components/time'
 import Split from './components/split'
 // 走马灯
 import { Carousel, CarouselItem } from './components/carousel'
+// 锚点
+import { Anchor, AnchorLink } from './components/anchor'
 
 // 上传
 import Upload from './components/upload'
@@ -105,8 +107,6 @@ import Slider from './components/slider'
 import Page from './components/page'
 // 自动完成
 import AutoComplete from './components/auto-complete'
-// 锚点
-import { Anchor, AnchorLink } from './components/anchor'
 
 // 表格
 import Table from './components/table/Table.vue'
@@ -168,9 +168,9 @@ const comps = {
   Split,
   Carousel,
   CarouselItem,
-
   Anchor,
   AnchorLink,
+
   Cascader,
   ColorPicker,
   Upload,
@@ -211,7 +211,6 @@ export default {
     Vue.LoadingBar = Vue.prototype.$Loading = loadingBarService(Vue)
     let prefix = typeof options.prefix === 'string' ? options.prefix : 'Ui'
     for (let name in comps) Vue.component(prefix + name, comps[name])
-
     // 全局指令
     createDirectives(Vue)
   }

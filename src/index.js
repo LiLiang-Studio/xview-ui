@@ -82,9 +82,9 @@ import Split from './components/split'
 import { Carousel, CarouselItem } from './components/carousel'
 // 锚点
 import { Anchor, AnchorLink } from './components/anchor'
-
 // 上传
 import Upload from './components/upload'
+
 // 颜色选择器
 import ColorPicker from './components/color-picker'
 // 级联选择
@@ -170,10 +170,10 @@ const comps = {
   CarouselItem,
   Anchor,
   AnchorLink,
+  Upload,
 
   Cascader,
   ColorPicker,
-  Upload,
   Select,
   Option,
   OptionGroup,

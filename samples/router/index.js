@@ -55,6 +55,7 @@ import Time from '../pages/Time.vue'
 import Split from '../pages/Split.vue'
 import Carousel from '../pages/Carousel.vue'
 import Anchor from '../pages/Anchor.vue'
+import Upload from '../pages/Upload.vue'
 
 Vue.use(Router)
 
@@ -98,6 +99,7 @@ export const routeComponents = {
   Split,
   Carousel,
   Anchor,
+  Upload,
 
   DatePicker,
   TimePicker,

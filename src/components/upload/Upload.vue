@@ -1,6 +1,6 @@
 <template>
   <div :class="prefix">
-    <input type="file" ref="File" v-show="false" :disabled="disabled" :multiple="multiple" :accept="accept">
+    <input type="file" ref="File" v-show="false" :disabled="disabled" :multiple="multiple" :accept="accept" @change="onFileChange">
     <div :class="`${prefix}-${type}`" @click="selectFile">
       <slot></slot>
     </div>
@@ -27,7 +27,10 @@ export default {
   name: 'UiUpload',
   components: { UiIcon, UiProgress, UiCloseIconButton },
   data() {
-    return { prefix: 'ui-upload' }
+    return {
+      prefix: 'ui-upload',
+      fileList: []
+    }
   },
   props: {
     action: {
@@ -84,6 +87,41 @@ export default {
   methods: {
     selectFile() {
       this.$refs.File.click()
+    },
+    onFileChange(e) {
+
+    },
+    validFormat(file) {
+      if (this.format.length) {
+        let fileFormat = file.name.split('.').pop().toLowerCase()
+        if (this.format.every(_ => _.toLowerCase() !== fileFormat)) {
+          this.onFormatError && this.onFormatError(file, )
+          return false
+        }
+      }
+      return true
+    },
+    validSize(file) {
+      if (this.maxSize && file.size > this.maxSize * 1024) {
+        this.onExceededSize && this.onExceededSize(file, this.fileList)
+        return false
+      }
+      return true
+    },
+    upload(file) {
+      const formData = new FormData()
+      formData.append(this.name, file)
+      const xhr = new XMLHttpRequest()
+      xhr.onprogress = e => {
+
+      }
+      xhr.onload = () => {
+
+      }
+      xhr.open('post', this.action, true)
+      xhr.withCredentials = this.withCredentials
+      Object.keys(this.headers).forEach(_ => xhr.setRequestHeader(_, headers[_]))
+      xhr.send(formData)
     }
   }
 }

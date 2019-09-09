@@ -8,7 +8,7 @@
       </div>
       <div v-if="!hideInfo" :class="`${prefix}-text`">
         <slot>
-          <UiIcon v-if="statusIcon" :type="statusIcon"/>
+          <UiIcon v-if="statusIcon" :class="`${prefix}-status-icon`" :type="statusIcon"/>
           <span v-else>{{Math.min(percent, 100)}}%</span>
         </slot>
       </div>
@@ -125,6 +125,9 @@ export default {
   }
   &-bg {
     transition: width .2s;
+  }
+  &-status-icon {
+    font-size: 14px;
   }
 }
 </style>

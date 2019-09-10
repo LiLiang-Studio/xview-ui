@@ -5582,7 +5582,8 @@ var script$X = {
   data: function data() {
     return {
       prefix: 'ui-upload',
-      fileList: []
+      fileList: [],
+      dragOver: false
     }
   },
   props: {
@@ -5595,7 +5596,6 @@ var script$X = {
       default: function () { return ({}); }
     },
     multiple: Boolean,
-    paste: Boolean,
     disabled: Boolean,
     data: Object,
     name: {
@@ -5652,10 +5652,15 @@ var script$X = {
     selectFile: function selectFile() {
       this.$refs.File.click();
     },
+    onDrop: function onDrop(e) {
+      this.dragOver = false;
+      if (this.disabled) { return }
+      this.onFileChange(e);
+    },
     onFileChange: function onFileChange(e) {
       var this$1 = this;
 
-      var files = Array.prototype.slice.call(e.target.files);
+      var files = Array.prototype.slice.call(e.target.files || e.dataTransfer.files);
       files.forEach(function (file) { return this$1.validFormat(file) && this$1.validSize(file) && this$1.upload(file); });
       this.$nextTick(function () { return e.target.value = ''; });
     },
@@ -5739,7 +5744,7 @@ var script$X = {
 /* script */
 var __vue_script__$X = script$X;
 /* template */
-var __vue_render__$_ = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.prefix},[_c('input',{directives:[{name:"show",rawName:"v-show",value:(false),expression:"false"}],ref:"File",attrs:{"type":"file","disabled":_vm.disabled,"multiple":_vm.multiple,"accept":_vm.accept},on:{"change":_vm.onFileChange}}),_vm._v(" "),_c('div',{class:(_vm.prefix + "-" + _vm.type),on:{"click":_vm.selectFile}},[_vm._t("default")],2),_vm._v(" "),(_vm.showUploadList)?_c('ul',{class:(_vm.prefix + "-list")},_vm._l((_vm.fileList),function(item){return _c('li',{key:item.key},[_c('div',{class:(_vm.prefix + "-finish")},[_c('ui-icon',{attrs:{"type":"document"}}),_vm._v(" "),_c('span',{class:(_vm.prefix + "-filename"),on:{"click":_vm.previewItem}},[_vm._v(_vm._s(item.name))]),_vm._v(" "),_c('b',{class:(_vm.prefix + "-spring")}),_vm._v(" "),_c('ui-close-icon-button',{class:(_vm.prefix + "-remove"),attrs:{"size":"18"},on:{"click":function($event){return _vm.removeItem(item)}}})],1),_vm._v(" "),_c('transition',{attrs:{"name":(_vm.prefix + "-progressbar")}},[(item.showProgress)?_c('ui-progress',{class:(_vm.prefix + "-progressbar"),attrs:{"strokeWidth":2,"percent":item.percentage,"status":item.status}}):_vm._e()],1)],1)}),0):_vm._e(),_vm._v(" "),(_vm.hasTip)?_c('div',{class:(_vm.prefix + "-tip")},[_vm._t("tip")],2):_vm._e()])};
+var __vue_render__$_ = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.prefix},[_c('input',{directives:[{name:"show",rawName:"v-show",value:(false),expression:"false"}],ref:"File",attrs:{"type":"file","disabled":_vm.disabled,"multiple":_vm.multiple,"accept":_vm.accept},on:{"change":_vm.onFileChange}}),_vm._v(" "),_c('div',{class:[(_vm.prefix + "-" + _vm.type), {dragOver: _vm.dragOver}],on:{"click":_vm.selectFile,"drop":function($event){$event.preventDefault();return _vm.onDrop($event)},"dragover":function($event){$event.preventDefault();_vm.dragOver = true;},"dragleave":function($event){$event.preventDefault();_vm.dragOver = false;}}},[_vm._t("default")],2),_vm._v(" "),(_vm.showUploadList)?_c('ul',{class:(_vm.prefix + "-list")},_vm._l((_vm.fileList),function(item){return _c('li',{key:item.key},[_c('div',{class:(_vm.prefix + "-finish")},[_c('ui-icon',{attrs:{"type":"document"}}),_vm._v(" "),_c('span',{class:(_vm.prefix + "-filename"),on:{"click":_vm.previewItem}},[_vm._v(_vm._s(item.name))]),_vm._v(" "),_c('b',{class:(_vm.prefix + "-spring")}),_vm._v(" "),_c('ui-close-icon-button',{class:(_vm.prefix + "-remove"),attrs:{"size":"18"},on:{"click":function($event){return _vm.removeItem(item)}}})],1),_vm._v(" "),_c('transition',{attrs:{"name":(_vm.prefix + "-progressbar")}},[(item.showProgress)?_c('ui-progress',{class:(_vm.prefix + "-progressbar"),attrs:{"strokeWidth":2,"percent":item.percentage,"status":item.status}}):_vm._e()],1)],1)}),0):_vm._e(),_vm._v(" "),(_vm.hasTip)?_c('div',{class:(_vm.prefix + "-tip")},[_vm._t("tip")],2):_vm._e()])};
 var __vue_staticRenderFns__$_ = [];
 
   /* style */

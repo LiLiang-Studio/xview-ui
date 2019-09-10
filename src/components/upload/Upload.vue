@@ -1,7 +1,8 @@
 <template>
   <div :class="prefix">
     <input type="file" ref="File" v-show="false" :disabled="disabled" :multiple="multiple" :accept="accept" @change="onFileChange">
-    <div :class="`${prefix}-${type}`" @click="selectFile">
+    <div :class="[`${prefix}-${type}`, {dragOver}]" @click="selectFile" 
+      @drop.prevent="onDrop" @dragover.prevent="dragOver = true" @dragleave.prevent="dragOver = false">
       <slot></slot>
     </div>
     <ul v-if="showUploadList" :class="`${prefix}-list`">
@@ -34,7 +35,8 @@ export default {
   data() {
     return {
       prefix: 'ui-upload',
-      fileList: []
+      fileList: [],
+      dragOver: false
     }
   },
   props: {
@@ -47,7 +49,6 @@ export default {
       default: () => ({})
     },
     multiple: Boolean,
-    paste: Boolean,
     disabled: Boolean,
     data: Object,
     name: {
@@ -106,8 +107,13 @@ export default {
     selectFile() {
       this.$refs.File.click()
     },
+    onDrop(e) {
+      this.dragOver = false
+      if (this.disabled) return
+      this.onFileChange(e)
+    },
     onFileChange(e) {
-      let files = Array.prototype.slice.call(e.target.files)
+      let files = Array.prototype.slice.call(e.target.files || e.dataTransfer.files)
       files.forEach(file => this.validFormat(file) && this.validSize(file) && this.upload(file))
       this.$nextTick(() => e.target.value = '')
     },
@@ -202,6 +208,9 @@ export default {
     transition: border-color .2s ease;
     &:hover {
       border-color: @primary-color;
+    }
+    &.dragOver {
+      border: 2px dashed @primary-color;
     }
   }
   &-tip, &-list {

@@ -482,13 +482,25 @@ var __vue_staticRenderFns__$2 = [];
 //
 var script$3 = {
   name: 'UiCloseIconButton',
-  components: { UiIcon: Icon }
+  components: { UiIcon: Icon },
+  props: {
+    size: {
+      type: [Number, String],
+      default: 22
+    }
+  },
+  computed: {
+    styles: function styles() {
+      var size = parseSize(this.size);
+      return { width: size, fontSize: size }
+    }
+  }
 };
 
 /* script */
 var __vue_script__$3 = script$3;
 /* template */
-var __vue_render__$3 = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('UiIcon',_vm._g({staticClass:"ui-close-icon-button",attrs:{"type":"ios-close-empty"}},_vm.$listeners))};
+var __vue_render__$3 = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('UiIcon',_vm._g({staticClass:"ui-close-icon-button",style:(_vm.styles),attrs:{"type":"ios-close-empty"}},_vm.$listeners))};
 var __vue_staticRenderFns__$3 = [];
 
   /* style */
@@ -2071,7 +2083,7 @@ var script$m = {
 /* script */
 var __vue_script__$m = script$m;
 /* template */
-var __vue_render__$m = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:[_vm.prefix, _vm.curStatus, {vertical: _vm.vertical}]},[_c('div',{class:(_vm.prefix + "-box")},[_c('div',{class:(_vm.prefix + "-outer")},[_c('div',{class:(_vm.prefix + "-inner"),style:(_vm.innerStyle)},[_c('div',{class:(_vm.prefix + "-bg"),style:(_vm.bgStyle)})])]),_vm._v(" "),(!_vm.hideInfo)?_c('div',{class:(_vm.prefix + "-text")},[_vm._t("default",[(_vm.statusIcon)?_c('UiIcon',{attrs:{"type":_vm.statusIcon}}):_c('span',[_vm._v(_vm._s(Math.min(_vm.percent, 100))+"%")])])],2):_vm._e()])])};
+var __vue_render__$m = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:[_vm.prefix, _vm.curStatus, {vertical: _vm.vertical}]},[_c('div',{class:(_vm.prefix + "-box")},[_c('div',{class:(_vm.prefix + "-outer")},[_c('div',{class:(_vm.prefix + "-inner"),style:(_vm.innerStyle)},[_c('div',{class:(_vm.prefix + "-bg"),style:(_vm.bgStyle)})])]),_vm._v(" "),(!_vm.hideInfo)?_c('div',{class:(_vm.prefix + "-text")},[_vm._t("default",[(_vm.statusIcon)?_c('UiIcon',{class:(_vm.prefix + "-status-icon"),attrs:{"type":_vm.statusIcon}}):_c('span',[_vm._v(_vm._s(Math.min(_vm.percent, 100))+"%")])])],2):_vm._e()])])};
 var __vue_staticRenderFns__$m = [];
 
   /* style */
@@ -5565,17 +5577,171 @@ var Anchor = UiAnchor;
 var AnchorLink = UiAnchorLink;
 
 //
-//
-//
-
+var incKey = 0;
 var script$X = {
-  
+  name: 'UiUpload',
+  components: { UiIcon: Icon, UiProgress: Progress, UiCloseIconButton: CloseIconButton },
+  data: function data() {
+    return {
+      prefix: 'ui-upload',
+      fileList: []
+    }
+  },
+  props: {
+    action: {
+      type: String,
+      required: true
+    },
+    headers: {
+      type: Object,
+      default: function () { return ({}); }
+    },
+    multiple: Boolean,
+    paste: Boolean,
+    disabled: Boolean,
+    data: Object,
+    name: {
+      type: String,
+      default: 'file'
+    },
+    withCredentials: Boolean,
+    showUploadList: {
+      type: Boolean,
+      default: true
+    },
+    type: {
+      default: 'select',
+      validator: function validator(value) {
+        return ['select', 'drag'].indexOf(value) !== -1
+      }
+    },
+    accept: String,
+    format: {
+      type: Array,
+      default: function () { return []; }
+    },
+    maxSize: Number,
+    beforeUpload: Function,
+    onProgress: Function,
+    onSuccess: Function,
+    onError: Function,
+    onPreview: Function,
+    onRemove: Function,
+    onFormatError: Function,
+    onExceededSize: Function,
+    defaultFileList: {
+      type: Array,
+      default: function () { return []; }
+    }
+  },
+  computed: {
+    hasTip: function hasTip() {
+      return this.$slots.tip !== undefined
+    }
+  },
+  watch: {
+    defaultFileList: {
+      immediate: true,
+      handler: function handler(newval) {
+        this.fileList = newval.map(function (_) { return (Object.assign({}, _, 
+          {key: incKey++,
+          showProgress: false,
+          status: 'success'})); });
+      }
+    }
+  },
+  methods: {
+    selectFile: function selectFile() {
+      this.$refs.File.click();
+    },
+    onFileChange: function onFileChange(e) {
+      var this$1 = this;
+
+      var files = Array.prototype.slice.call(e.target.files);
+      files.forEach(function (file) { return this$1.validFormat(file) && this$1.validSize(file) && this$1.upload(file); });
+      this.$nextTick(function () { return e.target.value = ''; });
+    },
+    validFormat: function validFormat(file) {
+      if (this.format.length) {
+        var fileFormat = file.name.split('.').pop().toLowerCase();
+        if (this.format.every(function (_) { return _.toLowerCase() !== fileFormat; })) {
+          this.onFormatError && this.onFormatError(file, this.fileList);
+          return false
+        }
+      }
+      return true
+    },
+    validSize: function validSize(file) {
+      if (this.maxSize && file.size > this.maxSize * 1024) {
+        this.onExceededSize && this.onExceededSize(file, this.fileList);
+        return false
+      }
+      return true
+    },
+    upload: function upload(file) {
+      var this$1 = this;
+
+      var fileItem = {
+        file: file,
+        percentage: 0,
+        key: incKey++,
+        name: file.name,
+        status: 'normal',
+        showProgress: true
+      };
+      this.fileList.push(fileItem);
+      var formData = new FormData();
+      formData.append(this.name, file);
+      this.data && Object.keys(this.data).forEach(function (_) { return formData.append(_, this$1.data[_]); });
+      var xhr = new XMLHttpRequest();
+      xhr.onprogress = function (e) {
+        if (e.total > 0) {
+          fileItem.percentage = e.loaded / e.total * 100;
+        }
+        this$1.onProgress && this$1.onProgress(e, fileItem, this$1.fileList);
+      };
+      xhr.onload = function () {
+        if (xhr.status < 200 && xhr.status >= 300) {
+          fileItem.status = 'wrong';
+          fileItem.showProgress = false;
+          this$1.fileList.splice(this$1.fileList.indexOf(fileItem), 1);
+          return this$1.onError && this$1.onError(new Error(("fail to post " + (this$1.action) + " " + (xhr.status) + "'")), fileItem, this$1.fileList)
+        }
+        fileItem.percentage = 100;
+        fileItem.status = 'success';
+        fileItem.showProgress = false;
+        fileItem.response = xhr.response;
+        this$1.onSuccess && this$1.onSuccess(xhr.response, fileItem, this$1.fileList);
+      };
+      xhr.onerror = function (err) {
+        fileItem.percentage = 100;
+        fileItem.status = 'wrong';
+        fileItem.showProgress = false;
+        this$1.fileList.splice(this$1.fileList.indexOf(fileItem), 1);
+        this$1.onError && this$1.onError(err);
+      };
+      xhr.open('post', this.action, true);
+      xhr.withCredentials = this.withCredentials;
+      Object.keys(this.headers).forEach(function (_) { return xhr.setRequestHeader(_, headers[_]); });
+      xhr.send(formData);
+    },
+    removeItem: function removeItem(item) {
+      this.fileList.splice(this.fileList.indexOf(item), 1);
+      this.onRemove && this.onRemove(item, this.fileList);
+    },
+    previewItem: function previewItem(item) {
+      this.onPreview && this.onPreview(item);
+    },
+    clearFiles: function clearFiles() {
+      this.fileList = [];
+    }
+  }
 };
 
 /* script */
 var __vue_script__$X = script$X;
 /* template */
-var __vue_render__$_ = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div')};
+var __vue_render__$_ = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.prefix},[_c('input',{directives:[{name:"show",rawName:"v-show",value:(false),expression:"false"}],ref:"File",attrs:{"type":"file","disabled":_vm.disabled,"multiple":_vm.multiple,"accept":_vm.accept},on:{"change":_vm.onFileChange}}),_vm._v(" "),_c('div',{class:(_vm.prefix + "-" + _vm.type),on:{"click":_vm.selectFile}},[_vm._t("default")],2),_vm._v(" "),(_vm.showUploadList)?_c('ul',{class:(_vm.prefix + "-list")},_vm._l((_vm.fileList),function(item){return _c('li',{key:item.key},[_c('div',{class:(_vm.prefix + "-finish")},[_c('ui-icon',{attrs:{"type":"document"}}),_vm._v(" "),_c('span',{class:(_vm.prefix + "-filename"),on:{"click":_vm.previewItem}},[_vm._v(_vm._s(item.name))]),_vm._v(" "),_c('b',{class:(_vm.prefix + "-spring")}),_vm._v(" "),_c('ui-close-icon-button',{class:(_vm.prefix + "-remove"),attrs:{"size":"18"},on:{"click":function($event){return _vm.removeItem(item)}}})],1),_vm._v(" "),_c('transition',{attrs:{"name":(_vm.prefix + "-progressbar")}},[(item.showProgress)?_c('ui-progress',{class:(_vm.prefix + "-progressbar"),attrs:{"strokeWidth":2,"percent":item.percentage,"status":item.status}}):_vm._e()],1)],1)}),0):_vm._e(),_vm._v(" "),(_vm.hasTip)?_c('div',{class:(_vm.prefix + "-tip")},[_vm._t("tip")],2):_vm._e()])};
 var __vue_staticRenderFns__$_ = [];
 
   /* style */
@@ -8412,10 +8578,10 @@ var comps = {
   CarouselItem: CarouselItem,
   Anchor: Anchor,
   AnchorLink: AnchorLink,
+  Upload: Upload,
 
   Cascader: Cascader,
   ColorPicker: ColorPicker,
-  Upload: Upload,
   Select: Select,
   Option: Option,
   OptionGroup: OptionGroup,

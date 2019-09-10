@@ -15,7 +15,7 @@
     <div class="page-sub-title">多选</div>
     <p>设置属性 multiple，可以选择多个文件。</p>
     <br />
-    <Upload multiple action="//jsonplaceholder.typicode.com/posts/">
+    <Upload multiple action="//jsonplaceholder.typicode.com/posts/" :default-file-list="defaultList">
       <Button icon="ios-cloud-upload-outline">Upload files</Button>
     </Upload>
 
@@ -60,16 +60,14 @@
     <br />
     <div>
       <div class="demo-upload-list" v-for="(item, index) in uploadList" :key="index">
-        <template v-if="item.status === 'finished'">
+        <template v-if="item.status === 'success'">
           <img :src="item.url" />
           <div class="demo-upload-list-cover">
             <Icon type="ios-eye-outline" @click.native="handleView(item.name)"></Icon>
             <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
           </div>
         </template>
-        <template v-else>
-          <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
-        </template>
+        <Progress v-else-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
       </div>
       <Upload
         ref="upload"
@@ -182,6 +180,7 @@ export default {
 <style>
 .demo-upload-list {
   display: inline-block;
+  vertical-align: middle;
   width: 60px;
   height: 60px;
   text-align: center;

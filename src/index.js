@@ -84,6 +84,8 @@ import { Carousel, CarouselItem } from './components/carousel'
 import { Anchor, AnchorLink } from './components/anchor'
 // 上传
 import Upload from './components/upload'
+// 表单
+import { Form, FormItem } from './components/form'
 
 // 颜色选择器
 import ColorPicker from './components/color-picker'
@@ -91,8 +93,6 @@ import ColorPicker from './components/color-picker'
 import Cascader from './components/cascader'
 // 下拉菜单
 import { Dropdown, DropdownItem, DropdownMenu } from './components/dropdown'
-// 表单
-import { Form, FormItem } from './components/form'
 // 菜单
 import { Menu, Submenu, MenuItem, MenuGroup } from './components/menu'
 // 下拉选择框
@@ -171,6 +171,8 @@ const comps = {
   Anchor,
   AnchorLink,
   Upload,
+  Form,
+  FormItem,
 
   Cascader,
   ColorPicker,
@@ -189,8 +191,6 @@ const comps = {
   Poptip,
   Table,
   Slider,
-  Form,
-  FormItem,
   AutoComplete,
   DatePicker,
   TimePicker
@@ -211,7 +211,6 @@ export default {
     Vue.LoadingBar = Vue.prototype.$Loading = loadingBarService(Vue)
     let prefix = typeof options.prefix === 'string' ? options.prefix : 'Ui'
     for (let name in comps) Vue.component(prefix + name, comps[name])
-    // 全局指令
     createDirectives(Vue)
   }
 }

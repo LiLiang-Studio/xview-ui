@@ -3,7 +3,8 @@
     <div class="page-title">Form 表单</div>
     <p>具有数据收集、校验和提交功能的表单，包含复选框、单选框、输入框、下拉选择框等元素。</p>
 
-    <div class="page-sub-title">设置属性 inline，表单元素可以水平排列。</div>
+    <div class="page-sub-title">行内表单</div>
+    <p>设置属性 inline，表单元素可以水平排列。<br><br></p>
     <Form ref="formInline" :model="formInline" :rules="ruleInline" inline>
       <FormItem prop="user">
         <Input type="text" v-model="formInline.user" placeholder="Username">
@@ -78,7 +79,8 @@
       </FormItem>
     </Form>
 
-    <div class="page-sub-title">设置属性 label-position，可以改变表单域标签的位置，left 为左对齐，right 为右对齐，top 会置于表单域顶部。</div>
+    <div class="page-sub-title">对齐方式</div>
+    <p>设置属性 label-position，可以改变表单域标签的位置，left 为左对齐，right 为右对齐，top 会置于表单域顶部。</p><br>
     <Form :model="formLeft" label-position="left" :label-width="100">
       <FormItem label="Title">
         <Input v-model="formLeft.input1"></Input>
@@ -113,7 +115,7 @@
       </FormItem>
     </Form>
 
-    <!-- <div class="page-sub-title">表单验证</div>
+    <div class="page-sub-title">表单验证</div>
     <p>给 Form 设置属性 rules，同时给需要验证的 FormItem 设置属性 prop 指向对应字段即可。验证方法也支持 Promise。</p>
     <br>
     <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
@@ -154,7 +156,7 @@
       </FormItem>
       <FormItem>
         <Button type="primary" @click="handleSubmit('formValidate')">Submit</Button>
-        <Button type="ghost" @click="handleReset('formValidate')" style="margin-left: 8px">Reset</Button>
+        <Button @click="handleReset('formValidate')" style="margin-left: 8px">Reset</Button>
       </FormItem>
     </Form>
 
@@ -173,7 +175,7 @@
       </FormItem>
       <FormItem>
         <Button type="primary" @click="handleSubmit('formCustom')">Submit</Button>
-        <Button type="ghost" @click="handleReset('formCustom')" style="margin-left: 8px">Reset</Button>
+        <Button @click="handleReset('formCustom')" style="margin-left: 8px">Reset</Button>
       </FormItem>
     </Form>
 
@@ -196,7 +198,7 @@
             <Input type="text" v-model="item.value" placeholder="Enter something..."></Input>
           </Col>
           <Col span="4" offset="1">
-            <Button type="ghost" @click="handleRemove(index)">Delete</Button>
+            <Button @click="handleRemove(index)">Delete</Button>
           </Col>
         </Row>
       </FormItem>
@@ -209,9 +211,9 @@
       </FormItem>
       <FormItem>
         <Button type="primary" @click="handleSubmit('formDynamic')">Submit</Button>
-        <Button type="ghost" @click="handleReset('formDynamic')" style="margin-left: 8px">Reset</Button>
+        <Button @click="handleReset('formDynamic')" style="margin-left: 8px">Reset</Button>
       </FormItem>
-    </Form> -->
+    </Form>
   </div>
 </template>
 <script>

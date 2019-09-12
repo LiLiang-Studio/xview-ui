@@ -1,32 +1,28 @@
 <template>
-  <div class="ui-form-item">
-    <label class="ui-form-item-label" :style="labelStyle" :for="labelFor">
+  <div :class="prefix">
+    <label v-if="hasLabel" :class="`${prefix}-label`" :style="labelStyle">
       <slot name="label">{{label}}</slot>
     </label>
-    <div class="ui-form-item-content" :style="contentStyle">
+    <div :class="`${prefix}-content`">
       <slot></slot>
       <transition name="ui-fade">
-        <div class="ui-form-item-error-tip"></div>
+        <div v-if="showMsg" :class="`${prefix}-error-tip`"></div>
       </transition>
     </div>
   </div>
 </template>
 <script>
-import { findParent } from '@/tools'
+import { findParent, parseSize } from '@/tools'
 export default {
+  name: 'UiFormItem',
   data() {
-    return {
-      parent: null
-    }
+    return { prefix: 'ui-form-item', parent: null }
   },
   props: {
     prop: String,
     label: String,
     labelWidth: [Number, String],
-    labelFor: String,
-    required: Boolean,
     rules: [Object, Array],
-    error: String,
     showMessage: {
       type: Boolean,
       default: true
@@ -34,20 +30,24 @@ export default {
   },
   computed: {
     lw() {
-      let labelWidth = this.labelWidth || (this.parent && this.parent.labelWidth)
-      if (labelWidth !== undefined) {
-        return isNaN(labelWidth) ? labelWidth : `${labelWidth}px`
-      }
+      return this.labelWidth || (this.parent && this.parent.labelWidth)
+    },
+    hasLabel() {
+      return this.label || this.$slots.label !== undefined || this.lw
     },
     labelStyle() {
-      return this.lw && { width: this.lw }
+      return this.lw && { width: parseSize(this.lw) }
     },
-    contentStyle() {
-      return this.lw && { marginLeft: this.lw }
+    showMsg() {
+      return this.showMessage && this.parent && this.parent.showMessage
     }
   },
   mounted() {
-    this.parent = findParent(this, 'ui-form')
+    this.parent = findParent(this, 'UiForm')
+    this.parent.addItem(this)
+  },
+  beforeDestroy() {
+    this.parent.removeItem(this)
   }
 }
 </script>

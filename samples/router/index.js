@@ -100,11 +100,11 @@ export const routeComponents = {
   Carousel,
   Anchor,
   Upload,
+  Form,
 
   DatePicker,
   TimePicker,
   AutoComplete,
-  Form,
   Slider,
   Table,
   Poptip,

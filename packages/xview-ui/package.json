@@ -1,0 +1,59 @@
+{
+  "name": "xview-ui",
+  "version": "1.0.0",
+  "private": false,
+  "main": "dist/xview-ui.common.js",
+  "module": "dist/xview-ui.es.js",
+  "author": {
+    "email": "ll917274996@live.com",
+    "name": "liliang"
+  },
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "devDependencies": {
+    "@rollup/plugin-alias": "^3.0.0",
+    "@rollup/plugin-buble": "^0.21.0",
+    "@rollup/plugin-commonjs": "^11.0.1",
+    "@rollup/plugin-json": "^4.0.1",
+    "@rollup/plugin-url": "^4.0.1",
+    "autoprefixer": "^9.6.1",
+    "del": "^5.0.0",
+    "less": "^3.10.1",
+    "rollup": "^1.29.0",
+    "rollup-plugin-copy": "^3.2.1",
+    "rollup-plugin-postcss": "^2.0.3",
+    "rollup-plugin-terser": "^5.2.0",
+    "rollup-plugin-vue": "^5.1.5",
+    "vue-template-compiler": "^2.6.10"
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ],
+  "keywords": [
+    "vueui-widgets",
+    "vuewidgets",
+    "vue-widgets",
+    "components",
+    "vueui",
+    "vue-ui",
+    "front-end",
+    "framework"
+  ],
+  "description": "基于Vuejs的高性能轻量级组件库",
+  "homepage": "https://github.com/LiLiang-Studio/vueui-widgets",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LiLiang-Studio/vueui-widgets.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LiLiang-Studio/vueui-widgets/issues"
+  },
+  "license": "MIT"
+}

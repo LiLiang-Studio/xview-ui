@@ -117,9 +117,8 @@ export const routeComponents = {
 
 const router = new Router({
   routes: [
-    { path: '/', redirect: '/samples' },
     {
-      path: '/samples',
+      path: '/',
       component: HomeRouter,
       children: [
         { path: '', redirect: Object.keys(routeComponents)[0] },

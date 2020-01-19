@@ -2,18 +2,18 @@
   <div class="com-sidebar-nav">
     <div class="title">VueUI-Widgets 组件列表</div>
     <ul>
-      <li v-for="(value, key) in routeComponents" :key="key">
-        <router-link :to="key">{{key}}</router-link>
+      <li v-for="item in routes" :key="item.path">
+        <router-link :to="{name: item.name}">{{item.name}}</router-link>
       </li>
     </ul>
   </div>
 </template>
 <script>
-import { routeComponents } from '../router'
+import { routes } from '../router'
 export default {
   data() {
     return {
-      routeComponents
+      routes
     }
   }
 }

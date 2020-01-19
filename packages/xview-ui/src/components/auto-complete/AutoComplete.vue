@@ -20,7 +20,7 @@
 <script>
 import UiInput from '../input'
 import UiDrop from '../select/OptionList.vue'
-import { isSelfOrParent } from '@/utils/index'
+import { isSelfOrParent } from '../../utils/index'
 export default {
   name: 'ui-autocomplete',
   components: { UiInput, UiDrop },

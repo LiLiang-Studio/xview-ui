@@ -1,8 +1,6 @@
-import path from 'path'
 import buble from '@rollup/plugin-buble'
 import url from '@rollup/plugin-url'
 import json from '@rollup/plugin-json'
-import alias from '@rollup/plugin-alias'
 import commonjs from '@rollup/plugin-commonjs'
 import vue from 'rollup-plugin-vue'
 import postcss from 'rollup-plugin-postcss'
@@ -16,14 +14,6 @@ del.sync('dist/*')
 export default {
   input: 'src/index.js',
   plugins: [
-    alias({
-      entries: [
-        {
-          find: '@',
-          replacement: path.join(__dirname, 'src')
-        }
-      ]
-    }),
     url(),
     json(),
     vue({ css: false }),

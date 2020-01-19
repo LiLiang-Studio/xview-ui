@@ -13,7 +13,7 @@
 <script>
 import UiIcon from '../icon'
 import UiCloseIconButton from '../close-icon-button'
-import { iconTypes, isFunc } from '@/tools'
+import { iconTypes, isFunc } from '../../tools'
 const prefix = 'ui-notice'
 export default {
   name: 'UiNotice',

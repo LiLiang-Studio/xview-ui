@@ -2,7 +2,7 @@
   <span class="ui-time" :is="tag" :href="hash">{{convertedValue}}</span>
 </template>
 <script>
-import { dateFormat } from '@/tools'
+import { dateFormat } from '../../tools'
 export default {
   name: 'UiTime',
   data() {

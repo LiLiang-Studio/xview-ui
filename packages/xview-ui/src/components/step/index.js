@@ -1,4 +1,2 @@
-import UiSteps from './Steps.vue'
-import UiStep from './Step.vue'
-export const Steps = UiSteps
-export const Step = UiStep
+export { default as Steps } from './Steps.vue'
+export { default as Step } from './Step.vue'

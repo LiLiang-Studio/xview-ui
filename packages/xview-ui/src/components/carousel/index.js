@@ -1,4 +1,2 @@
-import UiCarousel from './Carousel.vue'
-import UiCarouselItem from './CarouselItem.vue'
-export const Carousel = UiCarousel
-export const CarouselItem = UiCarouselItem
+export { default as Carousel } from './Carousel.vue'
+export { default as CarouselItem } from './CarouselItem.vue'

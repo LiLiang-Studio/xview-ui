@@ -1,4 +1,2 @@
-import UiForm from './Form.vue'
-import UiFormItem from './FormItem.vue'
-export const Form = UiForm
-export const FormItem = UiFormItem
+export { default as Form } from './Form.vue'
+export { default as FormItem } from './FormItem.vue'

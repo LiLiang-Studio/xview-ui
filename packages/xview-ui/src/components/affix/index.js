@@ -1,2 +1,1 @@
-import Affix from './Affix.vue'
-export default Affix
+export { default } from './Affix.vue'

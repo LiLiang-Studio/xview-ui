@@ -1,6 +1,6 @@
 
 import UiSpin from './Spin.vue'
-import { getMaxZIndex, winScrollbarLock, isFunc } from '@/tools'
+import { getMaxZIndex, winScrollbarLock, isFunc } from '../../tools'
 
 /**
  * 创建加载中组件

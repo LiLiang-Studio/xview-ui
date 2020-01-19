@@ -24,7 +24,7 @@
 <script>
 import UiOverlay from '../overlay'
 import UiCloseIconButton from '../close-icon-button'
-import { parseSize, winScrollbarLock, getMaxZIndex } from '@/tools'
+import { parseSize, winScrollbarLock, getMaxZIndex } from '../../tools'
 export default {
   name: 'UiDrawer',
   components: { UiOverlay, UiCloseIconButton },

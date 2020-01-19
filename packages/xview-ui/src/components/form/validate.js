@@ -2,7 +2,7 @@
  * 表单验证模块
  */
 
-import { getType } from '@/tools'
+import { getType } from '../../tools'
 
 // 是否假值
 const isFalse = value => [undefined, null, ''].indexOf(value) !== -1

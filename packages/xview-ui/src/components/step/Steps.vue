@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import { findChildrens } from '@/tools'
+import { findChildrens } from '../../tools'
 export default {
   name: 'UiSteps',
   props: {

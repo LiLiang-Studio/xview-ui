@@ -1746,9 +1746,6 @@
       undefined
     );
 
-  var Breadcrumb = __vue_component__$b;
-  var BreadcrumbItem = __vue_component__$c;
-
   //
   //
   //
@@ -1903,9 +1900,6 @@
       undefined,
       undefined
     );
-
-  var Timeline = __vue_component__$d;
-  var TimelineItem = __vue_component__$e;
 
   //
   //
@@ -2237,9 +2231,6 @@
       undefined
     );
 
-  var Steps = __vue_component__$g;
-  var Step = __vue_component__$h;
-
   //
   var script$i = {
     data: function data() {
@@ -2520,9 +2511,6 @@
       undefined,
       undefined
     );
-
-  var Row = __vue_component__$j;
-  var Col = __vue_component__$k;
 
   var prefix$2 = '.ui-col';
 
@@ -3172,9 +3160,6 @@
       undefined
     );
 
-  var Button = __vue_component__$o;
-  var ButtonGroup = __vue_component__$p;
-
   //
   //
   //
@@ -3791,9 +3776,6 @@
       undefined
     );
 
-  var Checkbox = __vue_component__$u;
-  var CheckboxGroup = __vue_component__$v;
-
   //
   //
   //
@@ -4098,12 +4080,6 @@
       undefined,
       undefined
     );
-
-  var Layout = __vue_component__$w;
-  var Header = __vue_component__$x;
-  var Sider = __vue_component__$y;
-  var Content = __vue_component__$z;
-  var Footer = __vue_component__$A;
 
   //
   var script$y = {
@@ -4438,9 +4414,6 @@
       undefined
     );
 
-  var Collapse = __vue_component__$C;
-  var Panel = __vue_component__$D;
-
   //
   var script$B = {
     name: 'UiCell',
@@ -4630,13 +4603,10 @@
       undefined
     );
 
-  var Cell = __vue_component__$E;
-  var CellGroup = __vue_component__$F;
-
   //
   var script$D = {
     name: 'UiRadio',
-    components: { UiButton: Button },
+    components: { UiButton: __vue_component__$o },
     data: function data() {
       return { prefix: 'ui-radio', checked: false, parent: null }
     },
@@ -4736,7 +4706,7 @@
   //
   var script$E = {
     name: 'UiRadioGroup',
-    components: { ButtonGroup: ButtonGroup },
+    components: { ButtonGroup: __vue_component__$p },
     data: function data() {
       return { checkedValue: this.value, childs: [] }
     },
@@ -4829,9 +4799,6 @@
       undefined,
       undefined
     );
-
-  var Radio = __vue_component__$G;
-  var RadioGroup = __vue_component__$H;
 
   //
   var script$F = {
@@ -5193,9 +5160,6 @@
       undefined,
       undefined
     );
-
-  var Tabs = __vue_component__$I;
-  var TabPane = __vue_component__$J;
 
   //
   var script$H = {
@@ -5747,7 +5711,7 @@
   //
   var script$K = {
     name: 'UiModal',
-    components: { UiOverlay: __vue_component__$L, UiButton: Button, UiCloseIconButton: __vue_component__$3 },
+    components: { UiOverlay: __vue_component__$L, UiButton: __vue_component__$o, UiCloseIconButton: __vue_component__$3 },
     data: function data() {
       return {
         prefix: 'ui-modal',
@@ -5997,7 +5961,7 @@
   //
   var script$L = {
     name: 'UiDialog',
-    components: { UiIcon: __vue_component__, UiModal: __vue_component__$N, UiButton: Button },
+    components: { UiIcon: __vue_component__, UiModal: __vue_component__$N, UiButton: __vue_component__$o },
     data: function data() {
       return { prefix: 'ui-dialog' }
     },
@@ -6345,7 +6309,7 @@
   //
   var script$N = {
     name: 'UiTransferBox',
-    components: { UiInput: __vue_component__$K, UiCheckbox: Checkbox, UiCheckboxGroup: CheckboxGroup },
+    components: { UiInput: __vue_component__$K, UiCheckbox: __vue_component__$u, UiCheckboxGroup: __vue_component__$v },
     data: function data() {
       return {
         prefix: 'ui-transferBox',
@@ -6552,7 +6516,7 @@
 
   //
   var script$O = {
-    components: { UiBox: __vue_component__$Q, UiButton: Button, UiIcon: __vue_component__ },
+    components: { UiBox: __vue_component__$Q, UiButton: __vue_component__$o, UiIcon: __vue_component__ },
     data: function data() {
       return { prefix: 'ui-transfer', selectedData: { left: [], right: [] } }
     },
@@ -6793,7 +6757,7 @@
   };
   var script$P = {
     name: 'UiTreeNode',
-    components: { UiIcon: __vue_component__, UiLoading: __vue_component__$s, UiCheckbox: Checkbox, UiRender: UiRender$1 },
+    components: { UiIcon: __vue_component__, UiLoading: __vue_component__$s, UiCheckbox: __vue_component__$u, UiRender: UiRender$1 },
     data: function data() {
       return { prefix: 'ui-tree-node', parent: null }
     },
@@ -7795,9 +7759,6 @@
       undefined
     );
 
-  var Carousel = __vue_component__$W;
-  var CarouselItem = __vue_component__$X;
-
   //
   var script$V = {
     name: 'UiAnchor',
@@ -8011,9 +7972,6 @@
       undefined,
       undefined
     );
-
-  var Anchor = __vue_component__$Y;
-  var AnchorLink = __vue_component__$Z;
 
   //
   var incKey = 0;
@@ -8535,9 +8493,6 @@
       undefined,
       undefined
     );
-
-  var Form = __vue_component__$$;
-  var FormItem = __vue_component__$10;
 
   //
   //
@@ -9095,10 +9050,6 @@
       undefined
     );
 
-  var Dropdown = __vue_component__$14;
-  var DropdownItem = __vue_component__$15;
-  var DropdownMenu = __vue_component__$16;
-
   //
   //
   //
@@ -9567,11 +9518,6 @@
       undefined,
       undefined
     );
-
-  var Menu = __vue_component__$17;
-  var Submenu = __vue_component__$18;
-  var MenuItem = __vue_component__$19;
-  var MenuGroup = __vue_component__$1a;
 
   //
   var script$17 = {
@@ -10325,10 +10271,6 @@
       undefined
     );
 
-  var Option = __vue_component__$1b;
-  var OptionGroup = __vue_component__$1c;
-  var Select = __vue_component__$1d;
-
   //
   var script$1a = {
     data: function data() {
@@ -10494,7 +10436,7 @@
 
   //
   var script$1b = {
-    components: { UiIcon: __vue_component__, UiPopper: __vue_component__$1e, UiButton: Button },
+    components: { UiIcon: __vue_component__, UiPopper: __vue_component__$1e, UiButton: __vue_component__$o },
     data: function data() {
       return { popperVisible: this.value, refElement: null }
     },
@@ -11204,7 +11146,7 @@
 
   //
   var script$1e = {
-    components: { UiIcon: __vue_component__, UiSelect: Select, UiOption: Option, UiInput: __vue_component__$K },
+    components: { UiIcon: __vue_component__, UiSelect: __vue_component__$1d, UiOption: __vue_component__$1b, UiInput: __vue_component__$K },
     data: function data() {
       return {
         limit: this.pageSize,
@@ -12578,39 +12520,39 @@
     Badge: __vue_component__$5,
     Rate: __vue_component__$6,
     ICircle: __vue_component__$a,
-    Breadcrumb: Breadcrumb,
-    BreadcrumbItem: BreadcrumbItem,
-    Timeline: Timeline,
-    TimelineItem: TimelineItem,
+    Breadcrumb: __vue_component__$b,
+    BreadcrumbItem: __vue_component__$c,
+    Timeline: __vue_component__$d,
+    TimelineItem: __vue_component__$e,
     Spin: __vue_component__$f,
-    Step: Step,
-    Steps: Steps,
+    Step: __vue_component__$h,
+    Steps: __vue_component__$g,
     Affix: __vue_component__$i,
-    Row: Row,
-    Col: Col,
+    Row: __vue_component__$j,
+    Col: __vue_component__$k,
     BackTop: __vue_component__$l,
     Progress: __vue_component__$m,
-    Button: Button,
-    ButtonGroup: ButtonGroup,
+    Button: __vue_component__$o,
+    ButtonGroup: __vue_component__$p,
     Divider: __vue_component__$q,
     ISwitch: __vue_component__$r,
     Scroll: __vue_component__$t,
-    Checkbox: Checkbox,
-    CheckboxGroup: CheckboxGroup,
-    Layout: Layout,
-    Header: Header,
-    Content: Content,
-    Footer: Footer,
-    Sider: Sider,
+    Checkbox: __vue_component__$u,
+    CheckboxGroup: __vue_component__$v,
+    Layout: __vue_component__$w,
+    Header: __vue_component__$x,
+    Content: __vue_component__$z,
+    Footer: __vue_component__$A,
+    Sider: __vue_component__$y,
     Tag: __vue_component__$B,
-    Collapse: Collapse,
-    Panel: Panel,
-    Cell: Cell,
-    CellGroup: CellGroup,
-    Radio: Radio,
-    RadioGroup: RadioGroup,
-    Tabs: Tabs,
-    TabPane: TabPane,
+    Collapse: __vue_component__$C,
+    Panel: __vue_component__$D,
+    Cell: __vue_component__$E,
+    CellGroup: __vue_component__$F,
+    Radio: __vue_component__$G,
+    RadioGroup: __vue_component__$H,
+    Tabs: __vue_component__$I,
+    TabPane: __vue_component__$J,
     Input: __vue_component__$K,
     Drawer: __vue_component__$M,
     Modal: __vue_component__$N,
@@ -12619,27 +12561,27 @@
     Tree: __vue_component__$T,
     Time: __vue_component__$U,
     Split: __vue_component__$V,
-    Carousel: Carousel,
-    CarouselItem: CarouselItem,
-    Anchor: Anchor,
-    AnchorLink: AnchorLink,
+    Carousel: __vue_component__$W,
+    CarouselItem: __vue_component__$X,
+    Anchor: __vue_component__$Y,
+    AnchorLink: __vue_component__$Z,
     Upload: __vue_component__$_,
-    Form: Form,
-    FormItem: FormItem,
+    Form: __vue_component__$$,
+    FormItem: __vue_component__$10,
 
     Cascader: __vue_component__$12,
     ColorPicker: __vue_component__$11,
-    Select: Select,
-    Option: Option,
-    OptionGroup: OptionGroup,
+    Select: __vue_component__$1d,
+    Option: __vue_component__$1b,
+    OptionGroup: __vue_component__$1c,
     Page: __vue_component__$1i,
-    Dropdown: Dropdown,
-    DropdownMenu: DropdownMenu,
-    DropdownItem: DropdownItem,
-    Menu: Menu,
-    MenuItem: MenuItem,
-    Submenu: Submenu,
-    MenuGroup: MenuGroup,
+    Dropdown: __vue_component__$14,
+    DropdownMenu: __vue_component__$16,
+    DropdownItem: __vue_component__$15,
+    Menu: __vue_component__$17,
+    MenuItem: __vue_component__$19,
+    Submenu: __vue_component__$18,
+    MenuGroup: __vue_component__$1a,
     Tooltip: __vue_component__$1g,
     Poptip: __vue_component__$1f,
     Table: __vue_component__$1m,

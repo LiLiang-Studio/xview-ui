@@ -1,9 +1,7 @@
-import UiRow from './Row.vue'
-import UiCol from './Col.vue'
-import { addStylesheet } from '@/tools'
 
-export const Row = UiRow
-export const Col = UiCol
+export { default as Row } from './Row.vue'
+export { default as Col } from './Col.vue'
+import { addStylesheet } from '../../tools'
 
 const prefix = '.ui-col'
 

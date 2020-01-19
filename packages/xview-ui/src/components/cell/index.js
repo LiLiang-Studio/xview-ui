@@ -1,4 +1,2 @@
-import UiCell from './Cell.vue'
-import UiCellGroup from './CellGroup.vue'
-export const Cell = UiCell
-export const CellGroup = UiCellGroup
+export { default as Cell } from './Cell.vue'
+export { default as CellGroup } from './CellGroup.vue'

@@ -22,7 +22,7 @@
   </div>
 </template>
 <script>
-import { getOffset } from '@/utils/index'
+import { getOffset } from '../../utils'
 import UiTooltip from '../tooltip'
 import UiInputNumber from '../input-number'
 export default {

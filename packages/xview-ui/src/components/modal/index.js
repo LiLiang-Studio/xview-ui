@@ -1,4 +1,3 @@
-import UiModal from './Modal.vue'
 import UiDialog from './Dialog.vue'
 /**
  * 创建对话框
@@ -43,4 +42,5 @@ export const modalService = Vue => {
     }
   }
 }
-export default UiModal
+
+export { default } from './Modal.vue'

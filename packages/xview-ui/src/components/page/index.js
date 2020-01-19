@@ -1,2 +1,1 @@
-import Page from './Page.vue'
-export default Page
+export { default } from './Page.vue'

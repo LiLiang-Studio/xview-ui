@@ -1,4 +1,2 @@
-import UiRadio from './Radio.vue'
-import UiRadioGroup from './RadioGroup.vue'
-export const Radio = UiRadio
-export const RadioGroup = UiRadioGroup
+export { default as Radio } from './Radio.vue'
+export { default as RadioGroup } from './RadioGroup.vue'

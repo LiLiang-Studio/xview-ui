@@ -11,7 +11,7 @@
   </div>
 </template>
 <script>
-import { isSelfOrParent } from '@/utils/index'
+import { isSelfOrParent } from '../../utils/index'
 import UiOptionList from './../select/OptionList.vue'
 export default {
   name: 'ui-dropdown',

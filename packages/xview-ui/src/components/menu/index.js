@@ -1,8 +1,4 @@
-import UiMenu from './Menu.vue'
-import UiSubmenu from './Submenu.vue'
-import UiMenuItem from './MenuItem.vue'
-import UiMenuGroup from './MenuGroup.vue'
-export const Menu = UiMenu
-export const Submenu = UiSubmenu
-export const MenuItem = UiMenuItem
-export const MenuGroup = UiMenuGroup
+export { default as Menu } from './Menu.vue'
+export { default as Submenu } from './Submenu.vue'
+export { default as MenuItem } from './MenuItem.vue'
+export { default as MenuGroup } from './MenuGroup.vue'

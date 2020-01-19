@@ -8,7 +8,7 @@
 </template>
 <script>
 import { getOffset } from './../../utils'
-import { getMaxZIndex } from '@/tools'
+import { getMaxZIndex } from '../../tools'
 export default {
   data() {
     return { zIndex: 0, styles: {} }

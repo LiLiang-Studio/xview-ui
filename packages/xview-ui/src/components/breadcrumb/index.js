@@ -1,4 +1,2 @@
-import UiBreadcrumb from './Breadcrumb.vue'
-import UiBreadcrumbItem from './BreadcrumbItem.vue'
-export const Breadcrumb = UiBreadcrumb
-export const BreadcrumbItem = UiBreadcrumbItem
+export { default as Breadcrumb } from './Breadcrumb.vue'
+export { default as BreadcrumbItem } from './BreadcrumbItem.vue'

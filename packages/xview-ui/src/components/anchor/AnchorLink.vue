@@ -5,7 +5,7 @@
   </div>
 </template>
 <script>
-import { findParent } from '@/tools'
+import { findParent } from '../../tools'
 export default {
   name: 'UiAnchorLink',
   data() {

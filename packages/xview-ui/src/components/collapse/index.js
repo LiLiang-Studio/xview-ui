@@ -1,4 +1,2 @@
-import UiCollapse from './Collapse.vue'
-import UiPanel from './Panel.vue'
-export const Collapse = UiCollapse
-export const Panel = UiPanel
+export { default as Collapse } from './Collapse.vue'
+export { default as Panel } from './Panel.vue'

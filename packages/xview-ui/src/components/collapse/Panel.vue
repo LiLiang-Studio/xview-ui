@@ -11,7 +11,7 @@
 </template>
 <script>
 import UiIcon from '../icon'
-import { findParent } from '@/tools'
+import { findParent } from '../../tools'
 export default {
   name: 'UiPanel',
   components: { UiIcon },

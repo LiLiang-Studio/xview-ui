@@ -8,7 +8,7 @@
   </div>
 </template>
 <script>
-import { findParent } from '@/tools'
+import { findParent } from '../../tools'
 import { Button as UiButton } from '../button'
 export default {
   name: 'UiRadio',

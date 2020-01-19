@@ -1,4 +1,4 @@
-import { getMaxZIndex } from '@/tools'
+import { getMaxZIndex } from '../../tools'
 import UiLoadingBar from './LoadingBar.vue'
 
 /**

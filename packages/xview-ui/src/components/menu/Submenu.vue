@@ -16,7 +16,7 @@
 <script>
 import UiIcon from '../icon'
 import UiOptionList from './../select/OptionList.vue'
-import { findParent } from '@/tools'
+import { findParent } from '../../tools'
 export default {
   name: 'ui-menu-submenu',
   components: { UiIcon, UiOptionList },

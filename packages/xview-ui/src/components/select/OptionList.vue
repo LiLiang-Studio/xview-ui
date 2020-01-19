@@ -10,7 +10,7 @@
 </template>
 <script>
 import { getOffset } from './../../utils'
-import { getMaxZIndex, findParent } from '@/tools'
+import { getMaxZIndex, findParent } from '../../tools'
 export default {
   data() {
     return { styles: {}, parent: null }

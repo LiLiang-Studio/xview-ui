@@ -40,7 +40,7 @@
 </template>
 <script>
 import UiIcon from '../icon'
-import { setAutoHeight } from '@/tools'
+import { setAutoHeight } from '../../tools'
 export default {
   name: 'UiInput',
   components: { UiIcon },

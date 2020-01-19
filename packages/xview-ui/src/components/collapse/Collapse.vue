@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import { isArr } from '@/tools'
+import { isArr } from '../../tools'
 export default {
   name: 'UiCollapse',
   data() {

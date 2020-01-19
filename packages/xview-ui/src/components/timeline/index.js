@@ -1,4 +1,2 @@
-import UiTimeline from './Timeline.vue'
-import UiTimelineItem from './TimelineItem.vue'
-export const Timeline = UiTimeline
-export const TimelineItem = UiTimelineItem
+export { default as Timeline } from './Timeline.vue'
+export { default as TimelineItem } from './TimelineItem.vue'

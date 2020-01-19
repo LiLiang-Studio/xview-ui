@@ -8,7 +8,7 @@
 </template>
 <script>
 import UiIcon from '../icon'
-import { parseSize } from '@/tools'
+import { parseSize } from '../../tools'
 export default {
   name: 'UiSider',
   components: { UiIcon },

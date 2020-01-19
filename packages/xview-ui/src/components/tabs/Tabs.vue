@@ -27,7 +27,7 @@
 <script>
 import UiIcon from '../icon'
 import UiCloseIconButton from '../close-icon-button'
-import { UiRender, isFunc } from '@/tools'
+import { UiRender, isFunc } from '../../tools'
 export default {
   name: 'UiTabs',
   components: { UiIcon, UiCloseIconButton, UiRender },

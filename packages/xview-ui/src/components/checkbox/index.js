@@ -1,4 +1,2 @@
-import UiCheckbox from './Checkbox.vue'
-import UiCheckboxGroup from './CheckboxGroup.vue'
-export const Checkbox = UiCheckbox
-export const CheckboxGroup = UiCheckboxGroup
+export { default as Checkbox } from './Checkbox.vue'
+export { default as CheckboxGroup } from './CheckboxGroup.vue'

@@ -1,6 +1,3 @@
-import UiDropdown from './Dropdown.vue'
-import UiDropdownItem from './DropdownItem.vue'
-import UiDropdownMenu from './DropdownMenu.vue'
-export const Dropdown = UiDropdown
-export const DropdownItem = UiDropdownItem
-export const DropdownMenu = UiDropdownMenu
+export { default as Dropdown } from './Dropdown.vue'
+export { default as DropdownItem } from './DropdownItem.vue'
+export { default as DropdownMenu } from './DropdownMenu.vue'

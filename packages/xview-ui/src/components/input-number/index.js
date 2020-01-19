@@ -1,2 +1,1 @@
-import InputNumber from './InputNumber.vue'
-export default InputNumber
+export { default } from './InputNumber.vue'

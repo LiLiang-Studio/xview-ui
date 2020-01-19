@@ -1,2 +1,1 @@
-import UiSwitch from './Switch.vue'
-export default UiSwitch
+export { default } from './Switch.vue'

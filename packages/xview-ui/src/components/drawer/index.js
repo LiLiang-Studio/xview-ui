@@ -1,2 +1,1 @@
-import Drawer from './Drawer.vue'
-export default Drawer
+export { default } from './Drawer.vue'

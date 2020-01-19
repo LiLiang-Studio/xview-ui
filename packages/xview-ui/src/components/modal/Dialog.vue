@@ -11,7 +11,7 @@
 import UiIcon from '../icon'
 import UiModal from './Modal.vue'
 import { Button as UiButton } from '../button'
-import { iconTypes } from '@/tools'
+import { iconTypes } from '../../tools'
 export default {
   name: 'UiDialog',
   components: { UiIcon, UiModal, UiButton },

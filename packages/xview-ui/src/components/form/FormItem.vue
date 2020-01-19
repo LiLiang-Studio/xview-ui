@@ -12,7 +12,7 @@
   </div>
 </template>
 <script>
-import { findParent, parseSize } from '@/tools'
+import { findParent, parseSize } from '../../tools'
 export default {
   name: 'UiFormItem',
   data() {

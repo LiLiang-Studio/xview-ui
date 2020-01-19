@@ -28,7 +28,7 @@
 import UiIcon from '../icon'
 import UiPopper from '../popper'
 import { Button as UiButton } from '../button'
-import { isSelfOrParent } from '@/utils/index'
+import { isSelfOrParent } from '../../utils'
 export default {
   components: { UiIcon, UiPopper, UiButton },
   data() {

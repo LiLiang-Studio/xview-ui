@@ -17,7 +17,7 @@
 <script>
 import UiIcon from '../icon'
 import UiCloseIconButton from '../close-icon-button'
-import { iconTypes } from '@/tools'
+import { iconTypes } from '../../tools'
 export default {
   name: 'UiAlert',
   components: { UiIcon, UiCloseIconButton },

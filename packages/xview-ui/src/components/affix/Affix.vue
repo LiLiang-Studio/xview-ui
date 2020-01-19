@@ -7,7 +7,7 @@
   </div>
 </template>
 <script>
-import { throttle } from '@/tools'
+import { throttle } from '../../tools'
 export default {
   data() {
     return {

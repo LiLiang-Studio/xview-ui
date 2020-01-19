@@ -1,7 +1,7 @@
 import UiNotice from './Notice.vue'
 import UiMessage from './Message.vue'
 import UiWrapper from './Wrapper.vue'
-import { isFunc, isStr, getMaxZIndex } from '@/tools'
+import { isFunc, isStr, getMaxZIndex } from '../../tools'
 
 /**
  * @param {import('vue').VueConstructor} Vue 

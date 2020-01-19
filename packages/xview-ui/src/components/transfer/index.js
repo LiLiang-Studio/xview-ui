@@ -1,2 +1,1 @@
-import Transfer from './Transfer.vue'
-export default Transfer
+export { default } from './Transfer.vue'

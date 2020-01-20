@@ -34,14 +34,12 @@ EventManager.prototype = {
 /**
  * 创建事件指令
  * 
- * @param {Vue.VueConstructor} Vue 
- * @param {String} directiveName
  * @param {Object} object
  * @param {String} eventName
  */
- export default function createEventDirective(Vue, directiveName, object, eventName) {
-  let eventManager, customAttr = directiveName + eventName
-  Vue.directive(directiveName, {
+export default function createEventDirective(object, eventName) {
+  let eventManager
+  return {
     inserted(el, { value }) {
       if (typeof value !== 'function') {
         throw new Error('The value of directive must be a function !')
@@ -49,16 +47,16 @@ EventManager.prototype = {
       if (!eventManager) {
         eventManager = new EventManager(object, eventName)
       }
-      el[customAttr] = value
+      el[el.tagName + eventName] = value
       eventManager.addHandler(value)
     },
     unbind(el) {
-      let handler = el[customAttr]
+      let handler = el[el.tagName + eventName]
       handler && eventManager.removeHandler(handler)
       if (eventManager.getHandlerCount() === 0) {
         eventManager.removeListener()
         eventManager = null
       }
     }
-  })
+  }
 }

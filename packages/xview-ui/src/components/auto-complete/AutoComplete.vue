@@ -20,7 +20,8 @@
 <script>
 import UiInput from '../input'
 import UiDrop from '../select/OptionList.vue'
-import { isSelfOrParent } from '../../utils/index'
+import { isSelfOrParent } from '../../utils'
+import { winclick } from '../../directives'
 export default {
   name: 'ui-autocomplete',
   components: { UiInput, UiDrop },
@@ -73,6 +74,7 @@ export default {
       return this.$slots.default !== undefined
     }
   },
+  directives: { winclick },
   watch: {
     value(newVal) {
       this.inputValue = newVal

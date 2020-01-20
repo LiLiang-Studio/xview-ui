@@ -1,5 +1,5 @@
 <template>
-  <div v-winresize="throttleResize" v-winscroll="throttleScroll">
+  <div v-winresize="onResize()" v-winscroll="onScroll()">
     <div :class="{'ui-affix': fixed}" :style="affixStyle">
       <slot></slot>
     </div>
@@ -8,14 +8,13 @@
 </template>
 <script>
 import { throttle } from '../../tools'
+import { winresize, winscroll } from '../../directives'
 export default {
   data() {
     return {
       fixed: false,
       affixStyle: {},
-      placeholderStyle: {},
-      throttleResize: throttle(() => this.onResize(), 50),
-      throttleScroll: throttle(() => this.onScroll(), 50)
+      placeholderStyle: {}
     }
   },
   props: {
@@ -30,24 +29,32 @@ export default {
       return this.offsetBottom !== undefined && this.offsetTop === 0
     }
   },
+  directives: {
+    winresize,
+    winscroll
+  },
   watch: {
     fixed(newVal) {
       this.$emit('on-change', newVal)
     }
   },
   mounted() {
-    this.onResize()
+    this.onResize()()
   },
   methods: {
     onScroll() {
-      let rect = this.$el.getBoundingClientRect()
-      this.fixed = this.isFixedBottom ? window.innerHeight - rect.bottom <= this.offsetBottom : rect.top <= this.offsetTop
+      return throttle(() => {
+        let rect = this.$el.getBoundingClientRect()
+        this.fixed = this.isFixedBottom ? window.innerHeight - rect.bottom <= this.offsetBottom : rect.top <= this.offsetTop
+      }, 50)
     },
     onResize() {
-      let rect = this.$el.getBoundingClientRect()
-      this.placeholderStyle = { width: `${rect.width}px`, height: `${rect.height}px` }
-      let obj = this.isFixedBottom ? { bottom: `${this.offsetBottom}px` } : { top: `${this.offsetTop}px` }
-      this.affixStyle = { ...obj, left: `${rect.left}px` }
+      return throttle(() => {
+        let rect = this.$el.getBoundingClientRect()
+        this.placeholderStyle = { width: `${rect.width}px`, height: `${rect.height}px` }
+        let obj = this.isFixedBottom ? { bottom: `${this.offsetBottom}px` } : { top: `${this.offsetTop}px` }
+        this.affixStyle = { ...obj, left: `${rect.left}px` }
+      }, 50)
     }
   }
 }

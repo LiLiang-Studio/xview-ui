@@ -54,6 +54,7 @@
 import UiIcon from '../icon'
 import UiInput from '../input'
 import UiSelect from '../select'
+import UiOption from '../option'
 export default {
   components: { UiIcon, UiSelect, UiOption, UiInput },
   data() {

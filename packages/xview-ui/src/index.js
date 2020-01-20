@@ -8,15 +8,15 @@ import './utils/polyfill'
 import Icon from './components/icon' // 图标
 import Affix from './components/affix' // 图钉
 import Alert from './components/alert' // 警告提示
-
-import { directives } from './directives' // 全局指令
+import Avatar from './components/avatar' // 头像
+import Anchor from './components/anchor' // 锚点容器
+import AnchorLink from './components/anchor-link' // 锚点
+import BackTop from './components/back-top' // 回到顶部
 
 /**
  * 新版本组件导入
  */
 import * as tools from './tools'
-// 头像
-import Avatar from './components/avatar'
 // 卡片
 import Card from './components/card'
 // 微标
@@ -40,8 +40,6 @@ import Step from './components/step'
 import Steps from './components/steps'
 // 网格布局
 import { Row, Col } from './components/grid'
-// 回到顶部
-import BackTop from './components/back-top'
 // 进度条
 import Progress from './components/progress'
 // 加载条
@@ -97,9 +95,6 @@ import Split from './components/split'
 // 走马灯
 import Carousel from './components/carousel'
 import CarouselItem from './components/carousel-item'
-// 锚点
-import Anchor from './components/anchor'
-import AnchorLink from './components/anchor-link'
 // 上传
 import Upload from './components/upload'
 // 表单
@@ -107,9 +102,9 @@ import Form from './components/form'
 import FormItem from './components/form-item'
 
 // 颜色选择器
-import ColorPicker from './components/color-picker'
-// 级联选择
-import Cascader from './components/cascader'
+// import ColorPicker from './components/color-picker'
+// // 级联选择
+// import Cascader from './components/cascader'
 // 下拉菜单
 import Dropdown from './components/dropdown'
 import DropdownItem from './components/dropdown-item'
@@ -137,9 +132,9 @@ import AutoComplete from './components/auto-complete'
 // 表格
 import Table from './components/table/Table.vue'
 // 日期选择器
-import DatePicker from './components/picker/DatePicker.vue'
-// 时间选择器
-import TimePicker from './components/picker/TimePicker.vue'
+// import DatePicker from './components/picker/DatePicker.vue'
+// // 时间选择器
+// import TimePicker from './components/picker/TimePicker.vue'
 
 const comps = {
   Icon,
@@ -198,8 +193,8 @@ const comps = {
   Form,
   FormItem,
 
-  Cascader,
-  ColorPicker,
+  // Cascader,
+  // ColorPicker,
   Select,
   Option,
   OptionGroup,
@@ -215,9 +210,9 @@ const comps = {
   Poptip,
   Table,
   Slider,
-  AutoComplete,
-  DatePicker,
-  TimePicker
+  AutoComplete
+  // ,DatePicker,
+  // TimePicker
 }
 
 /**
@@ -234,5 +229,4 @@ export default function (Vue, options = {}) {
   Vue.LoadingBar = Vue.prototype.$Loading = loadingBarService(Vue)
   let prefix = typeof options.prefix === 'string' ? options.prefix : 'Ui'
   for (let name in comps) Vue.component(prefix + name, comps[name])
-  Vue.use(directives)
 }

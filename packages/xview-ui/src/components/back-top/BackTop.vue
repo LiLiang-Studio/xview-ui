@@ -1,8 +1,8 @@
 <template>
   <transition :name="prefix">
-    <div v-show="visible" :class="prefix" :style="styles" @click="handleClick">
+    <div v-show="visible" :class="prefix" :style="styles" v-winscroll="onScroll()" @click="handleClick">
       <slot>
-        <UiIcon :class="`${prefix}--icon`" type="ios-arrow-up"/>
+        <UiIcon :class="`${prefix}-icon`" type="ios-arrow-up"/>
       </slot>
     </div>
   </transition>
@@ -10,6 +10,7 @@
 <script>
 import UiIcon from '../icon'
 import { throttle } from '../../tools'
+import { winscroll } from '../../directives'
 export default {
   name: 'UiBackTop',
   components: { UiIcon },
@@ -39,6 +40,7 @@ export default {
       return { right: `${+this.right}px`, bottom: `${+this.bottom}px` }
     }
   },
+  directives: { winscroll },
   methods: {
     handleClick() {
       if (this.timer) return
@@ -55,14 +57,8 @@ export default {
       }, ms)
     },
     onScroll() {
-      this.visible = window.scrollY > this.height
+      return throttle(() => this.visible = window.scrollY > this.height, 200)
     }
-  },
-  mounted() {
-    window.addEventListener('scroll', this.onScroll)
-  },
-  beforeDestroy() {
-    window.removeEventListener('scroll', this.onScroll)
   }
 }
 </script>
@@ -74,10 +70,10 @@ export default {
     opacity: 0;
     transform: scale(0);
   }
-  &, &--icon {
+  &, &-icon {
     transition: all .2s ease-in-out;
   }
-  &--icon {
+  &-icon {
     cursor: pointer;
     width: 48px;
     height: 40px;

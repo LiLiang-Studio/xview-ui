@@ -20,22 +20,32 @@ export const routes = [
     name: 'Alert',
     component: () => import('../pages/Alert.vue')
   },
-
   {
     path: 'Avatar',
     name: 'Avatar',
     component: () => import('../pages/Avatar.vue')
   },
   {
-    path: 'DatePicker',
-    name: 'DatePicker',
-    component: () => import('../pages/DatePicker.vue')
+    path: 'Anchor',
+    name: 'Anchor',
+    component: () => import('../pages/Anchor.vue')
   },
   {
-    path: 'TimePicker',
-    name: 'TimePicker',
-    component: () => import('../pages/TimePicker.vue')
+    path: 'BackTop',
+    name: 'BackTop',
+    component: () => import('../pages/BackTop.vue')
   },
+
+  // {
+  //   path: 'DatePicker',
+  //   name: 'DatePicker',
+  //   component: () => import('../pages/DatePicker.vue')
+  // },
+  // {
+  //   path: 'TimePicker',
+  //   name: 'TimePicker',
+  //   component: () => import('../pages/TimePicker.vue')
+  // },
   {
     path: 'AutoComplete',
     name: 'AutoComplete',
@@ -157,11 +167,6 @@ export const routes = [
     component: () => import('../pages/Layout.vue')
   },
   {
-    path: 'BackTop',
-    name: 'BackTop',
-    component: () => import('../pages/BackTop.vue')
-  },
-  {
     path: 'Badge',
     name: 'Badge',
     component: () => import('../pages/Badge.vue')
@@ -255,11 +260,6 @@ export const routes = [
     path: 'Carousel',
     name: 'Carousel',
     component: () => import('../pages/Carousel.vue')
-  },
-  {
-    path: 'Anchor',
-    name: 'Anchor',
-    component: () => import('../pages/Anchor.vue')
   },
   {
     path: 'Upload',

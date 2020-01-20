@@ -29,6 +29,7 @@ import UiIcon from '../icon'
 import UiPopper from '../popper'
 import UiButton from '../button'
 import { isSelfOrParent } from '../../utils'
+import { winclick } from '../../directives'
 export default {
   components: { UiIcon, UiPopper, UiButton },
   data() {
@@ -68,6 +69,7 @@ export default {
       return this.width ? { width: `${parseInt(this.width)}px` } : {}
     }
   },
+  directives: { winclick },
   watch: {
     popperVisible(newVal) {
       this.$emit('input', newVal)

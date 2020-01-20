@@ -1,6 +1,6 @@
 <template>
   <div :is="tag" :class="prefix" :offsetTop="offsetTop" :offsetBottom="offsetBottom">
-    <div :class="`${prefix}-ink`">
+    <div :class="`${prefix}-ink`" v-winscroll="onScroll()">
       <span v-if="showInk" ref="Ball" :class="`${prefix}-ball`" :style="ballStyle"></span>
     </div>
     <slot></slot>
@@ -8,11 +8,18 @@
 </template>
 <script>
 import UiAffix from '../affix'
+import { throttle } from '../../tools'
+import { winscroll } from '../../directives'
 export default {
   name: 'UiAnchor',
   components: { UiAffix },
   data() {
-    return { prefix: 'ui-anchor', items: [], activeItem: null, ballStyle: {} }
+    return {
+      prefix: 'ui-anchor',
+      items: [],
+      activeItem: null,
+      ballStyle: {}
+    }
   },
   props: {
     affix: {
@@ -35,6 +42,7 @@ export default {
       return this.affix ? UiAffix : 'div'
     }
   },
+  directives: { winscroll },
   watch: {
     activeItem(newval) {
       if (!this.showInk || !newval) return
@@ -45,12 +53,6 @@ export default {
       })
     }
   },
-  mounted() {
-    window.addEventListener('scroll', this.onScroll)
-  },
-  beforeDestroy() {
-    window.removeEventListener('scroll', this.onScroll)
-  },
   methods: {
     addItem(vm) {
       this.items.push(vm)
@@ -59,16 +61,18 @@ export default {
       this.items.splice(this.items.indexOf(vm), 1)
     },
     onScroll() {
-      this.activeItem = null
-      this.items.forEach(_ => {
-        const el = document.querySelector(_.href)
-        if (!el) return
-        let rect = el.getBoundingClientRect()
-        let scrollOffset = _.scrollOffset || this.scrollOffset
-        if (rect.top <= scrollOffset && rect.bottom > 0) {
-          this.activeItem = _
-        }
-      })
+      return throttle(() => {
+        this.activeItem = null
+        this.items.forEach(_ => {
+          const el = document.querySelector(_.href)
+          if (!el) return
+          let rect = el.getBoundingClientRect()
+          let scrollOffset = _.scrollOffset || this.scrollOffset
+          if (rect.top <= scrollOffset && rect.bottom > 0) {
+            this.activeItem = _
+          }
+        })
+      }, 50)
     }
   }
 }

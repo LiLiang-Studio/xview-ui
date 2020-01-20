@@ -33,7 +33,7 @@ export default {
   computed: {
     classes() {
       let { prefix, shape, size, icon, src } = this
-      return [prefix, `${prefix}--${shape}`, `${prefix}--${size}`, { isIcon: icon }]
+      return [prefix, `${prefix}-${shape}`, `${prefix}-${size}`, { isIcon: icon }]
     }
   }
 }
@@ -50,18 +50,18 @@ export default {
   &.isIcon {
     font-size: 18px;
   }
-  &--circle {
+  &-circle {
     border-radius: 50%;
   }
-  &--square {
+  &-square {
     border-radius: 4px;
   }
-  &--default {
+  &-default {
     width: 32px;
     height: 32px;
     line-height: 32px;
   }
-  &--large {
+  &-large {
     width: 40px;
     height: 40px;
     line-height: 40px;
@@ -69,7 +69,7 @@ export default {
       font-size: 24px;
     }
   }
-  &--small {
+  &-small {
     width: 24px;
     height: 24px;
     line-height: 24px;

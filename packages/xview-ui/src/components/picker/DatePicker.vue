@@ -14,6 +14,7 @@ import UiInput from '../input'
 import UiDrop from './../select/OptionList.vue'
 import UiDateView from './DateView.vue'
 import UiHeader from './Header.vue'
+import { winclick } from '../../directives'
 export default {
   name: 'ui-datepicker',
   mixins: [propsMixin],
@@ -41,6 +42,7 @@ export default {
       default: () => {}
     }
   },
+  directives: { winclick },
   methods: {
     handleClick() {
       this.dropVisible = true

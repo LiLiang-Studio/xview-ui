@@ -13,6 +13,7 @@
 <script>
 import { isSelfOrParent } from '../../utils/index'
 import UiOptionList from './../select/OptionList.vue'
+import { winclick } from '../../directives'
 export default {
   name: 'ui-dropdown',
   components: { UiOptionList },
@@ -39,6 +40,7 @@ export default {
       }
     }
   },
+  directives: { winclick },
   watch: {
     visible(newVal) {
       if (this.trigger === 'custom') this.isVisible = newVal

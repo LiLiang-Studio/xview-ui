@@ -23,7 +23,8 @@
 </template>
 <script>
 import UiInput from '../input'
-import { Checkbox as UiCheckbox, CheckboxGroup as UiCheckboxGroup } from '../checkbox'
+import UiCheckbox from '../checkbox'
+import UiCheckboxGroup from '../checkbox-group'
 export default {
   name: 'UiTransferBox',
   components: { UiInput, UiCheckbox, UiCheckboxGroup },

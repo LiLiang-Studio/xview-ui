@@ -1,2 +1,1 @@
-import CloseIconButton from './CloseIconButton.vue'
-export default CloseIconButton
+export { default } from './CloseIconButton.vue'

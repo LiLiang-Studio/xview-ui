@@ -9,7 +9,7 @@
 </template>
 <script>
 import { findParent } from '../../tools'
-import { Button as UiButton } from '../button'
+import UiButton from '../button'
 export default {
   name: 'UiRadio',
   components: { UiButton },

@@ -53,7 +53,7 @@
 <script>
 import UiIcon from '../icon'
 import UiInput from '../input'
-import { Select as UiSelect, Option as UiOption } from '../select'
+import UiSelect from '../select'
 export default {
   components: { UiIcon, UiSelect, UiOption, UiInput },
   data() {

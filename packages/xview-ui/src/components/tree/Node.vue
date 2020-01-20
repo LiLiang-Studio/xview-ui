@@ -19,7 +19,7 @@
 <script>
 import UiIcon from '../icon'
 import UiLoading from './../scroll/Loading.vue'
-import { Checkbox as UiCheckbox } from '../checkbox'
+import UiCheckbox from '../checkbox'
 import { findParent } from '../../tools'
 const UiRender = {
   functional: true,

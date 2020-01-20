@@ -23,7 +23,7 @@
 <script>
 import UiBox from './Box.vue'
 import UiIcon from '../icon'
-import { Button as UiButton } from '../button'
+import UiButton from '../button'
 export default {
   components: { UiBox, UiButton, UiIcon },
   data() {

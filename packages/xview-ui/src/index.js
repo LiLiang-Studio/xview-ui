@@ -28,13 +28,16 @@ import { createNotice, createMessage } from './components/notice'
 // 进度环
 import ICircle from './components/circle'
 // 面包屑导航
-import { Breadcrumb, BreadcrumbItem } from './components/breadcrumb'
+import Breadcrumb from './components/breadcrumb'
+import BreadcrumbItem from './components/breadcrumb-item'
 // 时间线
-import { Timeline, TimelineItem } from './components/timeline'
+import Timeline from './components/timeline'
+import TimelineItem from './components/timeline-item'
 // 加载中
 import Spin, { spinService } from './components/spin'
 // 步骤条
-import { Steps, Step } from './components/step'
+import Step from './components/step'
+import Steps from './components/steps'
 // 网格布局
 import { Row, Col } from './components/grid'
 // 回到顶部
@@ -44,7 +47,8 @@ import Progress from './components/progress'
 // 加载条
 import loadingBarService from './components/loading-bar'
 // 按钮
-import { Button, ButtonGroup } from './components/button'
+import Button from './components/button'
+import ButtonGroup from './components/button-group'
 // 分割线
 import Divider from './components/divider'
 // 开关
@@ -52,19 +56,28 @@ import ISwitch from './components/switch'
 // 无限滚动
 import Scroll from './components/scroll'
 // 复选框
-import { Checkbox, CheckboxGroup } from './components/checkbox'
+import Checkbox from './components/checkbox'
+import CheckboxGroup from './components/checkbox-group'
 // 布局
-import { Layout, Header, Content, Footer, Sider } from './components/layout'
+import Layout from './components/layout'
+import Header from './components/header'
+import Content from './components/content'
+import Footer from './components/footer'
+import Sider from './components/sider'
 // 标签
 import Tag from './components/tag'
 // 折叠面板
-import { Collapse, Panel } from './components/collapse'
+import Collapse from './components/collapse'
+import Panel from './components/panel'
 // 单元格
-import { Cell, CellGroup } from './components/cell'
+import Cell from './components/cell'
+import CellGroup from './components/cell-group'
 // 单选按钮
-import { Radio, RadioGroup } from './components/radio'
+import Radio from './components/radio'
+import RadioGroup from './components/radio-group'
 // 标签页
-import { Tabs, TabPane } from './components/tabs'
+import Tabs from './components/tabs'
+import TabPane from './components/tab-pane'
 // 文本输入框
 import Input from './components/input'
 // 抽屉
@@ -82,24 +95,34 @@ import Time from './components/time'
 // 面板分割
 import Split from './components/split'
 // 走马灯
-import { Carousel, CarouselItem } from './components/carousel'
+import Carousel from './components/carousel'
+import CarouselItem from './components/carousel-item'
 // 锚点
-import { Anchor, AnchorLink } from './components/anchor'
+import Anchor from './components/anchor'
+import AnchorLink from './components/anchor-link'
 // 上传
 import Upload from './components/upload'
 // 表单
-import { Form, FormItem } from './components/form'
+import Form from './components/form'
+import FormItem from './components/form-item'
 
 // 颜色选择器
 import ColorPicker from './components/color-picker'
 // 级联选择
 import Cascader from './components/cascader'
 // 下拉菜单
-import { Dropdown, DropdownItem, DropdownMenu } from './components/dropdown'
+import Dropdown from './components/dropdown'
+import DropdownItem from './components/dropdown-item'
+import DropdownMenu from './components/dropdown-menu'
 // 菜单
-import { Menu, Submenu, MenuItem, MenuGroup } from './components/menu'
+import Menu from './components/menu'
+import Submenu from './components/submenu'
+import MenuItem from './components/menu-item'
+import MenuGroup from './components/menu-group'
 // 下拉选择框
-import { Option, OptionGroup, Select } from './components/select'
+import Select from './components/select'
+import Option from './components/option'
+import OptionGroup from './components/option-group'
 // 气泡提示
 import Poptip from './components/poptip'
 // 文字提示

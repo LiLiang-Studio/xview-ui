@@ -28,7 +28,7 @@
 </template>
 <script>
 import UiOverlay from '../overlay'
-import { Button as UiButton } from '../button'
+import UiButton from '../button'
 import UiCloseIconButton from '../close-icon-button'
 import { parseSize, winScrollbarLock, getMaxZIndex, isFunc } from '../../tools'
 export default {

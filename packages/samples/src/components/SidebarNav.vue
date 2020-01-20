@@ -1,6 +1,6 @@
 <template>
   <div class="com-sidebar-nav">
-    <div class="title">VueUI-Widgets 组件列表</div>
+    <div class="title">XView-UI 组件列表</div>
     <ul>
       <li v-for="item in routes" :key="item.path">
         <router-link :to="{name: item.name}">{{item.name}}</router-link>

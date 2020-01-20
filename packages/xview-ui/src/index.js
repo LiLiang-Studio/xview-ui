@@ -3,17 +3,22 @@ import './styles/base.less'
 import './utils/polyfill'
 
 /**
+ * 已再次优化的组件
+ */
+import Icon from './components/icon' // 图标
+import Affix from './components/affix' // 图钉
+import Alert from './components/alert' // 警告提示
+
+import { directives } from './directives' // 全局指令
+
+/**
  * 新版本组件导入
  */
 import * as tools from './tools'
-// 图标
-import Icon from './components/icon'
 // 头像
 import Avatar from './components/avatar'
 // 卡片
 import Card from './components/card'
-// 警告提示
-import Alert from './components/alert'
 // 微标
 import Badge from './components/badge'
 // 评分
@@ -30,8 +35,6 @@ import { Timeline, TimelineItem } from './components/timeline'
 import Spin, { spinService } from './components/spin'
 // 步骤条
 import { Steps, Step } from './components/step'
-// 图钉
-import Affix from './components/affix'
 // 网格布局
 import { Row, Col } from './components/grid'
 // 回到顶部
@@ -115,8 +118,6 @@ import DatePicker from './components/picker/DatePicker.vue'
 // 时间选择器
 import TimePicker from './components/picker/TimePicker.vue'
 
-import { createDirectives } from './directives'
-
 const comps = {
   Icon,
   Avatar,
@@ -196,21 +197,19 @@ const comps = {
   TimePicker
 }
 
-export default {
-  /**
-   * 安装插件
-   * @param {import('vue').VueConstructor} Vue 
-   * @param {Object} options 
-   */
-  install(Vue, options = {}) {
-    Vue.prototype.$uiTools = tools
-    Vue.prototype.$Notice = createNotice(Vue)
-    Vue.prototype.$Message = createMessage(Vue)
-    Vue.prototype.$Spin = spinService(Vue)
-    Vue.prototype.$Modal = modalService(Vue)
-    Vue.LoadingBar = Vue.prototype.$Loading = loadingBarService(Vue)
-    let prefix = typeof options.prefix === 'string' ? options.prefix : 'Ui'
-    for (let name in comps) Vue.component(prefix + name, comps[name])
-    createDirectives(Vue)
-  }
+/**
+ * 安装插件
+ * @param {import('vue').VueConstructor} Vue 
+ * @param {Object} options 
+ */
+export default function (Vue, options = {}) {
+  Vue.prototype.$uiTools = tools
+  Vue.prototype.$Notice = createNotice(Vue)
+  Vue.prototype.$Message = createMessage(Vue)
+  Vue.prototype.$Spin = spinService(Vue)
+  Vue.prototype.$Modal = modalService(Vue)
+  Vue.LoadingBar = Vue.prototype.$Loading = loadingBarService(Vue)
+  let prefix = typeof options.prefix === 'string' ? options.prefix : 'Ui'
+  for (let name in comps) Vue.component(prefix + name, comps[name])
+  Vue.use(directives)
 }

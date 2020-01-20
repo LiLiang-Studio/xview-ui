@@ -1,16 +1,16 @@
 <template>
   <transition :name="prefix">
     <div v-if="visible" :class="classes">
-      <UiIcon v-if="showIcon" :class="`${prefix}--icon`" :type="iconType"/>
-      <div :class="`${prefix}--body`">
-        <p :class="`${prefix}--title`">
+      <UiIcon v-if="showIcon" :class="`${prefix}-icon`" :type="iconType"/>
+      <div :class="`${prefix}-body`">
+        <p :class="`${prefix}-title`">
           <slot></slot>
         </p>
-        <p :class="`${prefix}--desc`">
+        <p :class="`${prefix}-desc`">
           <slot name="desc"></slot>
         </p>
       </div>
-      <UiCloseIconButton v-if="closable" :class="`${prefix}--close`" @click="close"/>
+      <UiCloseIconButton v-if="closable" :class="`${prefix}-close`" @click="close"/>
     </div>
   </transition>
 </template>
@@ -40,7 +40,7 @@ export default {
     },
     classes() {
       let { prefix, type, hasDesc } = this
-      return [prefix, `${prefix}--${type}`, { hasDesc }]
+      return [prefix, `${prefix}-${type}`, { hasDesc }]
     }
   },
   methods: {
@@ -66,59 +66,59 @@ export default {
   display: flex;
   align-items: center;
   transition: opacity .22s ease-in-out;
-  &--info {
+  &-info {
     border-color: lighten(@info-color, 33.9%);
     background-color: lighten(@info-color, 39%);
-    @{prefix}--icon {
+    @{prefix}-icon {
       color: @primary-color;
     }
   }
-  &--success {
+  &-success {
     border-color: lighten(@success-color, 45%);
     background-color: lighten(@success-color, 50%);
-    @{prefix}--icon {
+    @{prefix}-icon {
       color: @success-color;
     }
   }
-  &--warning {
+  &-warning {
     border-color: lighten(@warning-color, 40%);
     background-color: lighten(@warning-color, 45%);
-    @{prefix}--icon {
+    @{prefix}-icon {
       color: @warning-color;
     }
   }
-  &--error {
+  &-error {
     border-color: lighten(@error-color, 40%);
     background-color: lighten(@error-color, 45%);
-    @{prefix}--icon {
+    @{prefix}-icon {
       color: @error-color;
     }
   }
   &.hasDesc {
     padding: 16px;
-    @{prefix}--icon {
+    @{prefix}-icon {
       font-size: 28px;
       margin-right: 16px;
     }
   }
-  &--icon {
+  &-icon {
     font-size: 14px;
     margin-right: 8px;
   }
-  &--title {
+  &-title {
     color: @title-color;
     font-size: 14px;
     word-break: break-all;
     padding-right: 32px;
     line-height: 1.4;
   }
-  &--desc {
+  &-desc {
     font-size: 12px;
     line-height: 1.7;
     word-break: break-word;
     margin-top: 2px;
   }
-  &--close {
+  &-close {
     position: absolute;
     top: 7px;
     right: 7px;

@@ -72,12 +72,15 @@ export const winScrollbarLock = {
 }
 
 export const throttle = (fn, gapTime = 16) => {
-  let lastTime = null
+  let tid, lastTime
   return () => {
+    clearTimeout(tid)
     let nowTime = Date.now()
-    if (!lastTime ||  nowTime - lastTime > gapTime) {
+    if (!lastTime || nowTime - lastTime > gapTime) {
       fn()
       lastTime = nowTime
+    } else {
+      tid = setTimeout(fn, nowTime - lastTime)
     }
   }
 }

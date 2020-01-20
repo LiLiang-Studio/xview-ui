@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-winresize="throttleResize" v-winscroll="throttleScroll">
     <div :class="{'ui-affix': fixed}" :style="affixStyle">
       <slot></slot>
     </div>
@@ -13,7 +13,9 @@ export default {
     return {
       fixed: false,
       affixStyle: {},
-      placeholderStyle: {}
+      placeholderStyle: {},
+      throttleResize: throttle(() => this.onResize(), 50),
+      throttleScroll: throttle(() => this.onScroll(), 50)
     }
   },
   props: {
@@ -35,14 +37,6 @@ export default {
   },
   mounted() {
     this.onResize()
-    this.throttleScroll = throttle(() => this.onScroll(), 50)
-    this.throttleResize = throttle(() => this.onResize(), 50)
-    window.addEventListener('scroll', this.throttleScroll)
-    window.addEventListener('resize', this.throttleResize)
-  },
-  beforeDestroy() {
-    window.removeEventListener('scroll', this.throttleScroll)
-    window.removeEventListener('resize', this.throttleResize)
   },
   methods: {
     onScroll() {

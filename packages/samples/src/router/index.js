@@ -11,6 +11,17 @@ export const routes = [
     component: () => import('../pages/Icon.vue')
   },
   {
+    path: 'Affix',
+    name: 'Affix',
+    component: () => import('../pages/Affix.vue')
+  },
+  {
+    path: 'Alert',
+    name: 'Alert',
+    component: () => import('../pages/Alert.vue')
+  },
+
+  {
     path: 'Avatar',
     name: 'Avatar',
     component: () => import('../pages/Avatar.vue')
@@ -81,11 +92,6 @@ export const routes = [
     component: () => import('../pages/LoadingBar.vue')
   },
   {
-    path: 'Affix',
-    name: 'Affix',
-    component: () => import('../pages/Affix.vue')
-  },
-  {
     path: 'Scroll',
     name: 'Scroll',
     component: () => import('../pages/Scroll.vue')
@@ -149,11 +155,6 @@ export const routes = [
     path: 'Layout',
     name: 'Layout',
     component: () => import('../pages/Layout.vue')
-  },
-  {
-    path: 'Alert',
-    name: 'Alert',
-    component: () => import('../pages/Alert.vue')
   },
   {
     path: 'BackTop',

@@ -11,8 +11,10 @@ export default {
   },
   computed: {
     styles() {
-      let fontSize = this.size && `${parseInt(this.size)}px`
-      return { fontSize, color: this.color }
+      return {
+        color: this.color,
+        fontSize: this.size && `${parseInt(this.size)}px`
+      }
     }
   }
 }

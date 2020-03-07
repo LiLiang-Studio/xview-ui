@@ -11,6 +11,11 @@ export const routes = [
     component: () => import('../pages/Icon.vue')
   },
   {
+    path: 'Button',
+    name: 'Button',
+    component: () => import('../pages/Button.vue')
+  },
+  {
     path: 'Affix',
     name: 'Affix',
     component: () => import('../pages/Affix.vue')
@@ -170,11 +175,6 @@ export const routes = [
     path: 'Badge',
     name: 'Badge',
     component: () => import('../pages/Badge.vue')
-  },
-  {
-    path: 'Button',
-    name: 'Button',
-    component: () => import('../pages/Button.vue')
   },
   {
     path: 'Card',

@@ -29,12 +29,12 @@ export default {
 @import url("../../styles/vars.less");
 .ui-btn-group {
   display: inline-block;
-  .ui-btn {
+  .x-btn {
     float: left;
     &:hover {
       z-index: 1;
     }
-    &.isOnlyIcon {
+    &.iconOnly {
       width: auto;
       padding: 0 15px;
       border-radius: 3px;
@@ -54,7 +54,7 @@ export default {
       margin-left: -1px;
     }
   }
-  &.vertical .ui-btn {
+  &.vertical .x-btn {
     float: none;
     display: flex;
     width: 100%;
@@ -70,16 +70,16 @@ export default {
     }
   }
   &-circle {
-    .ui-btn:first-child {
+    .x-btn:first-child {
       border-top-left-radius: @size-large;
       border-bottom-left-radius: @size-large;
     }
-    .ui-btn:last-child {
+    .x-btn:last-child {
       border-top-right-radius: @size-large;
       border-bottom-right-radius: @size-large;
     }
     &.vertical {
-      .ui-btn {
+      .x-btn {
         &:first-child {
           border-radius: @size-large @size-large 0 0;
         }

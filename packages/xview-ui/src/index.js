@@ -3,9 +3,14 @@ import './styles/base.less'
 import './utils/polyfill'
 
 /**
- * 已再次优化的组件
+ * 2020-03-07 开始新一轮优化
  */
 import Icon from './components/icon' // 图标
+import Button from './components/button' // 按钮
+
+/**
+ * 已再次优化的组件
+ */
 import Affix from './components/affix' // 图钉
 import Alert from './components/alert' // 警告提示
 import Avatar from './components/avatar' // 头像
@@ -44,8 +49,7 @@ import { Row, Col } from './components/grid'
 import Progress from './components/progress'
 // 加载条
 import loadingBarService from './components/loading-bar'
-// 按钮
-import Button from './components/button'
+// 按钮组
 import ButtonGroup from './components/button-group'
 // 分割线
 import Divider from './components/divider'

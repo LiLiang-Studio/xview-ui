@@ -2,22 +2,30 @@
 @primary-color: #2d8cf0;
 @primary-light-color: #5cadff;
 @primary-dark-color: #2b85e4;
-
 // 辅助色
 @info-color: #2db7f5;
 @success-color: #19be6b;
 @warning-color: #ff9900;
-@error-color: #ed3f14;
-
+@error-color: #ed4014;
 // 中性色
-@title-color: #1c2438;
-@content-color: #495060;
-@sub-color: #80848f;
-@disabled-color: #bbbec4;
-@border-color: #dddee1;
-@divider-color: #e9eaec;
+@title-color: #17233d;
+@content-color: #515a6e;
+@sub-color: #808695;
+@disabled-color: #c5c8ce;
+@border-color: #dcdee2;
+@divider-color: #e8eaec;
 @bg-color: #f8f8f9;
 @disabled-bg-color: #f3f3f3;
+
+// 表单控件尺寸
+@size-small: 24px;
+@size-normal: 32px;
+@size-large: 40px;
+
+// 表单控件阴影
+.control-shadow (@color) {
+  box-shadow: 0 0 0 2px fadeout(@color, 80%);
+}
 
 // 加亮色
 @primary-light-color: lighten(@primary-color, 8%);
@@ -42,10 +50,6 @@
 @form-control-small: 24px;
 @form-control-normal: 32px;
 @form-control-large: 36px;
-
-@size-small: 24px;
-@size-normal: 32px;
-@size-large: 36px;
 
 // 视口尺寸
 @screen-xs-min: 360px;

@@ -1,35 +1,30 @@
 <template>
-  <i :class="[`ion-${type}`, 'ui-icon']" :style="styles" v-on="$listeners"></i>
+  <i :class="classes" :style="styles"></i>
 </template>
 <script>
 export default {
-  name: 'UiIcon',
+  name: 'XIcon',
   props: {
     type: String,
-    size: [Number, String],
-    color: String
+    color: String,
+    custom: String,
+    size: [Number, String]
   },
   computed: {
     styles() {
-      return {
-        color: this.color,
-        fontSize: this.size && `${parseInt(this.size)}px`
-      }
+      return { color: this.color, fontSize: this.size && `${parseInt(this.size)}px` }
+    },
+    classes() {
+      return ['x-icon', this.custom || `ion-${this.type}`]
     }
   }
 }
 </script>
 <style lang="less">
-.ui-icon {
-  display: inline-block;
+.x-icon {
   font-family: Ionicons;
   font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  text-rendering: auto;
   line-height: 1;
-  vertical-align: middle;
-  -webkit-font-smoothing: antialiased;
+  padding: 0 3px;
 }
 </style>

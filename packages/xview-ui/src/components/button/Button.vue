@@ -1,95 +1,90 @@
 <template>
-  <a :class="classes" :is="root.name" v-bind="root.attrs" v-on="listeners">
-    <UiIcon v-if="loading" class="icon-loading" type="load-c"/>
-    <UiIcon v-else-if="icon" :type="icon"/>
-    <span v-if="!isOnlyIcon"><slot></slot></span>
-  </a>
+  <div :class="classes" v-bind="btnProps" v-on="listeners">
+    <x-icon v-if="loading" :class="`${prefix}_iconLoop`" type="load-c"/>
+    <x-icon v-else-if="icon" :type="icon" :custom="customIcon"/>
+    <span v-if="!iconOnly"><slot></slot></span>
+  </div>
 </template>
 <script>
-import UiIcon from '../icon'
+import XIcon from '../icon'
 export default {
-  name: 'UiButton',
-  components: { UiIcon },
-  data() {
-    return { prefix: 'ui-btn', isOnlyIcon: false }
-  },
+  name: 'XButton',
+  components: { XIcon },
   props: {
     type: {
       default: 'default',
-      validator(value) {
-        return ['default', 'primary', 'dashed', 'text', 'info', 'success', 'warning', 'error'].indexOf(value) !== -1
+      validator(v) {
+        return ['default', 'primary', 'dashed', 'text', 'info', 'success', 'warning', 'error'].indexOf(v) !== -1
       }
     },
     ghost: Boolean,
     size: {
-      validator(value) {
-        return ['large', 'default', 'small'].indexOf(value) !== -1
+      validator(v) {
+        return ['large', 'default', 'small'].indexOf(v) !== -1
       }
     },
     shape: {
-      validator(value) {
-        return value === 'circle'
+      validator(v) {
+        return v === 'circle'
       }
     },
     long: Boolean,
     htmlType: {
       default: 'button',
-      validator(value) {
-        return ['button', 'submit', 'reset'].indexOf(value) !== -1
+      validator(v) {
+        return ['button', 'submit', 'reset'].indexOf(v) !== -1
       }
     },
     disabled: Boolean,
     loading: Boolean,
     icon: String,
+    customIcon: String,
     to: [String, Object],
     replace: Boolean,
     target: String,
     append: Boolean
   },
+  data() {
+    return { prefix: 'x-btn', iconOnly: false }
+  },
   computed: {
     classes() {
+      let { prefix, type, size, shape, long, ghost, loading, disabled, iconOnly } = this
       return [
-        this.prefix,
-        this.type && `${this.prefix}-${this.type}`,
-        this.size && `${this.prefix}-${this.size}`,
-        this.shape && `${this.prefix}-${this.shape}`,
-        { long: this.long, ghost: this.ghost, isOnlyIcon: this.isOnlyIcon, loading: this.loading, disabled: this.disabled }
+        prefix,
+        `${prefix}_${type}`,
+        size && `${prefix}_size_${size}`,
+        shape && `${prefix}_${shape}`,
+        { long, ghost, loading, disabled, iconOnly }
       ]
     },
-    listeners() {
-      const that = this
-      return Object.assign({}, this.$listeners, {
-        click(event) {
-          !that.disabled && that.$emit('click', event)
-        }
-      })
+    btnProps() {
+      let { to, target, $router, replace, append, disabled, htmlType: type } = this
+      return to ? !target && $router ? 
+        { is: 'RouterLink', to, replace, append } : { is: 'a', target, href: to } : { is: 'button', disabled, type }
     },
-    root() {
-      if (this.to) {
-        if (!this.target && this.$router) {
-          return { name: 'RouterLink', attrs: { to: this.to, replace: this.replace, append: this.append } }
+    listeners() {
+      let that = this
+      return {
+        ...this.$listeners,
+        click(e) {
+          !that.disabled && that.$emit('click', e)
         }
-        return { name: 'a', attrs: { target: this.target, href: this.to } }
       }
-      return { name: 'button', attrs: { disabled: this.disabled, type: this.htmlType } }
     }
   },
   mounted() {
-    this.isOnlyIcon = this.$slots.default === undefined
+    this.iconOnly = !this.$slots.default
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-btn {
+@prefix: .x-btn;
+@{prefix} {
   outline: none;
   user-select: none;
   cursor: pointer;
-  height: 32px;
-  font-size: 12px;
-  padding: 0 15px;
-  border-radius: 3px;
-  border: 1px solid;
   white-space: nowrap;
   display: inline-flex;
   align-items: center;
@@ -97,6 +92,14 @@ export default {
   vertical-align: middle;
   position: relative;
   transition: all .2s ease-in-out;
+  height: @size-normal;
+  font-size: 14px;
+  padding: 0 15px;
+  border-radius: 3px;
+  border: 1px solid;
+  + @{prefix} {
+    margin-left: 10px;
+  }
   &:after {
     content: '';
     position: absolute;
@@ -110,158 +113,155 @@ export default {
     background-color: currentColor;
     transition: opacity .2s ease-in-out;
   }
-  &.loading {
-    pointer-events: none;
-    .icon-loading {
-      animation: ani-load-loop 1s linear infinite;
+  &_default, &_dashed, &_text {
+    color: @content-color;
+    &:focus {
+      .control-shadow(@primary-color)
     }
-    &:after {
+    &.ghost {
+      color: #fff;
+    }
+  }
+  &_primary, &_info, &_success, &_warning, &_error {
+    color: #fff;
+    &:not(.disabled):hover:after {
+      opacity: .2;
+    }
+    &:not(.disabled):active:after {
+      opacity: 0;
+    }
+    &.ghost {
+      border-color: currentColor;
+      &:not(.disabled):after {
+        opacity: 0;
+      }
+      &:hover {
+        background-color: rgba(255,250,242,.5);
+      }
+    }
+    &.loading:after {
       opacity: .38;
+    }
+  }
+  &_default, &_dashed {
+    background-color: #fff;
+    border-color: @border-color;
+    &:hover {
+      color: @primary-color;
+      border-color: @primary-color;
+    }
+    &.ghost {
+      border-color: currentColor;
+    }
+  }
+  &_text {
+    background-color: transparent;
+    &:hover {
+      color: @primary-color;
+    }
+  }
+  &_dashed {
+    border-style: dashed;
+  }
+  &_primary, &_info, &_success, &_warning, &_error, &_text {
+    border-color: transparent;
+  }
+  &_primary {
+    background-color: @primary-color;
+    &:focus {
+      .control-shadow(@primary-color)
+    }
+    &.ghost {
+      color: @primary-color;
+    }
+  }
+  &_info {
+    background-color: @info-color;
+    &:focus {
+      .control-shadow(@info-color)
+    }
+    &.ghost {
+      color: @primary-color;
+    }
+  }
+  &_success {
+    background-color: @success-color;
+    &:focus {
+      .control-shadow(@success-color)
+    }
+    &.ghost {
+      color: @success-color;
+    }
+  }
+  &_warning {
+    background-color: @warning-color;
+    &:focus {
+      .control-shadow(@warning-color)
+    }
+    &.ghost {
+      color: @warning-color;
+    }
+  }
+  &_error {
+    background-color: @error-color;
+    &:focus {
+      .control-shadow(@error-color)
+    }
+    &.ghost {
+      color: @error-color;
+    }
+  }
+  &_primary, &_info, &_success, &_warning, &_error, &_default, &_dashed {
+    &.ghost {
+      background-color: transparent;
+    }
+  }
+  &_circle {
+    border-radius: @size-large;
+  }
+  &.iconOnly {
+    padding: 0;
+    font-size: 16px;
+    width: @size-normal;
+  }
+  &_size_small {
+    height: @size-small;
+    font-size: 12px;
+    padding: 0 7px;
+    &.iconOnly {
+      font-size: 14px;
+      width: @size-small;
+    }
+  }
+  &_size_large {
+    height: @size-large;
+    font-size: 16px;
+    &.iconOnly {
+      font-size: 18px;
+      width: @size-large;
     }
   }
   &.long {
     width: 100%;
   }
-  &-circle {
-    border-radius: 36px;
-    &.isOnlyIcon {
-      padding: 0;
-      font-size: 16px;
-      border-radius: 50%;
-      width: @size-normal;
-      min-width: @size-normal;
-    }
-  }
-  &-large, &-group-large & {
-    font-size: 14px;
-    height: @size-large;
-    &.isOnlyIcon {
-      font-size: 18px;
-      width: @size-large;
-      min-width: @size-large;
-    }
-  }
-  &-small, &-group-small & {
-    height: @size-small;
-    &.isOnlyIcon {
-      font-size: 12px;
-      width: @size-small;
-      min-width: @size-small;
-    }
-  }
-  &-default, &-dashed {
-    background-color: #fff;
-    border-color: @border-color;
-    &.ghost {
-      border-color: currentColor;
-    }
-    &:not(.disabled):hover {
-      border-color: currentColor;
-    }
-  }
-  &-default, &-dashed, &-text {
-    color: @content-color;
-    &.ghost {
-      color: #fff;
-    }
-    &:not(.disabled):hover {
-      color: @primary-color;
-    }
-    &:not(.disabled):focus {
-      .form-control-shadow(@primary-color);
-    }
-  }
-  &-dashed {
-    border-style: dashed;
-  }
-  &-text {
-    border-color: transparent;
-    background-color: transparent;
-  }
-  &-primary, &-info, &-success, &-warning, &-error {
-    color: #fff;
-    &.ghost {
-      border-color: currentColor;
-      &:not(.disabled):hover {
-        background-color: rgba(255, 255, 255, .5);
-      }
-    }
-    &:not(.ghost):not(.disabled) {
-      &:hover {
-        color: #fff;
-      }
-      &:hover:after, &:focus:after {
-        opacity: .1;
-      }
-      &:active:after {
-        opacity: .3;
-      }
-    }
-  }
-  &-primary {
-    border-color: @primary-color;
-    background-color: @primary-color;
-    &.ghost {
-      color: @primary-color;
-    }
-    &:not(.disabled):focus {
-      .form-control-shadow(@primary-color);
-    }
-  }
-  &-info {
-    border-color: @info-color;
-    background-color: @info-color;
-    &.ghost {
-      color: @info-color;
-    }
-    &:not(.disabled):focus {
-      .form-control-shadow(@info-color);
-    }
-  }
-  &-success {
-    border-color: @success-color;
-    background-color: @success-color;
-    &.ghost {
-      color: @success-color;
-    }
-    &:not(.disabled):focus {
-      .form-control-shadow(@success-color);
-    }
-  }
-  &-warning {
-    border-color: @warning-color;
-    background-color: @warning-color;
-    &.ghost {
-      color: @warning-color;
-    }
-    &:not(.disabled):focus {
-      .form-control-shadow(@warning-color);
-    }
-  }
-  &-error {
-    border-color: @error-color;
-    background-color: @error-color;
-    &.ghost {
-      color: @error-color;
-    }
-    &:not(.disabled):focus {
-      .form-control-shadow(@error-color);
-    }
-  }
-  &.ghost {
-    background-color: transparent;
+  &.loading {
+    pointer-events: none;
   }
   &.disabled {
-    pointer-events: painted;
-    color: @disabled-color;
     cursor: not-allowed;
-  }
-  &.disabled:not(.text) {
+    color: @disabled-color;
     border-color: @border-color;
-    background-color: @bg-color;
+    background-color: #f7f7f7;
   }
-  .ui-icon + span {
-    margin-left: 8px;
+  > span {
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .x-icon + span {
+    margin-left: 3px;
+  }
+  &_iconLoop {
+    animation: x-load-loop 1s linear infinite;
   }
 }
 </style>

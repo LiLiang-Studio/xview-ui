@@ -93,7 +93,7 @@ export default {
     }
     &.loading {
       color: @primary-color;
-      animation: ani-load-loop 1s linear infinite;
+      animation: x-load-loop 1s linear infinite;
     }
   }
   &--close {

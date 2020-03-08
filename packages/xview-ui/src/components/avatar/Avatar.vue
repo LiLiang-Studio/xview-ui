@@ -1,80 +1,92 @@
 <template>
-  <span :class="classes" v-on="$listeners">
-    <slot>
-      <img v-if="src" :src="src">
-      <UiIcon v-else-if="icon" :type="icon"/>
-    </slot>
+  <span :class="classes" :style="styles">
+    <img v-if="src" :src="src">
+    <x-icon v-else-if="icon || customIcon" :type="icon" :custom="customIcon"/>
+    <span v-else ref="textBox" :style="textStyle">
+      <slot>{{text}}</slot>
+    </span>
   </span>
 </template>
 <script>
-import UiIcon from '../icon'
+import XIcon from '../icon'
 export default {
-  name: 'UiAvatar',
-  components: { UiIcon },
-  data() {
-    return { prefix: 'ui-avatar' }
-  },
+  name: 'XAvatar',
+  components: { XIcon },
   props: {
     shape: {
       default: 'circle',
-      validator(value) {
-        return ['circle', 'square'].indexOf(value) !== -1
+      validator(v) {
+        return ['circle', 'square'].indexOf(v) !== -1
       }
     },
-    size: {
-      default: 'default',
-      validator(value) {
-        return ['large', 'small', 'default'].indexOf(value) !== -1
-      }
-    },
+    size: [String, Number],
     src: String,
-    icon: String
+    icon: String,
+    customIcon: String,
+    text: String
+  },
+  data() {
+    return { prefix: 'x-avatar', textStyle: null }
   },
   computed: {
     classes() {
-      let { prefix, shape, size, icon, src } = this
-      return [prefix, `${prefix}-${shape}`, `${prefix}-${size}`, { isIcon: icon }]
+      let { prefix, shape, size, icon } = this
+      return [prefix, `${prefix}_${shape}`, size && `${prefix}_${size}`, { isIcon: icon }]
+    },
+    styles() {
+      let size = parseInt(this.size)
+      return isNaN(size) ? {} : { width: `${size}px`, height: `${size}px`, fontSize: `${size / 2}px` }
+    }
+  },
+  watch: {
+    text: {
+      immediate: true,
+      handler(val) {
+        if (this.src || this.icon || this.customIcon) return
+        this.$nextTick(() => {
+          let width = this.$el.offsetWidth,
+            textWidth = this.$refs.textBox.offsetWidth
+          this.textStyle = {
+            transform: `scale(${width - 8 < textWidth ? (width - 8) / textWidth : 1})`
+          }
+        })
+      }
     }
   }
 }
 </script>
 <style lang="less">
-.ui-avatar {
-  display: inline-block;
-  text-align: center;
-  background-color: #ccc;
-  color: #fff;
+@import url("../../styles/vars.less");
+.x-avatar {
   overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   vertical-align: middle;
-  position: relative;
+  color: #fff;
+  background-color: #ccc;
+  width: @size-normal;
+  height: @size-normal;
+  border-radius: 50%;
+  font-size: 14px;
   &.isIcon {
     font-size: 18px;
   }
-  &-circle {
-    border-radius: 50%;
-  }
-  &-square {
+  &_square {
     border-radius: 4px;
   }
-  &-default {
-    width: 32px;
-    height: 32px;
-    line-height: 32px;
-  }
-  &-large {
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    &.isIcon {
-      font-size: 24px;
-    }
-  }
-  &-small {
-    width: 24px;
-    height: 24px;
-    line-height: 24px;
+  &_small {
+    width: @size-small;
+    height: @size-small;
     &.isIcon {
       font-size: 14px;
+    }
+  }
+  &_large {
+    width: @size-large;
+    height: @size-large;
+    &.isIcon {
+      font-size: 24px;
     }
   }
   img {

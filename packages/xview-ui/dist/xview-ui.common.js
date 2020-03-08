@@ -1009,18 +1009,53 @@ __vue_render__$5._withStripped = true;
 
 //
 var script$6 = {
-  name: 'UiCloseIconButton',
-  components: { UiIcon: __vue_component__ },
+  name: 'XAvatar',
+  components: { XIcon: __vue_component__ },
   props: {
-    size: {
-      type: [Number, String],
-      default: 22
-    }
+    shape: {
+      default: 'circle',
+      validator: function validator(v) {
+        return ['circle', 'square'].indexOf(v) !== -1
+      }
+    },
+    size: [String, Number],
+    src: String,
+    icon: String,
+    customIcon: String,
+    text: String
+  },
+  data: function data() {
+    return { prefix: 'x-avatar', textStyle: null }
   },
   computed: {
+    classes: function classes() {
+      var ref = this;
+      var prefix = ref.prefix;
+      var shape = ref.shape;
+      var size = ref.size;
+      var icon = ref.icon;
+      return [prefix, (prefix + "_" + shape), size && (prefix + "_" + size), { isIcon: icon }]
+    },
     styles: function styles() {
-      var size = parseSize(this.size);
-      return { width: size, fontSize: size }
+      var size = parseInt(this.size);
+      return isNaN(size) ? {} : { width: (size + "px"), height: (size + "px"), fontSize: ((size / 2) + "px") }
+    }
+  },
+  watch: {
+    text: {
+      immediate: true,
+      handler: function handler(val) {
+        var this$1 = this;
+
+        if (this.src || this.icon || this.customIcon) { return }
+        this.$nextTick(function () {
+          var width = this$1.$el.offsetWidth,
+            textWidth = this$1.$refs.textBox.offsetWidth;
+          this$1.textStyle = {
+            transform: ("scale(" + (width - 8 < textWidth ? (width - 8) / textWidth : 1) + ")")
+          };
+        });
+      }
     }
   }
 };
@@ -1033,15 +1068,21 @@ var __vue_render__$6 = function() {
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
   return _c(
-    "UiIcon",
-    _vm._g(
-      {
-        staticClass: "ui-close-icon-button",
-        style: _vm.styles,
-        attrs: { type: "ios-close-empty" }
-      },
-      _vm.$listeners
-    )
+    "span",
+    { class: _vm.classes, style: _vm.styles },
+    [
+      _vm.src
+        ? _c("img", { attrs: { src: _vm.src } })
+        : _vm.icon || _vm.customIcon
+        ? _c("x-icon", { attrs: { type: _vm.icon, custom: _vm.customIcon } })
+        : _c(
+            "span",
+            { ref: "textBox", style: _vm.textStyle },
+            [_vm._t("default", [_vm._v(_vm._s(_vm.text))])],
+            2
+          )
+    ],
+    1
   )
 };
 var __vue_staticRenderFns__$6 = [];
@@ -1078,8 +1119,77 @@ __vue_render__$6._withStripped = true;
 
 //
 var script$7 = {
+  name: 'UiCloseIconButton',
+  components: { UiIcon: __vue_component__ },
+  props: {
+    size: {
+      type: [Number, String],
+      default: 22
+    }
+  },
+  computed: {
+    styles: function styles() {
+      var size = parseSize(this.size);
+      return { width: size, fontSize: size }
+    }
+  }
+};
+
+/* script */
+var __vue_script__$7 = script$7;
+/* template */
+var __vue_render__$7 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "UiIcon",
+    _vm._g(
+      {
+        staticClass: "ui-close-icon-button",
+        style: _vm.styles,
+        attrs: { type: "ios-close-empty" }
+      },
+      _vm.$listeners
+    )
+  )
+};
+var __vue_staticRenderFns__$7 = [];
+__vue_render__$7._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$7 = undefined;
+  /* scoped */
+  var __vue_scope_id__$7 = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$7 = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$7 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$7 = normalizeComponent(
+    { render: __vue_render__$7, staticRenderFns: __vue_staticRenderFns__$7 },
+    __vue_inject_styles__$7,
+    __vue_script__$7,
+    __vue_scope_id__$7,
+    __vue_is_functional_template__$7,
+    __vue_module_identifier__$7,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+var script$8 = {
   name: 'UiAlert',
-  components: { UiIcon: __vue_component__, UiCloseIconButton: __vue_component__$6 },
+  components: { UiIcon: __vue_component__, UiCloseIconButton: __vue_component__$7 },
   data: function data() {
     return { prefix: 'ui-alert', hasDesc: false, visible: true }
   },
@@ -1117,9 +1227,9 @@ var script$7 = {
 };
 
 /* script */
-var __vue_script__$7 = script$7;
+var __vue_script__$8 = script$8;
 /* template */
-var __vue_render__$7 = function() {
+var __vue_render__$8 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -1153,96 +1263,6 @@ var __vue_render__$7 = function() {
         )
       : _vm._e()
   ])
-};
-var __vue_staticRenderFns__$7 = [];
-__vue_render__$7._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$7 = undefined;
-  /* scoped */
-  var __vue_scope_id__$7 = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$7 = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$7 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$7 = normalizeComponent(
-    { render: __vue_render__$7, staticRenderFns: __vue_staticRenderFns__$7 },
-    __vue_inject_styles__$7,
-    __vue_script__$7,
-    __vue_scope_id__$7,
-    __vue_is_functional_template__$7,
-    __vue_module_identifier__$7,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-var script$8 = {
-  name: 'UiAvatar',
-  components: { UiIcon: __vue_component__ },
-  data: function data() {
-    return { prefix: 'ui-avatar' }
-  },
-  props: {
-    shape: {
-      default: 'circle',
-      validator: function validator(value) {
-        return ['circle', 'square'].indexOf(value) !== -1
-      }
-    },
-    size: {
-      default: 'default',
-      validator: function validator(value) {
-        return ['large', 'small', 'default'].indexOf(value) !== -1
-      }
-    },
-    src: String,
-    icon: String
-  },
-  computed: {
-    classes: function classes() {
-      var ref = this;
-      var prefix = ref.prefix;
-      var shape = ref.shape;
-      var size = ref.size;
-      var icon = ref.icon;
-      var src = ref.src;
-      return [prefix, (prefix + "-" + shape), (prefix + "-" + size), { isIcon: icon }]
-    }
-  }
-};
-
-/* script */
-var __vue_script__$8 = script$8;
-/* template */
-var __vue_render__$8 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "span",
-    _vm._g({ class: _vm.classes }, _vm.$listeners),
-    [
-      _vm._t("default", [
-        _vm.src
-          ? _c("img", { attrs: { src: _vm.src } })
-          : _vm.icon
-          ? _c("UiIcon", { attrs: { type: _vm.icon } })
-          : _vm._e()
-      ])
-    ],
-    2
-  )
 };
 var __vue_staticRenderFns__$8 = [];
 __vue_render__$8._withStripped = true;
@@ -1801,7 +1821,7 @@ __vue_render__$c._withStripped = true;
 var prefix = 'ui-notice';
 var script$d = {
   name: 'UiNotice',
-  components: { UiIcon: __vue_component__, UiCloseIconButton: __vue_component__$6 },
+  components: { UiIcon: __vue_component__, UiCloseIconButton: __vue_component__$7 },
   transition: prefix,
   data: function data() {
     return { prefix: prefix, hasDesc: false }
@@ -1925,7 +1945,7 @@ __vue_render__$d._withStripped = true;
 var prefix$1 = 'ui-message';
 var script$e = {
   name: 'UiMessage',
-  components: { UiIcon: __vue_component__, UiCloseIconButton: __vue_component__$6 },
+  components: { UiIcon: __vue_component__, UiCloseIconButton: __vue_component__$7 },
   transition: prefix$1,
   data: function data() {
     return { prefix: prefix$1 }
@@ -5112,7 +5132,7 @@ __vue_render__$J._withStripped = true;
 //
 var script$H = {
   name: 'UiTabs',
-  components: { UiIcon: __vue_component__, UiCloseIconButton: __vue_component__$6, UiRender: UiRender },
+  components: { UiIcon: __vue_component__, UiCloseIconButton: __vue_component__$7, UiRender: UiRender },
   data: function data() {
     return {
       prefix: 'ui-tabs',
@@ -5800,7 +5820,7 @@ __vue_render__$N._withStripped = true;
 //
 var script$L = {
   name: 'UiDrawer',
-  components: { UiOverlay: __vue_component__$N, UiCloseIconButton: __vue_component__$6 },
+  components: { UiOverlay: __vue_component__$N, UiCloseIconButton: __vue_component__$7 },
   data: function data() {
     return { prefix: 'ui-drawer', visible: this.value, zIndex: 1, isCallLock: false }
   },
@@ -6020,7 +6040,7 @@ __vue_render__$O._withStripped = true;
 //
 var script$M = {
   name: 'UiModal',
-  components: { UiOverlay: __vue_component__$N, UiButton: __vue_component__$1, UiCloseIconButton: __vue_component__$6 },
+  components: { UiOverlay: __vue_component__$N, UiButton: __vue_component__$1, UiCloseIconButton: __vue_component__$7 },
   data: function data() {
     return {
       prefix: 'ui-modal',
@@ -8072,7 +8092,7 @@ __vue_render__$Z._withStripped = true;
 var incKey = 0;
 var script$X = {
   name: 'UiUpload',
-  components: { UiIcon: __vue_component__, UiProgress: __vue_component__$q, UiCloseIconButton: __vue_component__$6 },
+  components: { UiIcon: __vue_component__, UiProgress: __vue_component__$q, UiCloseIconButton: __vue_component__$7 },
   data: function data() {
     return {
       prefix: 'ui-upload',
@@ -12051,9 +12071,9 @@ var comps = {
   ButtonGroup: __vue_component__$2,
   Badge: __vue_component__$3,
 
-  Avatar: __vue_component__$8,
+  Avatar: __vue_component__$6,
   Card: __vue_component__$b,
-  Alert: __vue_component__$7,
+  Alert: __vue_component__$8,
   Rate: __vue_component__$c,
   ICircle: __vue_component__$g,
   Breadcrumb: __vue_component__$h,

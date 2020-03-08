@@ -1,91 +1,87 @@
 <template>
-  <div :class="[prefix, `${prefix}-${size}`, `${prefix}-${shape}`, { vertical }]">
+  <div :class="[prefix, `${prefix}_${size}`, { vertical }]">
     <slot></slot>
   </div>
 </template>
 <script>
 export default {
-  name: 'UiButtonGroup',
-  data() {
-    return { prefix: 'ui-btn-group' }
-  },
+  name: 'XButtonGroup',
   props: {
     size: {
       default: 'default',
-      validator(value) {
-        return ['large', 'default', 'small'].indexOf(value) !== -1
+      validator(v) {
+        return ['large', 'default', 'small'].indexOf(v) !== -1
       }
     },
     shape: {
-      validator(value) {
-        return value === 'circle'
+      validator(v) {
+        return v === 'circle'
       }
     },
     vertical: Boolean
+  },
+  data() {
+    return { prefix: 'x-btn-group' }
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-btn-group {
+@btnPrefix: .x-btn;
+@prefix: .x-btn-group;
+@{prefix} {
   display: inline-block;
-  .x-btn {
-    float: left;
-    &:hover {
-      z-index: 1;
-    }
-    &.iconOnly {
-      width: auto;
-      padding: 0 15px;
-      border-radius: 3px;
-    }
+  + @{prefix} {
+    margin-left: 10px;
+  }
+  @{btnPrefix} {
+    margin-left: 0;
     &:not(:first-child):not(:last-child) {
       border-radius: 0;
     }
     &:first-child {
-      border-top-right-radius: 0;
       border-bottom-right-radius: 0;
     }
     &:last-child {
       border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
     }
     &:not(:first-child) {
       margin-left: -1px;
     }
+    &:hover {
+      z-index: 2;
+    }
+    &:focus {
+      z-index: 1;
+    }
   }
-  &.vertical .x-btn {
-    float: none;
-    display: flex;
-    width: 100%;
-    margin-left: 0;
+  &:not(.vertical) @{btnPrefix} {
     &:first-child {
-      border-radius: 3px 3px 0 0;
+      border-top-right-radius: 0;
     }
     &:last-child {
-      border-radius: 0 0 3px 3px;
-    }
-    &:not(:first-child) {
-      margin-top: -1px;
+      border-bottom-left-radius: 0;
     }
   }
-  &-circle {
-    .x-btn:first-child {
-      border-top-left-radius: @size-large;
-      border-bottom-left-radius: @size-large;
-    }
-    .x-btn:last-child {
-      border-top-right-radius: @size-large;
-      border-bottom-right-radius: @size-large;
-    }
-    &.vertical {
-      .x-btn {
-        &:first-child {
-          border-radius: @size-large @size-large 0 0;
-        }
-        &:last-child {
-          border-radius: 0 0 @size-large @size-large;
-        }
+  &.vertical {
+    @{btnPrefix} {
+      display: block;
+      margin-left: 0;
+      min-width: @size-normal;
+      &:first-child {
+        border-bottom-left-radius: 0;
+      }
+      &:last-child {
+        border-top-right-radius: 0;
+      }
+      &:not(:first-child) {
+        margin-top: -1px;
+      }
+      &_size_small {
+        min-width: @size-small;
+      }
+      &_size_large {
+        min-width: @size-large;
       }
     }
   }

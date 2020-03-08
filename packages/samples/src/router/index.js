@@ -16,6 +16,12 @@ export const routes = [
     component: () => import('../pages/Button.vue')
   },
   {
+    path: 'Badge',
+    name: 'Badge',
+    component: () => import('../pages/Badge.vue')
+  },
+
+  {
     path: 'Affix',
     name: 'Affix',
     component: () => import('../pages/Affix.vue')
@@ -170,11 +176,6 @@ export const routes = [
     path: 'Layout',
     name: 'Layout',
     component: () => import('../pages/Layout.vue')
-  },
-  {
-    path: 'Badge',
-    name: 'Badge',
-    component: () => import('../pages/Badge.vue')
   },
   {
     path: 'Card',

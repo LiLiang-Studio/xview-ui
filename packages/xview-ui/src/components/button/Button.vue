@@ -7,6 +7,7 @@
 </template>
 <script>
 import XIcon from '../icon'
+import { findParent } from '../../tools'
 export default {
   name: 'XButton',
   components: { XIcon },
@@ -45,11 +46,15 @@ export default {
     append: Boolean
   },
   data() {
-    return { prefix: 'x-btn', iconOnly: false }
+    return { prefix: 'x-btn', iconOnly: false, parent: null }
   },
   computed: {
     classes() {
       let { prefix, type, size, shape, long, ghost, loading, disabled, iconOnly } = this
+      if (this.parent) {
+        size = size || this.parent.size
+        shape = shape || this.parent.shape
+      }
       return [
         prefix,
         `${prefix}_${type}`,
@@ -75,6 +80,7 @@ export default {
   },
   mounted() {
     this.iconOnly = !this.$slots.default
+    this.parent = findParent(this, 'XButtonGroup')
   }
 }
 </script>

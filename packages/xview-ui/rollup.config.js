@@ -34,11 +34,6 @@ export default {
     {
       format: 'umd',
       name: pkgName,
-      file: `dist/${pkgName}.umd.js`
-    },
-    {
-      format: 'umd',
-      name: pkgName,
       file: `dist/${pkgName}.umd.min.js`
     },
     {

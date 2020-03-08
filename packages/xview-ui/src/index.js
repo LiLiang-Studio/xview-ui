@@ -1,12 +1,13 @@
 import './styles/ionicons.css'
 import './styles/base.less'
-import './utils/polyfill'
 
 /**
  * 2020-03-07 开始新一轮优化
  */
 import Icon from './components/icon' // 图标
 import Button from './components/button' // 按钮
+import ButtonGroup from './components/button-group' // 按钮组
+import Badge from './components/badge' // 微标
 
 /**
  * 已再次优化的组件
@@ -24,8 +25,6 @@ import BackTop from './components/back-top' // 回到顶部
 import * as tools from './tools'
 // 卡片
 import Card from './components/card'
-// 微标
-import Badge from './components/badge'
 // 评分
 import Rate from './components/rate'
 // 通知和消息提醒
@@ -49,8 +48,6 @@ import { Row, Col } from './components/grid'
 import Progress from './components/progress'
 // 加载条
 import loadingBarService from './components/loading-bar'
-// 按钮组
-import ButtonGroup from './components/button-group'
 // 分割线
 import Divider from './components/divider'
 // 开关
@@ -142,10 +139,13 @@ import Table from './components/table/Table.vue'
 
 const comps = {
   Icon,
+  Button,
+  ButtonGroup,
+  Badge,
+
   Avatar,
   Card,
   Alert,
-  Badge,
   Rate,
   ICircle,
   Breadcrumb,
@@ -160,8 +160,6 @@ const comps = {
   Col,
   BackTop,
   Progress,
-  Button,
-  ButtonGroup,
   Divider,
   ISwitch,
   Scroll,

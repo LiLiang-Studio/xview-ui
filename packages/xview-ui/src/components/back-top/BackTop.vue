@@ -2,21 +2,18 @@
   <transition :name="prefix">
     <div v-show="visible" :class="prefix" :style="styles" v-winscroll="onScroll()" @click="handleClick">
       <slot>
-        <UiIcon :class="`${prefix}-icon`" type="ios-arrow-up"/>
+        <x-Icon :class="`${prefix}_btn`" type="ios-arrow-up"/>
       </slot>
     </div>
   </transition>
 </template>
 <script>
-import UiIcon from '../icon'
+import XIcon from '../icon'
 import { throttle } from '../../tools'
 import { winscroll } from '../../directives'
 export default {
-  name: 'UiBackTop',
-  components: { UiIcon },
-  data() {
-    return { prefix: 'ui-backTop', visible: false }
-  },
+  name: 'XBackTop',
+  components: { XIcon },
   props: {
     height: {
       type: Number,
@@ -34,6 +31,9 @@ export default {
       type: Number,
       default: 300
     }
+  },
+  data() {
+    return { prefix: 'x-backTop', visible: false }
   },
   computed: {
     styles() {
@@ -63,23 +63,23 @@ export default {
 }
 </script>
 <style lang="less">
-.ui-backTop {
+.x-backTop {
   position: fixed;
   user-select: none;
   &-enter, &-leave-to {
     opacity: 0;
     transform: scale(0);
   }
-  &, &-icon {
+  &, &_btn {
     transition: all .2s ease-in-out;
   }
-  &-icon {
+  &_btn {
     cursor: pointer;
+    display: inline-block;
     width: 48px;
-    height: 40px;
     line-height: 40px;
-    text-align: center;
     border-radius: 2px;
+    text-align: center;
     color: #fff;
     font-size: 24px;
     background-color: rgba(0, 0, 0, .6);

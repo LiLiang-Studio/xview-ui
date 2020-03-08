@@ -1,6 +1,6 @@
 <template>
   <div v-winresize="onResize()" v-winscroll="onScroll()">
-    <div :class="{'ui-affix': fixed}" :style="affixStyle">
+    <div :class="{'x-affix': fixed}" :style="affixStyle">
       <slot></slot>
     </div>
     <div v-show="fixed" :style="placeholderStyle"></div>
@@ -10,13 +10,7 @@
 import { throttle } from '../../tools'
 import { winresize, winscroll } from '../../directives'
 export default {
-  data() {
-    return {
-      fixed: false,
-      affixStyle: {},
-      placeholderStyle: {}
-    }
-  },
+  name: 'XAffix',
   props: {
     offsetTop: {
       type: Number,
@@ -24,18 +18,22 @@ export default {
     },
     offsetBottom: Number
   },
+  data() {
+    return {
+      fixed: false,
+      affixStyle: {},
+      placeholderStyle: {}
+    }
+  },
   computed: {
-    isFixedBottom() {
+    fixedBottom() {
       return this.offsetBottom !== undefined && this.offsetTop === 0
     }
   },
-  directives: {
-    winresize,
-    winscroll
-  },
+  directives: { winresize, winscroll },
   watch: {
-    fixed(newVal) {
-      this.$emit('on-change', newVal)
+    fixed(val) {
+      this.$emit('on-change', val)
     }
   },
   mounted() {
@@ -45,14 +43,14 @@ export default {
     onScroll() {
       return throttle(() => {
         let rect = this.$el.getBoundingClientRect()
-        this.fixed = this.isFixedBottom ? window.innerHeight - rect.bottom <= this.offsetBottom : rect.top <= this.offsetTop
+        this.fixed = this.fixedBottom ? window.innerHeight - rect.bottom <= this.offsetBottom : rect.top <= this.offsetTop
       }, 50)
     },
     onResize() {
       return throttle(() => {
         let rect = this.$el.getBoundingClientRect()
         this.placeholderStyle = { width: `${rect.width}px`, height: `${rect.height}px` }
-        let obj = this.isFixedBottom ? { bottom: `${this.offsetBottom}px` } : { top: `${this.offsetTop}px` }
+        let obj = this.fixedBottom ? { bottom: `${this.offsetBottom}px` } : { top: `${this.offsetTop}px` }
         this.affixStyle = { ...obj, left: `${rect.left}px` }
       }, 50)
     }
@@ -60,7 +58,7 @@ export default {
 }
 </script>
 <style lang="less">
-.ui-affix {
+.x-affix {
   position: fixed;
   z-index: 10;
 }

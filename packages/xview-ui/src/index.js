@@ -8,16 +8,16 @@ import Icon from './components/icon' // 图标
 import Button from './components/button' // 按钮
 import ButtonGroup from './components/button-group' // 按钮组
 import Badge from './components/badge' // 微标
+import Affix from './components/affix' // 图钉
+import BackTop from './components/back-top' // 回到顶部
 
 /**
  * 已再次优化的组件
  */
-import Affix from './components/affix' // 图钉
 import Alert from './components/alert' // 警告提示
 import Avatar from './components/avatar' // 头像
 import Anchor from './components/anchor' // 锚点容器
 import AnchorLink from './components/anchor-link' // 锚点
-import BackTop from './components/back-top' // 回到顶部
 
 /**
  * 新版本组件导入

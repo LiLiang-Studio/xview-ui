@@ -20,12 +20,17 @@ export const routes = [
     name: 'Badge',
     component: () => import('../pages/Badge.vue')
   },
-
   {
     path: 'Affix',
     name: 'Affix',
     component: () => import('../pages/Affix.vue')
   },
+  {
+    path: 'BackTop',
+    name: 'BackTop',
+    component: () => import('../pages/BackTop.vue')
+  },
+
   {
     path: 'Alert',
     name: 'Alert',
@@ -40,11 +45,6 @@ export const routes = [
     path: 'Anchor',
     name: 'Anchor',
     component: () => import('../pages/Anchor.vue')
-  },
-  {
-    path: 'BackTop',
-    name: 'BackTop',
-    component: () => import('../pages/BackTop.vue')
   },
 
   // {

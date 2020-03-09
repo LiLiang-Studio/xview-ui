@@ -15,7 +15,10 @@ export default {
 <style lang="less">
 #app {
   padding: 30px 0;
-  padding-left: 220px;
+  padding-left: 135px;
+}
+a {
+  -webkit-tap-highlight-color: transparent;
 }
 p {
   font-size: 14px;
@@ -37,8 +40,7 @@ p {
   top: 0;
   bottom: 0;
   left: 0;
-  width: 220px;
-  min-width: 220px;
+  width: 135px;
   background-color: #fff;
   border-right: 1px solid #f2f2f2;
   overflow: auto;

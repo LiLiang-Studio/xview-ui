@@ -14,6 +14,7 @@ import Avatar from './components/avatar' // 头像
 import Alert from './components/alert' // 警告提示
 import Tag from './components/tag' // 标签
 import ICircle from './components/circle' // 进度环
+import Time from './components/time' // 相对时间
 
 /**
  * 已再次优化的组件
@@ -87,8 +88,6 @@ import InputNumber from './components/input-number'
 import Transfer from './components/transfer'
 // 树形控件
 import Tree from './components/tree'
-// 相对时间
-import Time from './components/time'
 // 面板分割
 import Split from './components/split'
 // 走马灯
@@ -146,6 +145,7 @@ const comps = {
   Alert,
   Tag,
   ICircle,
+  Time,
 
   Card,
   Rate,
@@ -183,7 +183,6 @@ const comps = {
   InputNumber,
   Transfer,
   Tree,
-  Time,
   Split,
   Carousel,
   CarouselItem,

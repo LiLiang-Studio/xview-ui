@@ -14,6 +14,7 @@ const coms = {
   Alert: () => import('../pages/Alert.vue'),
   Tag: () => import('../pages/Tag.vue'),
   ICircle: () => import('../pages/ICircle.vue'),
+  Time: () => import('../pages/Time.vue'),
 
   Anchor: () => import('../pages/Anchor.vue'),
   // DatePicker: () => import('../pages/DatePicker.vue'),
@@ -53,7 +54,6 @@ const coms = {
   Divider: () => import('../pages/Divider.vue'),
   Cell: () => import('../pages/Cell.vue'),
   Drawer: () => import('../pages/Drawer.vue'),
-  Time: () => import('../pages/Time.vue'),
   Split: () => import('../pages/Split.vue'),
   Carousel: () => import('../pages/Carousel.vue'),
   Upload: () => import('../pages/Upload.vue')

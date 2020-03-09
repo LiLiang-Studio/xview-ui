@@ -28,10 +28,6 @@
     <Tag color="green">green</Tag>
     <Tag color="blue">blue</Tag>
     <Tag color="#FFA2D3" checkable>Custom Color</Tag>
-    <Tag color="#FFA2D3" type="dot">Custom Color</Tag>
-    <Tag color="#FFA2D3" type="dot" closable>Custom Color</Tag>
-    <Tag color="#FFA2D3" type="border" closable>Custom Color</Tag>
-    <Tag color="#FFA2D3" type="border">Custom Color</Tag>
     <br />
     <br />
     <Tag type="border" closable color="primary">标签一</Tag>

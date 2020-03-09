@@ -62,7 +62,7 @@ export default {
         {} : this.type === 'border' ?
           { color: this.color } : this.type === 'dot' ?
             { borderColor: this.color } : this.isChecked ? 
-              {} : { backgroundColor: this.color, color: '#fff' }
+              { backgroundColor: this.color, color: '#fff' } : {}
     },
     dotStyle() {
       return this.colorClass ? {} : { backgroundColor: this.color }

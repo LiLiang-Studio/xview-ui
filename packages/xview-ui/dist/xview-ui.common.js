@@ -1119,8 +1119,8 @@ __vue_render__$6._withStripped = true;
 
 //
 var script$7 = {
-  name: 'UiCloseIconButton',
-  components: { UiIcon: __vue_component__ },
+  name: 'XCloseIconButton',
+  components: { XIcon: __vue_component__ },
   props: {
     size: {
       type: [Number, String],
@@ -1129,8 +1129,7 @@ var script$7 = {
   },
   computed: {
     styles: function styles() {
-      var size = parseSize(this.size);
-      return { width: size, fontSize: size }
+      return { fontSize: parseSize(this.size) }
     }
   }
 };
@@ -1143,10 +1142,10 @@ var __vue_render__$7 = function() {
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
   return _c(
-    "UiIcon",
+    "x-icon",
     _vm._g(
       {
-        staticClass: "ui-close-icon-button",
+        staticClass: "x-close-icon-button",
         style: _vm.styles,
         attrs: { type: "ios-close-empty" }
       },
@@ -1188,41 +1187,34 @@ __vue_render__$7._withStripped = true;
 
 //
 var script$8 = {
-  name: 'UiAlert',
-  components: { UiIcon: __vue_component__, UiCloseIconButton: __vue_component__$7 },
-  data: function data() {
-    return { prefix: 'ui-alert', hasDesc: false, visible: true }
-  },
+  name: 'XAlert',
+  components: { XIcon: __vue_component__, XCloseIconButton: __vue_component__$7 },
   props: {
     type: {
       default: 'info',
-      validator: function validator(value) {
-        return ['info', 'success', 'warning', 'error'].indexOf(value) !== -1
+      validator: function validator(v) {
+        return ['info', 'success', 'warning', 'error'].indexOf(v) !== -1
       }
     },
     closable: Boolean,
     showIcon: Boolean
   },
+  data: function data() {
+    return { prefix: 'x-alert', hasDesc: false, visible: true }
+  },
   computed: {
     iconType: function iconType() {
       return iconTypes[this.type]
-    },
-    classes: function classes() {
-      var ref = this;
-      var prefix = ref.prefix;
-      var type = ref.type;
-      var hasDesc = ref.hasDesc;
-      return [prefix, (prefix + "-" + type), { hasDesc: hasDesc }]
-    }
-  },
-  methods: {
-    close: function close(event) {
-      this.visible = false;
-      this.$emit('on-close', event);
     }
   },
   mounted: function mounted() {
-    this.hasDesc = this.$slots.desc !== undefined;
+    this.hasDesc = !!this.$slots.desc;
+  },
+  methods: {
+    close: function close(e) {
+      this.visible = false;
+      this.$emit('on-close', e);
+    }
   }
 };
 
@@ -1237,29 +1229,47 @@ var __vue_render__$8 = function() {
     _vm.visible
       ? _c(
           "div",
-          { class: _vm.classes },
+          {
+            class: [
+              _vm.prefix,
+              _vm.prefix + "_" + _vm.type,
+              { hasDesc: _vm.hasDesc }
+            ]
+          },
           [
             _vm.showIcon
-              ? _c("UiIcon", {
-                  class: _vm.prefix + "-icon",
-                  attrs: { type: _vm.iconType }
-                })
+              ? _c(
+                  "span",
+                  { class: _vm.prefix + "_icon" },
+                  [
+                    _vm._t("icon", [
+                      _c("x-icon", { attrs: { type: _vm.iconType } })
+                    ])
+                  ],
+                  2
+                )
               : _vm._e(),
             _vm._v(" "),
-            _c("div", { class: _vm.prefix + "-body" }, [
-              _c("p", { class: _vm.prefix + "-title" }, [_vm._t("default")], 2),
+            _c("div", [
+              _c(
+                "div",
+                { class: _vm.prefix + "_title" },
+                [_vm._t("default")],
+                2
+              ),
               _vm._v(" "),
-              _c("p", { class: _vm.prefix + "-desc" }, [_vm._t("desc")], 2)
+              _c("div", { class: _vm.prefix + "_desc" }, [_vm._t("desc")], 2)
             ]),
             _vm._v(" "),
             _vm.closable
-              ? _c("UiCloseIconButton", {
-                  class: _vm.prefix + "-close",
-                  on: { click: _vm.close }
-                })
+              ? _c(
+                  "span",
+                  { class: _vm.prefix + "_close", on: { click: _vm.close } },
+                  [_vm._t("close", [_c("x-close-icon-button")])],
+                  2
+                )
               : _vm._e()
-          ],
-          1
+          ]
         )
       : _vm._e()
   ])

@@ -11,8 +11,8 @@ const coms = {
   Affix: () => import('../pages/Affix.vue'),
   BackTop: () => import('../pages/BackTop.vue'),
   Avatar: () => import('../pages/Avatar.vue'),
-
   Alert: () => import('../pages/Alert.vue'),
+
   Anchor: () => import('../pages/Anchor.vue'),
   // DatePicker: () => import('../pages/DatePicker.vue'),
   // TimePicker: () => import('../pages/TimePicker.vue'),

@@ -1,129 +1,126 @@
 <template>
   <transition :name="prefix">
-    <div v-if="visible" :class="classes">
-      <UiIcon v-if="showIcon" :class="`${prefix}-icon`" :type="iconType"/>
-      <div :class="`${prefix}-body`">
-        <p :class="`${prefix}-title`">
+    <div v-if="visible" :class="[prefix, `${prefix}_${type}`, { hasDesc }]">
+      <span v-if="showIcon" :class="`${prefix}_icon`">
+        <slot name="icon">
+          <x-icon :type="iconType"/>
+        </slot>
+      </span>
+      <div>
+        <div :class="`${prefix}_title`">
           <slot></slot>
-        </p>
-        <p :class="`${prefix}-desc`">
+        </div>
+        <div :class="`${prefix}_desc`">
           <slot name="desc"></slot>
-        </p>
+        </div>
       </div>
-      <UiCloseIconButton v-if="closable" :class="`${prefix}-close`" @click="close"/>
+      <span v-if="closable" :class="`${prefix}_close`" @click="close">
+        <slot name="close">
+          <x-close-icon-button/>
+        </slot>
+      </span>
     </div>
   </transition>
 </template>
 <script>
-import UiIcon from '../icon'
-import UiCloseIconButton from '../close-icon-button'
+import XIcon from '../icon'
+import XCloseIconButton from '../close-icon-button'
 import { iconTypes } from '../../tools'
 export default {
-  name: 'UiAlert',
-  components: { UiIcon, UiCloseIconButton },
-  data() {
-    return { prefix: 'ui-alert', hasDesc: false, visible: true }
-  },
+  name: 'XAlert',
+  components: { XIcon, XCloseIconButton },
   props: {
     type: {
       default: 'info',
-      validator(value) {
-        return ['info', 'success', 'warning', 'error'].indexOf(value) !== -1
+      validator(v) {
+        return ['info', 'success', 'warning', 'error'].indexOf(v) !== -1
       }
     },
     closable: Boolean,
     showIcon: Boolean
   },
+  data() {
+    return { prefix: 'x-alert', hasDesc: false, visible: true }
+  },
   computed: {
     iconType() {
       return iconTypes[this.type]
-    },
-    classes() {
-      let { prefix, type, hasDesc } = this
-      return [prefix, `${prefix}-${type}`, { hasDesc }]
-    }
-  },
-  methods: {
-    close(event) {
-      this.visible = false
-      this.$emit('on-close', event)
     }
   },
   mounted() {
-    this.hasDesc = this.$slots.desc !== undefined
+    this.hasDesc = !!this.$slots.desc
+  },
+  methods: {
+    close(e) {
+      this.visible = false
+      this.$emit('on-close', e)
+    }
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-@prefix: .ui-alert;
+@prefix: .x-alert;
 @{prefix} {
-  border: 1px solid;
-  border-radius: 6px;
-  padding: 8px 48px 8px 16px;
-  position: relative;
-  margin-bottom: 10px;
   display: flex;
   align-items: center;
+  position: relative;
+  border-radius: 6px;
+  padding: 8px 48px 8px 16px;
+  margin-bottom: 10px;
   transition: opacity .22s ease-in-out;
-  &-info {
-    border-color: lighten(@info-color, 33.9%);
-    background-color: lighten(@info-color, 39%);
-    @{prefix}-icon {
-      color: @primary-color;
-    }
-  }
-  &-success {
-    border-color: lighten(@success-color, 45%);
-    background-color: lighten(@success-color, 50%);
-    @{prefix}-icon {
+  border: 1px solid lighten(@info-color, 30%);
+  background-color: lighten(@info-color, 40%);
+  &_success {
+    border-color: lighten(@success-color, 35%);
+    background-color: lighten(@success-color, 55%);
+    @{prefix}_icon {
       color: @success-color;
     }
   }
-  &-warning {
-    border-color: lighten(@warning-color, 40%);
-    background-color: lighten(@warning-color, 45%);
-    @{prefix}-icon {
+  &_warning {
+    border-color: lighten(@warning-color, 30%);
+    background-color: lighten(@warning-color, 46%);
+    @{prefix}_icon {
       color: @warning-color;
     }
   }
-  &-error {
-    border-color: lighten(@error-color, 40%);
-    background-color: lighten(@error-color, 45%);
-    @{prefix}-icon {
+  &_error {
+    border-color: lighten(@error-color, 30%);
+    background-color: lighten(@error-color, 46%);
+    @{prefix}_icon {
       color: @error-color;
     }
   }
   &.hasDesc {
     padding: 16px;
-    @{prefix}-icon {
+    @{prefix}_icon {
       font-size: 28px;
       margin-right: 16px;
     }
   }
-  &-icon {
+  &_icon {
     font-size: 14px;
     margin-right: 8px;
+    color: @primary-color;
   }
-  &-title {
+  &_title {
     color: @title-color;
     font-size: 14px;
-    word-break: break-all;
     padding-right: 32px;
     line-height: 1.4;
+    word-break: break-word;
   }
-  &-desc {
+  &_desc {
     font-size: 12px;
     line-height: 1.7;
-    word-break: break-word;
     margin-top: 2px;
+    word-break: break-word;
   }
-  &-close {
+  &_close {
     position: absolute;
     top: 7px;
     right: 7px;
-    width: 22px;
-    text-align: center;
   }
   &-enter, &-leave-to {
     opacity: 0;

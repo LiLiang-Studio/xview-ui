@@ -1,12 +1,12 @@
 <template>
-  <UiIcon class="ui-close-icon-button" type="ios-close-empty" :style="styles" v-on="$listeners"/>
+  <x-icon class="x-close-icon-button" type="ios-close-empty" :style="styles" v-on="$listeners"/>
 </template>
 <script>
-import UiIcon from '../icon'
+import XIcon from '../icon'
 import { parseSize } from '../../tools'
 export default {
-  name: 'UiCloseIconButton',
-  components: { UiIcon },
+  name: 'XCloseIconButton',
+  components: { XIcon },
   props: {
     size: {
       type: [Number, String],
@@ -15,17 +15,15 @@ export default {
   },
   computed: {
     styles() {
-      let size = parseSize(this.size)
-      return { width: size, fontSize: size }
+      return { fontSize: parseSize(this.size) }
     }
   }
 }
 </script>
 <style lang="less">
-.ui-close-icon-button {
+.x-close-icon-button {
   cursor: pointer;
   color: #999;
-  text-align: center;
   transition: color .2s ease;
   &:hover {
     color: #444;

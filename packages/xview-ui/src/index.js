@@ -13,6 +13,7 @@ import BackTop from './components/back-top' // 回到顶部
 import Avatar from './components/avatar' // 头像
 import Alert from './components/alert' // 警告提示
 import Tag from './components/tag' // 标签
+import ICircle from './components/circle' // 进度环
 
 /**
  * 已再次优化的组件
@@ -30,8 +31,6 @@ import Card from './components/card'
 import Rate from './components/rate'
 // 通知和消息提醒
 import { createNotice, createMessage } from './components/notice'
-// 进度环
-import ICircle from './components/circle'
 // 面包屑导航
 import Breadcrumb from './components/breadcrumb'
 import BreadcrumbItem from './components/breadcrumb-item'
@@ -146,10 +145,10 @@ const comps = {
   Avatar,
   Alert,
   Tag,
+  ICircle,
 
   Card,
   Rate,
-  ICircle,
   Breadcrumb,
   BreadcrumbItem,
   Timeline,

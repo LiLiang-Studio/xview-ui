@@ -13,6 +13,7 @@ const coms = {
   Avatar: () => import('../pages/Avatar.vue'),
   Alert: () => import('../pages/Alert.vue'),
   Tag: () => import('../pages/Tag.vue'),
+  ICircle: () => import('../pages/ICircle.vue'),
 
   Anchor: () => import('../pages/Anchor.vue'),
   // DatePicker: () => import('../pages/DatePicker.vue'),
@@ -29,7 +30,6 @@ const coms = {
   Page: () => import('../pages/Page.vue'),
   LoadingBar: () => import('../pages/LoadingBar.vue'),
   Scroll: () => import('../pages/Scroll.vue'),
-  ICircle: () => import('../pages/ICircle.vue'),
   Steps: () => import('../pages/Steps.vue'),
   Select: () => import('../pages/Select.vue'),
   InputNumber: () => import('../pages/InputNumber.vue'),

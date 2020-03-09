@@ -12,6 +12,7 @@ const coms = {
   BackTop: () => import('../pages/BackTop.vue'),
   Avatar: () => import('../pages/Avatar.vue'),
   Alert: () => import('../pages/Alert.vue'),
+  Tag: () => import('../pages/Tag.vue'),
 
   Anchor: () => import('../pages/Anchor.vue'),
   // DatePicker: () => import('../pages/DatePicker.vue'),
@@ -45,7 +46,6 @@ const coms = {
   Message: () => import('../pages/Message.vue'),
   Notice: () => import('../pages/Notice.vue'),
   Progress: () => import('../pages/Progress.vue'),
-  Tag: () => import('../pages/Tag.vue'),
   Timeline: () => import('../pages/Timeline.vue'),
   Collapse: () => import('../pages/Collapse.vue'),
   Modal: () => import('../pages/Modal.vue'),

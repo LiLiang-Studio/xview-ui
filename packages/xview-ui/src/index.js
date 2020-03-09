@@ -12,6 +12,7 @@ import Affix from './components/affix' // 图钉
 import BackTop from './components/back-top' // 回到顶部
 import Avatar from './components/avatar' // 头像
 import Alert from './components/alert' // 警告提示
+import Tag from './components/tag' // 标签
 
 /**
  * 已再次优化的组件
@@ -63,8 +64,6 @@ import Header from './components/header'
 import Content from './components/content'
 import Footer from './components/footer'
 import Sider from './components/sider'
-// 标签
-import Tag from './components/tag'
 // 折叠面板
 import Collapse from './components/collapse'
 import Panel from './components/panel'
@@ -142,10 +141,13 @@ const comps = {
   Button,
   ButtonGroup,
   Badge,
-
+  Affix,
+  BackTop,
   Avatar,
-  Card,
   Alert,
+  Tag,
+
+  Card,
   Rate,
   ICircle,
   Breadcrumb,
@@ -155,10 +157,8 @@ const comps = {
   Spin,
   Step,
   Steps,
-  Affix,
   Row,
   Col,
-  BackTop,
   Progress,
   Divider,
   ISwitch,
@@ -170,7 +170,6 @@ const comps = {
   Content,
   Footer,
   Sider,
-  Tag,
   Collapse,
   Panel,
   Cell,

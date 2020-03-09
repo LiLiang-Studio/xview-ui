@@ -1,5 +1,5 @@
 <template>
-  <i :class="classes" :style="styles"></i>
+  <i :class="classes" :style="styles" v-on="$listeners"></i>
 </template>
 <script>
 export default {

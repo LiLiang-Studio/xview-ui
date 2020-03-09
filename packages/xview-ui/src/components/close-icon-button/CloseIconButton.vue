@@ -23,10 +23,11 @@ export default {
 <style lang="less">
 .x-close-icon-button {
   cursor: pointer;
-  color: #999;
-  transition: color .2s ease;
+  color: #444;
+  opacity: .7;
+  transition: opacity .2s ease;
   &:hover {
-    color: #444;
+    opacity: 1;
   }
 }
 </style>

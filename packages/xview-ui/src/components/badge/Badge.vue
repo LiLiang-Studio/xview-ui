@@ -64,9 +64,7 @@ export default {
 @{prefix} {
   position: relative;
   display: inline-block;
-  + @{prefix} {
-    margin-left: 10px;
-  }
+  margin-right: 10px;
   &_sup {
     display: inline-block;
     vertical-align: middle;

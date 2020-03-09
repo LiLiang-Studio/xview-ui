@@ -103,9 +103,7 @@ export default {
   padding: 0 15px;
   border-radius: 3px;
   border: 1px solid;
-  + @{prefix} {
-    margin-left: 10px;
-  }
+  margin-right: 10px;
   &:after {
     content: '';
     position: absolute;

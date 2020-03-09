@@ -31,11 +31,9 @@ export default {
 @prefix: .x-btn-group;
 @{prefix} {
   display: inline-block;
-  + @{prefix} {
-    margin-left: 10px;
-  }
+  margin-right: 10px;
   @{btnPrefix} {
-    margin-left: 0;
+    margin: 0;
     &:not(:first-child):not(:last-child) {
       border-radius: 0;
     }
@@ -66,7 +64,7 @@ export default {
   &.vertical {
     @{btnPrefix} {
       display: block;
-      margin-left: 0;
+      margin: 0;
       min-width: @size-normal;
       &:first-child {
         border-bottom-left-radius: 0;

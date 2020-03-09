@@ -1,23 +1,17 @@
 <template>
-  <transition v-if="fade" :name="prefix">
+  <transition :name="prefix">
     <div :class="classes" :style="styles" @click="onClick">
+      <span v-if="type === 'dot'" :class="`${prefix}_circle`" :style="dotStyle"></span>
       <slot></slot>
-      <UiIcon v-if="closable" :class="`${prefix}-close`" type="ios-close-empty" @click="onClose"/>
+      <x-close-icon-button v-if="closable" :class="`${prefix}_close`" @click="onClose"/>
     </div>
   </transition>
-  <div v-else :class="classes" :style="styles" @click="onClick">
-    <slot></slot>
-    <UiIcon v-if="closable" :class="`${prefix}-close`" type="ios-close-empty" @click="onClose"/>
-  </div>
 </template>
 <script>
-import UiIcon from '../icon'
+import XCloseIconButton from '../close-icon-button'
 export default {
-  name: 'UiTag',
-  components: { UiIcon },
-  data() {
-    return { prefix: 'ui-tag', isChecked: this.checked }
-  },
+  name: 'XTag',
+  components: { XCloseIconButton },
   props: {
     closable: Boolean,
     checkable: Boolean,
@@ -26,8 +20,8 @@ export default {
       default: true
     },
     type: {
-      validator(value) {
-        return ['border', 'dot'].indexOf(value) !== -1
+      validator(v) {
+        return ['border', 'dot'].indexOf(v) !== -1
       }
     },
     color: {
@@ -38,38 +32,53 @@ export default {
     fade: {
       type: Boolean,
       default: true
+    },
+    size: {
+      default: 'default',
+      validator(v) {
+        return ['large', 'medium', 'default'].indexOf(v) !== -1
+      }
     }
+  },
+  data() {
+    return { prefix: 'x-tag', isChecked: this.checked }
   },
   computed: {
     colorClass() {
-      return [
-        'default', 'primary', 'success', 'warning', 'error',
-        'blue', 'green', 'red', 'yellow', 'magenta', 'volcano', 'orange', 'gold', 'lime', 'cyan', 'geekblue', 'purple'
-      ].find(_ => _ === this.color)
+      return ['default', 'primary', 'success', 'warning', 'error', 'blue', 'green', 'red', 'orange'].find(_ => _ === this.color)
     },
     classes() {
+      let { prefix, colorClass, type, isChecked, fade, size, color, closable } = this
       return [
-        this.prefix, 
-        this.colorClass && `${this.prefix}-${this.colorClass}`,
-        this.type && `${this.prefix}-${this.type}`,
-        { checked: this.isChecked }
+        prefix,
+        !type && `${prefix}_size_${size}`,
+        colorClass && `${prefix}_${colorClass}`,
+        type && `${prefix}_${type}`,
+        { checked: isChecked && !type, color: color && !colorClass, closable, fade }
       ]
     },
     styles() {
-      return !this.colorClass && { color: '#fff', backgroundColor: this.color }
+      return this.colorClass ?
+        {} : this.type === 'border' ?
+          { color: this.color } : this.type === 'dot' ?
+            { borderColor: this.color } : this.isChecked ? 
+              {} : { backgroundColor: this.color, color: '#fff' }
+    },
+    dotStyle() {
+      return this.colorClass ? {} : { backgroundColor: this.color }
     }
   },
   watch: {
-    checked(newVal) {
-      this.isChecked = newVal
+    checked(val) {
+      this.isChecked = val
     }
   },
   methods: {
-    onClose(event) {
-      this.$emit('on-close', event, this.name)
+    onClose(e) {
+      this.$emit('on-close', e, this.name)
     },
     onClick() {
-      if (!this.checkable) return
+      if (!this.checkable || this.type) return
       this.isChecked = !this.isChecked
       this.$emit('on-change', this.isChecked, this.name)
     }
@@ -78,176 +87,140 @@ export default {
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-@prefix: .ui-tag;
+@prefix: .x-tag;
 @{prefix} {
-  cursor: pointer;
   position: relative;
-  display: inline-flex;
-  align-items: center;
   height: 22px;
   padding: 0 8px;
   margin: 2px 4px 2px 0;
   font-size: 12px;
   border-radius: 3px;
   border: 1px solid;
-  transition: opacity .2s ease-in-out;
+  color: @content-color;
+  &, &_close {
+    display: inline-flex;
+    align-items: center;
+  }
   &:hover {
     opacity: .85;
+  }
+  &.fade {
+    transition: opacity .2s ease-in-out;
+  }
+  &.color:not(&_border):not(&_dot) {
+    border: none;
   }
   &-enter, &-leave-to {
     opacity: 0 !important;
   }
-  &-default {
-    color: @content-color;
-    background-color: @bg-color;
-    border-color: @border-color;
+  &_size_medium {
+    height: 28px;
   }
-  &-primary, &-success, &-error, &-warning {
+  &_size_large {
+    height: 32px;
+  }
+  &_primary, &_success, &_error, &_warning {
     border: none;
-    &.checked:not(@{prefix}-dot):not(@{prefix}-border) {
+    &.checked {
       color: #fff;
     }
   }
-  &-primary.checked:not(&-dot):not(&-border) {
-    background-color: @primary-color;
+  &.checked {
+    &@{prefix}_primary {
+      background-color: @primary-color;
+    }
+    &@{prefix}_success {
+      background-color: @success-color;
+    }
+    &@{prefix}_error {
+      background-color: @error-color;
+    }
+    &@{prefix}_warning {
+      background-color: @warning-color;
+    }
   }
-  &-success.checked:not(&-dot):not(&-border) {
-    background-color: @success-color;
+  .color(@c, @val1: 46%, @val2: 30%) {
+    color: @c;
+    border-color: transparent;
+    background-color: transparent;
+    &.checked {
+      border-color: lighten(@c, @val2);
+      background-color: lighten(@c, @val1);
+    }
   }
-  &-error.checked:not(&-dot):not(&-border) {
-    background-color: @error-color;
+  &_default {
+    .color(@content-color, 60%, 52%);
   }
-  &-warning.checked:not(&-dot):not(&-border) {
-    background-color: @warning-color;
+  &_blue {
+    .color(@primary-color, 42%);
   }
-  &-blue {
-    color: #1890ff;
-    border-color: #91d5ff;
-    background-color: #e6f7ff;
+  &_green {
+    .color(@success-color, 55%);
   }
-  &-green {
-    color: #52c41a;
-    border-color: #b7eb8f;
-    background-color: #f6ffed;
+  &_red {
+    .color(@error-color);
   }
-  &-red {
-    color: #f5222d;
-    border-color: #ffa39e;
-    background-color: #fff1f0;
+  &_orange {
+    .color(@warning-color);
   }
-  &-yellow {
-    color: #fadb14;
-    border-color: #fffb8f;
-    background-color: #feffe6;
-  }
-  &-magenta {
-    color: #eb2f96;
-    border-color: #ffadd2;
-    background-color: #fff0f6;
-  }
-  &-volcano {
-    color: #fa541c;
-    border-color: #ffbb96;
-    background-color: #fff2e8;
-  }
-  &-orange {
-    color: #fa8c16;
-    border-color: #ffd591;
-    background-color: #fff7e6;
-  }
-  &-gold {
-    color: #faad14;
-    border-color: #ffe58f;
-    background-color: #fffbe6;
-  }
-  &-lime {
-    color: #a0d911;
-    border-color: #eaff8f;
-    background-color: #fcffe6;
-  }
-  &-cyan {
-    color: #13c2c2;
-    border-color: #87e8de;
-    background-color: #e6fffb;
-  }
-  &-geekblue {
-    color: #2f54eb;
-    border-color: #adc6ff;
-    background-color: #f0f5ff;
-  }
-  &-purple {
-    color: #722ed1;
-    border-color: #d3adf7;
-    background-color: #f9f0ff;
-  }
-  &-dot, &-border {
+  &_dot, &_border {
     background-color: #fff;
   }
-  &-dot {
+  &_dot {
     height: 32px;
-    color: @content-color;
     border: 1px solid @divider-color;
   }
-  &-dot:before {
-    content: '';
+  &_circle {
     width: 12px;
     height: 12px;
     border-radius: 50%;
     margin-right: 8px;
     background-color: @divider-color;
   }
-  &-dot&-primary:before {
+  &_primary &_circle {
     background-color: @primary-color;
   }
-  &-dot&-success:before {
+  &_success &_circle {
     background-color: @success-color;
   }
-  &-dot&-error:before {
-    background-color: @error-color;
-  }
-  &-dot&-warning:before {
+  &_warning &_circle {
     background-color: @warning-color;
   }
-  &-close {
-    width: 20px;
-    height: 20px;
-    line-height: 20px;
-    font-size: 20px;
-    position: relative;
-    right: -6px;
-    opacity: .66;
-    text-align: center;
-    &:hover {
-      opacity: 1;
+  &_error &_circle {
+    background-color: @error-color;
+  }
+  &_border {
+    height: 24px;
+    border: 1px solid;
+    &.closable {
+      padding-right: 0;
+    }
+    &@{prefix}_default {
+      &, @{prefix}_close {
+        border-color: @border-color;
+      }
+    }
+    &@{prefix}_primary {
+      color: @primary-color;
+    }
+    &@{prefix}_success {
+      color: @success-color;
+    }
+    &@{prefix}_warning {
+      color: @warning-color;
+    }
+    &@{prefix}_error {
+      color: @error-color;
+    }
+    @{prefix}_close {
+      padding: 0 8px;
+      border-left: 1px solid;
     }
   }
-  &-border {
-    height: 24px;
-  }
-  &-border &-close {
-    height: 22px;
-    line-height: 22px;
+  &_close {
+    height: 100%;
     margin-left: 8px;
-    border-left: 1px solid currentColor;
-  }
-  &-default&-border &-close {
-    border-color: @border-color;
-  }
-  &-primary&-border {
-    color: @primary-color;
-    border: 1px solid currentColor;
-  }
-  &-success&-border {
-    color: @success-color;
-    border: 1px solid currentColor;
-  }
-  &-error&-border {
-    color: @error-color;
-    border: 1px solid currentColor;
-  }
-  &-warning&-border {
-    color: @warning-color;
-    border: 1px solid currentColor;
+    color: currentColor;
   }
 }
 </style>

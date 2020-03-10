@@ -1,46 +1,54 @@
 <template>
-  <div :class="[`${prefix}-${type}`, orientation, {dashed}]">
-    <span v-if="hasText && type === 'horizontal'" :class="`${prefix}-text`">
+  <div :class="[`${prefix}_${type}`, `${prefix}_${orientation}`, size, {dashed}]">
+    <span v-show="hasText" :class="`${prefix}_text`">
       <slot></slot>
     </span>
   </div>
 </template>
 <script>
 export default {
-  name: 'UiDivider',
-  data() {
-    return { prefix: 'ui-divider', hasText: false }
-  },
+  name: 'XDivider',
   props: {
     type: {
       default: 'horizontal',
-      validator(value) {
-        return ['horizontal', 'vertical'].indexOf(value) !== -1
+      validator(v) {
+        return ['horizontal', 'vertical'].indexOf(v) !== -1
       }
     },
     orientation: {
       default: 'center',
-      validator(value) {
-        return ['left', 'right', 'center'].indexOf(value) !== -1
+      validator(v) {
+        return ['left', 'right', 'center'].indexOf(v) !== -1
       }
     },
-    dashed: Boolean
+    dashed: Boolean,
+    size: {
+      validator(v) {
+        return ['small', 'default'].indexOf(v) !== -1
+      }
+    }
+  },
+  data() {
+    return { prefix: 'x-divider', hasText: false }
   },
   mounted() {
-    this.hasText = this.$slots.default !== undefined
+    this.hasText = this.type === 'horizontal' && this.$slots.default
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-divider {
-  &-horizontal {
+.x-divider {
+  &_horizontal {
     display: flex;
     align-items: center;
-    justify-content: center;
+    color: @title-color;
     margin: 16px 0;
     font-size: 16px;
-    color: @title-color;
+    &.small {
+      margin: 8px 0;
+      font-size: 14px;
+    }
     &:before, &:after {
       content: '';
       border-bottom: 1px solid @border-color;
@@ -48,23 +56,17 @@ export default {
     &.dashed:before, &.dashed:after {
       border-bottom-style: dashed;
     }
-    &.center:before, &.center:after {
-      flex: 1;
-    }
-    &.left:before {
-      width: 5%;
-    }
-    &.left:after {
-      flex: 1;
-    }
-    &.right:before {
-      flex: 1;
-    }
-    &.right:after {
-      width: 5%;
-    }
   }
-  &-vertical {
+  &_center:before, &_center:after, &_left:after, &_right:before {
+    flex: 1;
+  }
+  &_left:before {
+    width: 5%;
+  }
+  &_right:after {
+    width: 5%;
+  }
+  &_vertical {
     display: inline-block;
     margin: 0 8px;
     height: 1em;
@@ -74,7 +76,7 @@ export default {
       border-left-style: dashed;
     }
   }
-  &-text {
+  &_text {
     padding: 0 24px;
     white-space: nowrap;
   }

@@ -19,6 +19,12 @@
     </p>
     <Divider>With Text</Divider>
     <p>
+    <p>
+      Steven Paul Jobs was an American entrepreneur and business magnate. He was the chairman,
+      chief executive officer, and a co-founder of Apple Inc.
+    </p>
+    <Divider size="small">size = "small"</Divider>
+    <p>
       Steven Paul Jobs was an American entrepreneur and business magnate. He was the chairman,
       chief executive officer, and a co-founder of Apple Inc.
     </p>

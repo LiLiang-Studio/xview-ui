@@ -18,6 +18,7 @@ import Time from './components/time' // 相对时间
 import Card from './components/card' // 卡片
 import Breadcrumb from './components/breadcrumb' // 面包屑
 import BreadcrumbItem from './components/breadcrumb-item' // 面包屑项
+import Divider from './components/divider' // 分割线
 
 /**
  * 已再次优化的组件
@@ -47,8 +48,6 @@ import { Row, Col } from './components/grid'
 import Progress from './components/progress'
 // 加载条
 import loadingBarService from './components/loading-bar'
-// 分割线
-import Divider from './components/divider'
 // 开关
 import ISwitch from './components/switch'
 // 无限滚动
@@ -147,6 +146,7 @@ const comps = {
   Card,
   Breadcrumb,
   BreadcrumbItem,
+  Divider,
 
   Rate,
   Timeline,
@@ -157,7 +157,6 @@ const comps = {
   Row,
   Col,
   Progress,
-  Divider,
   ISwitch,
   Scroll,
   Checkbox,

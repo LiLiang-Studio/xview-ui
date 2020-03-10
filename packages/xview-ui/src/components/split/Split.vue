@@ -1,43 +1,32 @@
 <template>
-  <div :class="[prefix, mode]">
+  <div :class="[prefix, `${prefix}_${mode}`]">
     <template v-if="isHor">
-      <div :class="`${prefix}-left`" :style="paneStyle">
-        <slot name="left"></slot>
-      </div>
-      <div ref="Trigger" :class="[`${prefix}-trigger`, mode]" @mousedown="onMousedown">
+      <div :style="paneStyle"><slot name="left"></slot></div>
+      <div ref="trigger" @mousedown="onMousedown">
         <slot name="trigger">
-          <div :class="[`${prefix}-trigger-bar`, mode]">
+          <div :class="[`${prefix}_triggerBar`, mode]">
             <i v-for="i in 8" :key="i"></i>
           </div>
         </slot>
       </div>
-      <div :class="`${prefix}-right`">
-        <slot name="right"></slot>
-      </div>
+      <div :class="`${prefix}_right`"><slot name="right"></slot></div>
     </template>
     <template v-else>
-      <div :class="`${prefix}-top`" :style="paneStyle">
-        <slot name="top"></slot>
-      </div>
-      <div ref="Trigger" :class="[`${prefix}-trigger`, mode]" @mousedown="onMousedown">
+      <div :style="paneStyle"><slot name="top"></slot></div>
+      <div ref="trigger" @mousedown="onMousedown">
         <slot name="trigger">
-          <div :class="[`${prefix}-trigger-bar`, mode]">
+          <div :class="[`${prefix}_triggerBar`, mode]">
             <i v-for="i in 8" :key="i"></i>
           </div>
         </slot>
       </div>
-      <div :class="`${prefix}-bottom`">
-        <slot name="bottom"></slot>
-      </div>
+      <div :class="`${prefix}_bottom`"><slot name="bottom"></slot></div>
     </template>
   </div>
 </template>
 <script>
 export default {
-  name: 'UiSplit',
-  data() {
-    return { prefix: 'ui-split', paneStyle: {}, inputValue: this.value }
-  },
+  name: 'XSplit',
   props: {
     value: {
       type: [Number, String],
@@ -45,8 +34,8 @@ export default {
     },
     mode: {
       default: 'horizontal',
-      validator(value) {
-        return ['horizontal', 'vertical'].indexOf(value) !== -1
+      validator(v) {
+        return ['horizontal', 'vertical'].indexOf(v) !== -1
       }
     },
     min: {
@@ -58,17 +47,23 @@ export default {
       default: '40px'
     }
   },
+  data() {
+    return { prefix: 'x_split', paneStyle: {}, inputValue: this.value }
+  },
   computed: {
     isHor() {
       return this.mode === 'horizontal'
+    },
+    bodyClass() {
+      return [`${this.prefix}_disSelection`, this.mode]
     }
   },
   watch: {
-    value(newval) {
-      this.inputValue = newval
+    value(val) {
+      this.inputValue = val
     },
-    inputValue(newval) {
-      this.$emit('input', newval)
+    inputValue(val) {
+      this.$emit('input', val)
     }
   },
   mounted() {
@@ -78,7 +73,7 @@ export default {
     onMousedown(e) {
       this.initValue = this.inputValue
       this.offset = this.isHor ? e.pageX : e.pageY
-      document.body.classList.add('ui-disable-selection')
+      document.body.classList.add(...this.bodyClass)
       document.addEventListener('mousemove', this.onMousemove)
       document.addEventListener('mouseup', this.onMouseup)
       this.$emit('on-move-start')
@@ -87,12 +82,12 @@ export default {
       let minVal, maxVal, value
       let { offsetWidth: width, offsetHeight: height } = this.$el
       if (this.isHor) {
-        let triggerSize = this.$refs.Trigger.offsetWidth / width
+        let triggerSize = this.$refs.trigger.offsetWidth / width
         minVal = isNaN(this.min) ? parseInt(this.min) / width : this.min
         maxVal = (isNaN(this.max) ? (width - parseInt(this.max)) / width : this.max) - triggerSize
         value = this.initValue + (e.pageX - this.offset) / width
       } else {
-        let triggerSize = this.$refs.Trigger.offsetHeight / height
+        let triggerSize = this.$refs.trigger.offsetHeight / height
         minVal = isNaN(this.min) ? parseInt(this.min) / height : this.min
         maxVal = (isNaN(this.max) ? (height - parseInt(this.max)) / height : this.max) - triggerSize
         value = this.initValue + (e.pageY - this.offset) / height
@@ -102,20 +97,14 @@ export default {
       this.$emit('on-moving', e)
     },
     onMouseup(e) {
-      document.body.classList.remove('ui-disable-selection')
+      document.body.classList.remove(...this.bodyClass)
       document.removeEventListener('mousemove', this.onMousemove)
       document.removeEventListener('mouseup', this.onMouseup)
       this.$emit('on-move-end')
     },
     updatePaneStyle() {
       let size = this.inputValue
-      if (typeof size === 'string') {
-        if (this.isHor) {
-          size = parseInt(size) / this.$el.offsetWidth
-        } else {
-          size = parseInt(size) / this.$el.offsetHeight
-        }
-      }
+      if (isNaN(size)) size = this.isHor ? parseInt(size) / this.$el.offsetWidth : parseInt(size) / this.$el.offsetHeight
       size = `${size * 100}%`
       this.paneStyle = this.isHor ? { width: size } : { height: size }
     }
@@ -124,12 +113,17 @@ export default {
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-split {
-  width: 100%;
+.x_split {
   height: 100%;
   display: flex;
   align-items: stretch;
-  &-trigger-bar {
+  &_vertical {
+    flex-direction: column;
+  }
+  &_right, &_bottom {
+    flex: 1;
+  }
+  &_triggerBar {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -162,16 +156,12 @@ export default {
       }
     }
   }
-  &.vertical {
-    flex-direction: column;
-  }
-  &-right {
-    flex: 1;
-    width: 0;
-  }
-  &-bottom {
-    flex: 1;
-    height: 0;
+  &_disSelection {
+    user-select: none;
+    cursor: col-resize;
+    &.vertical {
+      cursor: row-resize;
+    }
   }
 }
 </style>

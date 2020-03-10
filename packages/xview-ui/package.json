@@ -8,6 +8,9 @@
     "email": "ll917274996@live.com",
     "name": "liliang"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "rollup -c"
   },

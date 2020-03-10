@@ -19,6 +19,7 @@ const coms = {
   Breadcrumb: () => import('../pages/Breadcrumb.vue'),
   Divider: () => import('../pages/Divider.vue'),
   Cell: () => import('../pages/Cell.vue'),
+  Split: () => import('../pages/Split.vue'),
 
   Anchor: () => import('../pages/Anchor.vue'),
   // DatePicker: () => import('../pages/DatePicker.vue'),
@@ -54,7 +55,6 @@ const coms = {
   Collapse: () => import('../pages/Collapse.vue'),
   Modal: () => import('../pages/Modal.vue'),
   Drawer: () => import('../pages/Drawer.vue'),
-  Split: () => import('../pages/Split.vue'),
   Carousel: () => import('../pages/Carousel.vue'),
   Upload: () => import('../pages/Upload.vue')
 }

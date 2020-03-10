@@ -21,6 +21,7 @@ import BreadcrumbItem from './components/breadcrumb-item' // 面包屑项
 import Divider from './components/divider' // 分割线
 import Cell from './components/cell' // 单元格
 import CellGroup from './components/cell-group' // 单元格组
+import Split from './components/split' // 面板分割
 
 /**
  * 已再次优化的组件
@@ -84,8 +85,6 @@ import InputNumber from './components/input-number'
 import Transfer from './components/transfer'
 // 树形控件
 import Tree from './components/tree'
-// 面板分割
-import Split from './components/split'
 // 走马灯
 import Carousel from './components/carousel'
 import CarouselItem from './components/carousel-item'
@@ -148,6 +147,7 @@ const comps = {
   Divider,
   Cell,
   CellGroup,
+  Split,
 
   Rate,
   Timeline,
@@ -179,7 +179,6 @@ const comps = {
   InputNumber,
   Transfer,
   Tree,
-  Split,
   Carousel,
   CarouselItem,
   Anchor,

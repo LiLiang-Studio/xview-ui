@@ -154,6 +154,8 @@ var isStr = function (s) { return typeof s === 'string'; };
 
 var isArr = function (arr) { return arr instanceof Array; };
 
+var isUrl = function (s) { return isStr(s) && /^(https?:\/\/(([a-zA-Z0-9]+-?)+[a-zA-Z0-9]+\.)+[a-zA-Z]+)(:\d+)?(\/.*)?(\?.*)?(#.*)?$/.test(s); };
+
 var getType = function (obj) { return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase(); };
 
 var _maxZIndex = 0;
@@ -311,6 +313,7 @@ var tools = /*#__PURE__*/Object.freeze({
   isFunc: isFunc,
   isStr: isStr,
   isArr: isArr,
+  isUrl: isUrl,
   getType: getType,
   getMaxZIndex: getMaxZIndex,
   findChildrens: findChildrens,
@@ -324,8 +327,28 @@ var tools = /*#__PURE__*/Object.freeze({
   dateFormat: dateFormat
 });
 
+var link = {
+  props: {
+    to: [String, Object],
+    replace: Boolean,
+    target: String,
+    append: Boolean
+  },
+  methods: {
+    getLinkProps: function getLinkProps() {
+      var ref = this;
+      var to = ref.to;
+      var target = ref.target;
+      var replace = ref.replace;
+      var append = ref.append;
+      return to ? isUrl(to) || target ? { is: 'a', target: target, href: to } : { is: 'RouterLink', to: to, replace: replace, append: append } : null
+    }
+  }
+};
+
 //
 var script$1 = {
+  mixins: [link],
   name: 'XButton',
   components: { XIcon: __vue_component__ },
   props: {
@@ -356,11 +379,7 @@ var script$1 = {
     disabled: Boolean,
     loading: Boolean,
     icon: String,
-    customIcon: String,
-    to: [String, Object],
-    replace: Boolean,
-    target: String,
-    append: Boolean
+    customIcon: String
   },
   data: function data() {
     return { prefix: 'x-btn', iconOnly: false, parent: null }
@@ -390,16 +409,7 @@ var script$1 = {
       ]
     },
     btnProps: function btnProps() {
-      var ref = this;
-      var to = ref.to;
-      var target = ref.target;
-      var $router = ref.$router;
-      var replace = ref.replace;
-      var append = ref.append;
-      var disabled = ref.disabled;
-      var type = ref.htmlType;
-      return to ? !target && $router ? 
-        { is: 'RouterLink', to: to, replace: replace, append: append } : { is: 'a', target: target, href: to } : { is: 'button', disabled: disabled, type: type }
+      return this.getLinkProps() || { is: 'button', disabled: this.disabled, type: this.htmlType }
     },
     listeners: function listeners() {
       var that = this;
@@ -1705,6 +1715,110 @@ __vue_render__$b._withStripped = true;
 
 //
 var script$c = {
+  mixins: [link],
+  name: 'XCard',
+  components: { XIcon: __vue_component__ },
+  props: {
+    bordered: { type: Boolean, default: true },
+    disHover: Boolean,
+    shadow: Boolean,
+    padding: { type: [Number, String], default: 16 },
+    title: String,
+    icon: String
+  },
+  data: function data() {
+    return { prefix: 'x-card', hasHeader: false }
+  },
+  computed: {
+    classes: function classes() {
+      return [this.prefix, { bordered: this.bordered, disHover: this.disHover, shadow: this.shadow }]
+    },
+    bindProps: function bindProps() {
+      return this.getLinkProps()
+    },
+    bodyStyle: function bodyStyle() {
+      return { padding: parseSize(this.padding) }
+    }
+  },
+  mounted: function mounted() {
+    this.hasHeader = this.$slots.title || this.$slots.extra || this.icon || this.title;
+  }
+};
+
+/* script */
+var __vue_script__$c = script$c;
+/* template */
+var __vue_render__$c = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    _vm._b({ class: _vm.classes }, "div", _vm.bindProps, false),
+    [
+      _vm.hasHeader
+        ? _c(
+            "div",
+            { class: _vm.prefix + "_header" },
+            [
+              _c(
+                "div",
+                { class: _vm.prefix + "_title" },
+                [
+                  _vm._t("title", [
+                    _vm.icon
+                      ? _c("x-icon", { attrs: { type: _vm.icon } })
+                      : _vm._e(),
+                    _vm._v(_vm._s(_vm.title) + "\n      ")
+                  ])
+                ],
+                2
+              ),
+              _vm._v(" "),
+              _vm._t("extra")
+            ],
+            2
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _c("div", { style: _vm.bodyStyle }, [_vm._t("default")], 2)
+    ]
+  )
+};
+var __vue_staticRenderFns__$c = [];
+__vue_render__$c._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$c = undefined;
+  /* scoped */
+  var __vue_scope_id__$c = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$c = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$c = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$c = normalizeComponent(
+    { render: __vue_render__$c, staticRenderFns: __vue_staticRenderFns__$c },
+    __vue_inject_styles__$c,
+    __vue_script__$c,
+    __vue_scope_id__$c,
+    __vue_is_functional_template__$c,
+    __vue_module_identifier__$c,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+var script$d = {
   name: 'UiAnchor',
   components: { UiAffix: __vue_component__$4 },
   data: function data() {
@@ -1778,9 +1892,9 @@ var script$c = {
 };
 
 /* script */
-var __vue_script__$c = script$c;
+var __vue_script__$d = script$d;
 /* template */
-var __vue_render__$c = function() {
+var __vue_render__$d = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -1821,86 +1935,6 @@ var __vue_render__$c = function() {
     2
   )
 };
-var __vue_staticRenderFns__$c = [];
-__vue_render__$c._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$c = undefined;
-  /* scoped */
-  var __vue_scope_id__$c = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$c = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$c = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$c = normalizeComponent(
-    { render: __vue_render__$c, staticRenderFns: __vue_staticRenderFns__$c },
-    __vue_inject_styles__$c,
-    __vue_script__$c,
-    __vue_scope_id__$c,
-    __vue_is_functional_template__$c,
-    __vue_module_identifier__$c,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-var script$d = {
-  name: 'UiAnchorLink',
-  data: function data() {
-    return { parent: null }
-  },
-  props: {
-    href: String,
-    title: String,
-    scrollOffset: {
-      type: Number,
-      default: 0
-    }
-  },
-  computed: {
-    active: function active() {
-      return this.parent && this.parent.activeItem === this
-    }
-  },
-  mounted: function mounted() {
-    this.parent = findParent(this, 'UiAnchor');
-    this.parent.addItem(this);
-  },
-  beforeDestroy: function beforeDestroy() {
-    this.parent.removeItem(this);
-  }
-};
-
-/* script */
-var __vue_script__$d = script$d;
-/* template */
-var __vue_render__$d = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    { staticClass: "ui-anchor-link" },
-    [
-      _c("a", { class: { active: _vm.active }, attrs: { href: _vm.href } }, [
-        _vm._v(_vm._s(_vm.title))
-      ]),
-      _vm._v(" "),
-      _vm._t("default")
-    ],
-    2
-  )
-};
 var __vue_staticRenderFns__$d = [];
 __vue_render__$d._withStripped = true;
 
@@ -1935,40 +1969,29 @@ __vue_render__$d._withStripped = true;
 
 //
 var script$e = {
-  name: 'UiCard',
-  components: { UiIcon: __vue_component__ },
+  name: 'UiAnchorLink',
   data: function data() {
-    return { prefix: 'ui-card', hasHeader: false }
+    return { parent: null }
   },
   props: {
-    bordered: {
-      type: Boolean,
-      default: true
-    },
-    disHover: Boolean,
-    shadow: Boolean,
-    padding: {
-      type: [Number, String],
-      default: 16
-    },
+    href: String,
     title: String,
-    icon: String
+    scrollOffset: {
+      type: Number,
+      default: 0
+    }
   },
   computed: {
-    classes: function classes() {
-      var ref = this;
-      var prefix = ref.prefix;
-      var bordered = ref.bordered;
-      var disHover = ref.disHover;
-      var shadow = ref.shadow;
-      return [prefix, { bordered: bordered, disHover: disHover, shadow: shadow }]
+    active: function active() {
+      return this.parent && this.parent.activeItem === this
     }
   },
   mounted: function mounted() {
-    var ref = this.$slots;
-    var title = ref.title;
-    var extra = ref.extra;
-    this.hasHeader = title !== undefined || extra !== undefined || this.icon || this.title;
+    this.parent = findParent(this, 'UiAnchor');
+    this.parent.addItem(this);
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.parent.removeItem(this);
   }
 };
 
@@ -1979,39 +2002,18 @@ var __vue_render__$e = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c("div", { class: _vm.classes }, [
-    _vm.hasHeader
-      ? _c(
-          "div",
-          { class: _vm.prefix + "--header" },
-          [
-            _c(
-              "div",
-              { class: _vm.prefix + "--title" },
-              [
-                _vm._t("title", [
-                  _vm.icon
-                    ? _c("UiIcon", { attrs: { type: _vm.icon } })
-                    : _vm._e(),
-                  _vm._v("\n        " + _vm._s(_vm.title) + "\n      ")
-                ])
-              ],
-              2
-            ),
-            _vm._v(" "),
-            _vm._t("extra")
-          ],
-          2
-        )
-      : _vm._e(),
-    _vm._v(" "),
-    _c(
-      "div",
-      { class: _vm.prefix + "--body", style: { padding: _vm.padding + "px" } },
-      [_vm._t("default")],
-      2
-    )
-  ])
+  return _c(
+    "div",
+    { staticClass: "ui-anchor-link" },
+    [
+      _c("a", { class: { active: _vm.active }, attrs: { href: _vm.href } }, [
+        _vm._v(_vm._s(_vm.title))
+      ]),
+      _vm._v(" "),
+      _vm._t("default")
+    ],
+    2
+  )
 };
 var __vue_staticRenderFns__$e = [];
 __vue_render__$e._withStripped = true;
@@ -12077,8 +12079,8 @@ var comps = {
   Tag: __vue_component__$9,
   ICircle: __vue_component__$a,
   Time: __vue_component__$b,
+  Card: __vue_component__$c,
 
-  Card: __vue_component__$e,
   Rate: __vue_component__$f,
   Breadcrumb: __vue_component__$j,
   BreadcrumbItem: __vue_component__$k,
@@ -12117,8 +12119,8 @@ var comps = {
   Split: __vue_component__$X,
   Carousel: __vue_component__$Y,
   CarouselItem: __vue_component__$Z,
-  Anchor: __vue_component__$c,
-  AnchorLink: __vue_component__$d,
+  Anchor: __vue_component__$d,
+  AnchorLink: __vue_component__$e,
   Upload: __vue_component__$_,
   Form: __vue_component__$$,
   FormItem: __vue_component__$10,

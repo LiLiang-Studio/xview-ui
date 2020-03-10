@@ -13,6 +13,8 @@ export const isStr = s => typeof s === 'string'
 
 export const isArr = arr => arr instanceof Array
 
+export const isUrl = s => isStr(s) && /^(https?:\/\/(([a-zA-Z0-9]+-?)+[a-zA-Z0-9]+\.)+[a-zA-Z]+)(:\d+)?(\/.*)?(\?.*)?(#.*)?$/.test(s)
+
 export const getType = obj => Object.prototype.toString.call(obj).slice(8, -1).toLowerCase()
 
 let _maxZIndex = 0

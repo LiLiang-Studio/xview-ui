@@ -15,6 +15,7 @@ const coms = {
   Tag: () => import('../pages/Tag.vue'),
   ICircle: () => import('../pages/ICircle.vue'),
   Time: () => import('../pages/Time.vue'),
+  Card: () => import('../pages/Card.vue'),
 
   Anchor: () => import('../pages/Anchor.vue'),
   // DatePicker: () => import('../pages/DatePicker.vue'),
@@ -41,7 +42,6 @@ const coms = {
   ISwitch: () => import('../pages/Switch.vue'),
   Radio: () => import('../pages/Radio.vue'),
   Grid: () => import('../pages/Grid.vue'),
-  Card: () => import('../pages/Card.vue'),
   Checkbox: () => import('../pages/Checkbox.vue'),
   Input: () => import('../pages/Input.vue'),
   Message: () => import('../pages/Message.vue'),

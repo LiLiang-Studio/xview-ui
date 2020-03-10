@@ -140,3 +140,8 @@ export default {
   }
 };
 </script>
+<style lang="less">
+ul {
+  list-style: none;
+}
+</style>

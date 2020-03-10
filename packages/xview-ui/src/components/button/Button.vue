@@ -8,7 +8,9 @@
 <script>
 import XIcon from '../icon'
 import { findParent } from '../../tools'
+import { link } from '../../mixins'
 export default {
+  mixins: [link],
   name: 'XButton',
   components: { XIcon },
   props: {
@@ -39,11 +41,7 @@ export default {
     disabled: Boolean,
     loading: Boolean,
     icon: String,
-    customIcon: String,
-    to: [String, Object],
-    replace: Boolean,
-    target: String,
-    append: Boolean
+    customIcon: String
   },
   data() {
     return { prefix: 'x-btn', iconOnly: false, parent: null }
@@ -64,9 +62,7 @@ export default {
       ]
     },
     btnProps() {
-      let { to, target, $router, replace, append, disabled, htmlType: type } = this
-      return to ? !target && $router ? 
-        { is: 'RouterLink', to, replace, append } : { is: 'a', target, href: to } : { is: 'button', disabled, type }
+      return this.getLinkProps() || { is: 'button', disabled: this.disabled, type: this.htmlType }
     },
     listeners() {
       let that = this

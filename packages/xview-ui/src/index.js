@@ -15,6 +15,7 @@ import Alert from './components/alert' // 警告提示
 import Tag from './components/tag' // 标签
 import ICircle from './components/circle' // 进度环
 import Time from './components/time' // 相对时间
+import Card from './components/card' // 卡片
 
 /**
  * 已再次优化的组件
@@ -26,8 +27,6 @@ import AnchorLink from './components/anchor-link' // 锚点
  * 新版本组件导入
  */
 import * as tools from './tools'
-// 卡片
-import Card from './components/card'
 // 评分
 import Rate from './components/rate'
 // 通知和消息提醒
@@ -146,8 +145,8 @@ const comps = {
   Tag,
   ICircle,
   Time,
-
   Card,
+
   Rate,
   Breadcrumb,
   BreadcrumbItem,

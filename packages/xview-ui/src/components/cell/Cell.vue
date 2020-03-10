@@ -1,74 +1,65 @@
 <template>
-  <div :is="root.name" v-bind="root.attrs" :class="[prefix, {disabled, selected}]" v-on="listeners">
+  <div :class="[prefix, {disabled, selected}]" v-bind="bindProps" @click="onClick">
     <div>
-      <p :class="`${prefix}-title`">
-        <slot>{{title}}</slot>
+      <div :class="`${prefix}_title`">
         <slot name="icon"></slot>
-      </p>
-      <p :class="`${prefix}-label`"><slot name="label">{{label}}</slot></p>
+        <slot>{{title}}</slot>
+      </div>
+      <div :class="`${prefix}_label`">
+        <slot name="label">{{label}}</slot>
+      </div>
     </div>
-    <div>
+    <div :class="`${prefix}_right`">
       <slot name="extra">{{extra}}</slot>
       <template v-if="to">
         <slot name="arrow">
-          <UiIcon type="ios-arrow-forward"/>
+          <x-icon type="ios-arrow-forward"/>
         </slot>
       </template>
     </div>
   </div>
 </template>
 <script>
-import UiIcon from '../icon'
+import XIcon from '../icon'
+import { link } from '../../mixins'
 import { findParent } from '../../tools'
 export default {
-  name: 'UiCell',
-  components: { UiIcon },
-  data() {
-    return { prefix: 'ui-cell' }
-  },
+  mixins: [link],
+  name: 'XCell',
+  components: { XIcon },
   props: {
     name: [String, Number],
     title: String,
     label: String,
     extra: String,
     disabled: Boolean,
-    selected: Boolean,
-    to: [String, Object],
-    replace: Boolean,
-    target: String,
-    append: Boolean
+    selected: Boolean
+  },
+  data() {
+    return { prefix: 'x-cell' }
   },
   computed: {
-    root() {
-      if (this.to) {
-        if (!this.target && this.$router) {
-          return { name: 'RouterLink', attrs: { to: this.to, replace: this.replace, append: this.append } }
-        }
-        return { name: 'a', attrs: { target: this.target, href: this.to } }
-      }
-      return { name: 'div', attrs: {} }
-    },
-    listeners() {
-      const that = this
-      return Object.assign({}, this.$listeners, {
-        click(event) {
-          that.$emit('click', event)
-          let parent = findParent(that, 'UiCellGroup')
-          parent && parent.$emit('on-click', that.name)
-        }
-      })
+    bindProps() {
+      return this.getLinkProps()
+    }
+  },
+  methods: {
+    onClick(e) {
+      if (this.disabled) return
+      let par = findParent(this, 'XCellGroup')
+      par && par.$emit('on-click', this.name)
     }
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-cell {
+.x-cell {
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 12px;
+  font-size: 14px;
   min-height: 38px;
   padding: 7px 16px;
   transition: all .2s ease-in-out;
@@ -86,11 +77,15 @@ export default {
     cursor: not-allowed;
     color: @disabled-color;
   }
-  &-title {
-    font-size: 14px;
-  }
-  &-label {
+  &_label {
+    font-size: 12px;
     color: @sub-color;
+  }
+  &_right .x-icon {
+    margin-left: 2px;
+  }
+  &_title .x-icon {
+    margin-right: 2px;
   }
 }
 </style>

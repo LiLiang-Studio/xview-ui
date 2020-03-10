@@ -19,6 +19,8 @@ import Card from './components/card' // 卡片
 import Breadcrumb from './components/breadcrumb' // 面包屑
 import BreadcrumbItem from './components/breadcrumb-item' // 面包屑项
 import Divider from './components/divider' // 分割线
+import Cell from './components/cell' // 单元格
+import CellGroup from './components/cell-group' // 单元格组
 
 /**
  * 已再次优化的组件
@@ -64,9 +66,6 @@ import Sider from './components/sider'
 // 折叠面板
 import Collapse from './components/collapse'
 import Panel from './components/panel'
-// 单元格
-import Cell from './components/cell'
-import CellGroup from './components/cell-group'
 // 单选按钮
 import Radio from './components/radio'
 import RadioGroup from './components/radio-group'
@@ -147,6 +146,8 @@ const comps = {
   Breadcrumb,
   BreadcrumbItem,
   Divider,
+  Cell,
+  CellGroup,
 
   Rate,
   Timeline,
@@ -168,8 +169,6 @@ const comps = {
   Sider,
   Collapse,
   Panel,
-  Cell,
-  CellGroup,
   Radio,
   RadioGroup,
   Tabs,

@@ -6,7 +6,13 @@
       <Card title="Options" icon="navicon" :padding="0" shadow style="width: 300px;">
         <CellGroup>
           <Cell title="只显示标题"/>
+          <Cell title="只显示标题">
+            <Icon type="home" slot="icon"/>
+          </Cell>
           <Cell title="显示 label 内容" label="label 的内容"/>
+          <Cell title="显示 label 内容" label="label 的内容">
+            <Icon type="home" slot="icon"/>
+          </Cell>
           <Cell title="显示右侧内容" extra="详细信息" />
           <Cell title="链接" extra="详细信息" to="Alert" />
           <Cell title="新窗口打开链接" to="/#/samples/Button" target="_blank" />
@@ -30,5 +36,5 @@ export default {
       switchValue: true
     };
   }
-};
+}
 </script>

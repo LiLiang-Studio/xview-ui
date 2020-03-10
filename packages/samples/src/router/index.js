@@ -18,6 +18,7 @@ const coms = {
   Card: () => import('../pages/Card.vue'),
   Breadcrumb: () => import('../pages/Breadcrumb.vue'),
   Divider: () => import('../pages/Divider.vue'),
+  Cell: () => import('../pages/Cell.vue'),
 
   Anchor: () => import('../pages/Anchor.vue'),
   // DatePicker: () => import('../pages/DatePicker.vue'),
@@ -52,7 +53,6 @@ const coms = {
   Timeline: () => import('../pages/Timeline.vue'),
   Collapse: () => import('../pages/Collapse.vue'),
   Modal: () => import('../pages/Modal.vue'),
-  Cell: () => import('../pages/Cell.vue'),
   Drawer: () => import('../pages/Drawer.vue'),
   Split: () => import('../pages/Split.vue'),
   Carousel: () => import('../pages/Carousel.vue'),

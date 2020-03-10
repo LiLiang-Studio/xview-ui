@@ -1,55 +1,47 @@
 <template>
   <span :class="prefix">
-    <router-link v-if="to" :class="`${prefix}--link`" :to="to" :replace="replace" :append="append">
+    <span :class="`${prefix}_link`" v-bind="bindProps">
       <slot></slot>
-    </router-link>
-    <a v-else-if="href" :class="`${prefix}--link`" :href="href" :target="target">
-      <slot></slot>
-    </a>
-    <span v-else :class="[`${prefix}--link`, 'notlink']"><slot></slot></span>
-    <span :class="`${prefix}--separator`" v-html="separator"></span>
+    </span>
+    <span :class="`${prefix}_sep`" v-html="separator"></span>
   </span>
 </template>
 <script>
+import { link } from '../../mixins'
 import { findParent } from '../../tools'
 export default {
-  name: 'UiBreadcrumbItem',
+  mixins: [link],
+  name: 'XBreadcrumbItem',
   data() {
-    return { prefix: 'ui-breadcrumb-item', separator: '' }
+    return { prefix: 'x-breadcrumb-item', separator: '' }
   },
-  props: {
-    replace: Boolean,
-    to: [String, Object],
-    target: {
-      type: String,
-      default: '_self'
-    },
-    href: String,
-    append: Boolean
+  computed: {
+    bindProps() {
+      return this.getLinkProps()
+    }
   },
   mounted() {
-    let parent = findParent(this, 'UiBreadcrumb')
+    let parent = findParent(this, 'XBreadcrumb')
     if (parent) this.separator = parent.separator
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-@prefix: .ui-breadcrumb-item;
+@prefix: .x-breadcrumb-item;
 @{prefix} {
   font-size: 14px;
-  color: @content-color;
-  &--link {
+  &_link {
     color: @content-color;
-    &.notlink {
-      font-weight: bold;
-    }
   }
-  &--separator {
-    margin: 0 8px;
+  span&_link {
+    font-weight: bold;
+  }
+  &_sep {
+    margin: 0 4px;
     color: @border-color;
   }
-  &:last-child @{prefix}--separator {
+  &:last-child @{prefix}_sep {
     display: none;
   }
 }

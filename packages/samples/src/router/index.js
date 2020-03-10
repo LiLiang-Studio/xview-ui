@@ -16,6 +16,7 @@ const coms = {
   ICircle: () => import('../pages/ICircle.vue'),
   Time: () => import('../pages/Time.vue'),
   Card: () => import('../pages/Card.vue'),
+  Breadcrumb: () => import('../pages/Breadcrumb.vue'),
 
   Anchor: () => import('../pages/Anchor.vue'),
   // DatePicker: () => import('../pages/DatePicker.vue'),
@@ -50,7 +51,6 @@ const coms = {
   Timeline: () => import('../pages/Timeline.vue'),
   Collapse: () => import('../pages/Collapse.vue'),
   Modal: () => import('../pages/Modal.vue'),
-  Breadcrumb: () => import('../pages/Breadcrumb.vue'),
   Divider: () => import('../pages/Divider.vue'),
   Cell: () => import('../pages/Cell.vue'),
   Drawer: () => import('../pages/Drawer.vue'),

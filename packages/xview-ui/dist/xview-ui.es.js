@@ -1818,7 +1818,131 @@ __vue_render__$c._withStripped = true;
   );
 
 //
+//
+//
+
 var script$d = {
+  name: 'XBreadcrumb',
+  props: {
+    separator: { type: String, default: '/' }
+  }
+};
+
+/* script */
+var __vue_script__$d = script$d;
+
+/* template */
+var __vue_render__$d = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", [_vm._t("default")], 2)
+};
+var __vue_staticRenderFns__$d = [];
+__vue_render__$d._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$d = undefined;
+  /* scoped */
+  var __vue_scope_id__$d = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$d = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$d = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$d = normalizeComponent(
+    { render: __vue_render__$d, staticRenderFns: __vue_staticRenderFns__$d },
+    __vue_inject_styles__$d,
+    __vue_script__$d,
+    __vue_scope_id__$d,
+    __vue_is_functional_template__$d,
+    __vue_module_identifier__$d,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+var script$e = {
+  mixins: [link],
+  name: 'XBreadcrumbItem',
+  data: function data() {
+    return { prefix: 'x-breadcrumb-item', separator: '' }
+  },
+  computed: {
+    bindProps: function bindProps() {
+      return this.getLinkProps()
+    }
+  },
+  mounted: function mounted() {
+    var parent = findParent(this, 'XBreadcrumb');
+    if (parent) { this.separator = parent.separator; }
+  }
+};
+
+/* script */
+var __vue_script__$e = script$e;
+/* template */
+var __vue_render__$e = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("span", { class: _vm.prefix }, [
+    _c(
+      "span",
+      _vm._b({ class: _vm.prefix + "_link" }, "span", _vm.bindProps, false),
+      [_vm._t("default")],
+      2
+    ),
+    _vm._v(" "),
+    _c("span", {
+      class: _vm.prefix + "_sep",
+      domProps: { innerHTML: _vm._s(_vm.separator) }
+    })
+  ])
+};
+var __vue_staticRenderFns__$e = [];
+__vue_render__$e._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$e = undefined;
+  /* scoped */
+  var __vue_scope_id__$e = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$e = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$e = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$e = normalizeComponent(
+    { render: __vue_render__$e, staticRenderFns: __vue_staticRenderFns__$e },
+    __vue_inject_styles__$e,
+    __vue_script__$e,
+    __vue_scope_id__$e,
+    __vue_is_functional_template__$e,
+    __vue_module_identifier__$e,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+var script$f = {
   name: 'UiAnchor',
   components: { UiAffix: __vue_component__$4 },
   data: function data() {
@@ -1892,9 +2016,9 @@ var script$d = {
 };
 
 /* script */
-var __vue_script__$d = script$d;
+var __vue_script__$f = script$f;
 /* template */
-var __vue_render__$d = function() {
+var __vue_render__$f = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -1935,17 +2059,17 @@ var __vue_render__$d = function() {
     2
   )
 };
-var __vue_staticRenderFns__$d = [];
-__vue_render__$d._withStripped = true;
+var __vue_staticRenderFns__$f = [];
+__vue_render__$f._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$d = undefined;
+  var __vue_inject_styles__$f = undefined;
   /* scoped */
-  var __vue_scope_id__$d = undefined;
+  var __vue_scope_id__$f = undefined;
   /* module identifier */
-  var __vue_module_identifier__$d = undefined;
+  var __vue_module_identifier__$f = undefined;
   /* functional template */
-  var __vue_is_functional_template__$d = false;
+  var __vue_is_functional_template__$f = false;
   /* style inject */
   
   /* style inject SSR */
@@ -1954,13 +2078,13 @@ __vue_render__$d._withStripped = true;
   
 
   
-  var __vue_component__$d = normalizeComponent(
-    { render: __vue_render__$d, staticRenderFns: __vue_staticRenderFns__$d },
-    __vue_inject_styles__$d,
-    __vue_script__$d,
-    __vue_scope_id__$d,
-    __vue_is_functional_template__$d,
-    __vue_module_identifier__$d,
+  var __vue_component__$f = normalizeComponent(
+    { render: __vue_render__$f, staticRenderFns: __vue_staticRenderFns__$f },
+    __vue_inject_styles__$f,
+    __vue_script__$f,
+    __vue_scope_id__$f,
+    __vue_is_functional_template__$f,
+    __vue_module_identifier__$f,
     false,
     undefined,
     undefined,
@@ -1968,7 +2092,7 @@ __vue_render__$d._withStripped = true;
   );
 
 //
-var script$e = {
+var script$g = {
   name: 'UiAnchorLink',
   data: function data() {
     return { parent: null }
@@ -1996,9 +2120,9 @@ var script$e = {
 };
 
 /* script */
-var __vue_script__$e = script$e;
+var __vue_script__$g = script$g;
 /* template */
-var __vue_render__$e = function() {
+var __vue_render__$g = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -2015,17 +2139,17 @@ var __vue_render__$e = function() {
     2
   )
 };
-var __vue_staticRenderFns__$e = [];
-__vue_render__$e._withStripped = true;
+var __vue_staticRenderFns__$g = [];
+__vue_render__$g._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$e = undefined;
+  var __vue_inject_styles__$g = undefined;
   /* scoped */
-  var __vue_scope_id__$e = undefined;
+  var __vue_scope_id__$g = undefined;
   /* module identifier */
-  var __vue_module_identifier__$e = undefined;
+  var __vue_module_identifier__$g = undefined;
   /* functional template */
-  var __vue_is_functional_template__$e = false;
+  var __vue_is_functional_template__$g = false;
   /* style inject */
   
   /* style inject SSR */
@@ -2034,13 +2158,13 @@ __vue_render__$e._withStripped = true;
   
 
   
-  var __vue_component__$e = normalizeComponent(
-    { render: __vue_render__$e, staticRenderFns: __vue_staticRenderFns__$e },
-    __vue_inject_styles__$e,
-    __vue_script__$e,
-    __vue_scope_id__$e,
-    __vue_is_functional_template__$e,
-    __vue_module_identifier__$e,
+  var __vue_component__$g = normalizeComponent(
+    { render: __vue_render__$g, staticRenderFns: __vue_staticRenderFns__$g },
+    __vue_inject_styles__$g,
+    __vue_script__$g,
+    __vue_scope_id__$g,
+    __vue_is_functional_template__$g,
+    __vue_module_identifier__$g,
     false,
     undefined,
     undefined,
@@ -2048,7 +2172,7 @@ __vue_render__$e._withStripped = true;
   );
 
 //
-var script$f = {
+var script$h = {
   name: 'UiRate',
   components: { UiIcon: __vue_component__ },
   data: function data() {
@@ -2126,9 +2250,9 @@ var script$f = {
 };
 
 /* script */
-var __vue_script__$f = script$f;
+var __vue_script__$h = script$h;
 /* template */
-var __vue_render__$f = function() {
+var __vue_render__$h = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -2194,17 +2318,17 @@ var __vue_render__$f = function() {
       : _vm._e()
   ])
 };
-var __vue_staticRenderFns__$f = [];
-__vue_render__$f._withStripped = true;
+var __vue_staticRenderFns__$h = [];
+__vue_render__$h._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$f = undefined;
+  var __vue_inject_styles__$h = undefined;
   /* scoped */
-  var __vue_scope_id__$f = undefined;
+  var __vue_scope_id__$h = undefined;
   /* module identifier */
-  var __vue_module_identifier__$f = undefined;
+  var __vue_module_identifier__$h = undefined;
   /* functional template */
-  var __vue_is_functional_template__$f = false;
+  var __vue_is_functional_template__$h = false;
   /* style inject */
   
   /* style inject SSR */
@@ -2213,13 +2337,13 @@ __vue_render__$f._withStripped = true;
   
 
   
-  var __vue_component__$f = normalizeComponent(
-    { render: __vue_render__$f, staticRenderFns: __vue_staticRenderFns__$f },
-    __vue_inject_styles__$f,
-    __vue_script__$f,
-    __vue_scope_id__$f,
-    __vue_is_functional_template__$f,
-    __vue_module_identifier__$f,
+  var __vue_component__$h = normalizeComponent(
+    { render: __vue_render__$h, staticRenderFns: __vue_staticRenderFns__$h },
+    __vue_inject_styles__$h,
+    __vue_script__$h,
+    __vue_scope_id__$h,
+    __vue_is_functional_template__$h,
+    __vue_module_identifier__$h,
     false,
     undefined,
     undefined,
@@ -2228,7 +2352,7 @@ __vue_render__$f._withStripped = true;
 
 //
 var prefix = 'ui-notice';
-var script$g = {
+var script$i = {
   name: 'UiNotice',
   components: { UiIcon: __vue_component__, UiCloseIconButton: __vue_component__$7 },
   transition: prefix,
@@ -2276,9 +2400,9 @@ var script$g = {
 };
 
 /* script */
-var __vue_script__$g = script$g;
+var __vue_script__$i = script$i;
 /* template */
-var __vue_render__$g = function() {
+var __vue_render__$i = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -2318,17 +2442,17 @@ var __vue_render__$g = function() {
     )
   ])
 };
-var __vue_staticRenderFns__$g = [];
-__vue_render__$g._withStripped = true;
+var __vue_staticRenderFns__$i = [];
+__vue_render__$i._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$g = undefined;
+  var __vue_inject_styles__$i = undefined;
   /* scoped */
-  var __vue_scope_id__$g = undefined;
+  var __vue_scope_id__$i = undefined;
   /* module identifier */
-  var __vue_module_identifier__$g = undefined;
+  var __vue_module_identifier__$i = undefined;
   /* functional template */
-  var __vue_is_functional_template__$g = false;
+  var __vue_is_functional_template__$i = false;
   /* style inject */
   
   /* style inject SSR */
@@ -2337,13 +2461,13 @@ __vue_render__$g._withStripped = true;
   
 
   
-  var __vue_component__$g = normalizeComponent(
-    { render: __vue_render__$g, staticRenderFns: __vue_staticRenderFns__$g },
-    __vue_inject_styles__$g,
-    __vue_script__$g,
-    __vue_scope_id__$g,
-    __vue_is_functional_template__$g,
-    __vue_module_identifier__$g,
+  var __vue_component__$i = normalizeComponent(
+    { render: __vue_render__$i, staticRenderFns: __vue_staticRenderFns__$i },
+    __vue_inject_styles__$i,
+    __vue_script__$i,
+    __vue_scope_id__$i,
+    __vue_is_functional_template__$i,
+    __vue_module_identifier__$i,
     false,
     undefined,
     undefined,
@@ -2352,7 +2476,7 @@ __vue_render__$g._withStripped = true;
 
 //
 var prefix$1 = 'ui-message';
-var script$h = {
+var script$j = {
   name: 'UiMessage',
   components: { UiIcon: __vue_component__, UiCloseIconButton: __vue_component__$7 },
   transition: prefix$1,
@@ -2394,9 +2518,9 @@ var script$h = {
 };
 
 /* script */
-var __vue_script__$h = script$h;
+var __vue_script__$j = script$j;
 /* template */
-var __vue_render__$h = function() {
+var __vue_render__$j = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -2423,17 +2547,17 @@ var __vue_render__$h = function() {
     )
   ])
 };
-var __vue_staticRenderFns__$h = [];
-__vue_render__$h._withStripped = true;
+var __vue_staticRenderFns__$j = [];
+__vue_render__$j._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$h = undefined;
+  var __vue_inject_styles__$j = undefined;
   /* scoped */
-  var __vue_scope_id__$h = undefined;
+  var __vue_scope_id__$j = undefined;
   /* module identifier */
-  var __vue_module_identifier__$h = undefined;
+  var __vue_module_identifier__$j = undefined;
   /* functional template */
-  var __vue_is_functional_template__$h = false;
+  var __vue_is_functional_template__$j = false;
   /* style inject */
   
   /* style inject SSR */
@@ -2442,13 +2566,13 @@ __vue_render__$h._withStripped = true;
   
 
   
-  var __vue_component__$h = normalizeComponent(
-    { render: __vue_render__$h, staticRenderFns: __vue_staticRenderFns__$h },
-    __vue_inject_styles__$h,
-    __vue_script__$h,
-    __vue_scope_id__$h,
-    __vue_is_functional_template__$h,
-    __vue_module_identifier__$h,
+  var __vue_component__$j = normalizeComponent(
+    { render: __vue_render__$j, staticRenderFns: __vue_staticRenderFns__$j },
+    __vue_inject_styles__$j,
+    __vue_script__$j,
+    __vue_scope_id__$j,
+    __vue_is_functional_template__$j,
+    __vue_module_identifier__$j,
     false,
     undefined,
     undefined,
@@ -2463,16 +2587,16 @@ __vue_render__$h._withStripped = true;
 //
 //
 
-var script$i = {
+var script$k = {
   props: {
     transition: String
   }
 };
 
 /* script */
-var __vue_script__$i = script$i;
+var __vue_script__$k = script$k;
 /* template */
-var __vue_render__$i = function() {
+var __vue_render__$k = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -2490,17 +2614,17 @@ var __vue_render__$i = function() {
     1
   )
 };
-var __vue_staticRenderFns__$i = [];
-__vue_render__$i._withStripped = true;
+var __vue_staticRenderFns__$k = [];
+__vue_render__$k._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$i = undefined;
+  var __vue_inject_styles__$k = undefined;
   /* scoped */
-  var __vue_scope_id__$i = undefined;
+  var __vue_scope_id__$k = undefined;
   /* module identifier */
-  var __vue_module_identifier__$i = undefined;
+  var __vue_module_identifier__$k = undefined;
   /* functional template */
-  var __vue_is_functional_template__$i = false;
+  var __vue_is_functional_template__$k = false;
   /* style inject */
   
   /* style inject SSR */
@@ -2509,13 +2633,13 @@ __vue_render__$i._withStripped = true;
   
 
   
-  var __vue_component__$i = normalizeComponent(
-    { render: __vue_render__$i, staticRenderFns: __vue_staticRenderFns__$i },
-    __vue_inject_styles__$i,
-    __vue_script__$i,
-    __vue_scope_id__$i,
-    __vue_is_functional_template__$i,
-    __vue_module_identifier__$i,
+  var __vue_component__$k = normalizeComponent(
+    { render: __vue_render__$k, staticRenderFns: __vue_staticRenderFns__$k },
+    __vue_inject_styles__$k,
+    __vue_script__$k,
+    __vue_scope_id__$k,
+    __vue_is_functional_template__$k,
+    __vue_module_identifier__$k,
     false,
     undefined,
     undefined,
@@ -2548,7 +2672,7 @@ var createNoticeManager = function (Vue, Component, config) {
         var this$1 = this;
 
         return h(
-          __vue_component__$i,
+          __vue_component__$k,
           {
             style: { zIndex: this.zIndex },
             props: { transition: Component.transition }
@@ -2619,166 +2743,8 @@ var createNoticeManager = function (Vue, Component, config) {
   return noticeFunc
 };
 
-var createNotice = function (Vue) { return createNoticeManager(Vue, __vue_component__$g, { duration: 4 }); };
-var createMessage = function (Vue) { return createNoticeManager(Vue, __vue_component__$h); };
-
-//
-//
-//
-//
-//
-
-var script$j = {
-  name: 'UiBreadcrumb',
-  props: {
-    separator: {
-      type: String,
-      default: '/'
-    }
-  }
-};
-
-/* script */
-var __vue_script__$j = script$j;
-
-/* template */
-var __vue_render__$j = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", { staticClass: "ui-breadcrumb" }, [_vm._t("default")], 2)
-};
-var __vue_staticRenderFns__$j = [];
-__vue_render__$j._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$j = undefined;
-  /* scoped */
-  var __vue_scope_id__$j = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$j = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$j = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$j = normalizeComponent(
-    { render: __vue_render__$j, staticRenderFns: __vue_staticRenderFns__$j },
-    __vue_inject_styles__$j,
-    __vue_script__$j,
-    __vue_scope_id__$j,
-    __vue_is_functional_template__$j,
-    __vue_module_identifier__$j,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-var script$k = {
-  name: 'UiBreadcrumbItem',
-  data: function data() {
-    return { prefix: 'ui-breadcrumb-item', separator: '' }
-  },
-  props: {
-    replace: Boolean,
-    to: [String, Object],
-    target: {
-      type: String,
-      default: '_self'
-    },
-    href: String,
-    append: Boolean
-  },
-  mounted: function mounted() {
-    var parent = findParent(this, 'UiBreadcrumb');
-    if (parent) { this.separator = parent.separator; }
-  }
-};
-
-/* script */
-var __vue_script__$k = script$k;
-/* template */
-var __vue_render__$k = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "span",
-    { class: _vm.prefix },
-    [
-      _vm.to
-        ? _c(
-            "router-link",
-            {
-              class: _vm.prefix + "--link",
-              attrs: { to: _vm.to, replace: _vm.replace, append: _vm.append }
-            },
-            [_vm._t("default")],
-            2
-          )
-        : _vm.href
-        ? _c(
-            "a",
-            {
-              class: _vm.prefix + "--link",
-              attrs: { href: _vm.href, target: _vm.target }
-            },
-            [_vm._t("default")],
-            2
-          )
-        : _c(
-            "span",
-            { class: [_vm.prefix + "--link", "notlink"] },
-            [_vm._t("default")],
-            2
-          ),
-      _vm._v(" "),
-      _c("span", {
-        class: _vm.prefix + "--separator",
-        domProps: { innerHTML: _vm._s(_vm.separator) }
-      })
-    ],
-    1
-  )
-};
-var __vue_staticRenderFns__$k = [];
-__vue_render__$k._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$k = undefined;
-  /* scoped */
-  var __vue_scope_id__$k = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$k = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$k = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$k = normalizeComponent(
-    { render: __vue_render__$k, staticRenderFns: __vue_staticRenderFns__$k },
-    __vue_inject_styles__$k,
-    __vue_script__$k,
-    __vue_scope_id__$k,
-    __vue_is_functional_template__$k,
-    __vue_module_identifier__$k,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
+var createNotice = function (Vue) { return createNoticeManager(Vue, __vue_component__$i, { duration: 4 }); };
+var createMessage = function (Vue) { return createNoticeManager(Vue, __vue_component__$j); };
 
 //
 //
@@ -12080,10 +12046,10 @@ var comps = {
   ICircle: __vue_component__$a,
   Time: __vue_component__$b,
   Card: __vue_component__$c,
+  Breadcrumb: __vue_component__$d,
+  BreadcrumbItem: __vue_component__$e,
 
-  Rate: __vue_component__$f,
-  Breadcrumb: __vue_component__$j,
-  BreadcrumbItem: __vue_component__$k,
+  Rate: __vue_component__$h,
   Timeline: __vue_component__$l,
   TimelineItem: __vue_component__$m,
   Spin: __vue_component__$n,
@@ -12119,8 +12085,8 @@ var comps = {
   Split: __vue_component__$X,
   Carousel: __vue_component__$Y,
   CarouselItem: __vue_component__$Z,
-  Anchor: __vue_component__$d,
-  AnchorLink: __vue_component__$e,
+  Anchor: __vue_component__$f,
+  AnchorLink: __vue_component__$g,
   Upload: __vue_component__$_,
   Form: __vue_component__$$,
   FormItem: __vue_component__$10,

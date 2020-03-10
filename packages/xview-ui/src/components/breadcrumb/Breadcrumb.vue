@@ -1,16 +1,11 @@
 <template>
-  <div class="ui-breadcrumb">
-    <slot></slot>
-  </div>
+  <div><slot></slot></div>
 </template>
 <script>
 export default {
-  name: 'UiBreadcrumb',
+  name: 'XBreadcrumb',
   props: {
-    separator: {
-      type: String,
-      default: '/'
-    }
+    separator: { type: String, default: '/' }
   }
 }
 </script>

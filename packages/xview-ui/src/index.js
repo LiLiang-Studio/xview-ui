@@ -16,6 +16,8 @@ import Tag from './components/tag' // 标签
 import ICircle from './components/circle' // 进度环
 import Time from './components/time' // 相对时间
 import Card from './components/card' // 卡片
+import Breadcrumb from './components/breadcrumb' // 面包屑
+import BreadcrumbItem from './components/breadcrumb-item' // 面包屑项
 
 /**
  * 已再次优化的组件
@@ -31,9 +33,6 @@ import * as tools from './tools'
 import Rate from './components/rate'
 // 通知和消息提醒
 import { createNotice, createMessage } from './components/notice'
-// 面包屑导航
-import Breadcrumb from './components/breadcrumb'
-import BreadcrumbItem from './components/breadcrumb-item'
 // 时间线
 import Timeline from './components/timeline'
 import TimelineItem from './components/timeline-item'
@@ -146,10 +145,10 @@ const comps = {
   ICircle,
   Time,
   Card,
-
-  Rate,
   Breadcrumb,
   BreadcrumbItem,
+
+  Rate,
   Timeline,
   TimelineItem,
   Spin,

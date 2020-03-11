@@ -22,6 +22,8 @@ import Divider from './components/divider' // 分割线
 import Cell from './components/cell' // 单元格
 import CellGroup from './components/cell-group' // 单元格组
 import Split from './components/split' // 面板分割
+import Timeline from './components/timeline' // 时间轴
+import TimelineItem from './components/timeline-item' // 时间轴项
 
 /**
  * 已再次优化的组件
@@ -37,9 +39,6 @@ import * as tools from './tools'
 import Rate from './components/rate'
 // 通知和消息提醒
 import { createNotice, createMessage } from './components/notice'
-// 时间线
-import Timeline from './components/timeline'
-import TimelineItem from './components/timeline-item'
 // 加载中
 import Spin, { spinService } from './components/spin'
 // 步骤条
@@ -148,10 +147,10 @@ const comps = {
   Cell,
   CellGroup,
   Split,
-
-  Rate,
   Timeline,
   TimelineItem,
+
+  Rate,
   Spin,
   Step,
   Steps,

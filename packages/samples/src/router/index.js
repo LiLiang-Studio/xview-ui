@@ -20,6 +20,7 @@ const coms = {
   Divider: () => import('../pages/Divider.vue'),
   Cell: () => import('../pages/Cell.vue'),
   Split: () => import('../pages/Split.vue'),
+  Timeline: () => import('../pages/Timeline.vue'),
 
   Anchor: () => import('../pages/Anchor.vue'),
   // DatePicker: () => import('../pages/DatePicker.vue'),
@@ -51,7 +52,6 @@ const coms = {
   Message: () => import('../pages/Message.vue'),
   Notice: () => import('../pages/Notice.vue'),
   Progress: () => import('../pages/Progress.vue'),
-  Timeline: () => import('../pages/Timeline.vue'),
   Collapse: () => import('../pages/Collapse.vue'),
   Modal: () => import('../pages/Modal.vue'),
   Drawer: () => import('../pages/Drawer.vue'),

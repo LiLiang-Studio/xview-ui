@@ -1,32 +1,25 @@
 <template>
   <div :class="prefix">
-    <ul :class="`${prefix}--list`">
-      <li :class="`${prefix}--item`" v-for="i in count" :key="i">
-        <UiIcon :type="icon" :class="fullClasses(i)"
+    <ul :class="`${prefix}_list`">
+      <li :class="`${prefix}_item`" v-for="i in count" :key="i">
+        <x-icon :type="icon" :custom="customIcon" :class="fullClasses(i)"
           @mouseenter="onMouseenter(i)" @mouseleave="onMouseleave" @click="onClick(i)"/>
-        <div :class="`${prefix}--half`" v-if="allowHalf">
-          <UiIcon :type="icon" :class="halfClasses(i)"
+        <div :class="`${prefix}_half`" v-if="allowHalf">
+          <x-icon :type="icon" :custom="customIcon" :class="halfClasses(i)"
             @mouseenter="onMouseenter(i, false)" @mouseleave="onMouseleave" @click="onClick(i, false)"/>
         </div>
       </li>
     </ul>
-    <span :class="`${prefix}--text`" v-if="showText">
+    <span :class="`${prefix}_text`" v-if="showText">
       <slot>{{inputValue}} 星</slot>
     </span>
   </div>
 </template>
 <script>
-import UiIcon from '../icon'
+import XIcon from '../icon'
 export default {
-  name: 'UiRate',
-  components: { UiIcon },
-  data() {
-    return {
-      prefix: 'ui-rate',
-      inputValue: this.value,
-      tempValue: this.value
-    }
-  },
+  name: 'XRate',
+  components: { XIcon },
   props: {
     count: {
       type: Number,
@@ -43,15 +36,18 @@ export default {
     icon: {
       type: String,
       default: 'star'
-    }
+    },
+    customIcon: String
+  },
+  data() {
+    return { prefix: 'x-rate', inputValue: this.value, tempValue: this.value }
   },
   watch: {
-    value(newval) {
-      this.inputValue = this.tempValue = newval
+    value(val) {
+      this.inputValue = this.tempValue = val
     },
-    inputValue(newval) {
-      this.$emit('input', newval)
-      this.$emit('on-change', newval)
+    inputValue(val) {
+      this.$emit('input', val)
     }
   },
   methods: {
@@ -64,57 +60,58 @@ export default {
     },
     onClick(i, isFull = true) {
       if (this.disabled) return
-      let value = isFull ? i : i - .5
-      if (this.clearable && value === this.inputValue) return this.inputValue = 0
-      this.inputValue = value
+      let value = isFull ? i : i - .5, thisValue = this.inputValue
+      this.inputValue = this.clearable && value === thisValue ? 0 : value
+      if (this.inputValue !== thisValue) this.$emit('on-change', this.inputValue)
     },
     isActive(i, isFull = true) {
       return i <= this.tempValue && i <= this.inputValue + (isFull ? 0 : .5)
     },
     fullClasses(i) {
       let { prefix, tempValue, disabled } = this
-      return [`${prefix}--icon`, { active: this.isActive(i), hover: i <= tempValue, disabled }]
+      return { active: this.isActive(i), hover: i <= tempValue, disabled }
     },
     halfClasses(i) {
       let { prefix, tempValue, disabled } = this
-      return [`${prefix}--icon`, { active: this.isActive(i, false), hover: i <= tempValue + .5, disabled }]
+      return { active: this.isActive(i, false), hover: i <= tempValue + .5, disabled }
     }
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-rate {
+.x-rate {
   display: inline-block;
-  &--list {
+  font-size: 14px;
+  &_list {
     list-style: none;
     display: inline-block;
     vertical-align: middle;
   }
-  &--item {
+  &_item {
     display: inline-block;
     position: relative;
     color: #e9e9e9;
-    margin-right: 8px;
+    margin-right: 2px;
     font-size: 20px;
   }
-  &--half {
+  &_half {
     position: absolute;
     top: 0;
     left: 0;
     width: 50%;
     overflow: hidden;
   }
-  &--icon {
+  .x-icon {
     transition: color .2s ease-in-out;
     &:not(.disabled) {
       cursor: pointer;
     }
-    &.active:not(.hover), &.hover {
+    &.active, &.hover {
       color: @warning-light-color;
     }
   }
-  &--text {
+  &_text {
     display: inline-block;
     vertical-align: middle;
     margin-left: 8px;

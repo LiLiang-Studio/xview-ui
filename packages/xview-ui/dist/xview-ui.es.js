@@ -2732,6 +2732,181 @@ __vue_render__$l._withStripped = true;
 
 //
 var script$m = {
+  name: 'XRate',
+  components: { XIcon: __vue_component__ },
+  props: {
+    count: {
+      type: Number,
+      default: 5
+    },
+    value: {
+      type: Number,
+      default: 0
+    },
+    allowHalf: Boolean,
+    disabled: Boolean,
+    showText: Boolean,
+    clearable: Boolean,
+    icon: {
+      type: String,
+      default: 'star'
+    },
+    customIcon: String
+  },
+  data: function data() {
+    return { prefix: 'x-rate', inputValue: this.value, tempValue: this.value }
+  },
+  watch: {
+    value: function value(val) {
+      this.inputValue = this.tempValue = val;
+    },
+    inputValue: function inputValue(val) {
+      this.$emit('input', val);
+    }
+  },
+  methods: {
+    onMouseenter: function onMouseenter(i, isFull) {
+      if ( isFull === void 0 ) isFull = true;
+
+      if (this.disabled) { return }
+      this.tempValue = isFull ? i : i - .5;
+    },
+    onMouseleave: function onMouseleave() {
+      this.tempValue = this.inputValue;
+    },
+    onClick: function onClick(i, isFull) {
+      if ( isFull === void 0 ) isFull = true;
+
+      if (this.disabled) { return }
+      var value = isFull ? i : i - .5, thisValue = this.inputValue;
+      this.inputValue = this.clearable && value === thisValue ? 0 : value;
+      if (this.inputValue !== thisValue) { this.$emit('on-change', this.inputValue); }
+    },
+    isActive: function isActive(i, isFull) {
+      if ( isFull === void 0 ) isFull = true;
+
+      return i <= this.tempValue && i <= this.inputValue + (isFull ? 0 : .5)
+    },
+    fullClasses: function fullClasses(i) {
+      var ref = this;
+      var prefix = ref.prefix;
+      var tempValue = ref.tempValue;
+      var disabled = ref.disabled;
+      return { active: this.isActive(i), hover: i <= tempValue, disabled: disabled }
+    },
+    halfClasses: function halfClasses(i) {
+      var ref = this;
+      var prefix = ref.prefix;
+      var tempValue = ref.tempValue;
+      var disabled = ref.disabled;
+      return { active: this.isActive(i, false), hover: i <= tempValue + .5, disabled: disabled }
+    }
+  }
+};
+
+/* script */
+var __vue_script__$m = script$m;
+/* template */
+var __vue_render__$m = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { class: _vm.prefix }, [
+    _c(
+      "ul",
+      { class: _vm.prefix + "_list" },
+      _vm._l(_vm.count, function(i) {
+        return _c(
+          "li",
+          { key: i, class: _vm.prefix + "_item" },
+          [
+            _c("x-icon", {
+              class: _vm.fullClasses(i),
+              attrs: { type: _vm.icon, custom: _vm.customIcon },
+              on: {
+                mouseenter: function($event) {
+                  return _vm.onMouseenter(i)
+                },
+                mouseleave: _vm.onMouseleave,
+                click: function($event) {
+                  return _vm.onClick(i)
+                }
+              }
+            }),
+            _vm._v(" "),
+            _vm.allowHalf
+              ? _c(
+                  "div",
+                  { class: _vm.prefix + "_half" },
+                  [
+                    _c("x-icon", {
+                      class: _vm.halfClasses(i),
+                      attrs: { type: _vm.icon, custom: _vm.customIcon },
+                      on: {
+                        mouseenter: function($event) {
+                          return _vm.onMouseenter(i, false)
+                        },
+                        mouseleave: _vm.onMouseleave,
+                        click: function($event) {
+                          return _vm.onClick(i, false)
+                        }
+                      }
+                    })
+                  ],
+                  1
+                )
+              : _vm._e()
+          ],
+          1
+        )
+      }),
+      0
+    ),
+    _vm._v(" "),
+    _vm.showText
+      ? _c(
+          "span",
+          { class: _vm.prefix + "_text" },
+          [_vm._t("default", [_vm._v(_vm._s(_vm.inputValue) + " 星")])],
+          2
+        )
+      : _vm._e()
+  ])
+};
+var __vue_staticRenderFns__$m = [];
+__vue_render__$m._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$m = undefined;
+  /* scoped */
+  var __vue_scope_id__$m = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$m = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$m = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$m = normalizeComponent(
+    { render: __vue_render__$m, staticRenderFns: __vue_staticRenderFns__$m },
+    __vue_inject_styles__$m,
+    __vue_script__$m,
+    __vue_scope_id__$m,
+    __vue_is_functional_template__$m,
+    __vue_module_identifier__$m,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+var script$n = {
   name: 'UiAnchor',
   components: { UiAffix: __vue_component__$4 },
   data: function data() {
@@ -2805,9 +2980,9 @@ var script$m = {
 };
 
 /* script */
-var __vue_script__$m = script$m;
+var __vue_script__$n = script$n;
 /* template */
-var __vue_render__$m = function() {
+var __vue_render__$n = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -2848,86 +3023,6 @@ var __vue_render__$m = function() {
     2
   )
 };
-var __vue_staticRenderFns__$m = [];
-__vue_render__$m._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$m = undefined;
-  /* scoped */
-  var __vue_scope_id__$m = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$m = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$m = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$m = normalizeComponent(
-    { render: __vue_render__$m, staticRenderFns: __vue_staticRenderFns__$m },
-    __vue_inject_styles__$m,
-    __vue_script__$m,
-    __vue_scope_id__$m,
-    __vue_is_functional_template__$m,
-    __vue_module_identifier__$m,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-var script$n = {
-  name: 'UiAnchorLink',
-  data: function data() {
-    return { parent: null }
-  },
-  props: {
-    href: String,
-    title: String,
-    scrollOffset: {
-      type: Number,
-      default: 0
-    }
-  },
-  computed: {
-    active: function active() {
-      return this.parent && this.parent.activeItem === this
-    }
-  },
-  mounted: function mounted() {
-    this.parent = findParent(this, 'UiAnchor');
-    this.parent.addItem(this);
-  },
-  beforeDestroy: function beforeDestroy() {
-    this.parent.removeItem(this);
-  }
-};
-
-/* script */
-var __vue_script__$n = script$n;
-/* template */
-var __vue_render__$n = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    { staticClass: "ui-anchor-link" },
-    [
-      _c("a", { class: { active: _vm.active }, attrs: { href: _vm.href } }, [
-        _vm._v(_vm._s(_vm.title))
-      ]),
-      _vm._v(" "),
-      _vm._t("default")
-    ],
-    2
-  )
-};
 var __vue_staticRenderFns__$n = [];
 __vue_render__$n._withStripped = true;
 
@@ -2962,79 +3057,29 @@ __vue_render__$n._withStripped = true;
 
 //
 var script$o = {
-  name: 'UiRate',
-  components: { UiIcon: __vue_component__ },
+  name: 'UiAnchorLink',
   data: function data() {
-    return {
-      prefix: 'ui-rate',
-      inputValue: this.value,
-      tempValue: this.value
-    }
+    return { parent: null }
   },
   props: {
-    count: {
-      type: Number,
-      default: 5
-    },
-    value: {
+    href: String,
+    title: String,
+    scrollOffset: {
       type: Number,
       default: 0
-    },
-    allowHalf: Boolean,
-    disabled: Boolean,
-    showText: Boolean,
-    clearable: Boolean,
-    icon: {
-      type: String,
-      default: 'star'
     }
   },
-  watch: {
-    value: function value(newval) {
-      this.inputValue = this.tempValue = newval;
-    },
-    inputValue: function inputValue(newval) {
-      this.$emit('input', newval);
-      this.$emit('on-change', newval);
+  computed: {
+    active: function active() {
+      return this.parent && this.parent.activeItem === this
     }
   },
-  methods: {
-    onMouseenter: function onMouseenter(i, isFull) {
-      if ( isFull === void 0 ) isFull = true;
-
-      if (this.disabled) { return }
-      this.tempValue = isFull ? i : i - .5;
-    },
-    onMouseleave: function onMouseleave() {
-      this.tempValue = this.inputValue;
-    },
-    onClick: function onClick(i, isFull) {
-      if ( isFull === void 0 ) isFull = true;
-
-      if (this.disabled) { return }
-      var value = isFull ? i : i - .5;
-      if (this.clearable && value === this.inputValue) { return this.inputValue = 0 }
-      this.inputValue = value;
-    },
-    isActive: function isActive(i, isFull) {
-      if ( isFull === void 0 ) isFull = true;
-
-      return i <= this.tempValue && i <= this.inputValue + (isFull ? 0 : .5)
-    },
-    fullClasses: function fullClasses(i) {
-      var ref = this;
-      var prefix = ref.prefix;
-      var tempValue = ref.tempValue;
-      var disabled = ref.disabled;
-      return [(prefix + "--icon"), { active: this.isActive(i), hover: i <= tempValue, disabled: disabled }]
-    },
-    halfClasses: function halfClasses(i) {
-      var ref = this;
-      var prefix = ref.prefix;
-      var tempValue = ref.tempValue;
-      var disabled = ref.disabled;
-      return [(prefix + "--icon"), { active: this.isActive(i, false), hover: i <= tempValue + .5, disabled: disabled }]
-    }
+  mounted: function mounted() {
+    this.parent = findParent(this, 'UiAnchor');
+    this.parent.addItem(this);
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.parent.removeItem(this);
   }
 };
 
@@ -3045,67 +3090,18 @@ var __vue_render__$o = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c("div", { class: _vm.prefix }, [
-    _c(
-      "ul",
-      { class: _vm.prefix + "--list" },
-      _vm._l(_vm.count, function(i) {
-        return _c(
-          "li",
-          { key: i, class: _vm.prefix + "--item" },
-          [
-            _c("UiIcon", {
-              class: _vm.fullClasses(i),
-              attrs: { type: _vm.icon },
-              on: {
-                mouseenter: function($event) {
-                  return _vm.onMouseenter(i)
-                },
-                mouseleave: _vm.onMouseleave,
-                click: function($event) {
-                  return _vm.onClick(i)
-                }
-              }
-            }),
-            _vm._v(" "),
-            _vm.allowHalf
-              ? _c(
-                  "div",
-                  { class: _vm.prefix + "--half" },
-                  [
-                    _c("UiIcon", {
-                      class: _vm.halfClasses(i),
-                      attrs: { type: _vm.icon },
-                      on: {
-                        mouseenter: function($event) {
-                          return _vm.onMouseenter(i, false)
-                        },
-                        mouseleave: _vm.onMouseleave,
-                        click: function($event) {
-                          return _vm.onClick(i, false)
-                        }
-                      }
-                    })
-                  ],
-                  1
-                )
-              : _vm._e()
-          ],
-          1
-        )
-      }),
-      0
-    ),
-    _vm._v(" "),
-    _vm.showText
-      ? _c(
-          "span",
-          { class: _vm.prefix + "--text" },
-          [_vm._t("default", [_vm._v(_vm._s(_vm.inputValue) + " 星")])],
-          2
-        )
-      : _vm._e()
-  ])
+  return _c(
+    "div",
+    { staticClass: "ui-anchor-link" },
+    [
+      _c("a", { class: { active: _vm.active }, attrs: { href: _vm.href } }, [
+        _vm._v(_vm._s(_vm.title))
+      ]),
+      _vm._v(" "),
+      _vm._t("default")
+    ],
+    2
+  )
 };
 var __vue_staticRenderFns__$o = [];
 __vue_render__$o._withStripped = true;
@@ -12068,8 +12064,8 @@ var comps = {
   Timeline: __vue_component__$j,
   TimelineItem: __vue_component__$k,
   ISwitch: __vue_component__$l,
+  Rate: __vue_component__$m,
 
-  Rate: __vue_component__$o,
   Spin: __vue_component__$s,
   Step: __vue_component__$t,
   Steps: __vue_component__$u,
@@ -12098,8 +12094,8 @@ var comps = {
   Tree: __vue_component__$X,
   Carousel: __vue_component__$Y,
   CarouselItem: __vue_component__$Z,
-  Anchor: __vue_component__$m,
-  AnchorLink: __vue_component__$n,
+  Anchor: __vue_component__$n,
+  AnchorLink: __vue_component__$o,
   Upload: __vue_component__$_,
   Form: __vue_component__$$,
   FormItem: __vue_component__$10,

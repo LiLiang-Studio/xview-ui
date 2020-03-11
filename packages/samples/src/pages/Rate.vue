@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding-bottom:100px;">
     <div class="page-title">Rate 评分</div>
     <p>对事物进行快速的评级操作，或对评价进行展示。</p>
 
@@ -26,9 +26,10 @@
 
     <div class="page-sub-title">支持允许或者禁用清除。</div>
     <Rate clearable v-model="value1" />clearable: true
-    <Rate v-model="value2" />
-clearable: false
-    <div class="page-sub-title">设置 icon 属性，可以自定义图标。</div>
+    <Rate v-model="value2" />clearable: false
+
+    <div class="page-sub-title">自定义图标</div>
+    <p>设置 icon 或 custom-icon 属性，可以自定义图标。</p><br>
     <Rate v-model="value5" icon="ios-heart" />
   </div>
 </template>

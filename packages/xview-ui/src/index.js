@@ -25,6 +25,7 @@ import Split from './components/split' // 面板分割
 import Timeline from './components/timeline' // 时间轴
 import TimelineItem from './components/timeline-item' // 时间轴项
 import ISwitch from './components/switch' // 开关
+import Rate from './components/rate' // 评分
 
 /**
  * 已再次优化的组件
@@ -36,8 +37,6 @@ import AnchorLink from './components/anchor-link' // 锚点
  * 新版本组件导入
  */
 import * as tools from './tools'
-// 评分
-import Rate from './components/rate'
 // 通知和消息提醒
 import { createNotice, createMessage } from './components/notice'
 // 加载中
@@ -149,8 +148,8 @@ const comps = {
   Timeline,
   TimelineItem,
   ISwitch,
-
   Rate,
+
   Spin,
   Step,
   Steps,

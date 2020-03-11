@@ -1,6 +1,8 @@
 # xview-ui
 
 [![npm package](https://img.shields.io/npm/v/xview-ui.svg)](https://www.npmjs.org/package/xview-ui)
+[![NPM downloads](http://img.shields.io/npm/dm/xview-ui.svg?style=flat-square)](https://npmjs.org/package/xview-ui)
+[![NPM downloads](https://img.shields.io/npm/dt/xview-ui.svg?style=flat-square)](https://npmjs.org/package/xview-ui)
 ![JS gzip size](http://img.badgesize.io/https://unpkg.com/xview-ui/dist/xview-ui.umd.min.js?compression=gzip&label=gzip:%20JS)
 ![CSS gzip size](http://img.badgesize.io/https://unpkg.com/xview-ui/dist/index.css?compression=gzip&label=gzip:%20CSS)
 ![License: MIT](https://img.shields.io/npm/l/xview-ui)
@@ -9,8 +11,7 @@
 
 > Like iview with usage, but it is more lightweight and has better performance.
 
-> Demo address [xview-ui](https://xview-ui.web.app)
-> 中国用户请访问 [xview-ui demo](https://liliang2019.gitee.io/xview-ui)
+> Demo address [xview-ui](https://liliang2019.gitee.io/xview-ui)
 
 ### Install
 

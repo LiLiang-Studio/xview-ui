@@ -26,6 +26,8 @@ import Timeline from './components/timeline' // 时间轴
 import TimelineItem from './components/timeline-item' // 时间轴项
 import ISwitch from './components/switch' // 开关
 import Rate from './components/rate' // 评分
+import Checkbox from './components/checkbox' // 复选框
+import CheckboxGroup from './components/checkbox-group' // 复选框组
 
 /**
  * 已再次优化的组件
@@ -52,9 +54,6 @@ import Progress from './components/progress'
 import loadingBarService from './components/loading-bar'
 // 无限滚动
 import Scroll from './components/scroll'
-// 复选框
-import Checkbox from './components/checkbox'
-import CheckboxGroup from './components/checkbox-group'
 // 布局
 import Layout from './components/layout'
 import Header from './components/header'
@@ -149,6 +148,8 @@ const comps = {
   TimelineItem,
   ISwitch,
   Rate,
+  Checkbox,
+  CheckboxGroup,
 
   Spin,
   Step,
@@ -157,8 +158,6 @@ const comps = {
   Col,
   Progress,
   Scroll,
-  Checkbox,
-  CheckboxGroup,
   Layout,
   Header,
   Content,

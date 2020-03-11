@@ -5,6 +5,7 @@ import HomeRouter from '../pages/HomeRouter.vue'
 Vue.use(Router)
 
 const coms = {
+  Checkbox: () => import('../pages/Checkbox.vue'),
   Rate: () => import('../pages/Rate.vue'),
   ISwitch: () => import('../pages/Switch.vue'),
   Timeline: () => import('../pages/Timeline.vue'),
@@ -47,7 +48,6 @@ const coms = {
   Tabs: () => import('../pages/Tabs.vue'),
   Radio: () => import('../pages/Radio.vue'),
   Grid: () => import('../pages/Grid.vue'),
-  Checkbox: () => import('../pages/Checkbox.vue'),
   Input: () => import('../pages/Input.vue'),
   Message: () => import('../pages/Message.vue'),
   Notice: () => import('../pages/Notice.vue'),

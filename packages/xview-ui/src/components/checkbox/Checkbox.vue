@@ -1,28 +1,27 @@
 <template>
-  <span :class="[prefix, size, {checked: checked || indeterminate, disabled}]" @click="onClick">
-    <span :class="`${prefix}-btn`" tabindex="0">
-      <UiIcon :class="[`${prefix}-icon`, {indeterminate}]" type="checkmark"/>
+  <span :class="prop.classes" @keydown.space.prevent @keyup.space="onClick" @click="onClick">
+    <span ref="btn" :class="`${prefix}_btn`" tabindex="0">
+      <span v-if="indeterminate" :class="`${prefix}_line`"></span>
+      <x-icon v-else :class="`${prefix}_icon`" type="checkmark"/>
     </span>
-    <slot>{{labelText}}</slot>
+    <slot>{{label}}</slot>
   </span>
 </template>
 <script>
-import UiIcon from '../icon'
+import XIcon from '../icon'
 import { findParent } from '../../tools'
 export default {
-  name: 'UiCheckbox',
-  components: { UiIcon },
-  data() {
-    return { prefix: 'ui-checkbox' }
-  },
+  name: 'XCheckbox',
+  components: { XIcon },
   props: {
     value: [String, Number, Boolean],
     label: [String, Number, Boolean],
+    border: Boolean,
     disabled: Boolean,
     indeterminate: Boolean,
     size: {
-      validator(value) {
-        return ['small', 'default', 'large'].indexOf(value) !== -1
+      validator(v) {
+        return ['small', 'default', 'large'].indexOf(v) !== -1
       }
     },
     trueValue: {
@@ -34,95 +33,119 @@ export default {
       default: false
     }
   },
-  computed: {
-    checked() {
-      let parent = findParent(this, 'UiCheckboxGroup')
-      return parent ? parent.includes(this.label) : this.value === this.trueValue
-    },
-    labelText() {
-      return typeof this.label === 'boolean' ? '' : this.label
-    }
+  data() {
+    return { prefix: 'x-checkbox' }
   },
-  watch: {
-    checked(newVal) {
-      this.$emit('on-change', newVal)
+  computed: {
+    prop() {
+      let par = findParent(this, 'XCheckboxGroup')
+      let checked = par ? par.includes(this.label) : this.value === this.trueValue
+      let size = this.size || par && par.size
+      let { prefix, border, disabled, indeterminate } = this
+      return {
+        checked,
+        classes: [prefix, size && `${prefix}_${size}`, { checked, border, disabled, indeterminate }]
+      }
     }
   },
   methods: {
-    onClick(event) {
+    onClick() {
       if (this.disabled) return
-      let parent = findParent(this, 'UiCheckboxGroup')
-      if (parent) {
-        parent.updateValue(this.label)
+      let { checked } = this.prop, par = findParent(this, 'XCheckboxGroup')
+      if (par) {
+        par.updateValue(this.label)
       } else {
-        this.$emit('input', this.checked ? this.falseValue : this.trueValue)
+        this.$emit('input', checked ? this.falseValue : this.trueValue)
+        this.$emit('on-change', !checked)
       }
+      this.$refs.btn.focus()
     }
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-checkbox {
+@prefix: .x-checkbox;
+@{prefix} {
   cursor: pointer;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   position: relative;
   margin-right: 8px;
-  font-size: 12px;
-  &-btn {
+  font-size: 14px;
+  &_btn {
+    color: #fff;
     outline: none;
-    display: inline-block;
-    box-sizing: content-box;
-    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
     margin-right: 6px;
-    width: 14px;
-    height: 14px;
-    line-height: 14px;
     border-radius: 2px;
-    background-color: #fff;
+    background: #fff;
     border: 1px solid @border-color;
     transition: all .2s ease-in-out;
-  }
-  &-icon {
-    color: #fff;
-    transform: scale(0);
-    transition: all .2s ease-in-out;
-    &.indeterminate {
-      width: 70%;
-      vertical-align: middle;
-      border-bottom: 2px solid currentColor;
-      &:before {
-        content: '';
-      }
-    }
-  }
-  &-group.large &, &.large {
-    font-size: 14px;
-  }
-  &-group.large &-btn, &.large &-btn {
     width: 16px;
     height: 16px;
-    line-height: 16px;
   }
-  &.checked:not(.disabled) &-btn {
-    border-color: @primary-color;
-    background-color: @primary-color;
+  &_line {
+    width: 70%;
+    border-bottom: 2px solid #fff;
   }
-  &.checked &-icon {
+  &_icon {
+    transform: scale(0);
+    transition: all .2s ease-in-out;
+  }
+  &:not(.disabled) @{prefix}_btn {
+    &:focus {
+      .control-shadow(@primary-color);
+    }
+    &:hover {
+      border-color: darken(@border-color, 10%);
+    }
+  }
+  &.checked, &.indeterminate {
+    &:not(.disabled) @{prefix}_btn {
+      border-color: @primary-color;
+      background-color: @primary-color;
+    }
+  }
+  &.border {
+    padding: 0 15px;
+    border-radius: 4px;
+    height: @size-normal;
+    border: 1px solid @border-color;
+  }
+  &_large {
+    &.border {
+      height: @size-large;
+    }
+    @{prefix}_btn {
+      width: 18px;
+      height: 18px;
+    }
+  }
+  &_small {
+    &.border {
+      height: @size-small;
+    }
+    @{prefix}_btn {
+      width: 14px;
+      height: 14px;
+      font-size: 12px;
+    }
+  }
+  &.checked &_icon {
     transform: scale(1);
   }
-  &.disabled, &.disabled &-icon {
-    cursor: not-allowed;
-    color: @disabled-color;
-  }
-  &.disabled &-btn {
-    background-color: @disabled-bg-color;
-  }
-  &:not(.disabled) &-btn:focus {
-    .form-control-shadow(@primary-color);
-  }
-  &:not(.disabled):not(.checked) &-btn:hover {
-    border-color: darken(@border-color, 10%);
+  &.disabled {
+    &, @{prefix}_btn {
+      cursor: not-allowed;
+      color: @disabled-color;
+    }
+    @{prefix}_btn {
+      background-color: lighten(@disabled-color, 17%);
+    }
   }
 }
 </style>

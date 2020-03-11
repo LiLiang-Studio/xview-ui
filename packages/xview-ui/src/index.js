@@ -24,6 +24,7 @@ import CellGroup from './components/cell-group' // 单元格组
 import Split from './components/split' // 面板分割
 import Timeline from './components/timeline' // 时间轴
 import TimelineItem from './components/timeline-item' // 时间轴项
+import ISwitch from './components/switch' // 开关
 
 /**
  * 已再次优化的组件
@@ -50,8 +51,6 @@ import { Row, Col } from './components/grid'
 import Progress from './components/progress'
 // 加载条
 import loadingBarService from './components/loading-bar'
-// 开关
-import ISwitch from './components/switch'
 // 无限滚动
 import Scroll from './components/scroll'
 // 复选框
@@ -149,6 +148,7 @@ const comps = {
   Split,
   Timeline,
   TimelineItem,
+  ISwitch,
 
   Rate,
   Spin,
@@ -157,7 +157,6 @@ const comps = {
   Row,
   Col,
   Progress,
-  ISwitch,
   Scroll,
   Checkbox,
   CheckboxGroup,

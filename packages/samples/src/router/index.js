@@ -21,6 +21,7 @@ const coms = {
   Cell: () => import('../pages/Cell.vue'),
   Split: () => import('../pages/Split.vue'),
   Timeline: () => import('../pages/Timeline.vue'),
+  ISwitch: () => import('../pages/Switch.vue'),
 
   Anchor: () => import('../pages/Anchor.vue'),
   // DatePicker: () => import('../pages/DatePicker.vue'),
@@ -44,7 +45,6 @@ const coms = {
   Transfer: () => import('../pages/Transfer.vue'),
   Spin: () => import('../pages/Spin.vue'),
   Tabs: () => import('../pages/Tabs.vue'),
-  ISwitch: () => import('../pages/Switch.vue'),
   Radio: () => import('../pages/Radio.vue'),
   Grid: () => import('../pages/Grid.vue'),
   Checkbox: () => import('../pages/Checkbox.vue'),

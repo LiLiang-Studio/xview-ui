@@ -12,10 +12,10 @@
 <script>
 export default {
   name: 'XTimelineItem',
+  props: { color: String },
   data() {
     return { prefix: 'x-timeline-item', custom: false }
   },
-  props: { color: String },
   computed: {
     clsName() {
       return ['blue', 'red', 'green'].indexOf(this.color) !== -1

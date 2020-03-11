@@ -154,6 +154,8 @@ var isFunc = function (f) { return typeof f === 'function'; };
 
 var isStr = function (s) { return typeof s === 'string'; };
 
+var isBool = function (b) { return typeof b === 'boolean'; };
+
 var isArr = function (arr) { return arr instanceof Array; };
 
 var isUrl = function (s) { return isStr(s) && /^(https?:\/\/(([a-zA-Z0-9]+-?)+[a-zA-Z0-9]+\.)+[a-zA-Z]+)(:\d+)?(\/.*)?(\?.*)?(#.*)?$/.test(s); };
@@ -314,6 +316,7 @@ var tools = /*#__PURE__*/Object.freeze({
   iconTypes: iconTypes,
   isFunc: isFunc,
   isStr: isStr,
+  isBool: isBool,
   isArr: isArr,
   isUrl: isUrl,
   getType: getType,
@@ -2944,8 +2947,10 @@ var script$n = {
       var border = ref.border;
       var disabled = ref.disabled;
       var indeterminate = ref.indeterminate;
+      var label = ref.label;
       return {
         checked: checked,
+        label: isBool(label) ? '' : label,
         classes: [prefix, size && (prefix + "_" + size), { checked: checked, border: border, disabled: disabled, indeterminate: indeterminate }]
       }
     }
@@ -3015,7 +3020,7 @@ var __vue_render__$n = function() {
         1
       ),
       _vm._v(" "),
-      _vm._t("default", [_vm._v(_vm._s(_vm.label))])
+      _vm._t("default", [_vm._v(_vm._s(_vm.prop.label))])
     ],
     2
   )

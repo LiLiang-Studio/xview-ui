@@ -11,6 +11,8 @@ export const isFunc = f => typeof f === 'function'
 
 export const isStr = s => typeof s === 'string'
 
+export const isBool = b => typeof b === 'boolean'
+
 export const isArr = arr => arr instanceof Array
 
 export const isUrl = s => isStr(s) && /^(https?:\/\/(([a-zA-Z0-9]+-?)+[a-zA-Z0-9]+\.)+[a-zA-Z]+)(:\d+)?(\/.*)?(\?.*)?(#.*)?$/.test(s)

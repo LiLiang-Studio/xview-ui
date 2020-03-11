@@ -4,12 +4,12 @@
       <span v-if="indeterminate" :class="`${prefix}_line`"></span>
       <x-icon v-else :class="`${prefix}_icon`" type="checkmark"/>
     </span>
-    <slot>{{label}}</slot>
+    <slot>{{prop.label}}</slot>
   </span>
 </template>
 <script>
 import XIcon from '../icon'
-import { findParent } from '../../tools'
+import { findParent, isBool } from '../../tools'
 export default {
   name: 'XCheckbox',
   components: { XIcon },
@@ -41,9 +41,10 @@ export default {
       let par = findParent(this, 'XCheckboxGroup')
       let checked = par ? par.includes(this.label) : this.value === this.trueValue
       let size = this.size || par && par.size
-      let { prefix, border, disabled, indeterminate } = this
+      let { prefix, border, disabled, indeterminate, label } = this
       return {
         checked,
+        label: isBool(label) ? '' : label,
         classes: [prefix, size && `${prefix}_${size}`, { checked, border, disabled, indeterminate }]
       }
     }

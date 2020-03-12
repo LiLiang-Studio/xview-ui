@@ -29,8 +29,10 @@ import Rate from './components/rate' // 评分
 import Checkbox from './components/checkbox' // 复选框
 import CheckboxGroup from './components/checkbox-group' // 复选框组
 import Progress from './components/progress' // 进度条
-import Collapse from './components/collapse' // 折叠
-import Panel from './components/panel' // 面板
+import Collapse from './components/collapse' // 折叠面板
+import Panel from './components/panel' // 折叠面板项
+import Step from './components/step' // 步骤条
+import Steps from './components/steps' // 步骤条项
 
 /**
  * 已再次优化的组件
@@ -46,9 +48,6 @@ import * as tools from './tools'
 import { createNotice, createMessage } from './components/notice'
 // 加载中
 import Spin, { spinService } from './components/spin'
-// 步骤条
-import Step from './components/step'
-import Steps from './components/steps'
 // 网格布局
 import { Row, Col } from './components/grid'
 // 加载条
@@ -151,10 +150,10 @@ const comps = {
   Progress,
   Collapse,
   Panel,
-
-  Spin,
   Step,
   Steps,
+
+  Spin,
   Row,
   Col,
   Scroll,

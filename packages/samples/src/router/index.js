@@ -5,6 +5,7 @@ import HomeRouter from '../pages/HomeRouter.vue'
 Vue.use(Router)
 
 const coms = {
+  Steps: () => import('../pages/Steps.vue'),
   Collapse: () => import('../pages/Collapse.vue'),
   Progress: () => import('../pages/Progress.vue'),
   Checkbox: () => import('../pages/Checkbox.vue'),
@@ -42,7 +43,6 @@ const coms = {
   Page: () => import('../pages/Page.vue'),
   LoadingBar: () => import('../pages/LoadingBar.vue'),
   Scroll: () => import('../pages/Scroll.vue'),
-  Steps: () => import('../pages/Steps.vue'),
   Select: () => import('../pages/Select.vue'),
   InputNumber: () => import('../pages/InputNumber.vue'),
   Transfer: () => import('../pages/Transfer.vue'),

@@ -1,39 +1,42 @@
 <template>
-  <div :class="[prefix, state.status]" :style="{width: state.width}">
-    <div :class="`${prefix}--tail`"></div>
-    <span :class="[`${prefix}--head`, {icon}]">
-      <UiIcon v-if="iconType" :type="iconType"/>
-      <b v-else>{{state.index + 1}}</b>
-    </span>
-    <div :class="`${prefix}--main`">
-      <div :class="`${prefix}--title`">{{title}}</div>
-      <div v-if="content" :class="`${prefix}--content`">{{content}}</div>
+  <div :class="[prefix, `${prefix}_${state.status}`]">
+    <div :class="`${prefix}_head`">
+      <span :class="[`${prefix}_icon`, {custom: icon}]">
+        <x-icon v-if="iconType" :type="iconType"/>
+        <template v-else>{{state.index + 1}}</template>
+      </span>
+      <div :class="`${prefix}_tail`"></div>
+    </div>
+    <div :class="`${prefix}_main`">
+      <b :class="`${prefix}_title`">
+        <slot name="title">{{title}}</slot>
+      </b>
+      <div v-show="hasContent" :class="`${prefix}_content`">
+        <slot name="content">{{content}}</slot>
+      </div>
     </div>
   </div>
 </template>
 <script>
-import UiIcon from '../icon'
+import XIcon from '../icon'
 export default {
-  name: 'UiStep',
-  components: { UiIcon },
-  data() {
-    return { prefix: 'ui-step', state: {} }
-  },
+  name: 'XStep',
+  components: { XIcon },
   props: {
     title: String,
     content: String,
     icon: String
   },
+  data() {
+    return { prefix: 'x-step', state: {}, hasContent: false }
+  },
   computed: {
     iconType() {
-      let { status } = this.state
-      return this.icon || (status === 'finish' && 'ios-checkmark-empty') || (status === 'error' && 'ios-close-empty')
+      return this.icon || ({ finish: 'ios-checkmark-empty', error: 'ios-close-empty' })[this.state.status]
     }
   },
-  methods: {
-    setState(state) {
-      this.state = Object.assign({}, this.state, state)
-    }
+  mounted() {
+    this.hasContent = this.content || this.$slots.content
   }
 }
 </script>

@@ -1,51 +1,48 @@
 <template>
-  <div class="ui-steps" :class="[size, direction]">
+  <div :class="['x-steps', size, direction]">
     <slot></slot>
   </div>
 </template>
 <script>
 import { findChildrens } from '../../tools'
 export default {
-  name: 'UiSteps',
+  name: 'XSteps',
   props: {
+    status: {
+      default: 'process',
+      validator(v) {
+        return ['wait', 'process', 'finish', 'error'].indexOf(v) !== -1
+      }
+    },
     current: {
       type: Number,
       default: 0
     },
-    status: {
-      default: 'process',
-      validator(value) {
-        return ['wait', 'process', 'finish', 'error'].indexOf(value) !== -1
-      }
-    },
     size: {
-      validator(value) {
-        return value === 'small'
+      validator(v) {
+        return v === 'small'
       }
     },
     direction: {
-      default: 'horizontal',
-      validator(value) {
-        return ['horizontal', 'vertical'].indexOf(value) !== -1
+      validator(v) {
+        return ['horizontal', 'vertical'].indexOf(v) !== -1
       }
     }
   },
   watch: {
-    current() {
-      this.setItemsState()
+    current: {
+      immediate: true,
+      handler: 'setItemsState'
     }
-  },
-  mounted() {
-    this.setItemsState()
   },
   methods: {
     setItemsState() {
-      let childs = findChildrens(this, 'UiStep'), count = childs.length
-      childs.forEach((item, index) => {
-        let isCurrent = index === this.current
-        let width = this.direction === 'horizontal' ? `${1 / count * 100}%` : undefined
-        let status = isCurrent ? this.status : index < this.current ? 'finish' : 'wait'
-        item.setState({ index, isCurrent, width, status })
+      this.$nextTick(() => {
+        let steps = findChildrens(this, 'XStep'), count = steps.length
+        steps.forEach((_, i) => _.state = {
+          index: i,
+          status: i === this.current ? this.status : i < this.current ? 'finish' : 'wait'
+        })
       })
     }
   }
@@ -53,152 +50,158 @@ export default {
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-@prefix: .ui-steps;
-@item-prefix: .ui-step;
-@{prefix} {
-  overflow: hidden;
+@prefix: .x-steps;
+@item-prefix: .x-step;
+@step: .x-step;
+.x-steps {
+  display: flex;
+  align-items: flex-start;
   &.small {
-    @{item-prefix}--main {
-      padding-left: 28px;
-    }
-    @{item-prefix}--tail {
-      top: 9px;
-      left: 28px;
-    }
-    @{item-prefix}--head {
-      width: 18px;
-      height: 18px;
-      line-height: 18px;
-      font-size: 12px;
-      .ui-icon {
-        font-size: 14px;
+    @{step} {
+      padding-left: 18px;
+      &_icon {
+        width: 18px;
+        height: 18px;
+        font-size: 12px;
+        .x-icon {
+          font-size: 16px;
+        }
       }
-    }
-    @{item-prefix}--title {
-      font-size: 12px;
+      &_title {
+        font-size: 12px;
+      }
     }
   }
   &.vertical {
-    @{item-prefix}--tail {
-      top: 30px;
-      right: 0;
-      bottom: 4px;
-      left: 13px;
-      width: 1px;
-      height: auto;
-    }
-    @{item-prefix}--main {
-      padding-top: 3px;
-      padding-bottom: 12px;
-    }
-    &.small @{item-prefix}--tail {
-      top: 22px;
-      left: 9px;
+    flex-direction: column;
+    @{step} {
+      padding-bottom: 24px;
+      &_head {
+        height: 100%;
+        right: auto;
+        flex-direction: column;
+      }
+      &_tail {
+        margin: 4px;
+        &, &:before {
+          border-width: 0 0 0 2px;
+        }
+        &:before {
+          left: -2px;
+        }
+      }
     }
   }
 }
-@{item-prefix} {
-  float: left;
-  width: 100%;
+@{step} {
+  flex: 1;
   position: relative;
-  &:last-child &--tail {
+  padding-left: 26px;
+  &:last-child &_tail {
     display: none;
   }
-  &.process {
-    @{item-prefix}--head:not(.icon) {
-      background-color: @primary-color;
-      color: #fff;
-    }
-    @{item-prefix}--title, @{item-prefix}--content {
-      color: #666;
-    }
+  &_head {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    left: 0;
+    z-index: -1;
+    display: flex;
+    align-items: center;
   }
-  &.finish, &.wait {
-    @{item-prefix}--title, @{item-prefix}--content {
-      color: #999;
-    }
-  }
-  &.finish, &.process {
-    @{item-prefix}--head {
-      color: @primary-color;
-    }
-  }
-  &.wait {
-    @{item-prefix}--head {
-      color: #ccc;
-    }
-    @{item-prefix}--head:not(.icon) {
-      border-color: #ccc;
-    }
-  }
-  &.error {
-    @{item-prefix}--head:not(.icon) {
-      border-color: currentColor;
-    }
-    @{item-prefix}--title, @{item-prefix}--content, @{item-prefix}--head {
-      color: @error-color;
-    }
-  }
-  &.finish {
-    @{item-prefix}--tail:before {
-      transform: scale(1);
-    }
-  }
-  &--head {
+  &_icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: @primary-color;
     width: 26px;
     height: 26px;
-    line-height: 26px;
-    text-align: center;
     border-radius: 50%;
-    margin-right: 8px;
-    float: left;
-    position: relative;
+    border: 1px solid @primary-color;
     font-size: 14px;
-    transition: all .3s ease-in-out;
-    &, .ui-icon {
-      font-weight: bold;
+    transition: all .2s ease-in-out;
+    &.custom {
+      border: none;
+      background: none;
+      color: @primary-color;
     }
-    .ui-icon {
+    .x-icon {
       font-size: 24px;
     }
-    &:not(.icon) {
-      background-color: #fff;
-      border: 1px solid @primary-color;
-    }
   }
-  &--tail {
-    position: absolute;
-    top: 13px;
-    left: 36px;
-    right: 10px;
-    height: 1px;
-    background-color: @divider-color;
+  &_tail {
+    flex: 1;
+    position: relative;
+    border-color: @divider-color;
+    &, &:before {
+      border-style: solid;
+      border-width: 0 0 1px;
+    }
     &:before {
-      display: block;
-      transform: scale(0);
-      height: 100%;
       content: '';
-      background-color: @primary-color;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      border-color: @primary-color;
+      transform: scale(0);
       transform-origin: 0 0;
       transition: transform .3s;
     }
   }
-  &--main {
-    position: relative;
-    padding-left: 36px;
+  &_main {
+    color: #999;
   }
-  &--title {
-    padding-right: 10px;
-    font-weight: bold;
+  &_title, &_content {
+    padding-left: 10px;
+  }
+  &_title {
+    background: #fff;
     font-size: 14px;
-    background-color: #fff;
-    display: inline-block;
+    padding-right: 10px;
   }
-  &--title + &--content {
-    margin-top: 6px;
-  }
-  &--content {
+  &_content {
     font-size: 12px;
+    margin-top: 3px;
+  }
+  &_finish {
+    @{step} {
+      &_tail:before {
+        transform: scale(1);
+      }
+    }
+  }
+  &_process {
+    @{step} {
+      &_icon {
+        color: #fff;
+        background: @primary-color;
+      }
+      &_main {
+        color: #666;
+      }
+      &_icon.custom {
+        background: none;
+        color: @primary-color;
+      }
+    }
+  }
+  &_wait {
+    @{step}_icon {
+      color: @disabled-color;
+      border-color: currentColor;
+    }
+  }
+  &_error {
+    @{step} {
+      &_icon, &_title, &_content {
+        color: @error-color;
+      }
+      &_icon {
+        border-color: currentColor;
+      }
+    }
   }
 }
 </style>

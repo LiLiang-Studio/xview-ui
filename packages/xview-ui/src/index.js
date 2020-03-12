@@ -33,6 +33,8 @@ import Collapse from './components/collapse' // 折叠面板
 import Panel from './components/panel' // 折叠面板项
 import Step from './components/step' // 步骤条
 import Steps from './components/steps' // 步骤条项
+import Radio from './components/radio' // 单选按钮
+import RadioGroup from './components/radio-group' // 单选按钮组
 
 /**
  * 已再次优化的组件
@@ -60,9 +62,6 @@ import Header from './components/header'
 import Content from './components/content'
 import Footer from './components/footer'
 import Sider from './components/sider'
-// 单选按钮
-import Radio from './components/radio'
-import RadioGroup from './components/radio-group'
 // 标签页
 import Tabs from './components/tabs'
 import TabPane from './components/tab-pane'
@@ -152,6 +151,8 @@ const comps = {
   Panel,
   Step,
   Steps,
+  Radio,
+  RadioGroup,
 
   Spin,
   Row,
@@ -162,8 +163,6 @@ const comps = {
   Content,
   Footer,
   Sider,
-  Radio,
-  RadioGroup,
   Tabs,
   TabPane,
   Input,

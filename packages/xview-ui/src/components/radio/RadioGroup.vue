@@ -1,48 +1,45 @@
 <template>
-  <ButtonGroup v-if="type === 'button'" class="ui-radio-group isButtonType" :size="size">
-    <slot></slot>
-  </ButtonGroup>
-  <div v-else class="ui-radio-group" :class="{vertical}">
-    <slot></slot>
-  </div>
+  <div v-bind="bindProps"><slot></slot></div>
 </template>
 <script>
-import ButtonGroup from '../button-group'
+import XBtnGroup from '../button-group'
 export default {
-  name: 'UiRadioGroup',
-  components: { ButtonGroup },
-  data() {
-    return { checkedValue: this.value, childs: [] }
-  },
+  name: 'XRadioGroup',
   props: {
     value: [String, Number],
     type: {
-      validator(value) {
-        return value === 'button'
+      validator(v) {
+        return v === 'button'
       }
     },
     size: {
-      validator(value) {
-        return ['large', 'small', 'default'].indexOf(value) !== -1
+      validator(v) {
+        return ['large', 'small', 'default'].indexOf(v) !== -1
       }
     },
     vertical: Boolean
   },
+  data() {
+    return { checkedValue: this.value }
+  },
+  computed: {
+    bindProps() {
+      let prefix = 'x-radio-group', { vertical } = this
+      return this.type === 'button' ? { is: XBtnGroup, class: prefix } : { class: [prefix, { vertical }] }
+    }
+  },
   watch: {
-    value(newVal) {
-      this.checkedValue = newVal
+    value(val) {
+      this.checkedValue = val
+    },
+    checkedValue(val) {
+      this.$emit('input', val)
     }
   },
   methods: {
-    addChild(vm) {
-      this.childs.push(vm)
-    },
-    updateValue(vm) {
-      this.childs.forEach(_ => _.checked = false)
-      vm.checked = true
-      this.checkedValue = vm.label
-      this.$emit('input', this.checkedValue)
-      this.$emit('on-change', this.checkedValue)
+    update(label) {
+      this.checkedValue = label
+      this.$emit('on-change', label)
     }
   }
 }

@@ -127,13 +127,14 @@ export default {
     }
   }
   &_small {
+    font-size: 12px;
     &.border {
+      padding: 0 8px;
       height: @size-small;
     }
     @{prefix}_btn {
       width: 14px;
       height: 14px;
-      font-size: 12px;
     }
   }
   &.checked &_icon {

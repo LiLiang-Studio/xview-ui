@@ -1,63 +1,70 @@
 <template>
-  <UiButton v-if="isButtonType" :class="[`${prefix}-btn`, {checked}]" :disabled="disabled" @click="onClick">
+  <div v-bind="bindProps" @click="onClick">
+    <span v-if="!isBtn" :class="[`${prefix}_box`, {checked}]"></span>
     <slot>{{label}}</slot>
-  </UiButton>
-  <div v-else tabindex="0" :class="[prefix, {disabled}]" @click="onClick">
-    <span :class="[`${prefix}-box`, {checked}]"></span>
-    <span><slot>{{label}}</slot></span>
   </div>
 </template>
 <script>
+import XBtn from '../button'
 import { findParent } from '../../tools'
-import UiButton from '../button'
 export default {
-  name: 'UiRadio',
-  components: { UiButton },
-  data() {
-    return { prefix: 'ui-radio', checked: false, parent: null }
-  },
+  name: 'XRadio',
   props: {
-    label: [String, Number],
-    disabled: Boolean
-  },
-  watch: {
-    checked(newVal) {
-      this.$emit('on-change', newVal)
+    label: {
+      required: true,
+      type: [String, Number]
+    },
+    disabled: Boolean,
+    border: Boolean,
+    size: {
+      validator(v) {
+        return ['large', 'small', 'default'].indexOf(v) !== -1
+      }
     }
   },
+  data() {
+    return { prefix: 'x-radio', parent: null }
+  },
   computed: {
-    isButtonType() {
+    isBtn() {
       return this.parent && this.parent.type === 'button'
+    },
+    checked() {
+      return this.parent && this.parent.checkedValue === this.label
+    },
+    bindProps() {
+      let { border, disabled, checked, prefix } = this
+      let size = this.size || (this.parent && this.parent.size)
+      return this.isBtn ?
+        { is: XBtn, disabled, size, class: [`${prefix}_btn`, { checked }] } :
+        { tabindex: '0', class: [prefix, size && `${prefix}_${size}`, { border, disabled }] }
     }
   },
   methods: {
     onClick() {
-      if (this.disabled) return
-      this.parent.updateValue(this)
+      if (!this.disabled) this.parent.update(this.label)
     }
   },
   mounted() {
-    this.parent = findParent(this, 'UiRadioGroup')
-    this.parent.addChild(this)
-    this.checked = this.parent.value === this.label
+    this.parent = findParent(this, 'XRadioGroup')
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-radio {
-  font-size: 12px;
-  margin-right: 8px;
+@radio: .x-radio;
+@{radio} {
   outline: none;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  &-box {
-    width: 14px;
-    height: 14px;
-    min-width: 14px;
+  font-size: 14px;
+  margin-right: 8px;
+  &_box {
+    width: 16px;
+    height: 16px;
     margin-right: 8px;
-    position: relative;
+    padding: 2px;
     border: 1px solid @border-color;
     &, &:before {
       border-radius: 50%;
@@ -65,11 +72,8 @@ export default {
     }
     &:before {
       content: '';
-      position: absolute;
-      top: 2px;
-      right: 2px;
-      bottom: 2px;
-      left: 2px;
+      display: block;
+      height: 100%;
       transform: scale(0);
       background-color: @primary-color;
     }
@@ -80,40 +84,64 @@ export default {
       }
     }
   }
-  &-group.vertical {
-    display: inline-block;
-  }
-  &-group.vertical & {
-    display: flex;
-    margin-right: 0;
-    height: 30px;
-  }
-  &-group.isButtonType {
-    margin-right: 10px;
-  }
-  &-group &-btn:hover {
-    border-color: @border-color;
-  }
-  &-btn.checked:not(:disabled) {
-    z-index: 2;
+  &_btn.checked {
+    z-index: 3;
     color: @primary-color;
     border-color: currentColor;
+    &:disabled {
+      color: #fff;
+      background: #e6e6e6;
+      border-color: @border-color;
+    }
   }
-  &-btn.checked:disabled {
-    background-color: #e6e6e6;
+  &.border {
+    padding: 0 15px;
+    border-radius: 4px;
+    height: @size-normal;
+    border: 1px solid @border-color;
+  }
+  &_small {
+    font-size: 12px;
+    &.border {
+      padding: 0 8px;
+      height: @size-small;
+    }
+    @{radio}_box {
+      width: 14px;
+      height: 14px;
+    }
+  }
+  &_large {
+    &.border {
+      height: @size-large;
+    }
+    @{radio}_box {
+      width: 18px;
+      height: 18px;
+    }
   }
   &.disabled {
     cursor: not-allowed;
-  }
-  &.disabled &-box {
-    border-color: @border-color;
-    background-color: @disabled-bg-color;
-    &:before {
-      background-color: #ccc;
+    @{radio}_box {
+      border-color: @border-color;
+      background: #f3f3f3;
+      &:before {
+        background-color: #ccc;
+      }
     }
   }
-  &:focus:not(.disabled) &-box {
-    .form-control-shadow(@primary-color);
+  &:focus:not(.disabled) &_box {
+    .control-shadow(@primary-color);
+  }
+  &-group {
+    &.vertical {
+      display: inline-block;
+      @{radio} {
+        display: flex;
+        margin-right: 0;
+        height: @size-normal;
+      }
+    }
   }
 }
 </style>

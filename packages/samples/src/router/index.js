@@ -5,6 +5,7 @@ import HomeRouter from '../pages/HomeRouter.vue'
 Vue.use(Router)
 
 const coms = {
+  Radio: () => import('../pages/Radio.vue'),
   Steps: () => import('../pages/Steps.vue'),
   Collapse: () => import('../pages/Collapse.vue'),
   Progress: () => import('../pages/Progress.vue'),
@@ -48,7 +49,6 @@ const coms = {
   Transfer: () => import('../pages/Transfer.vue'),
   Spin: () => import('../pages/Spin.vue'),
   Tabs: () => import('../pages/Tabs.vue'),
-  Radio: () => import('../pages/Radio.vue'),
   Grid: () => import('../pages/Grid.vue'),
   Input: () => import('../pages/Input.vue'),
   Message: () => import('../pages/Message.vue'),

@@ -1,6 +1,6 @@
 {
   "name": "xview-ui",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "private": false,
   "main": "dist/xview-ui.common.js",
   "module": "dist/xview-ui.es.js",

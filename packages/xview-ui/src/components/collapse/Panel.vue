@@ -1,40 +1,37 @@
 <template>
   <div :class="prefix">
-    <div :class="`${prefix}-header`" @click="onHeaderClick">
-      <UiIcon v-if="!hideArrow" :class="[`${prefix}-icon`, {isExpanded}]" type="ios-arrow-forward"/>
+    <div :class="`${prefix}_header`" @click="onClick">
+      <x-icon v-if="!hideArrow" :class="[`${prefix}_icon`, {expand}]" type="ios-arrow-forward"/>
       <slot></slot>
     </div>
-    <div v-show="isExpanded" :class="`${prefix}-content`">
+    <div v-show="expand" :class="`${prefix}_content`">
       <slot name="content"></slot>
     </div>
   </div>
 </template>
 <script>
-import UiIcon from '../icon'
+import XIcon from '../icon'
 import { findParent } from '../../tools'
 export default {
-  name: 'UiPanel',
-  components: { UiIcon },
+  name: 'XPanel',
+  components: { XIcon },
+  props: { name: String, hideArrow: Boolean },
   data() {
-    return { prefix: 'ui-collapse-item', isExpanded: false }
+    return { prefix: 'x-panel' }
   },
-  props: {
-    name: String,
-    hideArrow: Boolean
+  computed: {
+    expand() {
+      return findParent(this, 'XCollapse').inNames(this)
+    }
   },
   methods: {
-    onHeaderClick() {
-      this.isExpanded = !this.isExpanded
-      this.parent.updateModel(this)
-    },
-    fold() {
-      this.isExpanded = false
+    onClick() {
+      this.parent.updateNames(this)
     }
   },
   mounted() {
-    this.parent = findParent(this, 'UiCollapse')
-    this.parent.addChild(this)
-    this.isExpanded = this.parent.isExpand(this)
+    this.parent = findParent(this, 'XCollapse')
+    this.parent.addPanel(this)
   }
 }
 </script>

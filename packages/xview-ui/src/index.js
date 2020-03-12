@@ -29,6 +29,8 @@ import Rate from './components/rate' // 评分
 import Checkbox from './components/checkbox' // 复选框
 import CheckboxGroup from './components/checkbox-group' // 复选框组
 import Progress from './components/progress' // 进度条
+import Collapse from './components/collapse' // 折叠
+import Panel from './components/panel' // 面板
 
 /**
  * 已再次优化的组件
@@ -59,9 +61,6 @@ import Header from './components/header'
 import Content from './components/content'
 import Footer from './components/footer'
 import Sider from './components/sider'
-// 折叠面板
-import Collapse from './components/collapse'
-import Panel from './components/panel'
 // 单选按钮
 import Radio from './components/radio'
 import RadioGroup from './components/radio-group'
@@ -150,6 +149,8 @@ const comps = {
   Checkbox,
   CheckboxGroup,
   Progress,
+  Collapse,
+  Panel,
 
   Spin,
   Step,
@@ -162,8 +163,6 @@ const comps = {
   Content,
   Footer,
   Sider,
-  Collapse,
-  Panel,
   Radio,
   RadioGroup,
   Tabs,

@@ -1,84 +1,79 @@
 <template>
-  <div :class="['ui-collapse', {simple}]">
+  <div :class="['x-collapse', {simple}]">
     <slot></slot>
   </div>
 </template>
 <script>
 import { isArr } from '../../tools'
 export default {
-  name: 'UiCollapse',
-  data() {
-    return { childs: [], names: this.syncModel() }
-  },
+  name: 'XCollapse',
   props: {
     accordion: Boolean,
     value: [Array, String],
     simple: Boolean
   },
+  data() {
+    return { panels: [], names: [] }
+  },
   watch: {
-    value(newVal) {
-      this.names = this.syncModel()
+    value: {
+      immediate: true,
+      handler: 'syncValue'
     },
-    names(newval) {
-      this.$emit('input', newval)
-      this.$emit('on-change', newval)
+    names(val) {
+      this.$emit('input', val)
     }
   },
   methods: {
-    isExpand(vm) {
-      return this.names.indexOf(vm.name || this.childs.indexOf(vm)) !== -1
+    inNames(vm) {
+      return this.names.indexOf(vm.name || this.panels.indexOf(vm)) !== -1
     },
-    syncModel() {
-      return isArr(this.value) ? this.value : [this.value]
+    syncValue() {
+      this.names = isArr(this.value) ? this.value : [this.value]
     },
-    updateModel(vm) {
-      let name = vm.name || this.childs.indexOf(vm)
+    updateNames(vm) {
+      let name = vm.name || this.panels.indexOf(vm)
       let index = this.names.indexOf(name)
-      if (this.accordion) {
-        this.names = index === -1 ? [name] : []
-        return this.childs.forEach(_ => _.name !== name && _.fold())
-      }
-      if (index === -1) return this.names.push(name)
-      this.names.splice(index, 1)
+      index < 0 ? this.accordion ? (this.names = [name]) : this.names.push(name) : this.names.splice(index, 1)
+      this.$emit('on-change', this.names)
     },
-    addChild(vm) {
-      this.childs.push(vm)
+    addPanel(vm) {
+      this.panels.push(vm)
     }
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-collapse {
+.x-collapse {
+  font-size: 14px;
   border-radius: 3px;
   background-color: @bg-color;
   border: 1px solid @border-color;
   &.simple {
-    border-left: none;
-    border-right: none;
+    border-width: 1px 0;
     background-color: #fff;
   }
-  &-item + &-item {
+}
+.x-panel {
+  & + & {
     border-top: 1px solid @border-color;
   }
-  &-item-header {
-    height: 38px;
-    padding-left: 32px;
+  &_header {
+    padding: 9px 0 9px 32px;
     color: #666;
-    display: flex;
-    align-items: center;
     cursor: pointer;
   }
-  &-item-icon {
+  &_icon {
+    display: inline-block;
     margin-right: 14px;
     transition: transform .2s ease-in-out;
-    &.isExpanded {
+    &.expand {
       transform: rotateZ(90deg);
     }
   }
-  &-item-content {
+  &_content {
     padding: 16px;
-    overflow: hidden;
     background-color: #fff;
   }
 }

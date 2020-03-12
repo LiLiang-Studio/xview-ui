@@ -1,133 +1,156 @@
 <template>
-  <div :class="[prefix, curStatus, {vertical}]">
-    <div :class="`${prefix}-box`">
-      <div :class="`${prefix}-outer`">
-        <div :class="`${prefix}-inner`" :style="innerStyle">
-          <div :class="`${prefix}-bg`" :style="bgStyle"></div>
-        </div>
+  <div :class="classes">
+    <div :class="`${prefix}_box`" :style="boxStyle">
+      <div :class="`${prefix}_bg`" :style="bgStyle">
+        <x-info v-if="textInside" v-bind="iconProps"></x-info>
       </div>
-      <div v-if="!hideInfo" :class="`${prefix}-text`">
-        <slot>
-          <UiIcon v-if="statusIcon" :class="`${prefix}-status-icon`" :type="statusIcon"/>
-          <span v-else>{{Math.min(percent, 100)}}%</span>
-        </slot>
-      </div>
+      <div v-if="successPercent" :class="`${prefix}_bg success`" :style="successBGStyle"></div>
     </div>
+    <x-info v-if="!textInside" v-bind="iconProps"></x-info>
   </div>
 </template>
 <script>
-import UiIcon from '../icon'
+import props from './props'
+import { isArr } from '../../tools'
+import XInfo from './Info.vue'
 export default {
-  name: 'UiProgress',
-  components: { UiIcon },
+  name: 'XProgress',
+  components: { XInfo },
   data() {
-    return { prefix: 'ui-progress' }
+    return { prefix: 'x-progress' }
   },
   props: {
-    percent: {
+    ...props,
+    successPercent: {
       type: Number,
       default: 0
-    },
-    status: {
-      default: 'normal',
-      validator(value) {
-        return ['normal', 'active', 'wrong', 'success'].indexOf(value) !== -1
-      }
     },
     strokeWidth: {
       type: Number,
       default: 10
     },
-    hideInfo: Boolean,
+    strokeColor: [String, Array],
     vertical: Boolean
   },
   computed: {
-    innerStyle() {
-      return { borderRadius: `${this.strokeWidth * .5}px`, [this.vertical ? 'width' : 'height']: `${this.strokeWidth}px` }
+    iconProps() {
+      return { ...this.$props, status: this.percent < 100 ? this.status : 'success' }
+    },
+    classes() {
+      return [this.prefix, `${this.prefix}_${this.iconProps.status}`, { vertical: this.vertical }]
+    },
+    boxStyle() {
+      return { borderRadius: `${this.strokeWidth}px`, [this.vertical ? 'width' : 'height']: `${this.strokeWidth}px` }
     },
     bgStyle() {
-      return Object.assign({}, this.innerStyle, { [this.vertical ? 'height' : 'width']: `${Math.min(this.percent, 100)}%` })
+      let c = this.strokeColor
+      let [c0, c1] = isArr(c) ? c : [c]
+      let bgStyle = { background: c1 ? `linear-gradient(to right,${c0},${c1})` : c0 }
+      return { ...bgStyle, ...this.boxStyle, [this.vertical ? 'height' : 'width']: `${Math.min(this.percent, 100)}%` }
     },
-    curStatus() {
-      return this.percent < 100 ? this.status : 'success'
-    },
-    statusIcon() {
-      return ({ wrong: 'ios-close', success: 'ios-checkmark' })[this.curStatus]
+    successBGStyle() {
+      return { ...this.boxStyle, [this.vertical ? 'height' : 'width']: `${Math.min(this.successPercent, 100)}%` }
     }
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-progress {
-  &-box {
-    width: 100%;
-    display: table;
-    border-collapse: collapse;
+@prefix: .x-progress;
+@aniXName: x-progress-animate-x;
+@aniYName: x-progress-animate-y;
+@{prefix} {
+  display: flex;
+  align-items: center;
+  color: @primary-color;
+  padding: 4px 0;
+  &_wrong {
+    color: @error-color;
   }
-  &-box, &-outer, &-inner {
-    height: 100%;
+  &_success {
+    color: @success-color;
   }
-  &.vertical {
-    height: 100%;
-    margin-right: 6px;
-    display: inline-block;
-  }
-  &.vertical &-outer {
-    padding: 0;
-    position: relative;
-  }
-  &.vertical &-bg {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-  }
-  &.vertical.active &-bg:before {
-    transform-origin: 0 100%;
-    animation-name: ui-progress-animate-y;
-  }
-  &.normal &-bg, &.active &-bg {
-    background-color: @info-color;
-  }
-  &.active &-bg:before {
+  &_active &_bg:before {
     content: '';
     display: block;
     height: 100%;
     background-color: #fff;
     transform-origin: 0 0;
-    animation: ui-progress-animate-x 2s ease-in-out infinite;
+    animation: @aniXName 2s ease-in-out infinite;
   }
-  &.wrong {
-    color: @error-color;
+  &_box {
+    flex: 1;
+    position: relative;
+    background-color: lighten(@disabled-color, 15%);
   }
-  &.success {
-    color: @success-color;
-  }
-  &.wrong &-bg, &.success &-bg {
-    background-color: currentColor;
-  }
-  &-outer, &-text {
-    display: table-cell;
-    vertical-align: middle;
-  }
-  &-outer {
-    padding: 4px 0;
-  }
-  &-inner {
-    overflow: hidden;
-    background-color: @disabled-bg-color;
-  }
-  &-text {
-    width: 1px;
-    padding-left: 10px;
-    white-space: nowrap;
-  }
-  &-bg {
+  &_bg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
     transition: width .2s;
+    background: currentColor;
+    &.success {
+      background: @success-color;
+    }
   }
-  &-status-icon {
+  &-info {
     font-size: 14px;
+    margin-left: 10px;
+    &_text {
+      font-size: 12px;
+      color: @content-color;
+    }
+    &.textInside {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      padding-right: 6px;
+      display: inline-flex;
+      align-items: center;
+    }
+    &.textInside &_text {
+      color: #fff;
+    }
+  }
+  &.vertical {
+    height: 100%;
+    padding: 0;
+    margin-right: 6px;
+    display: inline-flex;
+    @{prefix}_box {
+      height: 100%;
+      position: relative;
+    }
+    @{prefix}_bg {
+      top: auto;
+      bottom: 0;
+    }
+    &@{prefix}_active @{prefix}_bg:before {
+      transform-origin: 0 100%;
+      animation-name: @aniYName;
+    }
+  }
+}
+@keyframes @aniXName {
+  from {
+    opacity: .3;
+    transform: scaleX(0);
+  }
+  to {
+    opacity: 0;
+    transform: scaleX(1);
+  }
+}
+@keyframes @aniYName {
+  from {
+    opacity: .3;
+    transform: scaleY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scaleY(1);
   }
 }
 </style>

@@ -28,6 +28,7 @@ import ISwitch from './components/switch' // 开关
 import Rate from './components/rate' // 评分
 import Checkbox from './components/checkbox' // 复选框
 import CheckboxGroup from './components/checkbox-group' // 复选框组
+import Progress from './components/progress' // 进度条
 
 /**
  * 已再次优化的组件
@@ -48,8 +49,6 @@ import Step from './components/step'
 import Steps from './components/steps'
 // 网格布局
 import { Row, Col } from './components/grid'
-// 进度条
-import Progress from './components/progress'
 // 加载条
 import loadingBarService from './components/loading-bar'
 // 无限滚动
@@ -150,13 +149,13 @@ const comps = {
   Rate,
   Checkbox,
   CheckboxGroup,
+  Progress,
 
   Spin,
   Step,
   Steps,
   Row,
   Col,
-  Progress,
   Scroll,
   Layout,
   Header,

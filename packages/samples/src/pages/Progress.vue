@@ -44,6 +44,10 @@
       <span>成功</span>
     </Progress>
 
+    <div class="page-sub-title">颜色</div>
+    <p>通过属性 stroke-color 设置进度条颜色。</p><br>
+    <Progress :percent="90" stroke-color="blue" />
+
     <div class="page-sub-title">渐变色</div>
     <p>设置属性 stroke-color 为数组时，可以显示为渐变色。数组只能设置为两项。</p><br>
     <Progress :percent="90" :stroke-color="['#108ee9', '#87d068']" />

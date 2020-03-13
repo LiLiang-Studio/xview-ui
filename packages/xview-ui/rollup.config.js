@@ -44,5 +44,6 @@ export default {
       format: 'es',
       file: `dist/${pkgName}.es.js`
     }
-  ]
+  ],
+  external: ['vue']
 }

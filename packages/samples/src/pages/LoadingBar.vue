@@ -9,9 +9,8 @@
       当然也可以通过update()方法来传入一个精确的进度，比如在文件上传时会很有用，具体见API。
     </p>
 
-    <div
-      class="page-sub-title"
-    >点击 Start 开始进度，点击 Finish 结束。在调用start()方法后，组件会自动模拟进度，当调用finish()或error()时，补全进度并自动消失。</div>
+    <div class="page-sub-title">基本用法</div>
+    <p>点击 Start 开始进度，点击 Finish 结束。在调用start()方法后，组件会自动模拟进度，当调用finish()或error()时，补全进度并自动消失。</p><br>
     <Button @click="start">开始</Button>
     <Button style="margin-left:4px;" @click="finish">完成</Button>
     <Button style="margin-left:4px;" @click="error">错误</Button>
@@ -50,7 +49,7 @@ export default {
       this.$Loading.destroy()
     }
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .list {

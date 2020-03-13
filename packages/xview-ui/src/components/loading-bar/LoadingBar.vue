@@ -1,16 +1,13 @@
 <template>
   <transition :name="prefix">
     <div :class="prefix" :style="styles">
-      <div :class="[`${prefix}-inner`, status]" :style="innerStyles"></div>
+      <div :class="[`${prefix}_bar`, status]" :style="barStyle"></div>
     </div>
   </transition>
 </template>
 <script>
 export default {
-  name: 'UiLoadingBar',
-  data() {
-    return { prefix: 'ui-loadingBar' }
-  },
+  name: 'XLoadingBar',
   props: {
     color: String,
     failedColor: String,
@@ -21,30 +18,33 @@ export default {
     percent: Number,
     status: String
   },
+  data() {
+    return { prefix: 'x-loadingBar' }
+  },
   computed: {
     styles() {
       return { height: `${this.height}px` }
     },
-    innerStyles() {
-      return { transform: `scaleX(${this.percent / 100})`, backgroundColor: this.status === 'error' ? this.failedColor : this.color }
+    barStyle() {
+      return { transform: `scaleX(${this.percent / 100})`, background: this.status === 'error' ? this.failedColor : this.color }
     }
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-loadingBar {
+.x-loadingBar {
   position: fixed;
   top: 0;
   right: 0;
   left: 0;
   &-leave-active {
-    transition: opacity .3s ease-in-out .5s;
+    transition: opacity .3s ease-in-out .8s;
   }
   &-leave-to {
     opacity: 0;
   }
-  &-inner {
+  &_bar {
     height: 100%;
     transform-origin: 0 0;
     transition: transform .2s;

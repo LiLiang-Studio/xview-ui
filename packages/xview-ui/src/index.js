@@ -36,6 +36,8 @@ import Steps from './components/steps' // 步骤条项
 import Radio from './components/radio' // 单选按钮
 import RadioGroup from './components/radio-group' // 单选按钮组
 
+import loadingBar from './components/loading-bar' // 加载条
+
 /**
  * 已再次优化的组件
  */
@@ -52,8 +54,6 @@ import { createNotice, createMessage } from './components/notice'
 import Spin, { spinService } from './components/spin'
 // 网格布局
 import { Row, Col } from './components/grid'
-// 加载条
-import loadingBarService from './components/loading-bar'
 // 无限滚动
 import Scroll from './components/scroll'
 // 布局
@@ -212,7 +212,8 @@ export default function (Vue, options = {}) {
   Vue.prototype.$Message = createMessage(Vue)
   Vue.prototype.$Spin = spinService(Vue)
   Vue.prototype.$Modal = modalService(Vue)
-  Vue.LoadingBar = Vue.prototype.$Loading = loadingBarService(Vue)
+
+  Vue.LoadingBar = Vue.prototype.$Loading = loadingBar
   let prefix = typeof options.prefix === 'string' ? options.prefix : 'Ui'
   for (let name in comps) Vue.component(prefix + name, comps[name])
 }

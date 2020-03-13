@@ -5,6 +5,7 @@ import HomeRouter from '../pages/HomeRouter.vue'
 Vue.use(Router)
 
 const coms = {
+  LoadingBar: () => import('../pages/LoadingBar.vue'),
   Radio: () => import('../pages/Radio.vue'),
   Steps: () => import('../pages/Steps.vue'),
   Collapse: () => import('../pages/Collapse.vue'),
@@ -42,7 +43,6 @@ const coms = {
   Menu: () => import('../pages/Menu.vue'),
   Dropdown: () => import('../pages/Dropdown.vue'),
   Page: () => import('../pages/Page.vue'),
-  LoadingBar: () => import('../pages/LoadingBar.vue'),
   Scroll: () => import('../pages/Scroll.vue'),
   Select: () => import('../pages/Select.vue'),
   InputNumber: () => import('../pages/InputNumber.vue'),

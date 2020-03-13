@@ -3,7 +3,8 @@
     <div class="page-title">Scroll 无限滚动</div>
     <p>常用于滚动至底部时，触发加载更多数据。</p>
 
-    <div class="page-sub-title">当滚动至底部时，触发加载更多。需返回 Promise。</div>
+    <div class="page-sub-title">底部触发</div>
+    <p>当滚动至底部时，触发加载更多。需返回 Promise。</p><br>
     <Scroll style="max-width:400px;" :on-reach-bottom="handleReachBottom">
       <Card
         dis-hover
@@ -13,7 +14,9 @@
       >Content {{ item }}</Card>
     </Scroll>
 
-    <div class="page-sub-title">当滚动至顶部时，触发加载更多。需返回 Promise。</div>
+    <div class="page-sub-title">顶部触发</div>
+    <p>当滚动至顶部时，触发加载更多。需返回 Promise。</p><br>
+    <div class="page-sub-title"></div>
     <Scroll style="max-width:400px;" :on-reach-top="handleReachTop">
       <Card
         dis-hover
@@ -23,7 +26,9 @@
       >Content {{ item }}</Card>
     </Scroll>
 
-    <div class="page-sub-title">当滚动至底部或顶部时，触发加载更多。需返回 Promise。</div>
+    <div class="page-sub-title">边缘触发</div>
+    <p>当滚动至底部或顶部时，触发加载更多。需返回 Promise。</p><br>
+    <div class="page-sub-title"></div>
     <Scroll style="max-width:400px;" :on-reach-edge="handleReachEdge">
       <Card
         dis-hover

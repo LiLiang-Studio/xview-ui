@@ -35,6 +35,7 @@ import Step from './components/step' // 步骤条
 import Steps from './components/steps' // 步骤条项
 import Radio from './components/radio' // 单选按钮
 import RadioGroup from './components/radio-group' // 单选按钮组
+import Scroll from './components/scroll' // 无限滚动
 
 import loadingBarService from './components/loading-bar' // 加载条
 import Spin, { spinService } from './components/spin' // 加载中
@@ -53,8 +54,6 @@ import * as tools from './tools'
 import { createNotice, createMessage } from './components/notice'
 // 网格布局
 import { Row, Col } from './components/grid'
-// 无限滚动
-import Scroll from './components/scroll'
 // 布局
 import Layout from './components/layout'
 import Header from './components/header'
@@ -153,10 +152,10 @@ const comps = {
   Radio,
   RadioGroup,
   Spin,
+  Scroll,
 
   Row,
   Col,
-  Scroll,
   Layout,
   Header,
   Content,
@@ -177,7 +176,6 @@ const comps = {
   Upload,
   Form,
   FormItem,
-
   // Cascader,
   // ColorPicker,
   Select,

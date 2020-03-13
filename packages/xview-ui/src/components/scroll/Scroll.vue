@@ -1,18 +1,16 @@
 <template>
-  <div class="ui-scroll" :style="styles" @scroll="onScroll" @mousewheel="onMouseWheel">
-    <UiLoading v-if="topHandlers.length" :loadingText="loadingText" :loading="topLoading"/>
+  <div class="x-scroll" :style="styles" @scroll="onScroll" @mousewheel="onMouseWheel">
+    <x-loading v-if="topHandlers.length" :loadingText="loadingText" :loading="topLoading"/>
     <slot></slot>
-    <UiLoading v-if="bottomHandlers.length" :loadingText="loadingText" :loading="bottomLoading"/>
+    <x-loading v-if="bottomHandlers.length" :loadingText="loadingText" :loading="bottomLoading"/>
   </div>
 </template>
 <script>
-import UiLoading from './Loading.vue'
+import { parseSize, isArr } from '../../tools'
+import XLoading from './Loading.vue'
 export default {
-  name: 'UiScroll',
-  components: { UiLoading },
-  data() {
-    return { topLoading: false, bottomLoading: false }
-  },
+  name: 'XScroll',
+  components: { XLoading },
   props: {
     height: {
       type: [String, Number],
@@ -30,12 +28,17 @@ export default {
       default: () => [20, 20]
     }
   },
+  data() {
+    return { topLoading: false, bottomLoading: false }
+  },
   computed: {
     styles() {
-      return { height: isNaN(this.height) ? this.height : `${this.height}px` }
+      return { height: parseSize(this.height) }
     },
     edge() {
-      return this.distanceToEdge instanceof Array ? this.distanceToEdge : [this.distanceToEdge, this.distanceToEdge]
+      let edge = this.distanceToEdge
+      let [e1, e2] = isArr(edge) ? edge : [edge, edge]
+      return [e1, e2 || e1]
     },
     topHandlers() {
       return [this.onReachTop, this.onReachEdge].filter(_ => _)
@@ -61,17 +64,19 @@ export default {
         }).finally(() => this.topLoading = false)
       }
     },
-    onMouseWheel(event) {
-      if (this.topHandlers.length && this.$el.scrollTop <= 0 && event.deltaY < 0) {
-        event.preventDefault()
-        this.onScroll()
+    onMouseWheel(e) {
+      if (
+        (this.topHandlers.length && this.$el.scrollTop <= 0 && e.deltaY < 0) ||
+        (this.bottomHandlers.length && this.$el.scrollTop + this.$el.clientHeight >= this.$el.scrollHeight && e.deltaY > 0)
+      ) {
+        e.preventDefault()
       }
     }
   }
 }
 </script>
 <style lang="less">
-.ui-scroll {
+.x-scroll {
   overflow-y: auto;
 }
 </style>

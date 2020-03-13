@@ -1,42 +1,43 @@
 <template>
   <div :class="prefix">
-    <UiSpin v-if="loading" fix>
-      <UiIcon type="load-c" size="18" :class="[`${prefix}-icon`, iconClass]"/>
-      <span :class="`${prefix}-text`">{{loadingText}}</span>
-    </UiSpin>
+    <x-spin v-if="loading" fix>
+      <x-icon type="load-c" size="18" :class="[`${prefix}_icon`, iconClass]"/>
+      <span :class="`${prefix}_text`">{{loadingText}}</span>
+    </x-spin>
   </div>
 </template>
 <script>
-import UiIcon from '../icon'
-import UiSpin from '../spin'
+import XIcon from '../icon'
+import XSpin from '../spin'
 export default {
-  name: 'UiLoading',
-  components: { UiIcon, UiSpin },
-  data() {
-    return { prefix: 'ui-loading' }
-  },
+  name: 'XLoading',
+  components: { XIcon, XSpin },
   props: {
     loading: Boolean,
     loadingText: String,
     iconClass: String
+  },
+  data() {
+    return { prefix: 'x-loading' }
   }
 }
 </script>
 <style lang="less">
-@prefix: ui-loading;
+@prefix: x-loading;
+@aniName: ~"@{prefix}-animate";
 .@{prefix} {
   height: 32px;
   position: relative;
-  &-icon, &-text {
+  &_icon, &_text {
     vertical-align: middle;
   }
-  &-icon {
+  &_icon {
     margin-right: 6px;
-    animation: @prefix .8s linear infinite;
+    animation: @aniName .8s linear infinite;
   }
 }
-@keyframes @prefix {
-  from {
+@keyframes @aniName {
+  0% {
     transform: rotate(0deg);
   }
   to {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding-bottom: 100px;">
     <div class="page-title">Drawer 抽屉</div>
     <p>抽屉从父窗体边缘滑入，覆盖住部分父窗体内容。用户在抽屉内操作时不必离开当前任务，操作完成后，可以平滑地回到到原任务。</p>
     <div class="page-sub-title">何时使用</div>
@@ -7,29 +7,29 @@
     <p>当需要在当前任务流中插入临时任务，创建或预览附加内容。比如展示协议条款，创建子对象。</p>
 
     <div class="page-sub-title">基础抽屉</div>
-    <p>基础抽屉，点击触发按钮抽屉从右滑出，点击遮罩区关闭。</p>
+    <p>基础抽屉，点击触发按钮抽屉从右滑出，点击遮罩区关闭。</p><br>
     <Button @click="value1 = true" type="primary">Open</Button>
-    <Drawer title="Basic Drawer" :closable="false" v-model="value1">
+    <Drawer title="Basic Drawer" v-model="value1">
       <p>Some contents...</p>
       <p>Some contents...</p>
       <p>Some contents...</p>
       <template slot="footer">
-        <Button>取消</Button>
-        <Button type="primary">确定</Button>
+        <Button @click="value1 = false">取消</Button>
+        <Button type="primary" @click="value1 = false">确定</Button>
       </template>
     </Drawer>
 
     <div class="page-sub-title">左侧滑出</div>
-    <p>基础抽屉，点击触发按钮抽屉从左滑出，点击遮罩区关闭。</p>
+    <p>基础抽屉，点击触发按钮抽屉从左滑出，点击遮罩区关闭。</p><br>
     <Button @click="value2 = true" type="primary">Open</Button>
-    <Drawer title="Basic Drawer" placement="left" :closable="false" v-model="value2">
+    <Drawer title="Basic Drawer" :transfer="false" placement="left" :closable="false" v-model="value2">
       <p>Some contents...</p>
       <p>Some contents...</p>
       <p>Some contents...</p>
     </Drawer>
 
     <div class="page-sub-title">对象编辑</div>
-    <p>用于承载编辑相关操作，需要点击关闭按钮关闭</p>
+    <p>用于承载编辑相关操作，需要点击关闭按钮关闭</p><br>
     <div>
       <Button @click="value3 = true" type="primary">Create</Button>
       <Drawer title="Create" v-model="value3" width="720" :mask-closable="false">
@@ -78,13 +78,12 @@
             </Col>
             <Col span="12">
               <FormItem label="DateTime" label-position="top">
-                <DatePicker
-                  v-model="formData.date"
-                  type="daterange"
-                  placeholder="please select the date"
-                  style="display: block"
-                  placement="bottom-end"
-                ></DatePicker>
+                <Input
+                  type="textarea"
+                  v-model="formData.desc"
+                  :rows="4"
+                  placeholder="please enter the description"
+                />
               </FormItem>
             </Col>
           </Row>
@@ -105,7 +104,7 @@
     </div>
 
     <div class="page-sub-title">信息预览抽屉</div>
-    <p>需要快速预览对象概要时使用，点击遮罩区关闭。</p>
+    <p>需要快速预览对象概要时使用，点击遮罩区关闭。</p><br>
     <div>
       <Button @click="value4 = true" type="primary">View Profile</Button>
       <Drawer :closable="false" width="640" v-model="value4">
@@ -160,12 +159,28 @@
     </div>
 
     <div class="page-sub-title">多层抽屉</div>
-    <p>在抽屉内打开新的抽屉，用以解决多分支任务的复杂状况</p>
+    <p>在抽屉内打开新的抽屉，用以解决多分支任务的复杂状况</p><br>
     <Button @click="value5 = true" type="primary">Open Drawer</Button>
     <Drawer title="Multi-level drawer" width="512" :closable="false" v-model="value5">
       <Button @click="value6 = true" type="primary">Two-level Drawer</Button>
     </Drawer>
     <Drawer title="Two-level Drawer" :closable="false" v-model="value6">This is two-level drawer.</Drawer>
+
+    <div class="page-sub-title">元素内打开</div>
+    <p>我们可以在元素内打开抽屉，只需将inner属性设置为true，scrollable和transfer属性将无效</p><br>
+    <Button @click="inner = true" type="primary">Open</Button><br><br>
+    <div class="test-element-inner">
+      <p style="padding: 12px;">抽屉将在这个区域打开</p>
+      <Drawer title="Basic Drawer" placement="left" inner v-model="inner">
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <template slot="footer">
+          <Button @click="inner = false">取消</Button>
+          <Button type="primary" @click="inner = false">确定</Button>
+        </template>
+      </Drawer>
+    </div>
   </div>
 </template>
 <script>
@@ -175,6 +190,7 @@ export default {
       value1: false,
       value2: false,
       value3: false,
+      inner: false,
       formData: {
         name: "",
         url: "",
@@ -198,7 +214,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 .demo-drawer-footer {
   width: 100%;
   position: absolute;
@@ -214,5 +230,12 @@ export default {
 }
 .demo-drawer-profile .ivu-col {
   margin-bottom: 12px;
+}
+.test-element-inner {
+  position: relative;
+  height: 300px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  overflow: hidden;
 }
 </style>

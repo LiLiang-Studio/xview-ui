@@ -1,20 +1,20 @@
 <template>
-  <div :class="`${prefix}-wrap`">
-    <ui-overlay v-show="visible" v-if="mask" :style="overlayStyle" @click="onMaskClick"/>
-    <transition :name="`${prefix}-${placement}`" @afterLeave="onLeave">
-      <div v-show="visible" :class="[prefix, `${prefix}-${placement}`]" :style="contentStyle">
-        <span v-if="closable" :class="`${prefix}-close`" @click="show(false)">
+  <div :class="`${prefix}_wrap`">
+    <x-overlay v-show="visible" v-if="mask" :style="overlayStyle" @click="onMaskClick"/>
+    <transition :name="`${prefix}_${placement}`" @afterLeave="onLeave">
+      <div v-show="visible" :class="[prefix, `${prefix}_${placement}`]" :style="boxStyle">
+        <span v-if="closable" :class="`${prefix}_close`" @click="close">
           <slot name="close">
-            <ui-close-icon-button :class="`${prefix}-close-icon`"/>
+            <x-close-icon-button size="31"/>
           </slot>
         </span>
-        <header v-if="hasHeader" :class="`${prefix}-header`">
+        <header v-if="hasHeader" :class="`${prefix}_header`">
           <slot name="header">{{title}}</slot>
         </header>
-        <main :class="`${prefix}-body`">
+        <main :class="`${prefix}_body`">
           <slot></slot>
         </main>
-        <footer v-if="hasFooter" :class="`${prefix}-footer`">
+        <footer v-if="hasFooter" :class="`${prefix}_footer`">
           <slot name="footer"></slot>
         </footer>
       </div>
@@ -22,15 +22,12 @@
   </div>
 </template>
 <script>
-import UiOverlay from '../overlay'
-import UiCloseIconButton from '../close-icon-button'
+import XOverlay from '../overlay'
+import XCloseIconButton from '../close-icon-button'
 import { parseSize, winScrollbarLock, getMaxZIndex } from '../../tools'
 export default {
-  name: 'UiDrawer',
-  components: { UiOverlay, UiCloseIconButton },
-  data() {
-    return { prefix: 'ui-drawer', visible: this.value, zIndex: 1, isCallLock: false }
-  },
+  name: 'XDrawer',
+  components: { XOverlay, XCloseIconButton },
   props: {
     value: Boolean,
     title: String,
@@ -52,53 +49,72 @@ export default {
     },
     maskStyle: Object,
     styles: Object,
+    scrollable: Boolean,
     placement: {
       default: 'right',
-      validator(value) {
-        return ['left', 'right'].indexOf(value) !== -1
+      validator(v) {
+        return ['left', 'right'].indexOf(v) !== -1
       }
-    }
+    },
+    transfer: {
+      type: Boolean,
+      default: true
+    },
+    inner: Boolean,
+    beforeClose: Function
+  },
+  data() {
+    return { zIndex: 1, prefix: 'x-drawer', visible: this.value }
   },
   computed: {
     overlayStyle() {
-      return { ...this.maskStyle, zIndex: this.zIndex - 1 }
+      let style = { ...this.maskStyle, zIndex: this.zIndex - 1 }
+      return this.inner ? { ...style, position: 'absolute' } : style
     },
-    contentStyle() {
-      return { ...this.styles, width: parseSize(this.width), zIndex: this.zIndex }
+    boxStyle() {
+      let style = { ...this.styles, width: parseSize(this.width), zIndex: this.zIndex }
+      return this.inner ? { ...style, position: 'absolute' } : style
     },
     hasHeader() {
-      return this.title || this.$slots.header !== undefined
+      return this.title || this.$slots.header
     },
     hasFooter() {
-      return this.$slots.footer !== undefined
+      return this.$slots.footer
     }
   },
   watch: {
-    value(newval) {
-      this.visible = newval
+    value(val) {
+      this.visible = val
     },
-    visible(newval) {
-      this.$emit('input', newval)
-      if (!newval) return
-      this.zIndex = getMaxZIndex()
-      if (winScrollbarLock.locked) return
-      winScrollbarLock.lock()
-      this.isCallLock = true
+    visible(val) {
+      this.$emit('input', val)
+      this.$emit('on-visible-change', val)
+      if (val) this.onOpen()
     }
   },
   mounted() {
-    document.body.appendChild(this.$el)
+    if (!this.inner && this.transfer) document.body.appendChild(this.$el)
   },
   beforeDestroy() {
     this.onLeave()
     this.$el.parentNode && this.$el.parentNode.removeChild(this.$el)
   },
   methods: {
-    show(visible = true) {
-      this.visible = visible
+    close() {
+      this.beforeClose ? this.beforeClose().then(this.onClose) : this.onClose()
+    },
+    onClose() {
+      this.visible = false
+      this.$emit('on-close')
+    },
+    onOpen() {
+      this.zIndex = getMaxZIndex()
+      if (this.inner || this.scrollable || winScrollbarLock.locked) return
+      winScrollbarLock.lock()
+      this.isCallLock = true
     },
     onMaskClick() {
-      if (this.maskClosable) this.show(false)
+      if (this.maskClosable) this.close()
     },
     onLeave() {
       if (!this.isCallLock) return
@@ -110,52 +126,46 @@ export default {
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-drawer {
+.x-drawer {
   position: fixed;
   top: 0;
   bottom: 0;
-  max-width: 100%;
+  max-width: 90%;
   display: flex;
   flex-direction: column;
   background-color: #fff;
-  transition: transform .3s ease-in-out;
+  transition: transform .24s ease-in-out;
   box-shadow: 0 4px 12px rgba(0,0,0,.15);
-  &-right {
+  &_right {
     right: 0;
+    &-enter, &-leave-to {
+      transform: translateX(100%);
+    }
   }
-  &-left {
+  &_left {
     left: 0;
+    &-enter, &-leave-to {
+      transform: translateX(-100%);
+    }
   }
-  &-left-enter, &-left-leave-to {
-    transform: translateX(-100%);
-  }
-  &-right-enter, &-right-leave-to {
-    transform: translateX(100%);
-  }
-  &-close {
+  &_close {
     position: absolute;
     top: 8px;
-    right: 8px;
+    right: 15px;
   }
-  &-close-icon {
-    width: 30px;
-    text-align: center;
-    font-size: 31px;
-  }
-  &-header {
-    font-weight: bold;
-    font-size: 14px;
+  &_header {
+    font-size: 16px;
     line-height: 1.5;
     padding: 14px 16px;
+    color: @title-color;
     border-bottom: 1px solid @border-color;
   }
-  &-body {
+  &_body {
     flex: 1;
-    height: 0;
     padding: 16px;
     overflow: auto;
   }
-  &-footer {
+  &_footer {
     text-align: right;
     padding: 10px 16px;
     border-top: 1px solid @border-color;

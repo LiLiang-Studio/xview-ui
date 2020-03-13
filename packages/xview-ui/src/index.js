@@ -36,6 +36,7 @@ import Steps from './components/steps' // 步骤条项
 import Radio from './components/radio' // 单选按钮
 import RadioGroup from './components/radio-group' // 单选按钮组
 import Scroll from './components/scroll' // 无限滚动
+import Drawer from './components/drawer' // 抽屉
 
 import loadingBarService from './components/loading-bar' // 加载条
 import Spin, { spinService } from './components/spin' // 加载中
@@ -65,8 +66,6 @@ import Tabs from './components/tabs'
 import TabPane from './components/tab-pane'
 // 文本输入框
 import Input from './components/input'
-// 抽屉
-import Drawer from './components/drawer'
 // 模态框
 import Modal, { modalService } from './components/modal'
 // 数值输入框
@@ -153,6 +152,7 @@ const comps = {
   RadioGroup,
   Spin,
   Scroll,
+  Drawer,
 
   Row,
   Col,
@@ -164,7 +164,6 @@ const comps = {
   Tabs,
   TabPane,
   Input,
-  Drawer,
   Modal,
   InputNumber,
   Transfer,

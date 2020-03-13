@@ -5,6 +5,7 @@ import HomeRouter from '../pages/HomeRouter.vue'
 Vue.use(Router)
 
 const coms = {
+  Drawer: () => import('../pages/Drawer.vue'),
   Notice: () => import('../pages/Notice.vue'),
   Message: () => import('../pages/Message.vue'),
   Scroll: () => import('../pages/Scroll.vue'),
@@ -54,7 +55,6 @@ const coms = {
   Grid: () => import('../pages/Grid.vue'),
   Input: () => import('../pages/Input.vue'),
   Modal: () => import('../pages/Modal.vue'),
-  Drawer: () => import('../pages/Drawer.vue'),
   Carousel: () => import('../pages/Carousel.vue'),
   Upload: () => import('../pages/Upload.vue')
 }

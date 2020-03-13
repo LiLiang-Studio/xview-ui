@@ -36,7 +36,8 @@ import Steps from './components/steps' // 步骤条项
 import Radio from './components/radio' // 单选按钮
 import RadioGroup from './components/radio-group' // 单选按钮组
 
-import loadingBar from './components/loading-bar' // 加载条
+import loadingBarService from './components/loading-bar' // 加载条
+import Spin, { spinService } from './components/spin' // 加载中
 
 /**
  * 已再次优化的组件
@@ -50,8 +51,6 @@ import AnchorLink from './components/anchor-link' // 锚点
 import * as tools from './tools'
 // 通知和消息提醒
 import { createNotice, createMessage } from './components/notice'
-// 加载中
-import Spin, { spinService } from './components/spin'
 // 网格布局
 import { Row, Col } from './components/grid'
 // 无限滚动
@@ -153,8 +152,8 @@ const comps = {
   Steps,
   Radio,
   RadioGroup,
-
   Spin,
+
   Row,
   Col,
   Scroll,
@@ -210,10 +209,10 @@ export default function (Vue, options = {}) {
   Vue.prototype.$uiTools = tools
   Vue.prototype.$Notice = createNotice(Vue)
   Vue.prototype.$Message = createMessage(Vue)
-  Vue.prototype.$Spin = spinService(Vue)
   Vue.prototype.$Modal = modalService(Vue)
 
-  Vue.LoadingBar = Vue.prototype.$Loading = loadingBar
+  Vue.prototype.$Spin = spinService
+  Vue.LoadingBar = Vue.prototype.$Loading = loadingBarService
   let prefix = typeof options.prefix === 'string' ? options.prefix : 'Ui'
   for (let name in comps) Vue.component(prefix + name, comps[name])
 }

@@ -22,6 +22,7 @@ export default {
 </script>
 <style lang="less">
 .x-icon {
+  display: inline-block;
   font-family: Ionicons;
   font-style: normal;
   line-height: 1;

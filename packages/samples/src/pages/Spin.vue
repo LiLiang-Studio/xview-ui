@@ -1,12 +1,14 @@
 <template>
-  <div>
+  <div style="padding-bottom:100px;">
     <div class="page-title">Spin 加载中</div>
     <p>当区块正在获取数据中时可使用，适当的等待动画可以提升用户体验。</p>
 
-    <div class="page-sub-title">最简单使用 Spin 的方法。</div>
+    <div class="page-sub-title">基础用法</div>
+    <p>最简单使用 Spin 的方法。</p><br>
     <Spin></Spin>
 
-    <div class="page-sub-title">通过设置size属性为large和small将 Spin 设置为大和小尺寸，不设置为默认（中）尺寸。</div>
+    <div class="page-sub-title">各种尺寸</div>
+    <p>通过设置size属性为large和small将 Spin 设置为大和小尺寸，不设置为默认（中）尺寸。</p><br>
     <Row>
       <Col span="8">
         <Spin size="small"></Spin>
@@ -19,12 +21,16 @@
       </Col>
     </Row>
 
-    <div class="page-sub-title">在容器内部垂直居中固定，需要父级有relative或absolute。</div>
+    <div class="page-sub-title">居中固定</div>
+    <p>在容器内部垂直居中固定，需要父级有relative或absolute。</p><br>
+    <div class="page-sub-title"></div>
     <div class="demo-spin-container">
       <Spin fix></Spin>
     </div>
 
-    <div class="page-sub-title">自定义 Spin 的内容，可以是简单的文字，也可以是很复杂的动画。</div>
+    <div class="page-sub-title">自定义内容</div>
+    <p>自定义 Spin 的内容，可以是简单的文字，也可以是很复杂的动画。</p><br>
+    <div class="page-sub-title"></div>
     <Row>
       <Col class="demo-spin-col" span="8">
         <Spin fix>加载中...</Spin>
@@ -54,7 +60,9 @@
       </Col>
     </Row>
 
-    <div class="page-sub-title">控制 Spin 组件的显示和消失。</div>
+    <div class="page-sub-title">状态切换</div>
+    <p>控制 Spin 组件的显示和消失。</p><br>
+    <div class="page-sub-title"></div>
     <div class="demo-spin-article">
       <h3>登金陵凤凰台</h3>
       <address>李白</address>
@@ -69,10 +77,12 @@
     <br>切换显示状态：
     <i-switch @on-change="spinShow = !spinShow"></i-switch>
 
-    <div class="page-sub-title">使用内置的 $Spin 方法可以全局加载。可以使用 Render 函数自定义显示内容</div>
+    <div class="page-sub-title">整页加载</div>
+    <p>使用内置的 $Spin 方法可以全局加载。可以使用 Render 函数自定义显示内容</p><br>
     <div>
       <Button type="primary" @click="handleSpinShow">整页显示，3秒后关闭</Button>
-      <Button type="primary" style="margin-left: 10px;" @click="handleSpinCustom">自定义显示内容</Button>
+      <Button type="primary" @click="handleSpinCustom">自定义显示内容</Button>
+      <Button type="primary" @click="handleSpinDestroy">注销Spin实例</Button>
     </div>
   </div>
 </template>
@@ -108,6 +118,9 @@ export default {
       setTimeout(() => {
         this.$Spin.hide();
       }, 3000);
+    },
+    handleSpinDestroy() {
+      this.$Spin.destroy()
     }
   }
 };

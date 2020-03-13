@@ -1,92 +1,74 @@
-import UiNotice from './Notice.vue'
-import UiMessage from './Message.vue'
-import UiWrapper from './Wrapper.vue'
-import { isFunc, isStr, getMaxZIndex } from '../../tools'
+import Vue from 'vue'
+import XNotice from './Notice.vue'
+import XMessage from './Message.vue'
+import XWrapper from './Wrapper.vue'
+import { isStr, getMaxZIndex } from '../../tools'
 
-/**
- * @param {import('vue').VueConstructor} Vue 
- * @param {Vue} Component
- * @param {Vue} WrappedComponent
- */
-const createNoticeManager = (Vue, Component, config = {}) => {
-  let comWrapper, key = 0
-  const getWrapper = () => {
-    comWrapper = comWrapper || new Vue({
-      name: 'UiNoticeManager',
-      data() {
-        return { comps: [], zIndex: 0 }
-      },
-      watch: {
-        'comps.length'(newval, oldval) {
-          if (newval > oldval) {
-            this.zIndex = getMaxZIndex()
-          }
-        }
-      },
-      render(h) {
-        return h(
-          UiWrapper,
-          {
-            style: { zIndex: this.zIndex },
-            props: { transition: Component.transition }
-          },
-          this.comps.map(({ ui, key, props }, i) => {
-            return h(
-              ui,
-              {
-                key,
-                props,
-                on: {
-                  close: () => this.comps.splice(i, 1)
-                }
-              },
-              isFunc(props.render) ? [props.render(h)] : (props.content || props.desc)
-            )
-          })
-        )
-      },
-      mounted() {
-        document.body.appendChild(this.$el)
-      },
-      beforeDestroy() {
-        comWrapper = null
-        document.body.removeChild(this.$el)
-      },
-      methods: {
-        addCompOptions(props = {}) {
-          let option = { props, ui: Component, key: key++ }
-          this.comps.push(option)
-          return option.key
-        },
-        delComOptionByKey(key) {
-          let index = this.comps.find(_ => _.key === key)
-          if (index !== -1) this.comps.splice(index, 1)
-        }
+const creator = (Component, config, addons = {}) => {
+  let vm, key = 0, getVM = () => vm || (vm = new Vue({
+    data() {
+      return { items: [], zIndex: 0 }
+    },
+    watch: {
+      'items.length'(newval, oldval) {
+        if (newval > oldval) this.zIndex = getMaxZIndex()
       }
-    }).$mount()
-    return comWrapper
+    },
+    render(h) {
+      return h(XWrapper, {
+        style: { zIndex: this.zIndex },
+        props: { transition: Component.transition }
+      }, this.items.map(({ ui, key, props }, i) => {
+        return h(
+          ui,
+          { key, props, on: { close: () => this.items.splice(i, 1) } },
+          props.render ? [props.render(h)] : props.content || props.desc)
+      }))
+    },
+    mounted() {
+      document.body.appendChild(this.$el)
+    },
+    beforeDestroy() {
+      this.$el.parentNode && this.$el.parentNode.removeChild(this.$el)
+    },
+    methods: {
+      addItem(props = {}) {
+        let item = { props, ui: Component, key: key++ }
+        this.items.push(item)
+        return item.key
+      },
+      removeItem(key) {
+        let index = this.items.findIndex(_ => _.key === key)
+        if (index >= 0) this.items.splice(index, 1)
+      }
+    }
+  }).$mount())
+
+  let defaultConfig = { duration: 1.5, ...(config || {}) },
+    addNotice = (options, type) => getVM().addItem({ ...defaultConfig, ...(isStr(options) ? { content: options } : options), type }),
+    noticeFunc = options => addNotice(options)
+
+  ;['info', 'warning', 'error', 'success'].forEach(_ => noticeFunc[_] = options => addNotice(options, _))
+  noticeFunc.config = options => defaultConfig = { ...defaultConfig, ...options }
+  noticeFunc.destroy = () => {
+    vm && vm.$destroy()
+    vm = null
   }
-  let defaultConfig = Object.assign({}, { duration: 2, closable: false }, config)
-  const addNotice = (options, type = 'info') => {
-    options = isStr(options) ?
-      Object.assign({}, defaultConfig, { content: options, type }) :
-      Object.assign({}, defaultConfig, options, { type })
-    return getWrapper().addCompOptions(options)
+  for (let k in addons) {
+    noticeFunc[k] = options => addons[k](addNotice, options, getVM)
   }
-  const noticeFunc = options => addNotice(options)
-  noticeFunc.open = options =>  addNotice(options, 'open')
-  noticeFunc.info = options =>  addNotice(options, 'info')
-  noticeFunc.warning = options => addNotice(options, 'warning')
-  noticeFunc.error = options => addNotice(options, 'error')
-  noticeFunc.success = options => addNotice(options, 'success')
-  noticeFunc.loading = options => {
-    let key = addNotice(options, 'loading')
-    return () => getWrapper().delComOptionByKey(key)
-  }
-  noticeFunc.config = options => defaultConfig = Object.assign({}, defaultConfig, options)
-  noticeFunc.destroy = () => comWrapper && comWrapper.$destroy()
   return noticeFunc
 }
 
-export const createNotice = Vue => createNoticeManager(Vue, UiNotice, { duration: 4 })
-export const createMessage = Vue => createNoticeManager(Vue, UiMessage)
+export const Message = creator(XMessage, null, {
+  loading(addNotice, options, getVM) {
+    let key = addNotice(options, 'loading')
+    return () => getVM().removeItem(key)
+  }
+})
+
+export const Notice = creator(XNotice, { duration: 4.5 }, {
+  open(addNotice, options) {
+    addNotice(options, 'open')
+  }
+})

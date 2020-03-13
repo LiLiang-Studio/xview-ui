@@ -39,6 +39,7 @@ import Scroll from './components/scroll' // 无限滚动
 
 import loadingBarService from './components/loading-bar' // 加载条
 import Spin, { spinService } from './components/spin' // 加载中
+import { Notice, Message } from './components/notice' // 通知和消息提醒
 
 /**
  * 已再次优化的组件
@@ -50,8 +51,6 @@ import AnchorLink from './components/anchor-link' // 锚点
  * 新版本组件导入
  */
 import * as tools from './tools'
-// 通知和消息提醒
-import { createNotice, createMessage } from './components/notice'
 // 网格布局
 import { Row, Col } from './components/grid'
 // 布局
@@ -205,10 +204,10 @@ const comps = {
  */
 export default function (Vue, options = {}) {
   Vue.prototype.$uiTools = tools
-  Vue.prototype.$Notice = createNotice(Vue)
-  Vue.prototype.$Message = createMessage(Vue)
   Vue.prototype.$Modal = modalService(Vue)
 
+  Vue.prototype.$Notice = Notice
+  Vue.prototype.$Message = Message
   Vue.prototype.$Spin = spinService
   Vue.LoadingBar = Vue.prototype.$Loading = loadingBarService
   let prefix = typeof options.prefix === 'string' ? options.prefix : 'Ui'

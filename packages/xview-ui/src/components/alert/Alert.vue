@@ -69,25 +69,21 @@ export default {
   padding: 8px 48px 8px 16px;
   margin-bottom: 10px;
   transition: opacity .22s ease-in-out;
-  border: 1px solid lighten(@info-color, 30%);
-  background-color: lighten(@info-color, 40%);
+  .x-alert-theme_info();
   &_success {
-    border-color: lighten(@success-color, 35%);
-    background-color: lighten(@success-color, 55%);
+    .x-alert-theme_success();
     @{prefix}_icon {
       color: @success-color;
     }
   }
   &_warning {
-    border-color: lighten(@warning-color, 30%);
-    background-color: lighten(@warning-color, 46%);
+    .x-alert-theme_warning();
     @{prefix}_icon {
       color: @warning-color;
     }
   }
   &_error {
-    border-color: lighten(@error-color, 30%);
-    background-color: lighten(@error-color, 46%);
+    .x-alert-theme_error();
     @{prefix}_icon {
       color: @error-color;
     }

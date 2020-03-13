@@ -4425,7 +4425,384 @@ var loadingBarService = {
 };
 
 //
+var prefix = 'x-notice';
 var script$B = {
+  name: 'XNotice',
+  components: { XIcon: __vue_component__, XCloseIconButton: __vue_component__$7 },
+  transition: prefix,
+  props: {
+    title: String,
+    duration: Number,
+    onClose: Function,
+    type: {
+      default: 'open',
+      validator: function validator(v) {
+        return ['info', 'success', 'warning', 'error', 'open'].indexOf(v) !== -1
+      }
+    }
+  },
+  data: function data() {
+    return { prefix: prefix, hasDesc: false }
+  },
+  computed: {
+    icon: function icon() {
+      return iconTypes[this.type]
+    },
+    showIcon: function showIcon() {
+      return this.type !== 'open'
+    }
+  },
+  mounted: function mounted() {
+    var this$1 = this;
+
+    var ref = this.$slots.default;
+    var desc = ref[0];
+    this.hasDesc = desc && (desc.text || desc.children);
+    if (this.duration) { this.tid = setTimeout(function () { return this$1.close(); }, this.duration * 1000); }
+  },
+  beforeDestroy: function beforeDestroy() {
+    clearTimeout(this.tid);
+  },
+  methods: {
+    close: function close() {
+      this.onClose && this.onClose(), this.$emit('close');
+    }
+  }
+};
+
+/* script */
+var __vue_script__$B = script$B;
+/* template */
+var __vue_render__$B = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { class: _vm.prefix }, [
+    _c(
+      "div",
+      { class: [_vm.prefix + "_box", { hasDesc: _vm.hasDesc }] },
+      [
+        _vm.showIcon
+          ? _c("x-icon", {
+              class: [_vm.prefix + "_icon", _vm.type],
+              attrs: { type: _vm.icon }
+            })
+          : _vm._e(),
+        _vm._v(" "),
+        _c(
+          "div",
+          [
+            _vm.title
+              ? _c("div", { class: _vm.prefix + "_title" }, [
+                  _vm._v(_vm._s(_vm.title))
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm._t("default")
+          ],
+          2
+        ),
+        _vm._v(" "),
+        _c("x-close-icon-button", {
+          class: _vm.prefix + "_close",
+          on: { click: _vm.close }
+        })
+      ],
+      1
+    )
+  ])
+};
+var __vue_staticRenderFns__$B = [];
+__vue_render__$B._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$B = undefined;
+  /* scoped */
+  var __vue_scope_id__$B = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$B = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$B = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$B = normalizeComponent(
+    { render: __vue_render__$B, staticRenderFns: __vue_staticRenderFns__$B },
+    __vue_inject_styles__$B,
+    __vue_script__$B,
+    __vue_scope_id__$B,
+    __vue_is_functional_template__$B,
+    __vue_module_identifier__$B,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+var prefix$1 = 'x-message';
+var script$C = {
+  name: 'XMessage',
+  components: { XIcon: __vue_component__, XCloseIconButton: __vue_component__$7 },
+  transition: prefix$1,
+  props: {
+    duration: Number,
+    onClose: Function,
+    closable: Boolean,
+    background: Boolean,
+    type: {
+      default: 'info',
+      validator: function validator(v) {
+        return ['info', 'success', 'warning', 'error', 'loading'].indexOf(v) !== -1
+      }
+    }
+  },
+  data: function data() {
+    return { prefix: prefix$1 }
+  },
+  computed: {
+    icon: function icon() {
+      return iconTypes[this.type]
+    }
+  },
+  mounted: function mounted() {
+    var this$1 = this;
+
+    if (this.duration) { this.tid = setTimeout(function () { return this$1.close(); }, this.duration * 1000); }
+  },
+  beforeDestroy: function beforeDestroy() {
+    clearTimeout(this.tid);
+  },
+  methods: {
+    close: function close() {
+      this.onClose && this.onClose(), this.$emit('close');
+    }
+  }
+};
+
+/* script */
+var __vue_script__$C = script$C;
+/* template */
+var __vue_render__$C = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { class: _vm.prefix }, [
+    _c(
+      "div",
+      {
+        class: [
+          _vm.prefix + "_box",
+          _vm.prefix + "_" + _vm.type,
+          { background: _vm.background }
+        ]
+      },
+      [
+        _c("x-icon", {
+          class: _vm.prefix + "_icon",
+          attrs: { type: _vm.icon }
+        }),
+        _vm._v(" "),
+        _vm._t("default"),
+        _vm._v(" "),
+        _vm.closable
+          ? _c("x-close-icon-button", {
+              class: _vm.prefix + "_close",
+              on: { click: _vm.close }
+            })
+          : _vm._e()
+      ],
+      2
+    )
+  ])
+};
+var __vue_staticRenderFns__$C = [];
+__vue_render__$C._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$C = undefined;
+  /* scoped */
+  var __vue_scope_id__$C = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$C = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$C = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$C = normalizeComponent(
+    { render: __vue_render__$C, staticRenderFns: __vue_staticRenderFns__$C },
+    __vue_inject_styles__$C,
+    __vue_script__$C,
+    __vue_scope_id__$C,
+    __vue_is_functional_template__$C,
+    __vue_module_identifier__$C,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+//
+//
+//
+//
+//
+//
+
+var script$D = {
+  props: {
+    transition: String
+  }
+};
+
+/* script */
+var __vue_script__$D = script$D;
+/* template */
+var __vue_render__$D = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    { staticClass: "x-notice-wrapper" },
+    [
+      _c(
+        "transition-group",
+        { attrs: { name: _vm.transition, tag: "div" } },
+        [_vm._t("default")],
+        2
+      )
+    ],
+    1
+  )
+};
+var __vue_staticRenderFns__$D = [];
+__vue_render__$D._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$D = undefined;
+  /* scoped */
+  var __vue_scope_id__$D = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$D = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$D = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$D = normalizeComponent(
+    { render: __vue_render__$D, staticRenderFns: __vue_staticRenderFns__$D },
+    __vue_inject_styles__$D,
+    __vue_script__$D,
+    __vue_scope_id__$D,
+    __vue_is_functional_template__$D,
+    __vue_module_identifier__$D,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var creator = function (Component, config, addons) {
+  if ( addons === void 0 ) addons = {};
+
+  var vm, key = 0, getVM = function () { return vm || (vm = new Vue({
+    data: function data() {
+      return { items: [], zIndex: 0 }
+    },
+    watch: {
+      'items.length': function items_length(newval, oldval) {
+        if (newval > oldval) { this.zIndex = getMaxZIndex(); }
+      }
+    },
+    render: function render(h) {
+      var this$1 = this;
+
+      return h(__vue_component__$D, {
+        style: { zIndex: this.zIndex },
+        props: { transition: Component.transition }
+      }, this.items.map(function (ref, i) {
+        var ui = ref.ui;
+        var key = ref.key;
+        var props = ref.props;
+
+        return h(
+          ui,
+          { key: key, props: props, on: { close: function () { return this$1.items.splice(i, 1); } } },
+          props.render ? [props.render(h)] : props.content || props.desc)
+      }))
+    },
+    mounted: function mounted() {
+      document.body.appendChild(this.$el);
+    },
+    beforeDestroy: function beforeDestroy() {
+      this.$el.parentNode && this.$el.parentNode.removeChild(this.$el);
+    },
+    methods: {
+      addItem: function addItem(props) {
+        if ( props === void 0 ) props = {};
+
+        var item = { props: props, ui: Component, key: key++ };
+        this.items.push(item);
+        return item.key
+      },
+      removeItem: function removeItem(key) {
+        var index = this.items.findIndex(function (_) { return _.key === key; });
+        if (index >= 0) { this.items.splice(index, 1); }
+      }
+    }
+  }).$mount()); };
+
+  var defaultConfig = Object.assign({}, {duration: 1.5}, (config || {})),
+    addNotice = function (options, type) { return getVM().addItem(Object.assign({}, defaultConfig, (isStr(options) ? { content: options } : options), {type: type})); },
+    noticeFunc = function (options) { return addNotice(options); }
+
+  ;['info', 'warning', 'error', 'success'].forEach(function (_) { return noticeFunc[_] = function (options) { return addNotice(options, _); }; });
+  noticeFunc.config = function (options) { return defaultConfig = Object.assign({}, defaultConfig, options); };
+  noticeFunc.destroy = function () {
+    vm && vm.$destroy();
+    vm = null;
+  };
+  var loop = function ( k ) {
+    noticeFunc[k] = function (options) { return addons[k](addNotice, options, getVM); };
+  };
+
+  for (var k in addons) loop( k );
+  return noticeFunc
+};
+
+var Message = creator(__vue_component__$C, null, {
+  loading: function loading(addNotice, options, getVM) {
+    var key = addNotice(options, 'loading');
+    return function () { return getVM().removeItem(key); }
+  }
+});
+
+var Notice = creator(__vue_component__$B, { duration: 4.5 }, {
+  open: function open(addNotice, options) {
+    addNotice(options, 'open');
+  }
+});
+
+//
+var script$E = {
   name: 'UiAnchor',
   components: { UiAffix: __vue_component__$4 },
   data: function data() {
@@ -4499,9 +4876,9 @@ var script$B = {
 };
 
 /* script */
-var __vue_script__$B = script$B;
+var __vue_script__$E = script$E;
 /* template */
-var __vue_render__$B = function() {
+var __vue_render__$E = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -4542,315 +4919,6 @@ var __vue_render__$B = function() {
     2
   )
 };
-var __vue_staticRenderFns__$B = [];
-__vue_render__$B._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$B = undefined;
-  /* scoped */
-  var __vue_scope_id__$B = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$B = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$B = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$B = normalizeComponent(
-    { render: __vue_render__$B, staticRenderFns: __vue_staticRenderFns__$B },
-    __vue_inject_styles__$B,
-    __vue_script__$B,
-    __vue_scope_id__$B,
-    __vue_is_functional_template__$B,
-    __vue_module_identifier__$B,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-var script$C = {
-  name: 'UiAnchorLink',
-  data: function data() {
-    return { parent: null }
-  },
-  props: {
-    href: String,
-    title: String,
-    scrollOffset: {
-      type: Number,
-      default: 0
-    }
-  },
-  computed: {
-    active: function active() {
-      return this.parent && this.parent.activeItem === this
-    }
-  },
-  mounted: function mounted() {
-    this.parent = findParent(this, 'UiAnchor');
-    this.parent.addItem(this);
-  },
-  beforeDestroy: function beforeDestroy() {
-    this.parent.removeItem(this);
-  }
-};
-
-/* script */
-var __vue_script__$C = script$C;
-/* template */
-var __vue_render__$C = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    { staticClass: "ui-anchor-link" },
-    [
-      _c("a", { class: { active: _vm.active }, attrs: { href: _vm.href } }, [
-        _vm._v(_vm._s(_vm.title))
-      ]),
-      _vm._v(" "),
-      _vm._t("default")
-    ],
-    2
-  )
-};
-var __vue_staticRenderFns__$C = [];
-__vue_render__$C._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$C = undefined;
-  /* scoped */
-  var __vue_scope_id__$C = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$C = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$C = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$C = normalizeComponent(
-    { render: __vue_render__$C, staticRenderFns: __vue_staticRenderFns__$C },
-    __vue_inject_styles__$C,
-    __vue_script__$C,
-    __vue_scope_id__$C,
-    __vue_is_functional_template__$C,
-    __vue_module_identifier__$C,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-var prefix = 'ui-notice';
-var script$D = {
-  name: 'UiNotice',
-  components: { UiIcon: __vue_component__, UiCloseIconButton: __vue_component__$7 },
-  transition: prefix,
-  data: function data() {
-    return { prefix: prefix, hasDesc: false }
-  },
-  props: {
-    title: String,
-    duration: Number,
-    onClose: Function,
-    type: {
-      default: 'open',
-      validator: function validator(value) {
-        return ['info', 'success', 'warning', 'error', 'open'].indexOf(value) !== -1
-      }
-    }
-  },
-  computed: {
-    iconType: function iconType() {
-      return iconTypes[this.type]
-    },
-    showIcon: function showIcon() {
-      return this.type !== 'open'
-    }
-  },
-  mounted: function mounted() {
-    var this$1 = this;
-
-    var ref = this.$slots.default;
-    var desc = ref[0];
-    this.hasDesc = desc && (desc.text || desc.children);
-    if (this.duration) {
-      this.timerId = setTimeout(function () { return this$1.close(); }, this.duration * 1000);
-    }
-  },
-  beforeDestroy: function beforeDestroy() {
-    clearTimeout(this.timerId);
-  },
-  methods: {
-    close: function close(event) {
-      isFunc(this.onClose) && this.onClose();
-      this.$emit('close');
-    }
-  }
-};
-
-/* script */
-var __vue_script__$D = script$D;
-/* template */
-var __vue_render__$D = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", { class: _vm.prefix }, [
-    _c(
-      "div",
-      { class: [_vm.prefix + "--box", { hasDesc: _vm.hasDesc }] },
-      [
-        _vm.showIcon
-          ? _c("UiIcon", {
-              class: [_vm.prefix + "--icon", _vm.type],
-              attrs: { type: _vm.iconType }
-            })
-          : _vm._e(),
-        _vm._v(" "),
-        _c(
-          "div",
-          { class: _vm.prefix + "--body" },
-          [
-            _vm.title
-              ? _c("div", { class: _vm.prefix + "--title" }, [
-                  _vm._v(_vm._s(_vm.title))
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm._t("default")
-          ],
-          2
-        ),
-        _vm._v(" "),
-        _c("UiCloseIconButton", {
-          class: _vm.prefix + "--close",
-          on: { click: _vm.close }
-        })
-      ],
-      1
-    )
-  ])
-};
-var __vue_staticRenderFns__$D = [];
-__vue_render__$D._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$D = undefined;
-  /* scoped */
-  var __vue_scope_id__$D = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$D = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$D = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$D = normalizeComponent(
-    { render: __vue_render__$D, staticRenderFns: __vue_staticRenderFns__$D },
-    __vue_inject_styles__$D,
-    __vue_script__$D,
-    __vue_scope_id__$D,
-    __vue_is_functional_template__$D,
-    __vue_module_identifier__$D,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-var prefix$1 = 'ui-message';
-var script$E = {
-  name: 'UiMessage',
-  components: { UiIcon: __vue_component__, UiCloseIconButton: __vue_component__$7 },
-  transition: prefix$1,
-  data: function data() {
-    return { prefix: prefix$1 }
-  },
-  props: {
-    duration: Number,
-    onClose: Function,
-    closable: Boolean,
-    type: {
-      default: 'info',
-      validator: function validator(value) {
-        return ['info', 'success', 'warning', 'error', 'loading'].indexOf(value) !== -1
-      }
-    }
-  },
-  computed: {
-    iconType: function iconType() {
-      return iconTypes[this.type]
-    }
-  },
-  mounted: function mounted() {
-    var this$1 = this;
-
-    if (this.duration) {
-      this.timerId = setTimeout(function () { return this$1.close(); }, this.duration * 1000);
-    }
-  },
-  beforeDestroy: function beforeDestroy() {
-    clearTimeout(this.timerId);
-  },
-  methods: {
-    close: function close() {
-      isFunc(this.onClose) && this.onClose();
-      this.$emit('close');
-    }
-  }
-};
-
-/* script */
-var __vue_script__$E = script$E;
-/* template */
-var __vue_render__$E = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", { class: _vm.prefix }, [
-    _c(
-      "div",
-      { class: _vm.prefix + "--box" },
-      [
-        _c("UiIcon", {
-          class: [_vm.prefix + "--icon", _vm.type],
-          attrs: { type: _vm.iconType }
-        }),
-        _vm._v(" "),
-        _vm._t("default"),
-        _vm._v(" "),
-        _vm.closable
-          ? _c("UiCloseIconButton", {
-              class: _vm.prefix + "--close",
-              on: { click: _vm.close }
-            })
-          : _vm._e()
-      ],
-      2
-    )
-  ])
-};
 var __vue_staticRenderFns__$E = [];
 __vue_render__$E._withStripped = true;
 
@@ -4884,16 +4952,30 @@ __vue_render__$E._withStripped = true;
   );
 
 //
-//
-//
-//
-//
-//
-//
-
 var script$F = {
+  name: 'UiAnchorLink',
+  data: function data() {
+    return { parent: null }
+  },
   props: {
-    transition: String
+    href: String,
+    title: String,
+    scrollOffset: {
+      type: Number,
+      default: 0
+    }
+  },
+  computed: {
+    active: function active() {
+      return this.parent && this.parent.activeItem === this
+    }
+  },
+  mounted: function mounted() {
+    this.parent = findParent(this, 'UiAnchor');
+    this.parent.addItem(this);
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.parent.removeItem(this);
   }
 };
 
@@ -4906,16 +4988,15 @@ var __vue_render__$F = function() {
   var _c = _vm._self._c || _h;
   return _c(
     "div",
-    { staticClass: "ui-notice-wrapper" },
+    { staticClass: "ui-anchor-link" },
     [
-      _c(
-        "transition-group",
-        { attrs: { name: _vm.transition, tag: "div" } },
-        [_vm._t("default")],
-        2
-      )
+      _c("a", { class: { active: _vm.active }, attrs: { href: _vm.href } }, [
+        _vm._v(_vm._s(_vm.title))
+      ]),
+      _vm._v(" "),
+      _vm._t("default")
     ],
-    1
+    2
   )
 };
 var __vue_staticRenderFns__$F = [];
@@ -4949,106 +5030,6 @@ __vue_render__$F._withStripped = true;
     undefined,
     undefined
   );
-
-/**
- * @param {import('vue').VueConstructor} Vue 
- * @param {Vue} Component
- * @param {Vue} WrappedComponent
- */
-var createNoticeManager = function (Vue, Component, config) {
-  if ( config === void 0 ) config = {};
-
-  var comWrapper, key = 0;
-  var getWrapper = function () {
-    comWrapper = comWrapper || new Vue({
-      name: 'UiNoticeManager',
-      data: function data() {
-        return { comps: [], zIndex: 0 }
-      },
-      watch: {
-        'comps.length': function comps_length(newval, oldval) {
-          if (newval > oldval) {
-            this.zIndex = getMaxZIndex();
-          }
-        }
-      },
-      render: function render(h) {
-        var this$1 = this;
-
-        return h(
-          __vue_component__$F,
-          {
-            style: { zIndex: this.zIndex },
-            props: { transition: Component.transition }
-          },
-          this.comps.map(function (ref, i) {
-            var ui = ref.ui;
-            var key = ref.key;
-            var props = ref.props;
-
-            return h(
-              ui,
-              {
-                key: key,
-                props: props,
-                on: {
-                  close: function () { return this$1.comps.splice(i, 1); }
-                }
-              },
-              isFunc(props.render) ? [props.render(h)] : (props.content || props.desc)
-            )
-          })
-        )
-      },
-      mounted: function mounted() {
-        document.body.appendChild(this.$el);
-      },
-      beforeDestroy: function beforeDestroy() {
-        comWrapper = null;
-        document.body.removeChild(this.$el);
-      },
-      methods: {
-        addCompOptions: function addCompOptions(props) {
-          if ( props === void 0 ) props = {};
-
-          var option = { props: props, ui: Component, key: key++ };
-          this.comps.push(option);
-          return option.key
-        },
-        delComOptionByKey: function delComOptionByKey(key) {
-          var index = this.comps.find(function (_) { return _.key === key; });
-          if (index !== -1) { this.comps.splice(index, 1); }
-        }
-      }
-    }).$mount();
-    return comWrapper
-  };
-  var defaultConfig = Object.assign({}, { duration: 2, closable: false }, config);
-  var addNotice = function (options, type) {
-    if ( type === void 0 ) type = 'info';
-
-    options = isStr(options) ?
-      Object.assign({}, defaultConfig, { content: options, type: type }) :
-      Object.assign({}, defaultConfig, options, { type: type });
-    return getWrapper().addCompOptions(options)
-  };
-  var noticeFunc = function (options) { return addNotice(options); };
-  noticeFunc.open = function (options) { return addNotice(options, 'open'); };
-  noticeFunc.info = function (options) { return addNotice(options, 'info'); };
-  noticeFunc.warning = function (options) { return addNotice(options, 'warning'); };
-  noticeFunc.error = function (options) { return addNotice(options, 'error'); };
-  noticeFunc.success = function (options) { return addNotice(options, 'success'); };
-  noticeFunc.loading = function (options) {
-    var key = addNotice(options, 'loading');
-    return function () { return getWrapper().delComOptionByKey(key); }
-  };
-  noticeFunc.config = function (options) { return defaultConfig = Object.assign({}, defaultConfig, options); };
-  noticeFunc.destroy = function () { return comWrapper && comWrapper.$destroy(); };
-  return noticeFunc
-};
-
-var createNotice = function (Vue) { return createNoticeManager(Vue, __vue_component__$D, { duration: 4 }); };
-var createMessage = function (Vue) { return createNoticeManager(Vue, __vue_component__$E); };
 
 //
 //
@@ -12194,8 +12175,8 @@ var comps = {
   Tree: __vue_component__$Y,
   Carousel: __vue_component__$Z,
   CarouselItem: __vue_component__$_,
-  Anchor: __vue_component__$B,
-  AnchorLink: __vue_component__$C,
+  Anchor: __vue_component__$E,
+  AnchorLink: __vue_component__$F,
   Upload: __vue_component__$$,
   Form: __vue_component__$10,
   FormItem: __vue_component__$11,
@@ -12230,10 +12211,10 @@ function index (Vue, options) {
   if ( options === void 0 ) options = {};
 
   Vue.prototype.$uiTools = tools;
-  Vue.prototype.$Notice = createNotice(Vue);
-  Vue.prototype.$Message = createMessage(Vue);
   Vue.prototype.$Modal = modalService(Vue);
 
+  Vue.prototype.$Notice = Notice;
+  Vue.prototype.$Message = Message;
   Vue.prototype.$Spin = spinService;
   Vue.LoadingBar = Vue.prototype.$Loading = loadingBarService;
   var prefix = typeof options.prefix === 'string' ? options.prefix : 'Ui';

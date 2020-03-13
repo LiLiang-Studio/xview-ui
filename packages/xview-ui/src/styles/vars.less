@@ -22,6 +22,23 @@
 @size-normal: 32px;
 @size-large: 40px;
 
+.x-alert-theme_info () {
+  border: 1px solid lighten(@info-color, 30%);
+  background-color: lighten(@info-color, 40%);
+}
+.x-alert-theme_success () {
+  border-color: lighten(@success-color, 35%);
+  background-color: lighten(@success-color, 55%);
+}
+.x-alert-theme_warning () {
+  border-color: lighten(@warning-color, 30%);
+  background-color: lighten(@warning-color, 46%);
+}
+.x-alert-theme_error () {
+  border-color: lighten(@error-color, 30%);
+  background-color: lighten(@error-color, 46%);
+}
+
 // 表单控件阴影
 .control-shadow (@color) {
   box-shadow: 0 0 0 2px fadeout(@color, 80%);

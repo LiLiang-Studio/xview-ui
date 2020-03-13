@@ -1,5 +1,5 @@
 <template>
-  <div class="ui-notice-wrapper">
+  <div class="x-notice-wrapper">
     <transition-group :name="transition" tag="div">
       <slot></slot>
     </transition-group>
@@ -13,11 +13,12 @@ export default {
 }
 </script>
 <style lang="less">
-.ui-notice-wrapper {
+.x-notice-wrapper {
   position: fixed;
-  top: 0;
+  top: 24px;
   right: 0;
   left: 0;
+  font-size: 14px;
   pointer-events: none;
 }
 </style>

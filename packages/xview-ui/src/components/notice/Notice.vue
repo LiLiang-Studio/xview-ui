@@ -1,40 +1,40 @@
 <template>
   <div :class="prefix">
-    <div :class="[`${prefix}--box`, {hasDesc}]">
-      <UiIcon :class="[`${prefix}--icon`, type]" v-if="showIcon" :type="iconType"/>
-      <div :class="`${prefix}--body`">
-        <div :class="`${prefix}--title`" v-if="title">{{title}}</div>
+    <div :class="[`${prefix}_box`, {hasDesc}]">
+      <x-icon :class="[`${prefix}_icon`, type]" v-if="showIcon" :type="icon"/>
+      <div>
+        <div :class="`${prefix}_title`" v-if="title">{{title}}</div>
         <slot></slot>
       </div>
-      <UiCloseIconButton :class="`${prefix}--close`" @click="close"/>
+      <x-close-icon-button :class="`${prefix}_close`" @click="close"/>
     </div>
   </div>
 </template>
 <script>
-import UiIcon from '../icon'
-import UiCloseIconButton from '../close-icon-button'
-import { iconTypes, isFunc } from '../../tools'
-const prefix = 'ui-notice'
+import XIcon from '../icon'
+import XCloseIconButton from '../close-icon-button'
+import { iconTypes } from '../../tools'
+const prefix = 'x-notice'
 export default {
-  name: 'UiNotice',
-  components: { UiIcon, UiCloseIconButton },
+  name: 'XNotice',
+  components: { XIcon, XCloseIconButton },
   transition: prefix,
-  data() {
-    return { prefix, hasDesc: false }
-  },
   props: {
     title: String,
     duration: Number,
     onClose: Function,
     type: {
       default: 'open',
-      validator(value) {
-        return ['info', 'success', 'warning', 'error', 'open'].indexOf(value) !== -1
+      validator(v) {
+        return ['info', 'success', 'warning', 'error', 'open'].indexOf(v) !== -1
       }
     }
   },
+  data() {
+    return { prefix, hasDesc: false }
+  },
   computed: {
-    iconType() {
+    icon() {
       return iconTypes[this.type]
     },
     showIcon() {
@@ -44,30 +44,27 @@ export default {
   mounted() {
     let [desc] = this.$slots.default
     this.hasDesc = desc && (desc.text || desc.children)
-    if (this.duration) {
-      this.timerId = setTimeout(() => this.close(), this.duration * 1000)
-    }
+    if (this.duration) this.tid = setTimeout(() => this.close(), this.duration * 1000)
   },
   beforeDestroy() {
-    clearTimeout(this.timerId)
+    clearTimeout(this.tid)
   },
   methods: {
-    close(event) {
-      isFunc(this.onClose) && this.onClose()
-      this.$emit('close')
+    close() {
+      this.onClose && this.onClose(), this.$emit('close')
     }
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-@prefix: .ui-notice;
+@prefix: .x-notice;
 @{prefix} {
-  text-align: right;
-  padding: 6px 12px;
-  transition: all .3s;
   left: 0;
   right: 0;
+  text-align: right;
+  padding: 0 12px 12px;
+  transition: all .3s;
   &-leave-active  {
     position: absolute;
   }
@@ -75,9 +72,9 @@ export default {
     opacity: 0;
     transform: translateX(24px);
   }
-  &--box {
-    pointer-events: all;
+  &_box {
     width: 335px;
+    pointer-events: all;
     display: inline-flex;
     text-align: left;
     align-items: center;
@@ -87,19 +84,19 @@ export default {
     position: relative;
     box-shadow: 0 1px 6px rgba(0,0,0,.2);
     &.hasDesc {
-      @{prefix}--icon {
-        font-size: 28px;
+      @{prefix}_icon {
+        font-size: 30px;
         margin-right: 16px;
         align-self: flex-start;
       }
-      @{prefix}--title {
+      @{prefix}_title {
         font-weight: bold;
         margin-bottom: 6px;
       }
     }
   }
-  &--icon {
-    font-size: 14px;
+  &_icon {
+    font-size: 20px;
     margin-right: 8px;
     &.info {
       color: @primary-color;
@@ -114,25 +111,17 @@ export default {
       color: @error-color;
     }
   }
-  &--title {
+  &_title {
+    font-size: 16px;
     color: @title-color;
-    font-size: 14px;
     word-break: break-all;
     padding-right: 16px;
     line-height: 1.4;
   }
-  &--desc {
-    font-size: 12px;
-    line-height: 1.5;
-    word-break: break-word;
-    margin-top: 2px;
-  }
-  &--close {
+  &_close {
     position: absolute;
     top: 7px;
     right: 7px;
-    width: 22px;
-    text-align: center;
   }
 }
 </style>

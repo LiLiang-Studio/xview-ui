@@ -36,7 +36,7 @@ let vm, getVM = () => vm || (vm = new Vue({
   }
 }).$mount())
 
-export const spinService = {
+XSpin.service = {
   show(options) {
     getVM().show(options)
   },

@@ -33,8 +33,8 @@ export default {
   output: [
     {
       format: 'umd',
-      name: pkgName,
-      file: `dist/${pkgName}.umd.min.js`
+      name: 'XViewUI',
+      file: `dist/${pkgName}.min.js`
     },
     {
       format: 'cjs',

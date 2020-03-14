@@ -108,7 +108,7 @@ export default {
       cursor: pointer;
     }
     &.active, &.hover {
-      color: @warning-light-color;
+      color: lighten(@warning-color, 8%);
     }
   }
   &_text {

@@ -5,27 +5,27 @@
 </template>
 <script>
 export default {
-  name: 'UiRow',
+  name: 'XRow',
   props: {
     gutter: {
       type: Number,
       default: 0
     },
     align: {
-      validator(value) {
-        return ['top', 'middle', 'bottom'].indexOf(value) !== -1
+      validator(v) {
+        return ['top', 'middle', 'bottom'].indexOf(v) !== -1
       }
     },
     justify: {
-      validator(value) {
-        return ['start', 'end', 'center', 'space-around', 'space-between'].indexOf(value) !== -1
+      validator(v) {
+        return ['start', 'end', 'center', 'space-around', 'space-between'].indexOf(v) !== -1
       }
     }
   },
   computed: {
     classes() {
-      let prefix = 'ui-row', { align, justify, gutter } = this
-      return [prefix, align && `${prefix}-${align}`, justify && `${prefix}-${justify}`, { gutter }].filter(_ => _)
+      let prefix = 'x-row', { align, justify, gutter } = this
+      return [prefix, align && `${prefix}_${align}`, justify && `${prefix}_${justify}`, { gutter }]
     },
     styles() {
       return this.gutter && { margin: `0 -${this.gutter / 2}px` }
@@ -34,30 +34,30 @@ export default {
 }
 </script>
 <style lang="less">
-.ui-row {
+.x-row {
   display: flex;
-  &-top {
+  &_top {
     align-items: flex-start;
   }
-  &-middle {
+  &_middle {
     align-items: center;
   }
-  &-bottom {
+  &_bottom {
     align-items: flex-end;
   }
-  &-start {
+  &_start {
     justify-content: flex-start;
   }
-  &-end {
+  &_end {
     justify-content: flex-end;
   }
-  &-center {
+  &_center {
     justify-content: center;
   }
-  &-space-around {
+  &_space-around {
     justify-content: space-around;
   }
-  &-space-between {
+  &_space-between {
     justify-content: space-between;
   }
 }

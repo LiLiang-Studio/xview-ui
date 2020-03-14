@@ -42,6 +42,7 @@ import Col from './components/col' // 网格列
 import List from './components/list' // 列表
 import ListItem from './components/list-item' // 列表项
 import ListItemMeta from './components/list-item-meta' // 列表项元信息
+import Input from './components/input' // 文本输入框
 
 import loadingBarService from './components/loading-bar' // 加载条
 import Spin from './components/spin' // 加载中
@@ -67,8 +68,6 @@ import Sider from './components/sider'
 // 标签页
 import Tabs from './components/tabs'
 import TabPane from './components/tab-pane'
-// 文本输入框
-import Input from './components/input'
 // 模态框
 import Modal, { modalService } from './components/modal'
 // 数值输入框
@@ -161,6 +160,7 @@ const comps = {
   List,
   ListItem,
   ListItemMeta,
+  Input,
 
   Layout,
   Header,
@@ -169,7 +169,6 @@ const comps = {
   Sider,
   Tabs,
   TabPane,
-  Input,
   Modal,
   InputNumber,
   Transfer,

@@ -1,6 +1,6 @@
 {
   "name": "xview-ui",
-  "version": "1.2.0-1",
+  "version": "1.2.4",
   "private": false,
   "main": "dist/xview-ui.common.js",
   "module": "dist/xview-ui.es.js",
@@ -40,14 +40,13 @@
     "last 2 versions"
   ],
   "keywords": [
-    "vueui-widgets",
-    "vuewidgets",
-    "vue-widgets",
+    "xview-ui",
     "components",
     "vueui",
     "vue-ui",
     "front-end",
-    "framework"
+    "framework",
+    "ui framework"
   ],
   "description": "基于Vuejs的高性能轻量级组件库",
   "homepage": "https://github.com/LiLiang-Studio/vueui-widgets",

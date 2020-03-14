@@ -5,6 +5,7 @@ import HomeRouter from '../pages/HomeRouter.vue'
 Vue.use(Router)
 
 const coms = {
+  List: () => import('../pages/List.vue'),
   Grid: () => import('../pages/Grid.vue'),
   Drawer: () => import('../pages/Drawer.vue'),
   Notice: () => import('../pages/Notice.vue'),

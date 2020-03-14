@@ -39,6 +39,9 @@ import Scroll from './components/scroll' // 无限滚动
 import Drawer from './components/drawer' // 抽屉
 import Row from './components/row' // 网格行
 import Col from './components/col' // 网格列
+import List from './components/list' // 列表
+import ListItem from './components/list-item' // 列表项
+import ListItemMeta from './components/list-item-meta' // 列表项元信息
 
 import loadingBarService from './components/loading-bar' // 加载条
 import Spin from './components/spin' // 加载中
@@ -155,6 +158,9 @@ const comps = {
   Drawer,
   Row,
   Col,
+  List,
+  ListItem,
+  ListItemMeta,
 
   Layout,
   Header,

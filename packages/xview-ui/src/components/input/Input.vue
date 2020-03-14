@@ -1,141 +1,145 @@
 <template>
-  <div :class="[prefixCls, !isArea && `${prefixCls}-${size}`]">
-    <div v-if="$slots.prepend" :class="`${prefixCls}-prepend`">
+  <div :class="classes">
+    <div v-if="$slots.prepend" :class="`${cls}_prepend`">
       <slot name="prepend"></slot>
     </div>
-    <div :class="[`${prefixCls}-box`, {hasAppend: hasAppend || hasSearchAppend}]">
-      <textarea v-if="isArea" v-bind="bindProps" :class="`${prefixCls}-input textarea`" v-on="listeners"></textarea>
-      <template v-else>
-        <span v-if="hasPrefix" :class="`${prefixCls}-prefix`">
+    <div :class="`${cls}_box`">
+      <template v-if="isText">
+        <span v-if="hasPrefix" :class="`${cls}_prefix`">
           <slot name="prefix">
-            <ui-icon :type="prefix"/>
+            <x-icon :type="prefix"/>
           </slot>
         </span>
-        <span v-if="clearable && value" :class="`${prefixCls}-suffix clear`" @click="clear">
-          <ui-icon type="ios-close"/>
+        <span v-if="clearable && inputVal" :class="`${cls}_suffix clear`" @click="onClear">
+          <x-icon type="ios-close"/>
         </span>
-        <span v-else-if="hasSuffix" :class="`${prefixCls}-suffix`">
-          <slot name="suffix">
-            <ui-icon :type="suffix"/>
-          </slot>
+        <span v-if="hasSuffix" :class="[`${cls}_suffix`, {search: hasSearchIcon}]">
+          <x-icon v-if="icon" :type="icon" @click="onIconClick"/>
+          <template v-else-if="suffix || $slots.suffix">
+            <slot name="suffix">
+              <x-icon :type="suffix"/>
+            </slot>
+          </template>
+          <x-icon v-else type="ios-search" @click="onSearch"/>
         </span>
-        <span v-else-if="icon" :class="`${prefixCls}-suffix`" @click="onIconClick">
-          <ui-icon :type="icon"/>
-        </span>
-        <span v-else-if="search && !enterButton" :class="`${prefixCls}-suffix search`" @click="onSearch">
-          <ui-icon type="ios-search"/>
-        </span>
-        <input v-bind="bindProps" :class="`${prefixCls}-input`" v-on="listeners">
       </template>
+      <input ref="Input" :class="`${cls}_input`" v-bind="attrs" v-on="listeners">
     </div>
-    <div v-if="hasAppend" :class="`${prefixCls}-append`">
-      <slot name="append">
-      </slot>
+    <div v-if="$slots.append" :class="`${cls}_append`">
+      <slot name="append"></slot>
     </div>
-    <div v-else-if="hasSearchAppend" :class="`${prefixCls}-search`" @click="onSearch">
-      <ui-icon v-if="enterButton === true" type="ios-search"/>
+    <x-btn v-else-if=" search && enterButton" type="primary" :size="size" @click="onSearch">
+      <x-icon v-if="enterButton === true" type="ios-search"/>
       <template v-else>{{enterButton}}</template>
-    </div>
+    </x-btn>
   </div>
 </template>
 <script>
-import UiIcon from '../icon'
+import XIcon from '../icon'
+import XBtn from '../button'
 import { setAutoHeight } from '../../tools'
+const S = String, B = Boolean
 export default {
-  name: 'UiInput',
-  components: { UiIcon },
-  data() {
-    return { prefixCls: 'ui-input' }
-  },
+  name: 'XInput',
+  components: { XIcon, XBtn },
   props: {
-    value: [String, Number],
+    value: S,
     size: {
       default: 'default',
-      validator(value) {
-        return ['small', 'default', 'large'].indexOf(value) !== -1
+      validator(v) {
+        return ['small', 'default', 'large'].indexOf(v) !== -1
       }
     },
-    clearable: Boolean,
-    icon: String,
-    prefix: String,
-    suffix: String,
-    search: Boolean,
-    enterButton: [Boolean, String],
-    rows: {
-      type: [Number, String],
-      default: 2
-    },
-    autosize: [Boolean, Object]
+    clearable: B,
+    icon: S,
+    prefix: S,
+    suffix: S,
+    search: B,
+    enterButton: [B, S],
+    autosize: [B, Object],
+    number: B
+  },
+  data() {
+    let _self = this
+    return {
+      cls: 'x-input',
+      inputVal: this.value,
+      listeners: {
+        ...this.$listeners,
+        input(e) {
+          if (!_self.isText && _self.autosize) {
+            let { minRows, maxRows } = _self.autosize
+            _self.autosize === true ? setAutoHeight(e.target) : setAutoHeight(e.target, minRows, maxRows)
+          }
+          let val = e.target.value
+          _self.$emit('input', _self.number && !isNaN(val) ? Number(val) : val)
+        },
+        change(e) {
+          _self.$emit('on-change', e)
+        },
+        focus() {
+          _self.$emit('on-focus')
+        },
+        blur() {
+          _self.$emit('on-blur')
+        },
+        keyup(e) {
+          _self.$emit('on-keyup', e)
+          if (e.keyCode === 13) {
+            _self.$emit('on-enter')
+            _self.search && _self.onSearch()
+          }
+        },
+        keydown(e) {
+          _self.$emit('on-keydown', e)
+        },
+        keypress(e) {
+          _self.$emit('on-keypress', e)
+        }
+      }
+    }
   },
   computed: {
-    hasPrefix() {
-      return this.prefix || this.$slots.prefix
+    isText() {
+      return this.$attrs.type !== 'textarea'
     },
-    hasSuffix() {
-      return this.suffix || this.$slots.suffix
-    },
-    hasAppend() {
-      return this.$slots.append
-    },
-    hasSearchAppend() {
-      return this.search && this.enterButton
-    },
-    isArea() {
-      return this.$attrs.type === 'textarea'
-    },
-    bindProps() {
-      let { autosize = false, rows } = this
+    attrs() {
+      let { autosize = false } = this, { rows = 2 } = this.$attrs
       if (autosize.minRows && autosize.minRows > rows) {
         rows = autosize.minRows
       } else if (autosize.maxRows && autosize.maxRows < rows) {
         rows = autosize.maxRows
       }
-      return { ...this.$attrs, rows, ref: 'Input', value: this.value }
+      let attrs = { ...this.$attrs, value: this.inputVal, rows }
+      return this.isText ? attrs : { ...attrs, is: 'textarea' }
     },
-    listeners() {
-      const that = this
-      return Object.assign({}, this.$listeners, {
-        input(event) {
-          if (that.isArea && that.autosize) {
-            if (typeof that.autosize === 'boolean') {
-              setAutoHeight(event.target)
-            } else {
-              setAutoHeight(event.target, that.autosize.minRows, that.autosize.maxRows)
-            }
-          }
-          that.$emit('input', event.target.value)
-        },
-        focus(event) {
-          that.$emit('on-focus', event)
-        },
-        blur() {
-          that.$emit('on-blur')
-        },
-        change(event) {
-          that.$emit('on-change', event)
-        },
-        keyup(event) {
-          that.$emit('on-keyup', event)
-          if (event.keyCode === 13) {
-            that.$emit('on-enter')
-            if (that.search) that.onSearch()
-          }
-        },
-        keydown(event) {
-          that.$emit('on-keydown', event)
-        },
-        keypress(event) {
-          that.$emit('on-keypress', event)
-        }
-      })
+    hasPrefix() {
+      return this.prefix || this.$slots.prefix
+    },
+    hasSuffix() {
+      if (this.icon || this.suffix || this.$slots.suffix || (this.search && !this.enterButton)) {
+        return this.clearable ? !this.inputVal : true
+      }
+    },
+    hasSearchIcon() {
+      return this.hasSuffix && !this.icon && !this.suffix && !this.$slots.suffix
+    },
+    classes() {
+      let { prepend } = this.$slots
+      let search = this.search && this.enterButton
+      let append = search || this.$slots.append
+      return [this.cls, this.size && this.isText && `${this.cls}_${this.size}`, { prepend, append, search }]
+    }
+  },
+  watch: {
+    value(val) {
+      this.inputVal = val
     }
   },
   methods: {
-    focus() {
-      this.$refs.Input.focus()
-    },
-    clear() {
+    onClear() {
       this.$emit('input', '')
+      this.$emit('on-clear')
     },
     onIconClick() {
       this.$emit('on-click')
@@ -143,63 +147,41 @@ export default {
     onSearch() {
       this.focus()
       this.$emit('on-search', this.$refs.Input.value)
+    },
+    focus() {
+      this.$refs.Input.focus()
     }
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-input {
+@prefix: .x-input;
+@{prefix} {
   display: flex;
   align-items: stretch;
-  color: @content-color;
-  &-prepend, &-append {
-    padding: 0 7px;
-    white-space: nowrap;
-    background-color: #eee;
-    border: 1px solid @border-color;
-    display: inline-flex;
-    align-items: center;
-    .ui-select-selection, .ui-btn {
-      background-color: inherit;
-      border-color: transparent !important;
-    }
-    .ui-select-selection {
-      box-shadow: none !important;
-    }
-    .ui-select, .ui-btn {
-      margin: 0 -7px;
-    }
-  }
-  &-prepend {
-    border-right: none;
-    border-radius: 4px 0 0 4px;
-  }
-  &-append {
-    border-left: none;
-    border-radius: 0 4px 4px 0;
-  }
-  &-box {
+  &_box {
     flex: 1;
-    width: 0;
     position: relative;
+    &:not(:hover) {
+      .clear {
+        display: none;
+      }
+    }
   }
-  &-input {
+  &_input {
+    display: block;
     width: 100%;
-    min-height: 100%;
+    height: 100%;
     padding: 0 7px;
-    font-size: 12px;
+    font-size: 14px;
     outline: none;
-    background-color: #fff;
+    background: #fff;
     color: @content-color;
     border: 1px solid @border-color;
     border-radius: 4px;
     font-family: inherit;
-    transition: border .2s ease-in-out, box-shadow .2s ease-in-out;
-    &.textarea {
-      height: auto;
-      padding: 4px 7px;
-    }
+    transition: all .2s ease-in-out;
     &::placeholder {
       color: @disabled-color;
     }
@@ -207,15 +189,20 @@ export default {
       border-color: @primary-color;
     }
     &:focus {
-      .form-control-shadow(@primary-color);
+      .control-shadow(@primary-color);
     }
     &:disabled {
       cursor: not-allowed;
       color: @disabled-color;
-      background-color: @disabled-bg-color;
+      background: lighten(@disabled-color, 18%);
     }
   }
-  &-prefix, &-suffix {
+  textarea&_input {
+    height: auto;
+    line-height: 1.5;
+    padding: 4px 7px;
+  }
+  &_prefix, &_suffix {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -223,82 +210,76 @@ export default {
     font-size: 16px;
     color: @sub-color;
     display: inline-flex;
+    width: @size-normal;
     align-items: center;
     justify-content: center;
   }
-  &-prefix {
+  &_prefix {
     left: 0;
+    ~ @{prefix}_input {
+      padding-left: @size-normal;
+    }
   }
-  &-suffix {
+  &_suffix {
     right: 0;
     &.search {
       cursor: pointer;
     }
-    &.clear {
-      display: none;
+    ~ @{prefix}_input {
+      padding-right: @size-normal;
     }
   }
-  &-box:hover &-suffix.clear {
-    display: inline-flex;
-  }
-  &-prepend + &-box &-input {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-  }
-  &-box.hasAppend &-input {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-  &-default &-input {
+  &_default {
     height: @size-normal;
   }
-  &-small &-input {
+  &_small {
     height: @size-small;
+    @{prefix}_prefix, @{prefix}_suffix {
+      font-size: 14px;
+    }
   }
-  &-large &-input {
+  &_large {
     height: @size-large;
+    @{prefix}_prefix, @{prefix}_suffix {
+      font-size: 18px;
+    }
   }
-  &-default &-prefix, &-default &-suffix {
-    width: @size-normal;
+  &.prepend {
+    @{prefix}_input {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
   }
-  &-small &-prefix, &-small &-suffix {
-    width: @size-small;
+  &.append {
+    @{prefix}_input {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .x-btn {
+      margin-right: 0;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
   }
-  &-large &-prefix, &-large &-suffix {
-    width: @size-large;
-  }
-  &-default &-prefix + &-input {
-    padding-left: @size-normal;
-  }
-  &-small &-prefix + &-input {
-    padding-left: @size-small;
-  }
-  &-large &-prefix + &-input {
-    padding-left: @size-large;
-  }
-  &-default &-suffix + &-input {
-    padding-right: @size-normal;
-  }
-  &-small &-suffix + &-input {
-    padding-right: @size-small;
-  }
-  &-large &-suffix + &-input {
-    padding-right: @size-large;
-  }
-  &-search {
-    padding: 0 16px;
-    color: #fff;
-    cursor: pointer;
-    display: flex;
+  &_prepend, &_append {
+    padding: 0 7px;
+    display: inline-flex;
     align-items: center;
+    background: @bg-color;
+    border: 1px solid @border-color;
+    * {
+      border: none !important;
+      box-shadow: none !important;
+      background-color: transparent !important;
+    }
+  }
+  &_prepend {
+    border-right: none;
+    border-radius: 4px 0 0 4px;
+  }
+  &_append {
+    border-left: none;
     border-radius: 0 4px 4px 0;
-    transition: all .2s ease-in-out;
-    &:hover {
-      background-color: lighten(@primary-color, 8%);
-    }
-    &, &:active {
-      background-color: @primary-color;
-    }
   }
 }
 </style>

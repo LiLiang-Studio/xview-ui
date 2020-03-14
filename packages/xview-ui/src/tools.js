@@ -11,6 +11,8 @@ export const isFunc = f => typeof f === 'function'
 
 export const isStr = s => typeof s === 'string'
 
+export const isNum = n => typeof n === 'number'
+
 export const isBool = b => typeof b === 'boolean'
 
 export const isArr = arr => arr instanceof Array
@@ -119,8 +121,8 @@ export const setAutoHeight = (textarea, minRows, maxRows) => {
   let matches = textarea.value.match(/\n/gm)
   let lbCount = matches ? matches.length : 0
   let compare = borderWidth + padding + lineHeight * lbCount < textarea.scrollHeight
-  if (typeof minRows === 'number' && (!compare && lbCount <= minRows)) return
-  if (typeof maxRows === 'number' && lbCount >= maxRows) return
+  if (isNum(minRows) && (!compare && lbCount <= minRows)) return
+  if (isNum(maxRows) && lbCount >= maxRows) return
   textarea.style.height = 'auto'
   textarea.style.height = `${textarea.scrollHeight + borderWidth}px`
 }

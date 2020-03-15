@@ -14,7 +14,6 @@
 <script>
 import XIcon from '../icon'
 import XInput from '../input'
-import { isNum } from '../../tools'
 const N = Number, S = String, B = Boolean, F = Function, I = Infinity
 export default {
   name: 'XInputNumber',

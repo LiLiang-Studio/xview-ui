@@ -1,68 +1,50 @@
 <template>
   <div :class="prefix">
-    <header :class="`${prefix}-header`">
-      <ui-checkbox v-model="checkAll" :disabled="disSelectAll" @click.native="onCheckAllClick">{{title}}</ui-checkbox>
+    <header :class="`${prefix}_header`">
+      <x-checkbox v-model="checkAll" :disabled="disSelectAll" @on-change="onCheckAllChange">{{title}}</x-checkbox>
       <span>{{countText}}</span>
     </header>
-    <div v-if="filterable" :class="`${prefix}-search`">
-      <ui-input v-model.trim="searchValue" size="small" search clearable :placeholder="filterPlaceholder"/>
+    <div v-if="filterable" :class="`${prefix}_search`">
+      <x-input v-model.trim="searchValue" size="small" search clearable :placeholder="filterPlaceholder"/>
     </div>
-    <div :class="`${prefix}-list`">
-      <ui-checkbox-group v-model="selectedKeys">
-        <ui-checkbox v-for="item in showedData" :key="item.key" :title="renderItem(item)"
-          :class="`${prefix}-item`" :label="item.key" :disabled="item.disabled">
-          {{renderItem(item)}}
-        </ui-checkbox>
-      </ui-checkbox-group>
-      <p v-if="!showedData.length" :class="`${prefix}-empty`">{{notFoundText}}</p>
-    </div>
-    <footer v-if="hasFooter" :class="`${prefix}-footer`">
+    <x-checkbox-group v-if="showedData.length" :class="`${prefix}_list`" v-model="selectedKeys">
+      <x-checkbox v-for="_ in showedData" :key="_.key" :label="_.key" :disabled="_.disabled">{{renderItem(_)}}</x-checkbox>
+    </x-checkbox-group>
+    <p v-else :class="`${prefix}_empty`">{{notFoundText}}</p>
+    <footer v-if="$slots.default" :class="`${prefix}_footer`">
       <slot></slot>
     </footer>
   </div>
 </template>
 <script>
-import UiInput from '../input'
-import UiCheckbox from '../checkbox'
-import UiCheckboxGroup from '../checkbox-group'
+import XInput from '../input'
+import XCheckbox from '../checkbox'
+import XCheckboxGroup from '../checkbox-group'
+const S = String, F = Function, arrProp = { type: Array, default: () => [] }
 export default {
-  name: 'UiTransferBox',
-  components: { UiInput, UiCheckbox, UiCheckboxGroup },
-  data() {
-    return {
-      prefix: 'ui-transferBox',
-      checkAll: false,
-      selectedKeys: this.value,
-      searchValue: ''
-    }
-  },
+  name: 'XTransferBox',
+  components: { XInput, XCheckbox, XCheckboxGroup },
   props: {
-    value: {
-      type: Array,
-      default: () => []
-    },
-    data: {
-      type: Array,
-      default: () => []
-    },
-    renderFormat: Function,
-    title: String,
+    value: arrProp,
+    data: arrProp,
+    renderFormat: F,
+    title: S,
     filterable: Boolean,
-    filterPlaceholder: String,
-    filterMethod: Function,
-    notFoundText: String
+    filterPlaceholder: S,
+    filterMethod: F,
+    notFoundText: S
+  },
+  data() {
+    return { prefix: 'x-transfer-box', checkAll: false, selectedKeys: this.value, searchValue: '' }
   },
   computed: {
     showedData() {
-      let { searchValue: val } = this
-      if (this.filterMethod) return this.filterMethod(this.data, val)
-      return val ? this.data.filter(_ => _.label && _.label.indexOf(val) !== -1) : [...this.data]
+      let val = this.searchValue
+      return val ? this.filterMethod ? this.filterMethod(this.data, val) :
+        this.data.filter(_ => _.label && _.label.indexOf(val) > -1) : [...this.data]
     },
     disSelectAll() {
       return this.showedData.every(_ => _.disabled)
-    },
-    hasFooter() {
-      return this.$slots.default !== undefined
     },
     countText() {
       let total = this.data.length, checkedCount = this.selectedKeys.length
@@ -70,73 +52,29 @@ export default {
     }
   },
   watch: {
-    selectedKeys(newval) {
-      this.$emit('input', newval)
-      this.$emit('on-selected-change', newval)
-      this.checkAll = newval.length && newval.length === this.showedData.filter(_ => !_.disabled).length
+    selectedKeys(val) {
+      this.$emit('input', val)
+      this.$emit('change', val)
+      this.checkAll = this.showedData.filter(_ => !_.disabled).every(_ => {
+        return val.indexOf(_.key) > -1
+      })
     },
-    value(newval) {
-      this.selectedKeys = newval
+    value(val) {
+      this.selectedKeys = val
     }
   },
   methods: {
     renderItem(item) {
       return this.renderFormat ? this.renderFormat(item) : item.label || item.key
     },
-    onCheckAllClick() {
+    onCheckAllChange() {
       if (this.disSelectAll) return
-      this.selectedKeys = this.checkAll ? this.showedData.filter(_ => !_.disabled).map(_ => _.key) : []
+      let selectedAndDisabled = this.showedData.filter(_ => {
+          return _.disabled && this.selectedKeys.indexOf(_.key) > -1
+        }).map(_ => _.key)
+      this.selectedKeys = this.checkAll ? 
+        this.showedData.filter(_ => !_.disabled).map(_ => _.key).concat(selectedAndDisabled) : selectedAndDisabled
     }
   }
 }
 </script>
-<style lang="less">
-@import url("../../styles/vars.less");
-.ui-transferBox {
-  width: 180px;
-  height: 210px;
-  font-size: 12px;
-  border-radius: 3px;
-  overflow: hidden;
-  display: inline-flex;
-  flex-direction: column;
-  vertical-align: middle;
-  border: 1px solid @border-color;
-  &-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 16px;
-    background-color: @bg-color;
-    border-bottom: 1px solid @border-color;
-  }
-  &-search {
-    padding: 8px 8px 3px;
-  }
-  &-list {
-    flex: 1;
-    padding: 4px 0;
-    overflow: auto;
-  }
-  &-item {
-    width: 100%;
-    padding: 7px 16px;
-    margin-right: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    transition: background-color .2s ease-in-out;
-    &:not(.disabled):hover {
-      background-color: @disabled-bg-color;
-    }
-  }
-  &-empty {
-    font-size: 12px;
-    text-align: center;
-    color: @disabled-color;
-  }
-  &-footer {
-    border-top: 1px solid @border-color;
-  }
-}
-</style>

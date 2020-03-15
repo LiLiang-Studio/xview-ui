@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding-bottom:100px;">
     <div class="page-title">Transfer 穿梭框</div>
     <p>双栏穿梭选择框，常用于将多个项目从一边移动到另一边。</p>
     <div class="page-sub-title">Transfer 组件主要基于以下四个 API 来使用:</div>
@@ -26,6 +26,7 @@
       :data="data1"
       :target-keys="targetKeys1"
       :render-format="render1"
+      :selectedKeys="selectedKeys"
       @on-change="handleChange1"
       @on-selected-change="handleSelectedChange"
     ></Transfer>
@@ -84,7 +85,8 @@ export default {
       listStyle: {
         height: "300px",
         width: "250px"
-      }
+      },
+      selectedKeys: ['1', '4', '6', '7']
     };
   },
   methods: {

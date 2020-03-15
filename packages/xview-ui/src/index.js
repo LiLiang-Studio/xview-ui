@@ -44,6 +44,7 @@ import ListItem from './components/list-item' // 列表项
 import ListItemMeta from './components/list-item-meta' // 列表项元信息
 import Input from './components/input' // 文本输入框
 import InputNumber from './components/input-number' // 数值输入框
+import Transfer from './components/transfer' // 穿梭框
 
 import loadingBarService from './components/loading-bar' // 加载条
 import Spin from './components/spin' // 加载中
@@ -71,8 +72,6 @@ import Tabs from './components/tabs'
 import TabPane from './components/tab-pane'
 // 模态框
 import Modal, { modalService } from './components/modal'
-// 穿梭框
-import Transfer from './components/transfer'
 // 树形控件
 import Tree from './components/tree'
 // 走马灯
@@ -161,6 +160,7 @@ const comps = {
   ListItemMeta,
   Input,
   InputNumber,
+  Transfer,
 
   Layout,
   Header,
@@ -170,7 +170,6 @@ const comps = {
   Tabs,
   TabPane,
   Modal,
-  Transfer,
   Tree,
   Carousel,
   CarouselItem,

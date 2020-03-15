@@ -6,7 +6,7 @@
     <div class="page-sub-title">基础用法</div>
     <p>可以通过输入、鼠标点击或键盘的上下键来改变数值大小。</p>
     <br>
-    <InputNumber :max="10" :min="1" v-model="value1"></InputNumber>
+    <InputNumber placeholder="请输入" :max="10" :min="1" v-model="value1"></InputNumber>
 
     <div class="page-sub-title">小数</div>
     <p>通过设置step属性控制每次改变的精度。</p>
@@ -19,8 +19,8 @@
     <InputNumber
       :max="10000"
       v-model="value9"
-      :formatter="value => `$ ${value}`.replace(/B(?=(d{3})+(?!d))/g, ',')"
-      :parser="value => value.replace(/$s?|(,*)/g, '')"></InputNumber>
+      :formatter="value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+      :parser="value => value.replace(/\$\s?|(,*)/g, '')"></InputNumber>
     <InputNumber
       style="margin-left:12px;"
       :max="100"
@@ -57,7 +57,7 @@
 export default {
   data() {
     return {
-      value1: 1,
+      value1: '',
       value2: 1,
       value9: 1000,
       value10: 100,

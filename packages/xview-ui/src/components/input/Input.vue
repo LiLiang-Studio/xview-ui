@@ -72,7 +72,7 @@ export default {
             _self.autosize === true ? setAutoHeight(e.target) : setAutoHeight(e.target, minRows, maxRows)
           }
           let val = e.target.value
-          _self.$emit('input', _self.number && !isNaN(val) ? Number(val) : val)
+          _self.$emit('input', _self.number && val && !isNaN(val) ? +val : val)
         },
         change(e) {
           _self.$emit('on-change', e)

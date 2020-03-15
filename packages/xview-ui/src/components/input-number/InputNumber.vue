@@ -15,27 +15,16 @@
 import XIcon from '../icon'
 import XInput from '../input'
 import { isNum } from '../../tools'
-const N = Number, S = String, B = Boolean, I = Infinity
+const N = Number, S = String, B = Boolean, F = Function, I = Infinity
 export default {
   name: 'XInputNumber',
   components: { XIcon, XInput },
   props: {
-    max: {
-      type: N,
-      default: I
+    max: { type: N, default: I },
+    min: { type: N, default: -I
     },
-    min: {
-      type: N,
-      default: -I
-    },
-    value: {
-      type: [N, S],
-      default: 1
-    },
-    step: {
-      type: N,
-      default: 1
-    },
+    value: { type: [N, S], default: 1 },
+    step: { type: N, default: 1 },
     size: {
       validator(v) {
         return ['large', 'small', 'default'].indexOf(v) !== -1
@@ -43,26 +32,18 @@ export default {
     },
     disabled: B,
     placeholder: S,
-    formatter: Function,
+    formatter: F,
+    parser: F,
     readonly: B,
-    editable: {
-      type: B,
-      default: true
-    },
-    precision: N,
-    activeChange: B
+    editable: { type: B, default: true },
+    precision: N
   },
   data() {
     return { prefix: 'x-inputNumber', inputVal: '' }
   },
   computed: {
-    prec() {
-      let s = (this.step + '').split('.')[1], digits = s ? s.length : 0
-      return this.precision || digits
-    },
     showVal() {
-      let val = this.inputVal
-      return this.formatter ? this.formatter(val) : isNum(val) ? val.toFixed(this.prec) : val
+      return this.formatVal()
     },
     inputProps() {
       let { size, disabled, placeholder } = this
@@ -73,30 +54,52 @@ export default {
     },
     disMinus() {
       return +this.inputVal - this.step < this.min
+    },
+    prec() {
+      return this.precision || (('' + this.step).split('.')[1] || '').length
     }
   },
   watch: {
     value: {
       immediate: true,
       handler(val) {
-        this.inputVal = val
+        this.inputVal = '' + val
       }
     },
     inputVal(val) {
-      val = val + '' ? +val : ''
+      if (val) val = +val
       this.$emit('input', val)
       this.$emit('on-change', val)
     }
   },
   methods: {
     add() {
-      if (!this.readonly && !this.disAdd) this.inputVal = (+this.value + this.step).toFixed(this.prec)
+      if (!this.readonly && !this.disAdd) this.inputVal = '' + (+this.value + this.step).toFixed(this.prec)
     },
     minus() {
-      if (!this.readonly && !this.disMinus) this.inputVal = (+this.value - this.step).toFixed(this.prec)
+      if (!this.readonly && !this.disMinus) this.inputVal = '' + (+this.value - this.step).toFixed(this.prec)
+    },
+    getVal(val) {
+      val = (val + '').trim()
+      if (val) {
+        if (isNaN(val)) {
+          val = this.value
+        } else if (+val > this.max) {
+          val = this.max
+        } else if (+val < this.min) {
+          val = this.min
+        }
+        if (val && !this.prec) val = parseInt(val)
+      }
+      return val
+    },
+    formatVal() {
+      return this.formatter ? this.formatter(this.inputVal) : this.inputVal
     },
     onInput(val) {
-      this.inputVal = val
+      if (this.parser) val = this.parser(val)
+      this.inputVal = this.getVal(val)
+      this.$el.querySelector('input').value = this.formatVal(this.inputVal)
     },
     onKeydown(e) {
       let k = e.keyCode, obj = { 38: this.add, 40: this.minus }
@@ -104,6 +107,7 @@ export default {
     },
     onBlur() {
       this.$emit('on-blur')
+      if (this.inputVal) this.inputVal = (+this.inputVal).toFixed(this.prec)
     },
     onFocus(e) {
       this.$emit('on-focus', e)
@@ -115,10 +119,8 @@ export default {
 @import url("../../styles/vars.less");
 .x-inputNumber {
   width: 80px;
-  overflow: hidden;
   position: relative;
   display: inline-block;
-  background-color: #fff;
   &_btns {
     position: absolute;
     top: 1px;
@@ -126,6 +128,8 @@ export default {
     bottom: 1px;
     width: 22px;
     opacity: 0;
+    background: #fff;
+    border-radius: 0 4px 4px 0;
     transition: all .2s ease-in-out;
     border-left: 1px solid @border-color;
   }
@@ -138,6 +142,11 @@ export default {
     justify-content: center;
     &:last-child {
       border-top: 1px solid @border-color;
+    }
+    &.disabled {
+      opacity: .72;
+      color: #ccc;
+      cursor: not-allowed;
     }
   }
   &:hover &_btns {

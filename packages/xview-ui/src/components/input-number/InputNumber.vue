@@ -1,111 +1,109 @@
 <template>
   <div :class="[prefix, {disabled}]">
-    <ui-input v-model="inputValue" v-bind="inputProps" @on-keydown="onKeydown" @on-blur="onBlur" @on-focus="onFocus"/>
-    <div :class="`${prefix}-btns`" v-if="!disabled">
-      <a :class="[`${prefix}-btn`, {disabled: disAdd}]" @click="add">
-        <ui-icon type="ios-arrow-up"/>
+    <x-input :value="showVal" v-bind="inputProps" @input="onInput" @on-keydown="onKeydown" @on-blur="onBlur" @on-focus="onFocus"/>
+    <div :class="`${prefix}_btns`" v-if="!disabled">
+      <a :class="[`${prefix}_btn`, {disabled: disAdd}]" @click="add">
+        <x-icon type="ios-arrow-up"/>
       </a>
-      <a :class="[`${prefix}-btn`, {disabled: disMinus}]" @click="minus">
-        <ui-icon type="ios-arrow-down"/>
+      <a :class="[`${prefix}_btn`, {disabled: disMinus}]" @click="minus">
+        <x-icon type="ios-arrow-down"/>
       </a>
     </div>
   </div>
 </template>
 <script>
-import UiIcon from '../icon'
-import UiInput from '../input'
+import XIcon from '../icon'
+import XInput from '../input'
+import { isNum } from '../../tools'
+const N = Number, S = String, B = Boolean, I = Infinity
 export default {
-  name: 'UiInputNumber',
-  components: { UiIcon, UiInput },
-  data() {
-    return { prefix: 'ui-inputNumber', inputValue: this.parseValue(this.value) }
-  },
+  name: 'XInputNumber',
+  components: { XIcon, XInput },
   props: {
     max: {
-      type: Number,
-      default: Infinity
+      type: N,
+      default: I
     },
     min: {
-      type: Number,
-      default: -Infinity
+      type: N,
+      default: -I
     },
     value: {
-      type: [Number, String],
+      type: [N, S],
       default: 1
     },
     step: {
-      type: Number,
+      type: N,
       default: 1
     },
     size: {
-      validator(value) {
-        return ['large', 'small', 'default'].indexOf(value) !== -1
+      validator(v) {
+        return ['large', 'small', 'default'].indexOf(v) !== -1
       }
     },
-    disabled: Boolean,
+    disabled: B,
+    placeholder: S,
     formatter: Function,
-    parser: Function,
-    readonly: Boolean,
+    readonly: B,
     editable: {
-      type: Boolean,
+      type: B,
       default: true
     },
-    precision: Number
+    precision: N,
+    activeChange: B
+  },
+  data() {
+    return { prefix: 'x-inputNumber', inputVal: '' }
   },
   computed: {
+    prec() {
+      let s = (this.step + '').split('.')[1], digits = s ? s.length : 0
+      return this.precision || digits
+    },
+    showVal() {
+      let val = this.inputVal
+      return this.formatter ? this.formatter(val) : isNum(val) ? val.toFixed(this.prec) : val
+    },
     inputProps() {
-      return { size: this.size, disabled: this.disabled, readonly: this.readonly || !this.editable }
+      let { size, disabled, placeholder } = this
+      return { size, disabled, placeholder, readonly: this.readonly || !this.editable }
     },
     disAdd() {
-      return +this.value + this.step > this.max
+      return +this.inputVal + this.step > this.max
     },
     disMinus() {
-      return +this.value - this.step < this.min
-    },
-    prec() {
-      let s = this.step.toString().split('.')[1]
-      let digits = s ? s.length : 0
-      return this.precision || digits
+      return +this.inputVal - this.step < this.min
     }
   },
   watch: {
-    value(newval) {
-      this.$emit('on-change', newval)
-      this.inputValue = this.parseValue(newval)
+    value: {
+      immediate: true,
+      handler(val) {
+        this.inputVal = val
+      }
     },
-    inputValue() {
-      let val = this.parseInputValue()
-      if (!isNaN(val)) this.$emit('input', val)
+    inputVal(val) {
+      val = val + '' ? +val : ''
+      this.$emit('input', val)
+      this.$emit('on-change', val)
     }
   },
   methods: {
-    parseValue(val) {
-      val = Math.min(Math.max(+val, this.min), this.max)
-      return this.formatter ? this.formatter(val) : val
-    },
-    parseInputValue() {
-      return this.parser ? this.parser(this.inputValue) : this.inputValue
-    },
     add() {
-      if (this.readonly || this.disAdd) return
-      this.$emit('input', (+this.value + this.step).toFixed(this.prec))
+      if (!this.readonly && !this.disAdd) this.inputVal = (+this.value + this.step).toFixed(this.prec)
     },
     minus() {
-      if (this.readonly || this.disMinus) return
-      this.$emit('input', (+this.value - this.step).toFixed(this.prec))
+      if (!this.readonly && !this.disMinus) this.inputVal = (+this.value - this.step).toFixed(this.prec)
+    },
+    onInput(val) {
+      this.inputVal = val
     },
     onKeydown(e) {
-      if (e.keyCode === 40) {
-        e.preventDefault()
-        this.minus()
-      } else if (e.keyCode === 38) {
-        e.preventDefault()
-        this.add()
-      }
+      let k = e.keyCode, obj = { 38: this.add, 40: this.minus }
+      if (k in obj) e.preventDefault(), obj[k]()
     },
     onBlur() {
       this.$emit('on-blur')
-      if (isNaN(this.parseInputValue())) this.inputValue = this.parseValue(this.value)
     },
     onFocus(e) {
       this.$emit('on-focus', e)
@@ -115,29 +113,23 @@ export default {
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-inputNumber {
+.x-inputNumber {
   width: 80px;
+  overflow: hidden;
   position: relative;
   display: inline-block;
   background-color: #fff;
-  &:hover &-btns {
-    opacity: 1;
-  }
-  &:not(.disabled):hover input {
-    border-color: @primary-color;
-  }
-  &-btns {
+  &_btns {
     position: absolute;
     top: 1px;
     right: 1px;
     bottom: 1px;
     width: 22px;
     opacity: 0;
-    border-radius: 0 4px 4px 0;
+    transition: all .2s ease-in-out;
     border-left: 1px solid @border-color;
-    transition: opacity .2s ease-in-out;
   }
-  &-btn {
+  &_btn {
     height: 50%;
     color: #999;
     font-size: 14px;
@@ -147,11 +139,12 @@ export default {
     &:last-child {
       border-top: 1px solid @border-color;
     }
-    &.disabled {
-      opacity: .72;
-      color: #ccc;
-      cursor: not-allowed;
-    }
+  }
+  &:hover &_btns {
+    opacity: 1;
+  }
+  &:not(.disabled):hover input {
+    border-color: @primary-color;
   }
 }
 </style>

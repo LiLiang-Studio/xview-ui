@@ -43,7 +43,7 @@ export default {
   name: 'XInput',
   components: { XIcon, XBtn },
   props: {
-    value: S,
+    value: {},
     size: {
       default: 'default',
       validator(v) {

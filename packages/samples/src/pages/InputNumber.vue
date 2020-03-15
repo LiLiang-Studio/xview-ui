@@ -45,7 +45,7 @@
     <div class="page-sub-title">只读</div>
     <p>通过设置readonly属性开启只读。</p>
     <br>
-    <InputNumber v-model="value7" readonly></InputNumber>
+    <InputNumber v-model="value7" :readonly="true"></InputNumber>
 
     <div class="page-sub-title">不可编辑</div>
     <p>通过设置editable属性控制是否能编辑。</p>

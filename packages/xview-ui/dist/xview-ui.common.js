@@ -5485,22 +5485,25 @@ __vue_render__$I._withStripped = true;
     undefined
   );
 
+var S$4 = String;
+var F$1 = Function;
+var arrProp = { type: Array, default: function () { return []; } };
+
+var props$1 = {
+  data: arrProp,
+  renderFormat: F$1,
+  selectedKeys: arrProp,
+  filterable: Boolean,
+  filterPlaceholder: S$4,
+  filterMethod: F$1,
+  notFoundText: S$4
+};
+
 //
-var S$4 = String, F$1 = Function, arrProp = { type: Array, default: function () { return []; } };
 var script$J = {
   name: 'XTransferBox',
   components: { XInput: __vue_component__$H, XCheckbox: __vue_component__$n, XCheckboxGroup: __vue_component__$o },
-  props: {
-    value: arrProp,
-    data: arrProp,
-    renderFormat: F$1,
-    title: S$4,
-    selectedKeys: arrProp,
-    filterable: Boolean,
-    filterPlaceholder: S$4,
-    filterMethod: F$1,
-    notFoundText: S$4
-  },
+  props: Object.assign({}, props$1, {title: S$4, value: arrProp}),
   data: function data() {
     return { prefix: 'x-transfer-box', checkAll: false, selectedValue: this.value, searchValue: '' }
   },
@@ -5514,7 +5517,11 @@ var script$J = {
       return this.showedData.every(function (_) { return _.disabled; })
     },
     countText: function countText() {
-      var total = this.data.length, checkedCount = this.selectedValue.length;
+      var this$1 = this;
+
+      var total = this.data.length, checkedCount = this.data.filter(function (_) {
+        return !_.disabled && this$1.selectedValue.indexOf(_.key) > -1
+      }).length;
       return checkedCount ? (checkedCount + "/" + total) : total
     }
   },
@@ -5689,23 +5696,16 @@ __vue_render__$J._withStripped = true;
   );
 
 //
-var A = Array, S$5 = String, F$2 = Function, arrProp$1 = { type: A, default: function () { return []; } };
 var script$K = {
   name: 'XTransfer',
   components: { XBox: __vue_component__$J, XIcon: __vue_component__, XBtn: __vue_component__$1 },
-  props: {
-    data: arrProp$1,
-    targetKeys: arrProp$1,
-    renderFormat: F$2,
-    selectedKeys: arrProp$1,
+  props: Object.assign({}, props$1,
+    {operations: arrProp,
+    targetKeys: arrProp,
     listStyle: { type: Object, default: function () { return ({}); } },
-    titles: { type: A, default: function () { return ['源列表', '目标列表']; } },
-    operations: arrProp$1,
-    filterable: Boolean,
-    filterPlaceholder: { type: S$5, default: '请输入搜索内容' },
-    filterMethod: F$2,
-    notFoundText: { type: S$5, default: '列表为空' }
-  },
+    notFoundText: { type: S$4, default: '列表为空' },
+    titles: { type: Array, default: function () { return ['源列表', '目标列表']; } },
+    filterPlaceholder: { type: S$4, default: '请输入搜索内容' }}),
   data: function data() {
     return { prefix: 'x-transfer', selectedData: { left: [], right: [] } }
   },
@@ -5729,9 +5729,24 @@ var script$K = {
       var ref = this.selectedData;
       var left = ref.left;
       var right = ref.right;
-      var disLeft = !left.length || left.every(function (key) { return data.left.find(function (_) { return _.key === key; }).disabled; });
-      var disRight = !right.length || right.every(function (key) { return data.right.find(function (_) { return _.key === key; }).disabled; });
-      return { toLeft: Object.assign({}, props, {disabled: disRight}), toRight: Object.assign({}, props, {disabled: disLeft}) }
+      var disToLeft = data.right.filter(function (_) { return !_.disabled; }).every(function (_) { return right.indexOf(_.key) < 0; });
+      var disToRight = data.left.filter(function (_) { return !_.disabled; }).every(function (_) { return left.indexOf(_.key) < 0; });
+      return { toLeft: Object.assign({}, props, {disabled: disToLeft}), toRight: Object.assign({}, props, {disabled: disToRight}) }
+    }
+  },
+  watch: {
+    data: {
+      immediate: true,
+      handler: function handler(val) {
+        var rtnData = { left: [], right: [] };
+        var ref = this;
+        var selectedData = ref.selectedData;
+        var data = ref.convertData;
+        var leftKeys = data.left.map(function (_) { return _.key; }), rightKeys = data.right.map(function (_) { return _.key; });
+        selectedData.left.forEach(function (key) { return leftKeys.indexOf(key) > 0 && rtnData.left.push(key); });
+        selectedData.right.forEach(function (key) { return rightKeys.indexOf(key) > 0 && rtnData.right.push(key); });
+        this.selectedData = rtnData;
+      }
     }
   },
   methods: {
@@ -5742,17 +5757,21 @@ var script$K = {
       }, { moved: [], noMoved: [] })
     },
     moveToLeft: function moveToLeft() {
-      var data = this.getCanMoved(this.selectedData.right, this.convertData.right);
-      var moveKeys = data.moved;
-      this.selectedData.right = data.noMoved;
-      var targetKeys = this.convertData.right.filter(function (_) { return moveKeys.indexOf(_.key) < 0; }).map(function (_) { return _.key; });
+      var ref = this;
+      var convertData = ref.convertData;
+      var selectedData = ref.selectedData;
+      var data = this.getCanMoved(selectedData.right, convertData.right), moveKeys = data.moved;
+      selectedData.right = data.noMoved;
+      var targetKeys = convertData.right.filter(function (_) { return moveKeys.indexOf(_.key) < 0; }).map(function (_) { return _.key; });
       this.$emit('on-change', targetKeys, 'left', moveKeys);
     },
     moveToRight: function moveToRight() {
-      var data = this.getCanMoved(this.selectedData.left, this.convertData.left);
-      var moveKeys = data.moved;
-      this.selectedData.left = data.noMoved;
-      var targetKeys = this.convertData.right.map(function (_) { return _.key; }).concat(moveKeys);
+      var ref = this;
+      var convertData = ref.convertData;
+      var selectedData = ref.selectedData;
+      var data = this.getCanMoved(selectedData.left, convertData.left), moveKeys = data.moved;
+      selectedData.left = data.noMoved;
+      var targetKeys = convertData.right.map(function (_) { return _.key; }).concat(moveKeys);
       this.$emit('on-change', targetKeys, 'right', moveKeys);
     },
     onSelectChange: function onSelectChange() {

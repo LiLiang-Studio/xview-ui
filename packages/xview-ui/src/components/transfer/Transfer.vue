@@ -12,22 +12,18 @@
 import XBox from './Box.vue'
 import XIcon from '../icon'
 import XBtn from '../button'
-const A = Array, S = String, F = Function, arrProp = { type: A, default: () => [] }
+import { S, arrProp, props } from './utils'
 export default {
   name: 'XTransfer',
   components: { XBox, XIcon, XBtn },
   props: {
-    data: arrProp,
-    targetKeys: arrProp,
-    renderFormat: F,
-    selectedKeys: arrProp,
-    listStyle: { type: Object, default: () => ({}) },
-    titles: { type: A, default: () => ['源列表', '目标列表'] },
+    ...props,
     operations: arrProp,
-    filterable: Boolean,
-    filterPlaceholder: { type: S, default: '请输入搜索内容' },
-    filterMethod: F,
-    notFoundText: { type: S, default: '列表为空' }
+    targetKeys: arrProp,
+    listStyle: { type: Object, default: () => ({}) },
+    notFoundText: { type: S, default: '列表为空' },
+    titles: { type: Array, default: () => ['源列表', '目标列表'] },
+    filterPlaceholder: { type: S, default: '请输入搜索内容' }
   },
   data() {
     return { prefix: 'x-transfer', selectedData: { left: [], right: [] } }
@@ -47,9 +43,21 @@ export default {
     },
     btnProps() {
       let props = { type: 'primary', size: 'small' }, data = this.convertData, { left, right } = this.selectedData
-      let disLeft = !left.length || left.every(key => data.left.find(_ => _.key === key).disabled)
-      let disRight = !right.length || right.every(key => data.right.find(_ => _.key === key).disabled)
-      return { toLeft: { ...props, disabled: disRight }, toRight: { ...props, disabled: disLeft } }
+      let disToLeft = data.right.filter(_ => !_.disabled).every(_ => right.indexOf(_.key) < 0)
+      let disToRight = data.left.filter(_ => !_.disabled).every(_ => left.indexOf(_.key) < 0)
+      return { toLeft: { ...props, disabled: disToLeft }, toRight: { ...props, disabled: disToRight } }
+    }
+  },
+  watch: {
+    data: {
+      immediate: true,
+      handler(val) {
+        let rtnData = { left: [], right: [] }, { selectedData, convertData: data } = this,
+          leftKeys = data.left.map(_ => _.key), rightKeys = data.right.map(_ => _.key)
+        selectedData.left.forEach(key => leftKeys.indexOf(key) > 0 && rtnData.left.push(key))
+        selectedData.right.forEach(key => rightKeys.indexOf(key) > 0 && rtnData.right.push(key))
+        this.selectedData = rtnData
+      }
     }
   },
   methods: {
@@ -60,17 +68,17 @@ export default {
       }, { moved: [], noMoved: [] })
     },
     moveToLeft() {
-      let data = this.getCanMoved(this.selectedData.right, this.convertData.right)
-      let moveKeys = data.moved
-      this.selectedData.right = data.noMoved
-      let targetKeys = this.convertData.right.filter(_ => moveKeys.indexOf(_.key) < 0).map(_ => _.key)
+      let { convertData, selectedData } = this,
+        data = this.getCanMoved(selectedData.right, convertData.right), moveKeys = data.moved
+      selectedData.right = data.noMoved
+      let targetKeys = convertData.right.filter(_ => moveKeys.indexOf(_.key) < 0).map(_ => _.key)
       this.$emit('on-change', targetKeys, 'left', moveKeys)
     },
     moveToRight() {
-      let data = this.getCanMoved(this.selectedData.left, this.convertData.left)
-      let moveKeys = data.moved
-      this.selectedData.left = data.noMoved
-      let targetKeys = this.convertData.right.map(_ => _.key).concat(moveKeys)
+      let { convertData, selectedData } = this,
+        data = this.getCanMoved(selectedData.left, convertData.left), moveKeys = data.moved
+      selectedData.left = data.noMoved
+      let targetKeys = convertData.right.map(_ => _.key).concat(moveKeys)
       this.$emit('on-change', targetKeys, 'right', moveKeys)
     },
     onSelectChange() {
@@ -102,8 +110,10 @@ export default {
     &_search {
       padding: 8px 8px 3px;
     }
-    &_list {
+    &_list, &_empty {
       flex: 1;
+    }
+    &_list {
       padding: 4px 0;
       overflow: auto;
       > * {

@@ -20,21 +20,11 @@
 import XInput from '../input'
 import XCheckbox from '../checkbox'
 import XCheckboxGroup from '../checkbox-group'
-const S = String, F = Function, arrProp = { type: Array, default: () => [] }
+import { S, arrProp, props } from './utils'
 export default {
   name: 'XTransferBox',
   components: { XInput, XCheckbox, XCheckboxGroup },
-  props: {
-    value: arrProp,
-    data: arrProp,
-    renderFormat: F,
-    title: S,
-    selectedKeys: arrProp,
-    filterable: Boolean,
-    filterPlaceholder: S,
-    filterMethod: F,
-    notFoundText: S
-  },
+  props: { ...props, title: S, value: arrProp },
   data() {
     return { prefix: 'x-transfer-box', checkAll: false, selectedValue: this.value, searchValue: '' }
   },
@@ -48,7 +38,9 @@ export default {
       return this.showedData.every(_ => _.disabled)
     },
     countText() {
-      let total = this.data.length, checkedCount = this.selectedValue.length
+      let total = this.data.length, checkedCount = this.data.filter(_ => {
+        return !_.disabled && this.selectedValue.indexOf(_.key) > -1
+      }).length
       return checkedCount ? `${checkedCount}/${total}` : total
     }
   },

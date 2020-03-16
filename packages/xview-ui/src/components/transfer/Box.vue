@@ -7,7 +7,7 @@
     <div v-if="filterable" :class="`${prefix}_search`">
       <x-input v-model.trim="searchValue" size="small" search clearable :placeholder="filterPlaceholder"/>
     </div>
-    <x-checkbox-group v-if="showedData.length" :class="`${prefix}_list`" v-model="selectedKeys">
+    <x-checkbox-group v-if="showedData.length" :class="`${prefix}_list`" v-model="selectedValue">
       <x-checkbox v-for="_ in showedData" :key="_.key" :label="_.key" :disabled="_.disabled">{{renderItem(_)}}</x-checkbox>
     </x-checkbox-group>
     <p v-else :class="`${prefix}_empty`">{{notFoundText}}</p>
@@ -29,13 +29,14 @@ export default {
     data: arrProp,
     renderFormat: F,
     title: S,
+    selectedKeys: arrProp,
     filterable: Boolean,
     filterPlaceholder: S,
     filterMethod: F,
     notFoundText: S
   },
   data() {
-    return { prefix: 'x-transfer-box', checkAll: false, selectedKeys: this.value, searchValue: '' }
+    return { prefix: 'x-transfer-box', checkAll: false, selectedValue: this.value, searchValue: '' }
   },
   computed: {
     showedData() {
@@ -47,33 +48,38 @@ export default {
       return this.showedData.every(_ => _.disabled)
     },
     countText() {
-      let total = this.data.length, checkedCount = this.selectedKeys.length
+      let total = this.data.length, checkedCount = this.selectedValue.length
       return checkedCount ? `${checkedCount}/${total}` : total
     }
   },
   watch: {
-    selectedKeys(val) {
+    value(val) {
+      this.selectedValue = val
+    },
+    selectedValue(val) {
       this.$emit('input', val)
       this.$emit('change', val)
-      this.checkAll = this.showedData.filter(_ => !_.disabled).every(_ => {
-        return val.indexOf(_.key) > -1
-      })
+      this.updateCheckAll()
     },
-    value(val) {
-      this.selectedKeys = val
+    data: 'updateCheckAll',
+    selectedKeys: {
+      immediate: true,
+      handler(val) {
+        this.selectedValue = val.filter(key => this.data.some(_ => _.key === key))
+      }
     }
   },
   methods: {
+    updateCheckAll() {
+      let noDis = this.showedData.filter(_ => !_.disabled)
+      this.checkAll = noDis.length && noDis.every(_ => this.selectedValue.indexOf(_.key) > -1)
+    },
     renderItem(item) {
       return this.renderFormat ? this.renderFormat(item) : item.label || item.key
     },
-    onCheckAllChange() {
-      if (this.disSelectAll) return
-      let selectedAndDisabled = this.showedData.filter(_ => {
-          return _.disabled && this.selectedKeys.indexOf(_.key) > -1
-        }).map(_ => _.key)
-      this.selectedKeys = this.checkAll ? 
-        this.showedData.filter(_ => !_.disabled).map(_ => _.key).concat(selectedAndDisabled) : selectedAndDisabled
+    onCheckAllChange(checked) {
+      let disAndSelected = this.data.filter(_ => _.disabled && this.selectedValue.indexOf(_.key) > -1)
+      this.selectedValue = disAndSelected.concat(checked ? this.showedData.filter(_ => !_.disabled) : []).map(_ => _.key)
     }
   }
 }

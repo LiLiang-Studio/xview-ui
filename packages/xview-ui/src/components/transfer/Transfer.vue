@@ -1,15 +1,11 @@
 <template>
   <div>
-    <x-box v-model="selectedData.left" v-bind="boxProps" :title="titles[0]" :data="convertData.left" @change="onSelectChange">
-      <slot></slot>
-    </x-box>
+    <x-box v-model="selectedData.left" v-bind="boxProps.left" @change="onSelectChange"><slot></slot></x-box>
     <div :class="`${prefix}_btns`">
       <x-btn v-bind="btnProps.toLeft" @click="moveToLeft"><x-icon type="ios-arrow-left"/>{{operations[0]}}</x-btn>
       <x-btn v-bind="btnProps.toRight" @click="moveToRight">{{operations[1]}}<x-icon type="ios-arrow-right"/></x-btn>
     </div>
-    <x-box v-model="selectedData.right" v-bind="boxProps" :title="titles[1]" :data="convertData.right" @change="onSelectChange">
-      <slot></slot>
-    </x-box>
+    <x-box v-model="selectedData.right" v-bind="boxProps.right" @change="onSelectChange"><slot></slot></x-box>
   </div>
 </template>
 <script>
@@ -43,29 +39,17 @@ export default {
       }, { left: [], right: [] })
     },
     boxProps() {
-      return { ...this.$props, style: this.listStyle }
+      let props = { ...this.$props, style: this.listStyle }, data = this.convertData
+      return {
+        left: { ...props, data: data.left, title: this.titles[0] },
+        right: { ...props, data: data.right, title: this.titles[1] }
+      }
     },
     btnProps() {
-      let data = this.selectedData, props = { type: 'primary', size: 'small' }
-      let disLeft = data.left.length === 0 || data.left.every(key => {
-        return this.convertData.left.find(_ => _.key === key).disabled
-      })
-      let disRight = data.right.length === 0 || data.right.every(key => {
-        return this.convertData.right.find(_ => _.key === key).disabled
-      })
+      let props = { type: 'primary', size: 'small' }, data = this.convertData, { left, right } = this.selectedData
+      let disLeft = !left.length || left.every(key => data.left.find(_ => _.key === key).disabled)
+      let disRight = !right.length || right.every(key => data.right.find(_ => _.key === key).disabled)
       return { toLeft: { ...props, disabled: disRight }, toRight: { ...props, disabled: disLeft } }
-    }
-  },
-  watch: {
-    selectedKeys: {
-      immediate: true,
-      handler(val) {
-        const inData = (key, arr) => arr.some(_ => _.key === key),
-          inLeft = key => inData(key, this.convertData.left), inRight = key => inData(key, this.convertData.right)
-        this.selectedData = val.reduce((acc, _) => {
-          return inLeft(_) ? acc.left.push(_) : inRight(_) ? acc.right.push(_) : 1, acc
-        }, { left: [], right: [] })
-      }
     }
   },
   methods: {

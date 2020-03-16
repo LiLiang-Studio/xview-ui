@@ -45,17 +45,13 @@ import ListItemMeta from './components/list-item-meta' // 列表项元信息
 import Input from './components/input' // 文本输入框
 import InputNumber from './components/input-number' // 数值输入框
 import Transfer from './components/transfer' // 穿梭框
+import Anchor from './components/anchor' // 锚点
+import AnchorLink from './components/anchor-link' // 锚点链接
 
 import loadingBarService from './components/loading-bar' // 加载条
 import Spin from './components/spin' // 加载中
 import Message from './components/message' // 消息
 import Notice from './components/notice' // 通知
-
-/**
- * 已再次优化的组件
- */
-import Anchor from './components/anchor' // 锚点容器
-import AnchorLink from './components/anchor-link' // 锚点
 
 /**
  * 新版本组件导入
@@ -161,6 +157,8 @@ const comps = {
   Input,
   InputNumber,
   Transfer,
+  Anchor,
+  AnchorLink,
 
   Layout,
   Header,
@@ -173,8 +171,6 @@ const comps = {
   Tree,
   Carousel,
   CarouselItem,
-  Anchor,
-  AnchorLink,
   Upload,
   Form,
   FormItem,

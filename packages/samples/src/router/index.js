@@ -5,6 +5,7 @@ import HomeRouter from '../pages/HomeRouter.vue'
 Vue.use(Router)
 
 const coms = {
+  Anchor: () => import('../pages/Anchor.vue'),
   Transfer: () => import('../pages/Transfer.vue'),
   InputNumber: () => import('../pages/InputNumber.vue'),
   Input: () => import('../pages/Input.vue'),
@@ -40,7 +41,6 @@ const coms = {
   Button: () => import('../pages/Button.vue'),
   Icon: () => import('../pages/Icon.vue'),
 
-  Anchor: () => import('../pages/Anchor.vue'),
   // DatePicker: () => import('../pages/DatePicker.vue'),
   // TimePicker: () => import('../pages/TimePicker.vue'),
   AutoComplete: () => import('../pages/AutoComplete.vue'),

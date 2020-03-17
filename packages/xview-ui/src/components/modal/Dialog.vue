@@ -1,29 +1,51 @@
 <template>
-  <ui-modal :className="prefix" v-bind="$props" :maskClosable="false" v-on="$listeners">
-    <div :class="`${prefix}-content`">
-      <ui-icon :class="[`${prefix}-icon`, type]" :type="icon"/>
-      <div v-html="content"></div>
-    </div>
-    <ui-button v-if="isNoNormal" slot="footer" type="primary" @click="onOK">{{okText}}</ui-button>
-  </ui-modal>
+  <x-modal :class="`${prefix}_wrap`" v-bind="modalProps" v-on="listeners">
+    <slot>
+      <div :class="`${prefix}_content`">
+        <x-icon :class="[`${prefix}_icon`, type]" size="36" :type="icon"/>
+        <div v-html="content"></div>
+      </div>
+    </slot>
+  </x-modal>
 </template>
 <script>
-import UiIcon from '../icon'
-import UiModal from './Modal.vue'
-import UiButton from '../button'
+import XIcon from '../icon'
+import XModal from './Modal.vue'
+import XBtn from '../button'
 import { iconTypes } from '../../tools'
+const S = String, B = Boolean, F = Function
 export default {
-  name: 'UiDialog',
-  components: { UiIcon, UiModal, UiButton },
-  data() {
-    return { prefix: 'ui-dialog' }
-  },
+  name: 'XDialog',
+  components: { XIcon, XModal, XBtn },
   props: {
-    ...UiModal.props,
-    content: String,
+    value: B,
+    title: S,
+    content: S,
+    width: { default: 416 },
+    okText: { type: S, default: '确定' },
+    cancelText: {},
+    loading: B,
+    scrollable: B,
+    onOk: F,
+    onCancel: F,
     type: {
-      validator(value) {
-        return ['info', 'success', 'warning', 'error', 'confirm'].indexOf(value) !== -1
+      validator(v) {
+        return ['info', 'success', 'warning', 'error', 'confirm'].indexOf(v) !== -1
+      }
+    }
+  },
+  data() {
+    let _self = this
+    return {
+      prefix: 'x-dialog',
+      listeners: {
+        ...this.$listeners,
+        'on-ok'() {
+          _self.onOk && _self.onOk()
+        },
+        'on-cancel'() {
+          _self.onCancel && _self.onCancel()
+        }
       }
     }
   },
@@ -31,25 +53,21 @@ export default {
     icon() {
       return iconTypes[this.type]
     },
-    isNoNormal() {
-      return this.type !== 'confirm'
-    }
-  },
-  methods: {
-    onOK() {
-      this.$emit('ok')
+    modalProps() {
+      let { content, onOk, onCancel, type, ...props } = this.$props
+      return { ...props, closable: false, maskClosable: false, className: this.prefix, hasCancel: this.type === 'confirm' }
     }
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-dialog {
-  &-content {
+.x-dialog {
+  &_content {
     display: flex;
   }
-  &-icon {
-    font-size: 36px;
+  &_icon {
+    float: left;
     margin-right: 12px;
     &.info {
       color: @primary-color;

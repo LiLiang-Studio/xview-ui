@@ -52,6 +52,7 @@ import loadingBarService from './components/loading-bar' // 加载条
 import Spin from './components/spin' // 加载中
 import Message from './components/message' // 消息
 import Notice from './components/notice' // 通知
+import Modal from './components/modal' // 模态框
 
 /**
  * 新版本组件导入
@@ -66,8 +67,6 @@ import Sider from './components/sider'
 // 标签页
 import Tabs from './components/tabs'
 import TabPane from './components/tab-pane'
-// 模态框
-import Modal, { modalService } from './components/modal'
 // 树形控件
 import Tree from './components/tree'
 // 走马灯
@@ -159,6 +158,7 @@ const comps = {
   Transfer,
   Anchor,
   AnchorLink,
+  Modal,
 
   Layout,
   Header,
@@ -167,7 +167,6 @@ const comps = {
   Sider,
   Tabs,
   TabPane,
-  Modal,
   Tree,
   Carousel,
   CarouselItem,
@@ -203,11 +202,11 @@ const comps = {
  */
 export default function (Vue, options = {}) {
   Vue.prototype.$uiTools = tools
-  Vue.prototype.$Modal = modalService(Vue)
 
   Vue.prototype.$Notice = Notice
   Vue.prototype.$Message = Message
   Vue.prototype.$Spin = Spin.service
+  Vue.prototype.$Modal = Modal.service
   Vue.LoadingBar = Vue.prototype.$Loading = loadingBarService
   let prefix = typeof options.prefix === 'string' ? options.prefix : 'Ui'
   for (let name in comps) Vue.component(prefix + name, comps[name])

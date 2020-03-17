@@ -1,46 +1,47 @@
-import UiDialog from './Dialog.vue'
-/**
- * 创建对话框
- * @param {Vue.VueConstructor} Vue 
- */
-export const modalService = Vue => {
-  let vm
-  const getVM = () => vm || (vm = new Vue({
-    data() {
-      return { options: {} }
+import Vue from 'vue'
+import XModal from './Modal.vue'
+import XDialog from './Dialog.vue'
+
+let vm, getVM = () => vm || (vm = new Vue({
+  data() {
+    return { options: {} }
+  },
+  render(h) {
+    let { render, ...props } = this.options
+    return h(XDialog, {
+      props, on: { leave: () => this.destroy() }
+    }, render && [render(h)])
+  },
+  methods: {
+    toggle(value) {
+      this.options = { ...this.options, value }
     },
-    render(h) {
-      return h(UiDialog, {
-        props: this.options,
-        on: {
-          ok: () => this.show(false),
-          input: val => this.show(val),
-          leave: () => this.destroy()
-        }
-      })
+    show(options) {
+      this.options = { ...options, value: true }
     },
-    methods: {
-      show(visible) {
-        this.$set(this.options, 'value', visible)
-      },
-      setOptions(options) {
-        this.options = options
-      },
-      destroy() {
-        this.$destroy()
-        vm = null
-      }
+    destroy() {
+      this.$destroy()
+      vm = null
     }
-  }).$mount())
-  const openDialog = (type, options) => getVM().setOptions({ ...options, type, value: true })
-  return {
-    ...['info', 'success', 'warning', 'error', 'confirm'].reduce((acc, _) => {
-      return { ...acc, [_](options) { openDialog(_, options) } }
-    }, {}),
-    remove() {
-      vm && vm.show(false)
+  }
+}).$mount())
+
+XModal.service = {
+  ...[
+    'info',
+    'success',
+    'warning',
+    'error',
+    'confirm'
+  ].reduce((acc, type) => {
+    return {
+      ...acc,
+      [type](options) { getVM().show({ ...options, type }) } 
     }
+  }, {}),
+  remove() {
+    vm && vm.toggle(false)
   }
 }
 
-export { default } from './Modal.vue'
+export default XModal

@@ -1,24 +1,22 @@
 <template>
-  <div :class="`${prefix}-wrap`">
-    <ui-overlay v-show="visible" :style="{zIndex: zIndex - 1}" @click="onMaskClick"/>
+  <div>
+    <x-overlay v-if="mask && !fullscreen" v-show="visible" :style="{zIndex}" @click="onMaskClose"/>
     <transition :name="prefix" @afterLeave="onLeave">
-      <div :class="prefix" v-show="visible" :style="{zIndex}">
-        <div :class="[`${prefix}-content`, className]" :style="contentStyle">
-          <span v-if="closable" :class="`${prefix}-close`">
+      <div :class="classes" v-show="visible" :style="{zIndex}">
+        <div :class="[`${prefix}_content`, {noMask: !mask}]" :style="dialogStyle">
+          <span v-if="closable" :class="`${prefix}_close`">
             <slot name="close">
-              <ui-close-icon-button :class="`${prefix}-close-icon`" @click="show(false)"/>
+              <x-close-icon-button size="31" @click="hide"/>
             </slot>
           </span>
-          <div v-if="hasHeader" :class="`${prefix}-header`">
-            <slot name="header">{{title}}</slot>
+          <div v-if="title || $slots.header" :class="`${prefix}_header`">
+            <slot name="header"><div v-html="title"></div></slot>
           </div>
-          <div :class="`${prefix}-body`">
-            <slot></slot>
-          </div>
-          <div :class="`${prefix}-footer`">
+          <div :class="`${prefix}_body`"><slot></slot></div>
+          <div v-if="!footerHide" :class="`${prefix}_footer`">
             <slot name="footer">
-              <ui-button @click="cancel">{{cancelText}}</ui-button>
-              <ui-button type="primary" :loading="isLoading" @click="ok">{{okText}}</ui-button>
+              <x-btn v-if="hasCancel" type="text" @click="onCancel">{{cancelText}}</x-btn>
+              <x-btn type="primary" :loading="isLoading" @click="onOk">{{okText}}</x-btn>
             </slot>
           </div>
         </div>
@@ -27,158 +25,158 @@
   </div>
 </template>
 <script>
-import UiOverlay from '../overlay'
-import UiButton from '../button'
-import UiCloseIconButton from '../close-icon-button'
-import { parseSize, winScrollbarLock, getMaxZIndex, isFunc } from '../../tools'
+import XBtn from '../button'
+import XOverlay from '../overlay'
+import XCloseIconButton from '../close-icon-button'
+import { parseSize, winScrollbarLock, getMaxZIndex } from '../../tools'
+const S = String, B = Boolean, BTrue = { type: B, default: true }
 export default {
-  name: 'UiModal',
-  components: { UiOverlay, UiButton, UiCloseIconButton },
-  data() {
-    return {
-      prefix: 'ui-modal',
-      visible: this.value,
-      zIndex: 1,
-      isLoading: false,
-      isCallLock: false
-    }
-  },
+  name: 'XModal',
+  components: { XOverlay, XBtn, XCloseIconButton },
   props: {
-    value: Boolean,
-    title: String,
-    closable: {
-      type: Boolean,
-      default: true
-    },
-    loading: Boolean,
-    okText: {
-      type: String,
-      default: '确定'
-    },
-    cancelText: {
-      type: String,
-      default: '取消'
-    },
-    width: {
-      type: [Number, String],
-      default: 520
-    },
+    value: B,
+    title: S,
+    closable: BTrue,
+    maskClosable: BTrue,
+    loading: B,
+    scrollable: B,
+    fullscreen: B,
+    mask: BTrue,
+    okText: { type: S, default: '确定' },
+    cancelText: { type: S, default: '取消' },
+    width: { type: [Number, S], default: 520 },
+    footerHide: B,
     styles: Object,
-    className: String,
-    maskClosable: {
-      type: Boolean,
-      default: true
-    },
-    onOk: Function,
-    onCancel: Function
+    className: S,
+    transfer: BTrue,
+    hasCancel: BTrue
+  },
+  data() {
+    return { prefix: 'x-modal', visible: false, zIndex: 1, isLoading: false, isCallLock: false }
   },
   computed: {
-    contentStyle() {
-      return { ...this.styles, width: parseSize(this.width) }
+    classes() {
+      return [this.prefix, this.className, { fullscreen: this.fullscreen }]
     },
-    hasHeader() {
-      return this.title || this.$slots.header !== undefined
+    dialogStyle() {
+      return this.fullscreen ? this.styles : { ...this.styles, width: parseSize(this.width) }
     }
   },
   watch: {
-    value(newval) {
-      this.visible = newval
+    value: {
+      immediate: true,
+      handler(val) {
+        this.visible = val
+      }
     },
-    visible(newval) {
-      this.$emit('input', newval)
-      this.$emit('on-visible-change', newval)
-      if (!newval) return
-      this.isLoading = false
-      this.zIndex = getMaxZIndex()
-      if (winScrollbarLock.locked) return
-      winScrollbarLock.lock()
-      this.isCallLock = true
+    visible(val) {
+      this.$emit('input', val)
+      this.$emit('on-visible-change', val)
+      if (val) {
+        this.isLoading = false
+        this.zIndex = getMaxZIndex()
+        if (winScrollbarLock.locked || this.scrollable) return
+        winScrollbarLock.lock()
+        this.isCallLock = true
+      }
     }
   },
   mounted() {
-    document.body.appendChild(this.$el)
+    this.transfer && document.body.appendChild(this.$el)
   },
   beforeDestroy() {
     this.onLeave()
     this.$el.parentNode && this.$el.parentNode.removeChild(this.$el)
   },
   methods: {
-    show(visible = true) {
-      this.visible = visible
+    hide() {
+      this.visible = false
     },
-    onMaskClick() {
-      if (this.maskClosable) this.show(false)
+    onMaskClose() {
+      if (this.maskClosable) this.hide()
     },
-    cancel() {
+    onCancel() {
+      this.hide()
       this.$emit('on-cancel')
-      isFunc(this.onCancel) && this.onCancel()
-      this.show(false)
     },
-    ok() {
+    onOk() {
       this.$emit('on-ok')
-      isFunc(this.onOk) && this.onOk()
       if (this.loading) return this.isLoading = true
-      this.show(false)
+      this.hide()
     },
     onLeave() {
       this.$emit('leave')
-      if (!this.isCallLock) return
-      winScrollbarLock.unlock()
-      this.isCallLock = false
+      if (this.isCallLock) {
+        winScrollbarLock.unlock()
+        this.isCallLock = false
+      }
     }
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-modal {
+@modal: .x-modal;
+@{modal} {
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  padding: 12px 16px;
+  padding: 12px;
   pointer-events: none;
-  transition: all .24s ease-in-out;
+  transition: all .24s ease;
   &-enter, &-leave-to {
     opacity: 0;
     transform: translateY(-24px);
   }
-  &-content {
+  &_content {
     max-width: 100%;
     position: relative;
     top: 15vh;
     margin: 0 auto;
     border-radius: 6px;
     pointer-events: all;
-    background-color: #fff;
+    background: #fff;
+    &.noMask {
+      box-shadow: 0 4px 12px rgba(0,0,0,.15);
+    }
   }
-  &-header {
-    font-size: 14px;
+  &_header {
+    font-size: 16px;
     font-weight: bold;
     color: @title-color;
     padding: 14px 16px;
     border-bottom: 1px solid @divider-color;
   }
-  &-close {
+  &_close {
     position: absolute;
     top: 8px;
     right: 8px;
     min-width: 30px;
     text-align: center;
   }
-  &-close-icon {
-    font-size: 31px;
-  }
-  &-body {
+  &_body {
     padding: 16px;
   }
-  &-footer {
+  &_footer {
     text-align: right;
     padding: 10px 16px;
     border-top: 1px solid @divider-color;
-    button + button {
-      margin-left: 8px;
+  }
+  &.fullscreen {
+    padding: 0;
+    @{modal}_content {
+      top: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    @{modal}_body {
+      flex: 1;
+      overflow: auto;
     }
   }
 }

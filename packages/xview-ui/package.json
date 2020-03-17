@@ -1,6 +1,6 @@
 {
   "name": "xview-ui",
-  "version": "1.2.9",
+  "version": "1.3.1",
   "private": false,
   "main": "dist/xview-ui.common.js",
   "module": "dist/xview-ui.es.js",
@@ -49,13 +49,13 @@
     "ui framework"
   ],
   "description": "基于Vuejs的高性能轻量级组件库",
-  "homepage": "https://github.com/LiLiang-Studio/vueui-widgets",
+  "homepage": "https://github.com/LiLiang-Studio/xview-ui",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LiLiang-Studio/vueui-widgets.git"
+    "url": "git+https://github.com/LiLiang-Studio/xview-ui.git"
   },
   "bugs": {
-    "url": "https://github.com/LiLiang-Studio/vueui-widgets/issues"
+    "url": "https://github.com/LiLiang-Studio/xview-ui/issues"
   },
   "license": "MIT"
 }

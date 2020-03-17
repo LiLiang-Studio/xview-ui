@@ -6717,18 +6717,88 @@ var Notice = creator(__vue_component__$Q, { duration: 4.5 }, {
 });
 
 //
-//
-//
-//
-//
-
+var S$5 = String, B$4 = Boolean, BTrue = { type: B$4, default: true };
 var script$R = {
-  name: 'UiLayout',
+  name: 'XModal',
+  components: { XOverlay: __vue_component__$A, XBtn: __vue_component__$1, XCloseIconButton: __vue_component__$7 },
+  props: {
+    value: B$4,
+    title: S$5,
+    closable: BTrue,
+    maskClosable: BTrue,
+    loading: B$4,
+    scrollable: B$4,
+    fullscreen: B$4,
+    mask: BTrue,
+    okText: { type: S$5, default: '确定' },
+    cancelText: { type: S$5, default: '取消' },
+    width: { type: [Number, S$5], default: 520 },
+    footerHide: B$4,
+    styles: Object,
+    className: S$5,
+    transfer: BTrue,
+    hasCancel: BTrue
+  },
   data: function data() {
-    return { hasSider: false }
+    return { prefix: 'x-modal', visible: false, zIndex: 1, isLoading: false, isCallLock: false }
+  },
+  computed: {
+    classes: function classes() {
+      return [this.prefix, this.className, { fullscreen: this.fullscreen }]
+    },
+    dialogStyle: function dialogStyle() {
+      return this.fullscreen ? this.styles : Object.assign({}, this.styles, {width: parseSize(this.width)})
+    }
+  },
+  watch: {
+    value: {
+      immediate: true,
+      handler: function handler(val) {
+        this.visible = val;
+      }
+    },
+    visible: function visible(val) {
+      this.$emit('input', val);
+      this.$emit('on-visible-change', val);
+      if (val) {
+        this.isLoading = false;
+        this.zIndex = getMaxZIndex();
+        if (winScrollbarLock.locked || this.scrollable) { return }
+        winScrollbarLock.lock();
+        this.isCallLock = true;
+      }
+    }
   },
   mounted: function mounted() {
-    this.hasSider = this.$children.some(function (_) { return _.$options.name === 'UiSider'; });
+    this.transfer && document.body.appendChild(this.$el);
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.onLeave();
+    this.$el.parentNode && this.$el.parentNode.removeChild(this.$el);
+  },
+  methods: {
+    hide: function hide() {
+      this.visible = false;
+    },
+    onMaskClose: function onMaskClose() {
+      if (this.maskClosable) { this.hide(); }
+    },
+    onCancel: function onCancel() {
+      this.hide();
+      this.$emit('on-cancel');
+    },
+    onOk: function onOk() {
+      this.$emit('on-ok');
+      if (this.loading) { return this.isLoading = true }
+      this.hide();
+    },
+    onLeave: function onLeave() {
+      this.$emit('leave');
+      if (this.isCallLock) {
+        winScrollbarLock.unlock();
+        this.isCallLock = false;
+      }
+    }
   }
 };
 
@@ -6741,9 +6811,127 @@ var __vue_render__$R = function() {
   var _c = _vm._self._c || _h;
   return _c(
     "div",
-    { staticClass: "ui-layout", class: { hasSider: _vm.hasSider } },
-    [_vm._t("default")],
-    2
+    [
+      _vm.mask && !_vm.fullscreen
+        ? _c("x-overlay", {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.visible,
+                expression: "visible"
+              }
+            ],
+            style: { zIndex: _vm.zIndex },
+            on: { click: _vm.onMaskClose }
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "transition",
+        { attrs: { name: _vm.prefix }, on: { afterLeave: _vm.onLeave } },
+        [
+          _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.visible,
+                  expression: "visible"
+                }
+              ],
+              class: _vm.classes,
+              style: { zIndex: _vm.zIndex }
+            },
+            [
+              _c(
+                "div",
+                {
+                  class: [_vm.prefix + "_content", { noMask: !_vm.mask }],
+                  style: _vm.dialogStyle
+                },
+                [
+                  _vm.closable
+                    ? _c(
+                        "span",
+                        { class: _vm.prefix + "_close" },
+                        [
+                          _vm._t("close", [
+                            _c("x-close-icon-button", {
+                              attrs: { size: "31" },
+                              on: { click: _vm.hide }
+                            })
+                          ])
+                        ],
+                        2
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.title || _vm.$slots.header
+                    ? _c(
+                        "div",
+                        { class: _vm.prefix + "_header" },
+                        [
+                          _vm._t("header", [
+                            _c("div", {
+                              domProps: { innerHTML: _vm._s(_vm.title) }
+                            })
+                          ])
+                        ],
+                        2
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { class: _vm.prefix + "_body" },
+                    [_vm._t("default")],
+                    2
+                  ),
+                  _vm._v(" "),
+                  !_vm.footerHide
+                    ? _c(
+                        "div",
+                        { class: _vm.prefix + "_footer" },
+                        [
+                          _vm._t("footer", [
+                            _vm.hasCancel
+                              ? _c(
+                                  "x-btn",
+                                  {
+                                    attrs: { type: "text" },
+                                    on: { click: _vm.onCancel }
+                                  },
+                                  [_vm._v(_vm._s(_vm.cancelText))]
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _c(
+                              "x-btn",
+                              {
+                                attrs: {
+                                  type: "primary",
+                                  loading: _vm.isLoading
+                                },
+                                on: { click: _vm.onOk }
+                              },
+                              [_vm._v(_vm._s(_vm.okText))]
+                            )
+                          ])
+                        ],
+                        2
+                      )
+                    : _vm._e()
+                ]
+              )
+            ]
+          )
+        ]
+      )
+    ],
+    1
   )
 };
 var __vue_staticRenderFns__$R = [];
@@ -6778,14 +6966,101 @@ __vue_render__$R._withStripped = true;
     undefined
   );
 
-/* script */
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
+function objectWithoutProperties (obj, exclude) { var target = {}; for (var k in obj) if (Object.prototype.hasOwnProperty.call(obj, k) && exclude.indexOf(k) === -1) target[k] = obj[k]; return target; }
+var S$6 = String, B$5 = Boolean, F$2 = Function;
+var script$S = {
+  name: 'XDialog',
+  components: { XIcon: __vue_component__, XModal: __vue_component__$R, XBtn: __vue_component__$1 },
+  props: {
+    value: B$5,
+    title: S$6,
+    content: S$6,
+    width: { default: 416 },
+    okText: { type: S$6, default: '确定' },
+    cancelText: {},
+    loading: B$5,
+    scrollable: B$5,
+    onOk: F$2,
+    onCancel: F$2,
+    type: {
+      validator: function validator(v) {
+        return ['info', 'success', 'warning', 'error', 'confirm'].indexOf(v) !== -1
+      }
+    }
+  },
+  data: function data() {
+    var _self = this;
+    return {
+      prefix: 'x-dialog',
+      listeners: Object.assign({}, this.$listeners,
+        {'on-ok': function on_ok() {
+          _self.onOk && _self.onOk();
+        },
+        'on-cancel': function on_cancel() {
+          _self.onCancel && _self.onCancel();
+        }})
+    }
+  },
+  computed: {
+    icon: function icon() {
+      return iconTypes[this.type]
+    },
+    modalProps: function modalProps() {
+      var ref = this.$props;
+      var content = ref.content;
+      var onOk = ref.onOk;
+      var onCancel = ref.onCancel;
+      var type = ref.type;
+      var rest = objectWithoutProperties( ref, ["content", "onOk", "onCancel", "type"] );
+      var props = rest;
+      return Object.assign({}, props, {closable: false, maskClosable: false, className: this.prefix, hasCancel: this.type === 'confirm'})
+    }
+  }
+};
+
+/* script */
+var __vue_script__$S = script$S;
 /* template */
 var __vue_render__$S = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c("div", { staticClass: "ui-layout-header" }, [_vm._t("default")], 2)
+  return _c(
+    "x-modal",
+    _vm._g(
+      _vm._b({ class: _vm.prefix + "_wrap" }, "x-modal", _vm.modalProps, false),
+      _vm.listeners
+    ),
+    [
+      _vm._t("default", [
+        _c(
+          "div",
+          { class: _vm.prefix + "_content" },
+          [
+            _c("x-icon", {
+              class: [_vm.prefix + "_icon", _vm.type],
+              attrs: { size: "36", type: _vm.icon }
+            }),
+            _vm._v(" "),
+            _c("div", { domProps: { innerHTML: _vm._s(_vm.content) } })
+          ],
+          1
+        )
+      ])
+    ],
+    2
+  )
 };
 var __vue_staticRenderFns__$S = [];
 __vue_render__$S._withStripped = true;
@@ -6809,7 +7084,7 @@ __vue_render__$S._withStripped = true;
   var __vue_component__$S = normalizeComponent(
     { render: __vue_render__$S, staticRenderFns: __vue_staticRenderFns__$S },
     __vue_inject_styles__$S,
-    {},
+    __vue_script__$S,
     __vue_scope_id__$S,
     __vue_is_functional_template__$S,
     __vue_module_identifier__$S,
@@ -6819,14 +7094,82 @@ __vue_render__$S._withStripped = true;
     undefined
   );
 
-/* script */
+function objectWithoutProperties$1 (obj, exclude) { var target = {}; for (var k in obj) if (Object.prototype.hasOwnProperty.call(obj, k) && exclude.indexOf(k) === -1) target[k] = obj[k]; return target; }
 
+var vm$2, getVM$2 = function () { return vm$2 || (vm$2 = new Vue({
+  data: function data() {
+    return { options: {} }
+  },
+  render: function render(h) {
+    var this$1 = this;
+
+    var ref = this.options;
+    var render = ref.render;
+    var rest = objectWithoutProperties$1( ref, ["render"] );
+    var props = rest;
+    return h(__vue_component__$S, {
+      props: props, on: { leave: function () { return this$1.destroy(); } }
+    }, render && [render(h)])
+  },
+  methods: {
+    toggle: function toggle(value) {
+      this.options = Object.assign({}, this.options, {value: value});
+    },
+    show: function show(options) {
+      this.options = Object.assign({}, options, {value: true});
+    },
+    destroy: function destroy() {
+      this.$destroy();
+      vm$2 = null;
+    }
+  }
+}).$mount()); };
+
+__vue_component__$R.service = Object.assign({}, [
+    'info',
+    'success',
+    'warning',
+    'error',
+    'confirm'
+  ].reduce(function (acc, type) {
+    var obj;
+
+    return Object.assign({}, acc,
+      ( obj = {}, obj[type] = function (options) { getVM$2().show(Object.assign({}, options, {type: type})); }, obj ))
+  }, {}),
+  {remove: function remove() {
+    vm$2 && vm$2.toggle(false);
+  }});
+
+//
+//
+//
+//
+//
+
+var script$T = {
+  name: 'UiLayout',
+  data: function data() {
+    return { hasSider: false }
+  },
+  mounted: function mounted() {
+    this.hasSider = this.$children.some(function (_) { return _.$options.name === 'UiSider'; });
+  }
+};
+
+/* script */
+var __vue_script__$T = script$T;
 /* template */
 var __vue_render__$T = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c("div", { staticClass: "ui-layout-content" }, [_vm._t("default")], 2)
+  return _c(
+    "div",
+    { staticClass: "ui-layout", class: { hasSider: _vm.hasSider } },
+    [_vm._t("default")],
+    2
+  )
 };
 var __vue_staticRenderFns__$T = [];
 __vue_render__$T._withStripped = true;
@@ -6850,7 +7193,7 @@ __vue_render__$T._withStripped = true;
   var __vue_component__$T = normalizeComponent(
     { render: __vue_render__$T, staticRenderFns: __vue_staticRenderFns__$T },
     __vue_inject_styles__$T,
-    {},
+    __vue_script__$T,
     __vue_scope_id__$T,
     __vue_is_functional_template__$T,
     __vue_module_identifier__$T,
@@ -6867,7 +7210,7 @@ var __vue_render__$U = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c("div", { staticClass: "ui-layout-footer" }, [_vm._t("default")], 2)
+  return _c("div", { staticClass: "ui-layout-header" }, [_vm._t("default")], 2)
 };
 var __vue_staticRenderFns__$U = [];
 __vue_render__$U._withStripped = true;
@@ -6901,8 +7244,90 @@ __vue_render__$U._withStripped = true;
     undefined
   );
 
+/* script */
+
+/* template */
+var __vue_render__$V = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { staticClass: "ui-layout-content" }, [_vm._t("default")], 2)
+};
+var __vue_staticRenderFns__$V = [];
+__vue_render__$V._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$V = undefined;
+  /* scoped */
+  var __vue_scope_id__$V = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$V = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$V = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$V = normalizeComponent(
+    { render: __vue_render__$V, staticRenderFns: __vue_staticRenderFns__$V },
+    __vue_inject_styles__$V,
+    {},
+    __vue_scope_id__$V,
+    __vue_is_functional_template__$V,
+    __vue_module_identifier__$V,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+/* script */
+
+/* template */
+var __vue_render__$W = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { staticClass: "ui-layout-footer" }, [_vm._t("default")], 2)
+};
+var __vue_staticRenderFns__$W = [];
+__vue_render__$W._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$W = undefined;
+  /* scoped */
+  var __vue_scope_id__$W = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$W = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$W = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$W = normalizeComponent(
+    { render: __vue_render__$W, staticRenderFns: __vue_staticRenderFns__$W },
+    __vue_inject_styles__$W,
+    {},
+    __vue_scope_id__$W,
+    __vue_is_functional_template__$W,
+    __vue_module_identifier__$W,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
 //
-var script$S = {
+var script$U = {
   name: 'UiSider',
   components: { UiIcon: __vue_component__ },
   data: function data() {
@@ -6952,10 +7377,10 @@ var script$S = {
 };
 
 /* script */
-var __vue_script__$S = script$S;
+var __vue_script__$U = script$U;
 
 /* template */
-var __vue_render__$V = function() {
+var __vue_render__$X = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -6989,17 +7414,17 @@ var __vue_render__$V = function() {
     2
   )
 };
-var __vue_staticRenderFns__$V = [];
-__vue_render__$V._withStripped = true;
+var __vue_staticRenderFns__$X = [];
+__vue_render__$X._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$V = undefined;
+  var __vue_inject_styles__$X = undefined;
   /* scoped */
-  var __vue_scope_id__$V = undefined;
+  var __vue_scope_id__$X = undefined;
   /* module identifier */
-  var __vue_module_identifier__$V = undefined;
+  var __vue_module_identifier__$X = undefined;
   /* functional template */
-  var __vue_is_functional_template__$V = false;
+  var __vue_is_functional_template__$X = false;
   /* style inject */
   
   /* style inject SSR */
@@ -7008,13 +7433,13 @@ __vue_render__$V._withStripped = true;
   
 
   
-  var __vue_component__$V = normalizeComponent(
-    { render: __vue_render__$V, staticRenderFns: __vue_staticRenderFns__$V },
-    __vue_inject_styles__$V,
-    __vue_script__$S,
-    __vue_scope_id__$V,
-    __vue_is_functional_template__$V,
-    __vue_module_identifier__$V,
+  var __vue_component__$X = normalizeComponent(
+    { render: __vue_render__$X, staticRenderFns: __vue_staticRenderFns__$X },
+    __vue_inject_styles__$X,
+    __vue_script__$U,
+    __vue_scope_id__$X,
+    __vue_is_functional_template__$X,
+    __vue_module_identifier__$X,
     false,
     undefined,
     undefined,
@@ -7022,7 +7447,7 @@ __vue_render__$V._withStripped = true;
   );
 
 //
-var script$T = {
+var script$V = {
   name: 'UiTabs',
   components: { UiIcon: __vue_component__, UiCloseIconButton: __vue_component__$7, UiRender: UiRender },
   data: function data() {
@@ -7150,9 +7575,9 @@ var script$T = {
 };
 
 /* script */
-var __vue_script__$T = script$T;
+var __vue_script__$V = script$V;
 /* template */
-var __vue_render__$W = function() {
+var __vue_render__$Y = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -7282,324 +7707,6 @@ var __vue_render__$W = function() {
     ]
   )
 };
-var __vue_staticRenderFns__$W = [];
-__vue_render__$W._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$W = undefined;
-  /* scoped */
-  var __vue_scope_id__$W = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$W = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$W = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$W = normalizeComponent(
-    { render: __vue_render__$W, staticRenderFns: __vue_staticRenderFns__$W },
-    __vue_inject_styles__$W,
-    __vue_script__$T,
-    __vue_scope_id__$W,
-    __vue_is_functional_template__$W,
-    __vue_module_identifier__$W,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-var script$U = {
-  name: 'UiTabPane',
-  data: function data() {
-    return { key: this.name, parent: null }
-  },
-  props: {
-    name: String,
-    label: [String, Function],
-    icon: String,
-    disabled: Boolean,
-    closable: {
-      type: Boolean,
-      default: null
-    }
-  },
-  mounted: function mounted() {
-    this.parent = findParent(this, 'UiTabs');
-    var len = this.parent.addItem(this);
-    this.key = this.name || len - 1;
-  },
-  beforeDestroy: function beforeDestroy() {
-    this.parent.removeItem(this);
-  }
-};
-
-/* script */
-var __vue_script__$U = script$U;
-
-/* template */
-var __vue_render__$X = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", { staticClass: "ui-tabs-pane" }, [_vm._t("default")], 2)
-};
-var __vue_staticRenderFns__$X = [];
-__vue_render__$X._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$X = undefined;
-  /* scoped */
-  var __vue_scope_id__$X = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$X = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$X = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$X = normalizeComponent(
-    { render: __vue_render__$X, staticRenderFns: __vue_staticRenderFns__$X },
-    __vue_inject_styles__$X,
-    __vue_script__$U,
-    __vue_scope_id__$X,
-    __vue_is_functional_template__$X,
-    __vue_module_identifier__$X,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-var script$V = {
-  name: 'UiModal',
-  components: { UiOverlay: __vue_component__$A, UiButton: __vue_component__$1, UiCloseIconButton: __vue_component__$7 },
-  data: function data() {
-    return {
-      prefix: 'ui-modal',
-      visible: this.value,
-      zIndex: 1,
-      isLoading: false,
-      isCallLock: false
-    }
-  },
-  props: {
-    value: Boolean,
-    title: String,
-    closable: {
-      type: Boolean,
-      default: true
-    },
-    loading: Boolean,
-    okText: {
-      type: String,
-      default: '确定'
-    },
-    cancelText: {
-      type: String,
-      default: '取消'
-    },
-    width: {
-      type: [Number, String],
-      default: 520
-    },
-    styles: Object,
-    className: String,
-    maskClosable: {
-      type: Boolean,
-      default: true
-    },
-    onOk: Function,
-    onCancel: Function
-  },
-  computed: {
-    contentStyle: function contentStyle() {
-      return Object.assign({}, this.styles, {width: parseSize(this.width)})
-    },
-    hasHeader: function hasHeader() {
-      return this.title || this.$slots.header !== undefined
-    }
-  },
-  watch: {
-    value: function value(newval) {
-      this.visible = newval;
-    },
-    visible: function visible(newval) {
-      this.$emit('input', newval);
-      this.$emit('on-visible-change', newval);
-      if (!newval) { return }
-      this.isLoading = false;
-      this.zIndex = getMaxZIndex();
-      if (winScrollbarLock.locked) { return }
-      winScrollbarLock.lock();
-      this.isCallLock = true;
-    }
-  },
-  mounted: function mounted() {
-    document.body.appendChild(this.$el);
-  },
-  beforeDestroy: function beforeDestroy() {
-    this.onLeave();
-    this.$el.parentNode && this.$el.parentNode.removeChild(this.$el);
-  },
-  methods: {
-    show: function show(visible) {
-      if ( visible === void 0 ) visible = true;
-
-      this.visible = visible;
-    },
-    onMaskClick: function onMaskClick() {
-      if (this.maskClosable) { this.show(false); }
-    },
-    cancel: function cancel() {
-      this.$emit('on-cancel');
-      isFunc(this.onCancel) && this.onCancel();
-      this.show(false);
-    },
-    ok: function ok() {
-      this.$emit('on-ok');
-      isFunc(this.onOk) && this.onOk();
-      if (this.loading) { return this.isLoading = true }
-      this.show(false);
-    },
-    onLeave: function onLeave() {
-      this.$emit('leave');
-      if (!this.isCallLock) { return }
-      winScrollbarLock.unlock();
-      this.isCallLock = false;
-    }
-  }
-};
-
-/* script */
-var __vue_script__$V = script$V;
-/* template */
-var __vue_render__$Y = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    { class: _vm.prefix + "-wrap" },
-    [
-      _c("ui-overlay", {
-        directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value: _vm.visible,
-            expression: "visible"
-          }
-        ],
-        style: { zIndex: _vm.zIndex - 1 },
-        on: { click: _vm.onMaskClick }
-      }),
-      _vm._v(" "),
-      _c(
-        "transition",
-        { attrs: { name: _vm.prefix }, on: { afterLeave: _vm.onLeave } },
-        [
-          _c(
-            "div",
-            {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.visible,
-                  expression: "visible"
-                }
-              ],
-              class: _vm.prefix,
-              style: { zIndex: _vm.zIndex }
-            },
-            [
-              _c(
-                "div",
-                {
-                  class: [_vm.prefix + "-content", _vm.className],
-                  style: _vm.contentStyle
-                },
-                [
-                  _vm.closable
-                    ? _c(
-                        "span",
-                        { class: _vm.prefix + "-close" },
-                        [
-                          _vm._t("close", [
-                            _c("ui-close-icon-button", {
-                              class: _vm.prefix + "-close-icon",
-                              on: {
-                                click: function($event) {
-                                  return _vm.show(false)
-                                }
-                              }
-                            })
-                          ])
-                        ],
-                        2
-                      )
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _vm.hasHeader
-                    ? _c(
-                        "div",
-                        { class: _vm.prefix + "-header" },
-                        [_vm._t("header", [_vm._v(_vm._s(_vm.title))])],
-                        2
-                      )
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { class: _vm.prefix + "-body" },
-                    [_vm._t("default")],
-                    2
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { class: _vm.prefix + "-footer" },
-                    [
-                      _vm._t("footer", [
-                        _c("ui-button", { on: { click: _vm.cancel } }, [
-                          _vm._v(_vm._s(_vm.cancelText))
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "ui-button",
-                          {
-                            attrs: { type: "primary", loading: _vm.isLoading },
-                            on: { click: _vm.ok }
-                          },
-                          [_vm._v(_vm._s(_vm.okText))]
-                        )
-                      ])
-                    ],
-                    2
-                  )
-                ]
-              )
-            ]
-          )
-        ]
-      )
-    ],
-    1
-  )
-};
 var __vue_staticRenderFns__$Y = [];
 __vue_render__$Y._withStripped = true;
 
@@ -7634,80 +7741,39 @@ __vue_render__$Y._withStripped = true;
 
 //
 var script$W = {
-  name: 'UiDialog',
-  components: { UiIcon: __vue_component__, UiModal: __vue_component__$Y, UiButton: __vue_component__$1 },
+  name: 'UiTabPane',
   data: function data() {
-    return { prefix: 'ui-dialog' }
+    return { key: this.name, parent: null }
   },
-  props: Object.assign({}, __vue_component__$Y.props,
-    {content: String,
-    type: {
-      validator: function validator(value) {
-        return ['info', 'success', 'warning', 'error', 'confirm'].indexOf(value) !== -1
-      }
-    }}),
-  computed: {
-    icon: function icon() {
-      return iconTypes[this.type]
-    },
-    isNoNormal: function isNoNormal() {
-      return this.type !== 'confirm'
+  props: {
+    name: String,
+    label: [String, Function],
+    icon: String,
+    disabled: Boolean,
+    closable: {
+      type: Boolean,
+      default: null
     }
   },
-  methods: {
-    onOK: function onOK() {
-      this.$emit('ok');
-    }
+  mounted: function mounted() {
+    this.parent = findParent(this, 'UiTabs');
+    var len = this.parent.addItem(this);
+    this.key = this.name || len - 1;
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.parent.removeItem(this);
   }
 };
 
 /* script */
 var __vue_script__$W = script$W;
+
 /* template */
 var __vue_render__$Z = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c(
-    "ui-modal",
-    _vm._g(
-      _vm._b(
-        { attrs: { className: _vm.prefix, maskClosable: false } },
-        "ui-modal",
-        _vm.$props,
-        false
-      ),
-      _vm.$listeners
-    ),
-    [
-      _c(
-        "div",
-        { class: _vm.prefix + "-content" },
-        [
-          _c("ui-icon", {
-            class: [_vm.prefix + "-icon", _vm.type],
-            attrs: { type: _vm.icon }
-          }),
-          _vm._v(" "),
-          _c("div", { domProps: { innerHTML: _vm._s(_vm.content) } })
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _vm.isNoNormal
-        ? _c(
-            "ui-button",
-            {
-              attrs: { slot: "footer", type: "primary" },
-              on: { click: _vm.onOK },
-              slot: "footer"
-            },
-            [_vm._v(_vm._s(_vm.okText))]
-          )
-        : _vm._e()
-    ],
-    1
-  )
+  return _c("div", { staticClass: "ui-tabs-pane" }, [_vm._t("default")], 2)
 };
 var __vue_staticRenderFns__$Z = [];
 __vue_render__$Z._withStripped = true;
@@ -7740,52 +7806,6 @@ __vue_render__$Z._withStripped = true;
     undefined,
     undefined
   );
-
-/**
- * 创建对话框
- * @param {Vue.VueConstructor} Vue 
- */
-var modalService = function (Vue) {
-  var vm;
-  var getVM = function () { return vm || (vm = new Vue({
-    data: function data() {
-      return { options: {} }
-    },
-    render: function render(h) {
-      var this$1 = this;
-
-      return h(__vue_component__$Z, {
-        props: this.options,
-        on: {
-          ok: function () { return this$1.show(false); },
-          input: function (val) { return this$1.show(val); },
-          leave: function () { return this$1.destroy(); }
-        }
-      })
-    },
-    methods: {
-      show: function show(visible) {
-        this.$set(this.options, 'value', visible);
-      },
-      setOptions: function setOptions(options) {
-        this.options = options;
-      },
-      destroy: function destroy() {
-        this.$destroy();
-        vm = null;
-      }
-    }
-  }).$mount()); };
-  var openDialog = function (type, options) { return getVM().setOptions(Object.assign({}, options, {type: type, value: true})); };
-  return Object.assign({}, ['info', 'success', 'warning', 'error', 'confirm'].reduce(function (acc, _) {
-      var obj;
-
-      return Object.assign({}, acc, ( obj = {}, obj[_] = function (options) { openDialog(_, options); }, obj ))
-    }, {}),
-    {remove: function remove() {
-      vm && vm.show(false);
-    }})
-};
 
 //
 var UiRender$1 = {
@@ -7967,7 +7987,7 @@ __vue_render__$_._withStripped = true;
 //
 //
 
-function objectWithoutProperties (obj, exclude) { var target = {}; for (var k in obj) if (Object.prototype.hasOwnProperty.call(obj, k) && exclude.indexOf(k) === -1) target[k] = obj[k]; return target; }
+function objectWithoutProperties$2 (obj, exclude) { var target = {}; for (var k in obj) if (Object.prototype.hasOwnProperty.call(obj, k) && exclude.indexOf(k) === -1) target[k] = obj[k]; return target; }
 var key = 0;
 var script$Y = {
   name: 'UiTree',
@@ -8030,7 +8050,7 @@ var script$Y = {
     getSelectedNodes: function getSelectedNodes() {
       return this.flatState.filter(function (_) { return _.selected; }).map(function (_) {
         var children = _.children;
-        var rest = objectWithoutProperties( _, ["children"] );
+        var rest = objectWithoutProperties$2( _, ["children"] );
         var data = rest;
         return data
       })
@@ -8068,7 +8088,7 @@ var script$Y = {
     getCheckedNodes: function getCheckedNodes() {
       return this.flatState.filter(function (_) { return _.checked; }).map(function (_) {
         var __ = _.children;
-        var rest = objectWithoutProperties( _, ["children"] );
+        var rest = objectWithoutProperties$2( _, ["children"] );
         var data = rest;
         return data
       })
@@ -8077,7 +8097,7 @@ var script$Y = {
     getCheckedAndIndeterminateNodes: function getCheckedAndIndeterminateNodes() {
       return this.flatState.filter(function (_) { return _.checked || _.indeterminate; }).map(function (_) {
         var __ = _.children;
-        var rest = objectWithoutProperties( _, ["children"] );
+        var rest = objectWithoutProperties$2( _, ["children"] );
         var data = rest;
         return data
       })
@@ -12448,15 +12468,15 @@ var comps = {
   Transfer: __vue_component__$K,
   Anchor: __vue_component__$L,
   AnchorLink: __vue_component__$M,
+  Modal: __vue_component__$R,
 
-  Layout: __vue_component__$R,
-  Header: __vue_component__$S,
-  Content: __vue_component__$T,
-  Footer: __vue_component__$U,
-  Sider: __vue_component__$V,
-  Tabs: __vue_component__$W,
-  TabPane: __vue_component__$X,
-  Modal: __vue_component__$Y,
+  Layout: __vue_component__$T,
+  Header: __vue_component__$U,
+  Content: __vue_component__$V,
+  Footer: __vue_component__$W,
+  Sider: __vue_component__$X,
+  Tabs: __vue_component__$Y,
+  TabPane: __vue_component__$Z,
   Tree: __vue_component__$$,
   Carousel: __vue_component__$10,
   CarouselItem: __vue_component__$11,
@@ -12494,11 +12514,11 @@ function index (Vue, options) {
   if ( options === void 0 ) options = {};
 
   Vue.prototype.$uiTools = tools;
-  Vue.prototype.$Modal = modalService(Vue);
 
   Vue.prototype.$Notice = Notice;
   Vue.prototype.$Message = Message;
   Vue.prototype.$Spin = __vue_component__$x.service;
+  Vue.prototype.$Modal = __vue_component__$R.service;
   Vue.LoadingBar = Vue.prototype.$Loading = loadingBarService;
   var prefix = typeof options.prefix === 'string' ? options.prefix : 'Ui';
   for (var name in comps) { Vue.component(prefix + name, comps[name]); }

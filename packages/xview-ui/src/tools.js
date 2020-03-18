@@ -102,9 +102,9 @@ export const addStylesheet = (id, styleStr) => {
 
 export const parseSize = size => isNaN(size) ? size : `${+size}px`
 
-export const UiRender = {
+export const XRender = {
   functional: true,
-  render: (h, ctx) => ctx.props.render(h)
+  render: (h, ctx) => ctx.props.render(h, ctx.props)
 }
 
 /**

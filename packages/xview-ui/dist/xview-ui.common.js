@@ -1,5 +1,5 @@
 /*!
- * xview-ui v1.3.4
+ * xview-ui v1.3.5
  * (c) 2019-2020 LiLiang
  * Released under the MIT License.
  */
@@ -117,9 +117,9 @@ var addStylesheet = function (id, styleStr) {
 
 var parseSize = function (size) { return isNaN(size) ? size : ((+size) + "px"); };
 
-var UiRender = {
+var XRender = {
   functional: true,
-  render: function (h, ctx) { return ctx.props.render(h); }
+  render: function (h, ctx) { return ctx.props.render(h, ctx.props); }
 };
 
 /**
@@ -221,7 +221,7 @@ var tools = /*#__PURE__*/Object.freeze({
   throttle: throttle,
   addStylesheet: addStylesheet,
   parseSize: parseSize,
-  UiRender: UiRender,
+  XRender: XRender,
   setAutoHeight: setAutoHeight,
   dateFormat: dateFormat,
   getOffset: getOffset
@@ -6505,47 +6505,40 @@ __vue_render__$O._withStripped = true;
   );
 
 //
-var UiRender$1 = {
-  functional: true,
-  render: function (h, ctx) { return ctx.props.render(h, ctx.props); }
-};
 var script$P = {
-  name: 'UiTreeNode',
-  components: { UiIcon: __vue_component__, UiLoading: __vue_component__$y, UiCheckbox: __vue_component__$n, UiRender: UiRender$1 },
+  name: 'XTreeNode',
+  components: { XIcon: __vue_component__, XLoading: __vue_component__$y, XCheckbox: __vue_component__$n, XRender: XRender },
+  props: { data: Object, render: Function },
   data: function data() {
-    return { prefix: 'ui-tree-node', parent: null }
-  },
-  props: {
-    data: Object,
-    render: Function
+    return { prefix: 'x-tree-node', parent: null }
   },
   computed: {
-    renderFns: function renderFns() {
+    renderFn: function renderFn() {
       return this.data.render || this.render
     },
-    rootData: function rootData() {
-      return this.parent ? this.parent.flatState : []
+    root: function root() {
+      return this.parent ? this.parent.flatData : []
     },
     hasArrow: function hasArrow() {
-      if (this.parent && this.parent.loadData) { return this.data.children }
-      return this.data.children && this.data.children.length
-    }
-  },
-  methods: {
-    onTextClick: function onTextClick(item) {
-      if (item.disabled) { return }
-      this.parent.updateSeleckedNodes(item);
+      return this.data.children && (this.parent && this.parent.loadData ? true : this.data.children.length)
     },
-    onCheckboxClick: function onCheckboxClick(item) {
-      if (item.disabled || item.disableCheckbox) { return }
-      this.parent.updateCheckedNodes(item);
-    },
-    toggleExpand: function toggleExpand(item) {
-      this.parent.toggleExpand(item);
+    labelClass: function labelClass() {
+      return [((this.prefix) + "_label"), { selected: this.data.selected, isRender: this.renderFn }]
     }
   },
   mounted: function mounted() {
-    this.parent = findParent(this, 'UiTree');
+    this.parent = findParent(this, 'XTree');
+  },
+  methods: {
+    onSelect: function onSelect() {
+      if (!this.data.disabled) { this.parent.updateSelectedNodes(this.data); }
+    },
+    onCheckChange: function onCheckChange() {
+      this.parent.checkChange(this.data);
+    },
+    onToggleExpand: function onToggleExpand() {
+      this.parent.toggleExpand(this.data);
+    }
   }
 };
 
@@ -6556,95 +6549,84 @@ var __vue_render__$P = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c("ul", { class: _vm.prefix }, [
-    _c(
-      "li",
-      { class: _vm.prefix + "-item" },
-      [
-        _c(
-          "div",
-          { class: _vm.prefix + "-title" },
-          [
-            _vm.data.loading
-              ? _c("ui-loading", {
-                  class: _vm.prefix + "-loading",
-                  attrs: {
-                    iconClass: _vm.prefix + "-loading-icon",
-                    loading: ""
-                  }
-                })
-              : _vm.hasArrow
-              ? _c("ui-icon", {
-                  class: [_vm.prefix + "-arrow", { expand: _vm.data.expand }],
-                  attrs: { type: "ios-arrow-forward" },
-                  on: {
-                    click: function($event) {
-                      return _vm.toggleExpand(_vm.data)
+  return _c(
+    "div",
+    { class: _vm.prefix },
+    [
+      _c(
+        "div",
+        { class: _vm.prefix + "_title" },
+        [
+          _c(
+            "span",
+            { class: _vm.prefix + "_icon" },
+            [
+              _vm.data.loading
+                ? _c("x-loading", {
+                    attrs: {
+                      iconClass: _vm.prefix + "_loadingIcon",
+                      loading: ""
                     }
-                  }
-                })
-              : _vm._e(),
-            _vm._v(" "),
-            _c("ui-checkbox", {
-              class: _vm.prefix + "-checkbox",
-              attrs: {
-                disabled: _vm.data.disableCheckbox || _vm.data.disabled,
-                indeterminate: _vm.data.indeterminate
+                  })
+                : _vm.hasArrow
+                ? _c("x-icon", {
+                    class: [_vm.prefix + "_arrow", { expand: _vm.data.expand }],
+                    attrs: { type: "ios-arrow-forward" },
+                    on: { click: _vm.onToggleExpand }
+                  })
+                : _vm._e()
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("x-checkbox", {
+            class: _vm.prefix + "_checkbox",
+            attrs: {
+              indeterminate: _vm.data.indeterminate,
+              disabled: _vm.data.disableCheckbox || _vm.data.disabled
+            },
+            on: { "on-change": _vm.onCheckChange },
+            model: {
+              value: _vm.data.checked,
+              callback: function($$v) {
+                _vm.$set(_vm.data, "checked", $$v);
               },
-              nativeOn: {
-                click: function($event) {
-                  return _vm.onCheckboxClick(_vm.data)
-                }
-              },
-              model: {
-                value: _vm.data.checked,
-                callback: function($$v) {
-                  _vm.$set(_vm.data, "checked", $$v);
-                },
-                expression: "data.checked"
-              }
-            }),
-            _vm._v(" "),
-            _vm.renderFns
-              ? _c("ui-render", {
-                  attrs: {
-                    render: _vm.renderFns,
-                    data: _vm.data,
-                    root: _vm.rootData
-                  }
-                })
-              : _c(
-                  "span",
-                  {
-                    class: [
-                      _vm.prefix + "-text",
-                      { selected: _vm.data.selected }
-                    ],
-                    on: {
-                      click: function($event) {
-                        return _vm.onTextClick(_vm.data)
-                      }
+              expression: "data.checked"
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "span",
+            { class: _vm.labelClass, on: { click: _vm.onSelect } },
+            [
+              _vm.renderFn
+                ? _c("x-render", {
+                    attrs: {
+                      render: _vm.renderFn,
+                      data: _vm.data,
+                      root: _vm.root
                     }
-                  },
-                  [_vm._v(_vm._s(_vm.data.title))]
-                )
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _vm.data.children && _vm.data.expand
-          ? _vm._l(_vm.data.children, function(item, index) {
-              return _c("ui-tree-node", {
-                key: index,
-                class: _vm.prefix + "-child",
-                attrs: { data: item, render: _vm.render }
-              })
+                  })
+                : _c("div", { domProps: { innerHTML: _vm._s(_vm.data.title) } })
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _vm.data.children && _vm.data.expand
+        ? _vm._l(_vm.data.children, function(_, i) {
+            return _c("x-tree-node", {
+              key: i,
+              class: _vm.prefix + "_child",
+              attrs: { data: _, render: _vm.render }
             })
-          : _vm._e()
-      ],
-      2
-    )
-  ])
+          })
+        : _vm._e()
+    ],
+    2
+  )
 };
 var __vue_staticRenderFns__$P = [];
 __vue_render__$P._withStripped = true;
@@ -6679,130 +6661,99 @@ __vue_render__$P._withStripped = true;
   );
 
 //
-//
-//
-//
-//
-
-function objectWithoutProperties (obj, exclude) { var target = {}; for (var k in obj) if (Object.prototype.hasOwnProperty.call(obj, k) && exclude.indexOf(k) === -1) target[k] = obj[k]; return target; }
-var key = 0;
+var key = 0, B$5 = Boolean, F$2 = Function;
 var script$Q = {
-  name: 'UiTree',
-  components: { UiNode: __vue_component__$P },
-  data: function data() {
-    return { selectedNodes: [] }
-  },
+  name: 'XTree',
+  components: { XNode: __vue_component__$P },
   props: {
-    data: {
-      type: Array,
-      default: function () { return []; }
-    },
-    multiple: Boolean,
-    showCheckbox: Boolean,
-    emptyText: {
-      type: String,
-      default: '暂无数据'
-    },
-    loadData: Function,
-    render: Function,
-    checkStrictly: Boolean
+    data: { type: Array, default: function () { return []; } },
+    multiple: B$5,
+    showCheckbox: B$5,
+    emptyText: { type: String, default: '暂无数据' },
+    loadData: F$2,
+    render: F$2,
+    checkStrictly: B$5,
+    checkDirectly: B$5
   },
-  computed: {
-    flatState: function flatState() {
-      return this.getFlatState()
+  data: function data() {
+    return { flatData: [] }
+  },
+  watch: {
+    data: {
+      deep: true,
+      immediate: true,
+      handler: function handler() {
+        this.createFlatData();
+        this.updateCheckedNodes();
+      }
     }
   },
-  mounted: function mounted() {
-    this.updateCheckedNodes();
-  },
   methods: {
-    // 将树形数据转化为一维数组
-    getFlatState: function getFlatState() {
-      var flatState = [];
+    createFlatData: function createFlatData() { // 转化为一维数组
+      var flatData = [];
       var ref = this;
       var data = ref.data;
       var loop = function () {
         var arr = [];
         data.forEach(function (_) {
           if (_.nodeKey === undefined) { _.nodeKey = ++key; }
-          flatState.push(_);
+          flatData.push(_);
           _.children && arr.push.apply(arr, _.children);
         });
         data = arr;
       };
 
       while (data.length) loop();
-      return flatState
+      this.flatData = flatData;
     },
-    // 更新选中的节点
-    updateSeleckedNodes: function updateSeleckedNodes(item) {
+    updateSelectedNodes: function updateSelectedNodes(item) {
       var this$1 = this;
-
-      var selected = item.selected;
-      if (!this.multiple) { this.flatState.forEach(function (_) { return this$1.$set(_, 'selected', false); }); }
-      this.$set(item, 'selected', !selected);
-      this.$emit('on-select-change', this.getSelectedNodes(), item);
+ // 更新选中的节点
+      if (this.checkDirectly) {
+        this.$set(item, 'checked', !item.checked);
+        this.checkChange(item);
+      } else {
+        var selected = item.selected;
+        if (!this.multiple) { this.flatData.forEach(function (_) { return this$1.$set(_, 'selected', false); }); }
+        this.$set(item, 'selected', !selected);
+        this.$emit('on-select-change', this.getSelectedNodes(), item);
+      }
     },
-    // 获取被选中的节点
-    getSelectedNodes: function getSelectedNodes() {
-      return this.flatState.filter(function (_) { return _.selected; }).map(function (_) {
-        var children = _.children;
-        var rest = objectWithoutProperties( _, ["children"] );
-        var data = rest;
-        return data
-      })
-    },
-    // 更新勾选的节点
     updateCheckedNodes: function updateCheckedNodes(item) {
       var this$1 = this;
       if ( item === void 0 ) item = {};
+ // 更新勾选的节点 先子后父遍历
+      if (!this.checkStrictly) {
+        var eachData = item.children || [];
+        var loop = function () {
+          var arr = [];
+          eachData.forEach(function (_) {
+            this$1.$set(_, 'checked', item.checked);
+            _.children && arr.push.apply(arr, _.children);
+          });
+          eachData = arr;
+        };
 
-      if (this.checkStrictly) { return this.$emit('on-check-change', this.getCheckedNodes(), item) }
-      var eachData = item.children || [];
-      var loop = function () {
-        var arr = [];
-        eachData.forEach(function (_) {
-          this$1.$set(_, 'checked', item.checked);
-          _.children && arr.push.apply(arr, _.children);
+        while (eachData.length) loop();
+        var data = [].concat( this.flatData );
+        data.reverse();
+        data.forEach(function (_) {
+          if (_.children && _.children.length) {
+            var checkeds = _.children.filter(function (__) { return __.checked; });
+            var hasIndeterminate = _.children.some(function (__) { return __.indeterminate; });
+            this$1.$set(_, 'checked', checkeds.length === _.children.length);
+            this$1.$set(_, 'indeterminate', hasIndeterminate || (checkeds.length > 0 && checkeds.length < _.children.length));
+          }
         });
-        eachData = arr;
-      };
-
-      while (eachData.length) loop();
-      var data = [].concat( this.flatState );
-      data.reverse();
-      data.forEach(function (_) {
-        if (_.children && _.children.length) {
-          var checkeds = _.children.filter(function (__) { return __.checked; });
-          var hasIndeterminate = _.children.some(function (__) { return __.indeterminate; });
-          this$1.$set(_, 'checked', checkeds.length === _.children.length);
-          this$1.$set(_, 'indeterminate', hasIndeterminate || (checkeds.length > 0 && checkeds.length < _.children.length));
-        }
-      });
+      }
+    },
+    checkChange: function checkChange(item) { // 勾选改变处理
+      this.updateCheckedNodes(item);
       this.$emit('on-check-change', this.getCheckedNodes(), item);
     },
-    // 获取被勾选的节点
-    getCheckedNodes: function getCheckedNodes() {
-      return this.flatState.filter(function (_) { return _.checked; }).map(function (_) {
-        var __ = _.children;
-        var rest = objectWithoutProperties( _, ["children"] );
-        var data = rest;
-        return data
-      })
-    },
-    // 获取选中及半选节点
-    getCheckedAndIndeterminateNodes: function getCheckedAndIndeterminateNodes() {
-      return this.flatState.filter(function (_) { return _.checked || _.indeterminate; }).map(function (_) {
-        var __ = _.children;
-        var rest = objectWithoutProperties( _, ["children"] );
-        var data = rest;
-        return data
-      })
-    },
-    // 节点的展开和收起
     toggleExpand: function toggleExpand(item) {
       var this$1 = this;
-
+ // 节点的展开和收起
       this.$set(item, 'expand', !item.expand);
       if (!item.children.length && this.loadData) {
         this.$set(item, 'loading', true);
@@ -6813,6 +6764,15 @@ var script$Q = {
         });
       }
       this.$emit('on-toggle-expand', item);
+    },
+    getCheckedNodes: function getCheckedNodes() { // API方法 **不可改名** 获取被勾选的节点
+      return this.flatData.filter(function (_) { return _.checked; })
+    },
+    getSelectedNodes: function getSelectedNodes() { // API方法 **不可改名** 获取被选中的节点
+      return this.flatData.filter(function (_) { return _.selected; })
+    },
+    getCheckedAndIndeterminateNodes: function getCheckedAndIndeterminateNodes() { // API方法 **不可改名** 获取选中及半选节点
+      return this.flatData.filter(function (_) { return _.checked || _.indeterminate; })
     }
   }
 };
@@ -6827,12 +6787,9 @@ var __vue_render__$Q = function() {
   var _c = _vm._self._c || _h;
   return _c(
     "div",
-    { staticClass: "ui-tree", class: { showCheckbox: _vm.showCheckbox } },
-    _vm._l(_vm.data, function(item) {
-      return _c("ui-node", {
-        key: item.nodeKey,
-        attrs: { data: item, render: _vm.render }
-      })
+    { staticClass: "x-tree", class: { showCheckbox: _vm.showCheckbox } },
+    _vm._l(_vm.data, function(_, i) {
+      return _c("x-node", { key: i, attrs: { data: _, render: _vm.render } })
     }),
     1
   )
@@ -7398,23 +7355,23 @@ var Notice = creator(__vue_component__$U, { duration: 4.5 }, {
 });
 
 //
-var S$6 = String, B$5 = Boolean, BTrue = { type: B$5, default: true };
+var S$6 = String, B$6 = Boolean, BTrue = { type: B$6, default: true };
 var script$V = {
   name: 'XModal',
   components: { XOverlay: __vue_component__$A, XBtn: __vue_component__$1, XCloseIconButton: __vue_component__$7 },
   props: {
-    value: B$5,
+    value: B$6,
     title: S$6,
     closable: BTrue,
     maskClosable: BTrue,
-    loading: B$5,
-    scrollable: B$5,
-    fullscreen: B$5,
+    loading: B$6,
+    scrollable: B$6,
+    fullscreen: B$6,
     mask: BTrue,
     okText: { type: S$6, default: '确定' },
     cancelText: { type: S$6, default: '取消' },
     width: { type: [Number, S$6], default: 520 },
-    footerHide: B$5,
+    footerHide: B$6,
     styles: Object,
     className: S$6,
     transfer: BTrue,
@@ -7658,22 +7615,22 @@ __vue_render__$V._withStripped = true;
 //
 //
 
-function objectWithoutProperties$1 (obj, exclude) { var target = {}; for (var k in obj) if (Object.prototype.hasOwnProperty.call(obj, k) && exclude.indexOf(k) === -1) target[k] = obj[k]; return target; }
-var S$7 = String, B$6 = Boolean, F$2 = Function;
+function objectWithoutProperties (obj, exclude) { var target = {}; for (var k in obj) if (Object.prototype.hasOwnProperty.call(obj, k) && exclude.indexOf(k) === -1) target[k] = obj[k]; return target; }
+var S$7 = String, B$7 = Boolean, F$3 = Function;
 var script$W = {
   name: 'XDialog',
   components: { XIcon: __vue_component__, XModal: __vue_component__$V, XBtn: __vue_component__$1 },
   props: {
-    value: B$6,
+    value: B$7,
     title: S$7,
     content: S$7,
     width: { default: 416 },
     okText: { type: S$7, default: '确定' },
     cancelText: {},
-    loading: B$6,
-    scrollable: B$6,
-    onOk: F$2,
-    onCancel: F$2,
+    loading: B$7,
+    scrollable: B$7,
+    onOk: F$3,
+    onCancel: F$3,
     type: {
       validator: function validator(v) {
         return ['info', 'success', 'warning', 'error', 'confirm'].indexOf(v) !== -1
@@ -7703,7 +7660,7 @@ var script$W = {
       var onOk = ref.onOk;
       var onCancel = ref.onCancel;
       var type = ref.type;
-      var rest = objectWithoutProperties$1( ref, ["content", "onOk", "onCancel", "type"] );
+      var rest = objectWithoutProperties( ref, ["content", "onOk", "onCancel", "type"] );
       var props = rest;
       return Object.assign({}, props, {closable: false, maskClosable: false, className: this.prefix, hasCancel: this.type === 'confirm'})
     }
@@ -7775,7 +7732,7 @@ __vue_render__$W._withStripped = true;
     undefined
   );
 
-function objectWithoutProperties$2 (obj, exclude) { var target = {}; for (var k in obj) if (Object.prototype.hasOwnProperty.call(obj, k) && exclude.indexOf(k) === -1) target[k] = obj[k]; return target; }
+function objectWithoutProperties$1 (obj, exclude) { var target = {}; for (var k in obj) if (Object.prototype.hasOwnProperty.call(obj, k) && exclude.indexOf(k) === -1) target[k] = obj[k]; return target; }
 
 var vm$2, getVM$2 = function () { return vm$2 || (vm$2 = new Vue({
   data: function data() {
@@ -7786,7 +7743,7 @@ var vm$2, getVM$2 = function () { return vm$2 || (vm$2 = new Vue({
 
     var ref = this.options;
     var render = ref.render;
-    var rest = objectWithoutProperties$2( ref, ["render"] );
+    var rest = objectWithoutProperties$1( ref, ["render"] );
     var props = rest;
     return h(__vue_component__$W, {
       props: props, on: { leave: function () { return this$1.destroy(); } }
@@ -8130,7 +8087,7 @@ __vue_render__$$._withStripped = true;
 //
 var script$Z = {
   name: 'UiTabs',
-  components: { UiIcon: __vue_component__, UiCloseIconButton: __vue_component__$7, UiRender: UiRender },
+  components: { UiIcon: __vue_component__, UiCloseIconButton: __vue_component__$7, XRender: XRender },
   data: function data() {
     return {
       prefix: 'ui-tabs',
@@ -8315,7 +8272,7 @@ var __vue_render__$10 = function() {
                         : _vm._e(),
                       _vm._v(" "),
                       _vm.isFunc(item.label)
-                        ? _c("UiRender", { attrs: { render: item.label } })
+                        ? _c("XRender", { attrs: { render: item.label } })
                         : [_vm._v(_vm._s(item.label))],
                       _vm._v(" "),
                       _vm.canClose(item)

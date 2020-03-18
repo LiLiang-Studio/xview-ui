@@ -1,130 +1,122 @@
 <template>
-  <ul :class="prefix">
-    <li :class="`${prefix}-item`">
-      <div :class="`${prefix}-title`">
-        <ui-loading v-if="data.loading" :class="`${prefix}-loading`" :iconClass="`${prefix}-loading-icon`" loading/>
-        <ui-icon type="ios-arrow-forward" v-else-if="hasArrow" :class="[`${prefix}-arrow`, {expand: data.expand}]" 
-          @click="toggleExpand(data)"/>
-        <ui-checkbox v-model="data.checked" :class="`${prefix}-checkbox`" :disabled="data.disableCheckbox || data.disabled"
-          :indeterminate="data.indeterminate" @click.native="onCheckboxClick(data)"/>
-        <ui-render v-if="renderFns" :render="renderFns" :data="data" :root="rootData"/>
-        <span v-else :class="[`${prefix}-text`, {selected: data.selected}]" @click="onTextClick(data)">{{data.title}}</span>
-      </div>
-      <template v-if="data.children && data.expand">
-        <ui-tree-node v-for="(item, index) in data.children" :key="index" :class="`${prefix}-child`" :data="item" :render="render"/>
-      </template>
-    </li>
-  </ul>
+  <div :class="prefix">
+    <div :class="`${prefix}_title`">
+      <span :class="`${prefix}_icon`">
+        <x-loading v-if="data.loading" :iconClass="`${prefix}_loadingIcon`" loading/>
+        <x-icon v-else-if="hasArrow" type="ios-arrow-forward" :class="[`${prefix}_arrow`, {expand: data.expand}]" @click="onToggleExpand"/>
+      </span>
+      <x-checkbox
+        v-model="data.checked"
+        :class="`${prefix}_checkbox`"
+        :indeterminate="data.indeterminate"
+        :disabled="data.disableCheckbox || data.disabled"
+        @on-change="onCheckChange"/>
+      <span :class="labelClass" @click="onSelect">
+        <x-render v-if="renderFn" :render="renderFn" :data="data" :root="root"/>
+        <div v-else v-html="data.title"></div>
+      </span>
+    </div>
+    <template v-if="data.children && data.expand">
+      <x-tree-node v-for="(_, i) in data.children" :key="i" :class="`${prefix}_child`" :data="_" :render="render"/>
+    </template>
+  </div>
 </template>
 <script>
-import UiIcon from '../icon'
-import UiLoading from './../scroll/Loading.vue'
-import UiCheckbox from '../checkbox'
-import { findParent } from '../../tools'
-const UiRender = {
-  functional: true,
-  render: (h, ctx) => ctx.props.render(h, ctx.props)
-}
+import XIcon from '../icon'
+import XLoading from './../scroll/Loading.vue'
+import XCheckbox from '../checkbox'
+import { findParent, XRender } from '../../tools'
 export default {
-  name: 'UiTreeNode',
-  components: { UiIcon, UiLoading, UiCheckbox, UiRender },
+  name: 'XTreeNode',
+  components: { XIcon, XLoading, XCheckbox, XRender },
+  props: { data: Object, render: Function },
   data() {
-    return { prefix: 'ui-tree-node', parent: null }
-  },
-  props: {
-    data: Object,
-    render: Function
+    return { prefix: 'x-tree-node', parent: null }
   },
   computed: {
-    renderFns() {
+    renderFn() {
       return this.data.render || this.render
     },
-    rootData() {
-      return this.parent ? this.parent.flatState : []
+    root() {
+      return this.parent ? this.parent.flatData : []
     },
     hasArrow() {
-      if (this.parent && this.parent.loadData) return this.data.children
-      return this.data.children && this.data.children.length
-    }
-  },
-  methods: {
-    onTextClick(item) {
-      if (item.disabled) return
-      this.parent.updateSeleckedNodes(item)
+      return this.data.children && (this.parent && this.parent.loadData ? true : this.data.children.length)
     },
-    onCheckboxClick(item) {
-      if (item.disabled || item.disableCheckbox) return
-      this.parent.updateCheckedNodes(item)
-    },
-    toggleExpand(item) {
-      this.parent.toggleExpand(item)
+    labelClass() {
+      return [`${this.prefix}_label`, { selected: this.data.selected, isRender: this.renderFn }]
     }
   },
   mounted() {
-    this.parent = findParent(this, 'UiTree')
+    this.parent = findParent(this, 'XTree')
+  },
+  methods: {
+    onSelect() {
+      if (!this.data.disabled) this.parent.updateSelectedNodes(this.data)
+    },
+    onCheckChange() {
+      this.parent.checkChange(this.data)
+    },
+    onToggleExpand() {
+      this.parent.toggleExpand(this.data)
+    }
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-tree-node {
-  &-item {
-    font-size: 14px;
-    list-style: none;
-  }
-  &-title {
-    padding: 4px 0;
+@iconSize: 16px;
+@prefix: .x-tree-node;
+@{prefix} {
+  &_title {
+    margin: 8px 0;
     display: flex;
     align-items: center;
   }
-  &-loading-icon, &-arrow {
-    width: 14px;
-  }
-  &-arrow, &-loading {
-    margin-right: 6px;
-  }
-  &-arrow {
-    color: @sub-color;
+  &_icon {
+    width: @iconSize;
+    height: @iconSize;
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    margin-right: 3px;
+  }
+  &_arrow {
     cursor: pointer;
+    color: @sub-color;
     transition: transform .2s ease-in-out;
     &.expand {
       transform: rotate(90deg);
     }
   }
-  &-loading-icon {
+  &_loadingIcon {
     color: @content-color;
     font-size: 14px !important;
   }
-  &-loading {
-    height: auto;
-    width: 14px;
+  &_child {
+    padding-left: @iconSize;
   }
-  &-child {
-    padding-left: 2em;
-  }
-  &-text {
+  &_label {
     padding: 0 4px;
     cursor: pointer;
     border-radius: 3px;
     transition: all .2s ease-in-out;
+    &.isRender {
+      flex: 1;
+    }
     &:hover {
-      background-color: lighten(@info-color, 39%);
+      background: lighten(@primary-color, 40%);
     }
     &.selected {
-      background-color: lighten(@info-color, 33%);
+      background: lighten(@primary-color, 35%);
     }
   }
-  &-checkbox {
-    display: none;
-    margin-right: 0;
+  &_checkbox {
+    margin: 0 0 0 4px;
   }
 }
-.ui-tree {
-  &.showCheckbox &-node-checkbox {
-    display: inline-block;
-  }
+.x-tree:not(.showCheckbox) @{prefix}_checkbox {
+  display: none;
 }
 </style>

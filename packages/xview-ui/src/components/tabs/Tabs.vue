@@ -5,7 +5,7 @@
         <ul ref="scrollView" :class="`${prefix}-nav`" :style="{transform: `translateX(${translateX}px)`}">
           <li v-for="item in childs" :key="item.key" :ref="item.key" :class="navItemClasses(item)" @click="onNavItemClick(item)">
             <ui-icon v-if="item.icon" :class="`${prefix}-icon`" :type="item.icon"/>
-            <UiRender v-if="isFunc(item.label)" :render="item.label"/>
+            <XRender v-if="isFunc(item.label)" :render="item.label"/>
             <template v-else>{{item.label}}</template>
             <ui-close-icon-button :class="`${prefix}-close`" v-if="canClose(item)" @click.stop="deleteItem(item)"/>
           </li>
@@ -27,10 +27,10 @@
 <script>
 import UiIcon from '../icon'
 import UiCloseIconButton from '../close-icon-button'
-import { UiRender, isFunc } from '../../tools'
+import { XRender, isFunc } from '../../tools'
 export default {
   name: 'UiTabs',
-  components: { UiIcon, UiCloseIconButton, UiRender },
+  components: { UiIcon, UiCloseIconButton, XRender },
   data() {
     return {
       prefix: 'ui-tabs',

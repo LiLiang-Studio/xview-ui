@@ -14,7 +14,7 @@
     <div class="page-sub-title">可勾选</div>
     <p>设置属性 show-checkbox 可以对节点进行勾选。</p>
     <b></b>
-    <Tree :data="data2" check-directly show-checkbox></Tree>
+    <Tree :data="data2" show-checkbox></Tree>
 
     <div class="page-sub-title">异步加载子节点</div>
     <p>
@@ -38,7 +38,13 @@
       <br>Render 函数的第二个参数，包含两个字段：
     </p>
     <ul style="padding-left:3em;line-height:2;">
-      <li><strong>为了减少不必要的的更新和状态维护，以提供更好的性能，这里与iview不同，不需要node参数</strong></li>
+      <li><strong>这里与iview不同，不需要node参数</strong></li>
+      <li><strong>这是一种简单易用的方法，但我并不喜欢</strong></li>
+      <li><strong>采用了deep watch，导致更新频繁，这是我的xview和隔壁iview都存在的问题</strong></li>
+      <li>如果我们能提供一个removeNode方法 <code>this.$refs.Tree.removeNode(data)</code> 是否会更好呢？</li>
+      <li>实际上，我们可以多做一些事情，让库的使用者做的更少</li>
+      <li>removeNode方法内部对data重新赋值，来避免使用deep watch</li>
+      <li><strong>下次更新树形组件将提供更好性能 更易用的版本，敬请期待</strong></li>
       <li><strong>如果你不需要使用node和root参数，则与iview用法完全一致</strong></li>
       <li>root {Array}：根节点树形数据打平后的一维数组（<strong>此处与iview不同</strong>）</li>
       <li>data {Object}：当前节点的数据</li>
@@ -213,7 +219,7 @@ export default {
                         type: "primary"
                       }),
                       style: {
-                        width: "72px"
+                        width: "64px"
                       },
                       on: {
                         click: () => {

@@ -6281,10 +6281,10 @@ var script$N = {
       if (--this.curIndex < 0) {
         this.curIndex = this.count;
         this.setListStyle();
-        return this.$nextTick(function () {
+        return setTimeout(function () {
           this$1.curIndex--;
           this$1.setListStyle(true);
-        })
+        }, 0)
       }
       this.setListStyle(true);
     },

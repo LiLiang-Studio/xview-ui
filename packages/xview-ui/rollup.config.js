@@ -7,7 +7,14 @@ import postcss from 'rollup-plugin-postcss'
 import copy from 'rollup-plugin-copy'
 import { terser } from 'rollup-plugin-terser'
 import del from 'del'
-import { name as pkgName } from './package.json'
+import { name as pkgName, version } from './package.json'
+
+const banner =
+  '/*!\n' +
+  ` * ${pkgName} v${version}\n` +
+  ` * (c) 2019-${new Date().getFullYear()} LiLiang\n` +
+  ' * Released under the MIT License.\n' +
+  ' */'
 
 del.sync('dist/*')
 
@@ -32,15 +39,18 @@ export default {
   ],
   output: [
     {
+      banner,
       format: 'umd',
       name: 'XViewUI',
       file: `dist/${pkgName}.umd.min.js`
     },
     {
+      banner,
       format: 'cjs',
       file: `dist/${pkgName}.common.js`
     },
     {
+      banner,
       format: 'es',
       file: `dist/${pkgName}.es.js`
     }

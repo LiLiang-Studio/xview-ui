@@ -4,6 +4,8 @@ import './styles/base.less'
 /**
  * 2020-03-07 开始新一轮优化
  */
+import * as tools from './tools'
+
 import Icon from './components/icon' // 图标
 import Button from './components/button' // 按钮
 import ButtonGroup from './components/button-group' // 按钮组
@@ -49,6 +51,7 @@ import Anchor from './components/anchor' // 锚点
 import AnchorLink from './components/anchor-link' // 锚点链接
 import Carousel from './components/carousel' // 走马灯
 import CarouselItem from './components/carousel-item' // 走马灯项
+import Tree from './components/tree' // 树形控件
 
 import loadingBarService from './components/loading-bar' // 加载条
 import Spin from './components/spin' // 加载中
@@ -57,9 +60,8 @@ import Notice from './components/notice' // 通知
 import Modal from './components/modal' // 模态框
 
 /**
- * 新版本组件导入
+ * 待优化组件
  */
-import * as tools from './tools'
 // 布局
 import Layout from './components/layout'
 import Header from './components/header'
@@ -69,14 +71,11 @@ import Sider from './components/sider'
 // 标签页
 import Tabs from './components/tabs'
 import TabPane from './components/tab-pane'
-// 树形控件
-import Tree from './components/tree'
 // 上传
 import Upload from './components/upload'
 // 表单
 import Form from './components/form'
 import FormItem from './components/form-item'
-
 // 颜色选择器
 // import ColorPicker from './components/color-picker'
 // // 级联选择
@@ -104,7 +103,6 @@ import Slider from './components/slider'
 import Page from './components/page'
 // 自动完成
 import AutoComplete from './components/auto-complete'
-
 // 表格
 import Table from './components/table/Table.vue'
 // 日期选择器
@@ -160,6 +158,7 @@ const comps = {
   Modal,
   Carousel,
   CarouselItem,
+  Tree,
 
   Layout,
   Header,
@@ -168,7 +167,6 @@ const comps = {
   Sider,
   Tabs,
   TabPane,
-  Tree,
   Upload,
   Form,
   FormItem,
@@ -200,8 +198,7 @@ const comps = {
  * @param {Object} options 
  */
 export default function (Vue, options = {}) {
-  Vue.prototype.$uiTools = tools
-
+  Vue.prototype.$XVIEW_UI = tools
   Vue.prototype.$Notice = Notice
   Vue.prototype.$Message = Message
   Vue.prototype.$Spin = Spin.service

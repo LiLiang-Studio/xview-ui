@@ -6285,9 +6285,12 @@ var script$N = {
       if (--this.curIndex < 0) {
         this.curIndex = this.count;
         this.setListStyle();
-        this.$nextTick(function () { return this$1.curIndex--; });
+        return this.$nextTick(function () {
+          this$1.curIndex--;
+          this$1.setListStyle(true);
+        })
       }
-      this.$nextTick(function () { return this$1.setListStyle(true); });
+      this.setListStyle(true);
     },
     toNext: function toNext() { // 切换到下一个
       if (this.returning) { return }

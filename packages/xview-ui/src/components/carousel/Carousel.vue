@@ -109,9 +109,12 @@ export default {
       if (--this.curIndex < 0) {
         this.curIndex = this.count
         this.setListStyle()
-        this.$nextTick(() => this.curIndex--)
+        return this.$nextTick(() => {
+          this.curIndex--
+          this.setListStyle(true)
+        })
       }
-      this.$nextTick(() => this.setListStyle(true))
+      this.setListStyle(true)
     },
     toNext() { // 切换到下一个
       if (this.returning) return

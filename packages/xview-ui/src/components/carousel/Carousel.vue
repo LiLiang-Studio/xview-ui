@@ -1,75 +1,59 @@
 <template>
   <div :class="[prefix, arrow]" @mouseenter="stopTimer" @mouseleave="startTimer">
-    <div :class="`${prefix}-box`">
-      <div :class="`${prefix}-list`" :style="listStyle" @transitionend="onTransitionend">
+    <div :class="`${prefix}_box`">
+      <div :class="`${prefix}_list`" :style="listStyle" @transitionend="onTransitionend">
         <slot></slot>
         <slot></slot>
       </div>
     </div>
-    <button :class="`${prefix}-arrow prev`" :disabled="disPrev" @click="toPrev">
-      <ui-icon type="chevron-left"/>
+    <button :class="`${prefix}_arrow prev`" :disabled="disPrev" @click="toPrev">
+      <x-icon type="chevron-left"/>
     </button>
-    <button :class="`${prefix}-arrow next`" :disabled="disNext" @click="toNext">
-      <ui-icon type="chevron-right"/>
+    <button :class="`${prefix}_arrow next`" :disabled="disNext" @click="toNext">
+      <x-icon type="chevron-right"/>
     </button>
-    <ul :class="[`${prefix}-dots`, dots, {radiusDot}]">
+    <ul :class="[`${prefix}_dots`, dots, {radiusDot}]">
       <li v-for="i in count" :key="i" :class="{active: i === curIndex + 1}" 
         @click="toIndex(i, $event)" @mouseover="toIndex(i, $event)"></li>
     </ul>
   </div>
 </template>
 <script>
-import UiIcon from '../icon'
+import XIcon from '../icon'
 import { parseSize } from '../../tools'
+const S = String, B = Boolean, N = Number
 export default {
-  name: 'UiCarousel',
-  components: { UiIcon },
-  data() {
-    return {
-      prefix: 'ui-carousel',
-      curIndex: this.value,
-      items: [],
-      listStyle: this.getListStyle()
-    }
-  },
+  name: 'XCarousel',
+  components: { XIcon },
   props: {
-    value: {
-      type: Number,
-      default: 0
-    },
-    height: {
-      type: [String, Number],
-      default: 'auto'
-    },
-    loop: Boolean,
-    autoplay: Boolean,
-    autoplaySpeed: {
-      type: Number,
-      default: 2000
-    },
+    value: { type: N, default: 0 },
+    height: { type: [S, N], default: 'auto' },
+    loop: B,
+    autoplay: B,
+    autoplaySpeed: { type: N, default: 2000 },
     dots: {
       default: 'inside',
-      validator(value) {
-        return ['inside', 'outside', 'none'].indexOf(value) !== -1
+      validator(v) {
+        return ['inside', 'outside', 'none'].indexOf(v) !== -1
       }
     },
-    radiusDot: Boolean,
+    radiusDot: B,
     trigger: {
       default: 'click',
-      validator(value) {
-        return ['click', 'hover'].indexOf(value) !== -1
+      validator(v) {
+        return ['click', 'hover'].indexOf(v) !== -1
       }
     },
     arrow: {
       default: 'hover',
-      validator(value) {
-        return ['hover', 'always', 'never'].indexOf(value) !== -1
+      validator(v) {
+        return ['hover', 'always', 'never'].indexOf(v) !== -1
       }
     },
-    easing: {
-      type: String,
-      default: 'ease'
-    }
+    easing: { type: S, default: 'ease' }
+  },
+  data() {
+    return { prefix: 'x-carousel', curIndex: this.value, items: [], listStyle: this.getListStyle() }
   },
   computed: {
     count() {
@@ -83,91 +67,101 @@ export default {
     }
   },
   watch: {
-    value(newval) {
-      this.curIndex = newval
+    value(val) {
+      this.curIndex = val
     },
-    curIndex(newval) {
+    curIndex(newval, oldval) {
       this.$emit('input', newval)
-    },
-    autoplay() {
-      this.startTimer()
-    },
-    autoplaySpeed() {
-      this.startTimer()
+      this.$emit('on-change', oldval, newval)
     }
   },
   mounted() {
-    this.startTimer()
+    this.unwatch = this.$watch(
+      () => `${this.autoplay} ${this.autoplaySpeed}`, 
+      this.startTimer, 
+      { immediate: true }
+    )
+  },
+  beforeDestroy() {
+    this.unwatch()
   },
   methods: {
-    addItem(vm) {
+    addItem(vm) { // 添加项 项被挂载时
       this.items.push(vm)
     },
-    removeItem(vm) {
+    removeItem(vm) { // 移除项 项被注销时
       this.items.splice(this.items.indexOf(vm), 1)
     },
-    getListStyle(animated) {
-      const style = {
+    itemClick(vm) { // 项单击 发射索引值
+      this.$emit('on-click', this.items.indexOf(vm))
+    },
+    getListStyle(hasAnimate) { // 获取列表样式
+      let style = {
         height: parseSize(this.height),
         transform: `translateX(-${this.curIndex * 100}%)`
       }
-      return animated ? { ...style, transition: `transform .5s ${this.easing}` } : style
+      return hasAnimate ? { ...style, transition: `transform .5s ${this.easing}` } : style
     },
-    toPrev() {
+    setListStyle(hasAnimate) { // 设置列表样式
+      this.listStyle = this.getListStyle(hasAnimate)
+    },
+    toPrev() { // 切换到前一个
       if (--this.curIndex < 0) {
         this.curIndex = this.count
-        this.listStyle = this.getListStyle()
-        this.curIndex--
+        this.setListStyle()
+        this.$nextTick(() => this.curIndex--)
       }
-      this.$nextTick(() => this.listStyle = this.getListStyle(true))
+      this.$nextTick(() => this.setListStyle(true))
     },
-    toNext() {
-      if (this.isTail) return
+    toNext() { // 切换到下一个
+      if (this.returning) return
       this.curIndex++
-      this.listStyle = this.getListStyle(true)
+      this.setListStyle(true)
       if (this.curIndex > this.count - 1) {
         this.curIndex = 0
-        this.isTail = true
+        this.returning = true
       }
     },
-    toIndex(i, e) {
-      if ((this.trigger === 'click' && e.type === 'click') || (this.trigger === 'hover' && e.type === 'mouseover')) {
+    toIndex(i, e) { // 切换到指定索引
+      if (
+        (this.trigger === 'click' && e.type === 'click') ||
+        (this.trigger === 'hover' && e.type === 'mouseover')
+      ) {
         this.curIndex = i - 1
-        this.listStyle = this.getListStyle(true)
+        this.setListStyle(true)
       }
     },
-    onTransitionend() {
-      this.isTail = false
-      this.listStyle = this.getListStyle()
+    onTransitionend() { // 过渡结束
+      this.returning = false
+      this.setListStyle()
     },
-    startTimer() {
+    startTimer() { // 开始定时器
       this.stopTimer()
-      if (this.autoplay) this.timerId = setInterval(() => this.toNext(), this.autoplaySpeed)
+      if (this.autoplay) this.tid = setInterval(() => this.toNext(), this.autoplaySpeed)
     },
-    stopTimer() {
-      clearInterval(this.timerId)
+    stopTimer() { // 停止定时器
+      clearInterval(this.tid)
     }
   }
 }
 </script>
 <style lang="less">
-.ui-carousel {
+.x-carousel {
   user-select: none;
   position: relative;
-  &-arrow {
+  &_arrow {
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    font-size: 12px;
     border: none;
     outline: none;
     color: #fff;
-    background-color: rgba(31,45,61,.11);
-    transition: all .2s ease-in-out;
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
     z-index: 1;
+    transform: translateY(-50%);
+    transition: all .2s ease-in-out;
+    background: rgba(31, 45, 61, .11);
     &.prev {
       left: 16px;
     }
@@ -179,13 +173,13 @@ export default {
       background-color: rgba(31,45,61,.5);
     }
   }
-  &.hover:not(:hover) &-arrow {
+  &.hover:not(:hover) &_arrow {
     opacity: 0;
   }
-  &.never &-arrow {
+  &.never &_arrow {
     display: none;
   }
-  &-dots {
+  &_dots {
     width: 100%;
     list-style: none;
     text-align: center;
@@ -207,9 +201,9 @@ export default {
       vertical-align: middle;
       height: 3px;
       margin: 0 2px;
-      background-color: #8391a5;
+      background: #8391a5;
       opacity: .3;
-      transition: all .5s ease-in-out;
+      transition: all .3s ease-in-out;
       &:hover {
         opacity: .7;
       }
@@ -224,12 +218,11 @@ export default {
       border-radius: 50%;
     }
   }
-  &-box {
+  &_box {
     overflow: hidden;
   }
-  &-list {
+  &_list {
     display: flex;
-    align-items: flex-start;
   }
   &-item {
     width: 100%;

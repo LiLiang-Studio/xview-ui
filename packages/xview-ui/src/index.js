@@ -47,6 +47,8 @@ import InputNumber from './components/input-number' // 数值输入框
 import Transfer from './components/transfer' // 穿梭框
 import Anchor from './components/anchor' // 锚点
 import AnchorLink from './components/anchor-link' // 锚点链接
+import Carousel from './components/carousel' // 走马灯
+import CarouselItem from './components/carousel-item' // 走马灯项
 
 import loadingBarService from './components/loading-bar' // 加载条
 import Spin from './components/spin' // 加载中
@@ -69,9 +71,6 @@ import Tabs from './components/tabs'
 import TabPane from './components/tab-pane'
 // 树形控件
 import Tree from './components/tree'
-// 走马灯
-import Carousel from './components/carousel'
-import CarouselItem from './components/carousel-item'
 // 上传
 import Upload from './components/upload'
 // 表单
@@ -159,6 +158,8 @@ const comps = {
   Anchor,
   AnchorLink,
   Modal,
+  Carousel,
+  CarouselItem,
 
   Layout,
   Header,
@@ -168,8 +169,6 @@ const comps = {
   Tabs,
   TabPane,
   Tree,
-  Carousel,
-  CarouselItem,
   Upload,
   Form,
   FormItem,

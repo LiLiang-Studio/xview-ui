@@ -109,10 +109,10 @@ export default {
       if (--this.curIndex < 0) {
         this.curIndex = this.count
         this.setListStyle()
-        return this.$nextTick(() => {
+        return setTimeout(() => {
           this.curIndex--
           this.setListStyle(true)
-        })
+        }, 0)
       }
       this.setListStyle(true)
     },

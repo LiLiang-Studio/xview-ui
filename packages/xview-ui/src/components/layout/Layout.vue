@@ -1,68 +1,88 @@
 <template>
-  <div class="ui-layout" :class="{hasSider}">
+  <div :class="['x-layout', {hasSider}]">
     <slot></slot>
   </div>
 </template>
 <script>
 export default {
-  name: 'UiLayout',
+  name: 'XLayout',
   data() {
     return { hasSider: false }
   },
   mounted() {
-    this.hasSider = this.$children.some(_ => _.$options.name === 'UiSider')
+    this.hasSider = this.$children.some(_ => _.$options.name === 'XSider')
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-layout {
+.x-layout {
   display: flex;
-  flex-direction: column;
-  flex: auto;
-  background-color: #f5f7f9;
-  &.hasSider {
-    flex-direction: row;
-  }
-  &-header, &-footer {
-    flex: 0 0 auto;
+  flex: 1;
+  font-size: 14px;
+  background: #f5f7f9;
+  &:not(.hasSider) {
+    flex-direction: column;
   }
   &-header, &-sider {
-    background-color: @content-color;
+    color: #fff;
+    background: @content-color;
   }
   &-header {
     height: 64px;
     padding: 0 50px;
+    line-height: 64px;
   }
   &-footer {
     padding: 24px 50px;
     color: @content-color;
-    font-size: 14px;
+    background: @bg-color;
   }
   &-content {
-    flex: auto;
+    flex: 1;
   }
   &-sider {
     position: relative;
     transition: all .2s ease-in-out;
-  }
-  &-sider-trigger {
-    position: fixed;
-    bottom: 0;
-    z-index: 11;
-    text-align: center;
-    cursor: pointer;
-    height: 48px;
-    line-height: 48px;
-    font-size: 14px;
-    color: #fff;
-    background-color: #515a6e;
-    transition: all .2s ease-in-out;
-  }
-  &-sider-trigger-icon {
-    transition: all .2s ease-in-out;
-    &.isCollapsed {
-      transform: rotateZ(180deg);
+    &_trigger {
+      position: fixed;
+      bottom: 0;
+      z-index: 11;
+      text-align: center;
+      cursor: pointer;
+      height: 48px;
+      line-height: 48px;
+      font-size: 14px;
+      color: #fff;
+      background: #515a6e;
+      transition: all .2s ease-in-out;
+    }
+    &_triggerIcon {
+      transition: all .2s ease-in-out;
+      &.isCollapsed {
+        transform: rotateZ(180deg);
+      }
+    }
+    &_zeroWidthTrigger {
+      position: absolute;
+      top: 64px;
+      right: -36px;
+      width: 36px;
+      height: 42px;
+      line-height: 42px;
+      cursor: pointer;
+      text-align: center;
+      background-color: @content-color;
+      color: #fff;
+      font-size: 18px;
+      border-radius: 0 6px 6px 0;
+      transition: background-color .3s ease;
+      &:hover {
+        background-color: lighten(@content-color, 3%);
+      }
+    }
+    .x-menu {
+      overflow: hidden;
     }
   }
 }

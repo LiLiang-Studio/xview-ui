@@ -1,59 +1,91 @@
 <template>
-  <div :class="prefix" :style="styles">
+  <div :class="prefix" :style="styles" v-winresize="onWinResize()">
     <slot></slot>
-    <div v-if="showTrigger" :class="`${prefix}-trigger`" :style="{width: styles.width}" @click="toggleCollapse">
-      <UiIcon :class="[`${prefix}-trigger-icon`, {isCollapsed}]" type="ios-arrow-back"/>
+    <span v-if="zeroTrigger.visible" :class="`${prefix}_zeroWidthTrigger`" @click="toggleCollapseByZeroTrigger">
+      <x-icon type="navicon"/>
+    </span>
+    <div v-else-if="showTrigger" :class="`${prefix}_trigger`" :style="{width: styles.width}" @click="toggleCollapse">
+      <x-icon :class="[`${prefix}_triggerIcon`, {isCollapsed}]" :type="triggerIcon"/>
     </div>
   </div>
 </template>
 <script>
-import UiIcon from '../icon'
-import { parseSize } from '../../tools'
+import XIcon from '../icon'
+import { parseSize, throttle } from '../../tools'
+import { winresize } from '../../directives'
+const B = Boolean, NS = [Number, String]
 export default {
-  name: 'UiSider',
-  components: { UiIcon },
-  data() {
-    return { prefix: 'ui-layout-sider', isCollapsed: this.value || this.defaultCollapsed }
-  },
+  name: 'XSider',
+  components: { XIcon },
   props: {
-    value: Boolean,
-    width: {
-      type: [Number, String],
-      default: 200
-    },
-    collapsible: Boolean,
-    collapsedWidth: {
-      type: [Number, String],
-      default: 64
-    },
-    hideTrigger: Boolean,
-    defaultCollapsed: Boolean,
-    reverseArrow: Boolean
+    value: B,
+    width: { type: NS, default: 200 },
+    collapsible: B,
+    collapsedWidth: { type: NS, default: 64 },
+    hideTrigger: B,
+    defaultCollapsed: B,
+    reverseArrow: B,
+    breakpoint: {
+      validator(v) {
+        return ['xs', 'sm', 'md', 'lg', 'xl', 'xxl'].indexOf(v) > -1
+      }
+    }
+  },
+  data() {
+    return {
+      prefix: 'x-layout-sider',
+      isCollapsed: this.value || this.defaultCollapsed,
+      zeroTrigger: { visible: false, clicked: false }
+    }
   },
   computed: {
     styles() {
-      let condition = this.defaultCollapsed || this.collapsible
-      let size = parseSize(condition && this.isCollapsed ? this.collapsedWidth : this.width)
+      let size = parseSize(this.isCollapsed ? this.zeroTrigger.visible ? 0 : this.collapsedWidth : this.width)
       return { width: size, minWidth: size, maxWidth: size, flex: `0 0 ${size}` }
     },
     showTrigger() {
       return !this.hideTrigger && this.collapsible
     },
     triggerIcon() {
-      return this.reverseArrow ? 'ios-arrow-forward' : 'ios-arrow-back'
+      return `ios-arrow-${this.reverseArrow ? 'forward' : 'back'}`
     }
   },
+  directives: { winresize },
   watch: {
-    value(newVal) {
-      this.isCollapsed = newVal
+    value(val) {
+      this.isCollapsed = val
+    },
+    isCollapsed(val) {
+      this.$emit('input', val)
+      this.$emit('on-collapse', val)
     }
+  },
+  mounted() {
+    this.onWinResize()()
   },
   methods: {
     toggleCollapse() {
-      if (!(this.defaultCollapsed || this.collapsible)) return
-      this.isCollapsed = !this.isCollapsed
-      this.$emit('input', this.isCollapsed)
-      this.$emit('on-change', this.isCollapsed)
+      if (this.collapsible) this.isCollapsed = !this.isCollapsed
+    },
+    toggleCollapseByZeroTrigger() {
+      this.toggleCollapse()
+      this.zeroTrigger.clicked = true
+    },
+    setResponsive(num) {
+      let winWidth = window.innerWidth
+      if (this.zeroTrigger.clicked) {
+        if (winWidth > num) this.zeroTrigger = { visible: false, click: false }
+      } else {
+        this.isCollapsed = window.innerWidth < num
+        this.zeroTrigger.visible = this.isCollapsed
+      }
+    },
+    onWinResize() {
+      return throttle(() => {
+        this.breakpoint && this.setResponsive(
+          { xs: 480, sm: 576, md: 768, lg: 992, xl: 1200, xxl: 1600 }[this.breakpoint]
+        )
+      }, 50)
     }
   }
 }

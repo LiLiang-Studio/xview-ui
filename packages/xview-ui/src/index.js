@@ -52,6 +52,11 @@ import AnchorLink from './components/anchor-link' // 锚点链接
 import Carousel from './components/carousel' // 走马灯
 import CarouselItem from './components/carousel-item' // 走马灯项
 import Tree from './components/tree' // 树形控件
+import Layout from './components/layout' // 布局
+import Header from './components/header' // 布局头
+import Content from './components/content' // 布局内容
+import Footer from './components/footer' // 布局脚
+import Sider from './components/sider' // 布局边栏
 
 import loadingBarService from './components/loading-bar' // 加载条
 import Spin from './components/spin' // 加载中
@@ -62,12 +67,6 @@ import Modal from './components/modal' // 模态框
 /**
  * 待优化组件
  */
-// 布局
-import Layout from './components/layout'
-import Header from './components/header'
-import Content from './components/content'
-import Footer from './components/footer'
-import Sider from './components/sider'
 // 标签页
 import Tabs from './components/tabs'
 import TabPane from './components/tab-pane'
@@ -159,12 +158,12 @@ const comps = {
   Carousel,
   CarouselItem,
   Tree,
-
   Layout,
   Header,
   Content,
   Footer,
   Sider,
+
   Tabs,
   TabPane,
   Upload,

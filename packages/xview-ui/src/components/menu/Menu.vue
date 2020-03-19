@@ -1,5 +1,5 @@
 <template>
-  <ul class="ui-menu" :class="[mode, theme]" :style="styles">
+  <ul class="x-menu" :class="[mode, theme]" :style="styles">
     <slot></slot>
   </ul>
 </template>
@@ -108,7 +108,7 @@ export default {
 <style lang="less">
 @import url("../../styles/vars.less");
 // 主菜单容器
-.ui-menu {
+.x-menu {
   font-size: 14px;
   position: relative;
   color: @content-color;

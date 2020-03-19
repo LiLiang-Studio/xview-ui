@@ -1,5 +1,5 @@
 <template>
-  <div class="ui-layout-footer">
+  <div class="x-layout-footer">
     <slot></slot>
   </div>
 </template>

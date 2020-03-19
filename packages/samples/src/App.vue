@@ -1,21 +1,29 @@
 <template>
-  <div id="app">
-    <SidebarNav/>
+  <div id="app" :class="{hasNav}">
+    <SidebarNav v-if="hasNav"/>
     <div class="app-content-wrapper">
       <router-view></router-view>
     </div>
+    <back-top/>
   </div>
 </template>
 <script>
 import SidebarNav from "./components/SidebarNav.vue";
 export default {
-  components: { SidebarNav }
+  components: { SidebarNav },
+  computed: {
+    hasNav() {
+      return !this.$route.meta.noNav
+    }
+  }
 };
 </script>
 <style lang="less">
 #app {
-  padding: 30px 0;
-  padding-left: 135px;
+  &.hasNav {
+    padding: 30px 0;
+    padding-left: 135px;
+  }
 }
 a {
   -webkit-tap-highlight-color: transparent;

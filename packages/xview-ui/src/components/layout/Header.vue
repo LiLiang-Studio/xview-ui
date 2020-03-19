@@ -1,5 +1,5 @@
 <template>
-  <div class="ui-layout-header">
+  <div class="x-layout-header">
     <slot></slot>
   </div>
 </template>

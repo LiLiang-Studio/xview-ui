@@ -5,6 +5,7 @@ import HomeRouter from '../pages/HomeRouter.vue'
 Vue.use(Router)
 
 const coms = {
+  Layout: () => import('../pages/Layout.vue'),
   Tree: () => import('../pages/Tree.vue'),
   Carousel: () => import('../pages/Carousel.vue'),
   Modal: () => import('../pages/Modal.vue'),
@@ -71,6 +72,30 @@ export default new Router({
         {
           path: '',
           redirect: { name: routes[0].name }
+        },
+        {
+          path: 'SiderLayout',
+          name: 'SiderLayout',
+          component: () => import('../pages/layout/SiderLayout.vue'),
+          meta: { noNav: true }
+        },
+        {
+          path: 'FixedHeader',
+          name: 'FixedHeader',
+          component: () => import('../pages/layout/FixedHeader.vue'),
+          meta: { noNav: true }
+        },
+        {
+          path: 'FixedSider',
+          name: 'FixedSider',
+          component: () => import('../pages/layout/FixedSider.vue'),
+          meta: { noNav: true }
+        },
+        {
+          path: 'ResLayout',
+          name: 'ResLayout',
+          component: () => import('../pages/layout/ResLayout.vue'),
+          meta: { noNav: true }
         }
       ].concat(routes)
     }

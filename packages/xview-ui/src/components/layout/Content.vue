@@ -1,5 +1,5 @@
 <template>
-  <div class="ui-layout-content">
+  <div class="x-layout-content">
     <slot></slot>
   </div>
 </template>

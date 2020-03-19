@@ -1,5 +1,5 @@
 /*!
- * xview-ui v1.4.0
+ * xview-ui v1.4.0-1
  * (c) 2019-2020 LiLiang
  * Released under the MIT License.
  */
@@ -7083,7 +7083,7 @@ var script$S = {
       var this$1 = this;
 
       return throttle(function () {
-        this$1.breakpoint && this$1.setResponsive(
+        this$1.breakpoint && this$1.collapsible && this$1.setResponsive(
           { xs: 480, sm: 576, md: 768, lg: 992, xl: 1200, xxl: 1600 }[this$1.breakpoint]
         );
       }, 50)

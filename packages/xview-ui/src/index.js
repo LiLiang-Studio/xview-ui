@@ -57,6 +57,7 @@ import Header from './components/header' // 布局头
 import Content from './components/content' // 布局内容
 import Footer from './components/footer' // 布局脚
 import Sider from './components/sider' // 布局边栏
+import Page from './components/page' // 分页器
 
 import loadingBarService from './components/loading-bar' // 加载条
 import Spin from './components/spin' // 加载中
@@ -98,8 +99,6 @@ import Poptip from './components/poptip'
 import Tooltip from './components/tooltip'
 // 滑块
 import Slider from './components/slider'
-// 分页器
-import Page from './components/page'
 // 自动完成
 import AutoComplete from './components/auto-complete'
 // 表格
@@ -163,6 +162,7 @@ const comps = {
   Content,
   Footer,
   Sider,
+  Page,
 
   Tabs,
   TabPane,
@@ -174,7 +174,6 @@ const comps = {
   Select,
   Option,
   OptionGroup,
-  Page,
   Dropdown,
   DropdownMenu,
   DropdownItem,

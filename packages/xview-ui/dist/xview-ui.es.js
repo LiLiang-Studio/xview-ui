@@ -1,5 +1,5 @@
 /*!
- * xview-ui v1.4.0-1
+ * xview-ui v1.4.1
  * (c) 2019-2020 LiLiang
  * Released under the MIT License.
  */
@@ -7179,1877 +7179,7 @@ __vue_render__$V._withStripped = true;
   );
 
 //
-//
-//
-//
-//
-//
-//
-
 var script$T = {
-  name: 'XLoadingBar',
-  props: {
-    color: String,
-    failedColor: String,
-    height: {
-      type: Number,
-      default: 2
-    },
-    percent: Number,
-    status: String
-  },
-  data: function data() {
-    return { prefix: 'x-loadingBar' }
-  },
-  computed: {
-    styles: function styles() {
-      return { height: ((this.height) + "px") }
-    },
-    barStyle: function barStyle() {
-      return { transform: ("scaleX(" + (this.percent / 100) + ")"), background: this.status === 'error' ? this.failedColor : this.color }
-    }
-  }
-};
-
-/* script */
-var __vue_script__$T = script$T;
-/* template */
-var __vue_render__$W = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("transition", { attrs: { name: _vm.prefix } }, [
-    _c("div", { class: _vm.prefix, style: _vm.styles }, [
-      _c("div", {
-        class: [_vm.prefix + "_bar", _vm.status],
-        style: _vm.barStyle
-      })
-    ])
-  ])
-};
-var __vue_staticRenderFns__$W = [];
-__vue_render__$W._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$W = undefined;
-  /* scoped */
-  var __vue_scope_id__$W = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$W = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$W = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$W = normalizeComponent(
-    { render: __vue_render__$W, staticRenderFns: __vue_staticRenderFns__$W },
-    __vue_inject_styles__$W,
-    __vue_script__$T,
-    __vue_scope_id__$W,
-    __vue_is_functional_template__$W,
-    __vue_module_identifier__$W,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-var vm$1, tid, clearTimer = function () { clearInterval(tid), tid = null; },
-  getVM$1 = function () { return vm$1 || (vm$1 = new Vue({
-  data: function data() {
-    return {
-      customOptions: {},
-      options: { percent: 0 }
-    }
-  },
-  render: function render(h) {
-    return h(__vue_component__$W, {
-      style: { zIndex: this.options.zIndex },
-      props: Object.assign({}, this.options, this.customOptions),
-      directives: [{ name: 'show', value: this.options.visible }]
-    })
-  },
-  mounted: function mounted() {
-    document.body.appendChild(this.$el);
-  },
-  beforeDestroy: function beforeDestroy() {
-    this.$el.parentNode && this.$el.parentNode.removeChild(this.$el);
-  },
-  methods: {
-    update: function update(options) {
-      if ( options === void 0 ) options = {};
-
-      this.options = Object.assign({}, this.options, options);
-    },
-    config: function config(options) {
-      if ( options === void 0 ) options = {};
-
-      this.customOptions = Object.assign({}, this.customOptions, options);
-    }
-  }
-}).$mount()); };
-
-var loadingBarService = {
-  start: function start() {
-    var this$1 = this;
-
-    if (tid) { return }
-    getVM$1().update({ visible: true, percent: 0, status: undefined, zIndex: getMaxZIndex() });
-    var percent = 0;
-    tid = setInterval(function () {
-      percent += Math.floor(Math.random() * 3 + 2);
-      if (percent > 90) { clearTimer(); }
-      this$1.update(percent);
-    }, 200);
-  },
-  finish: function finish(status) {
-    clearTimer();
-    var vm = getVM$1();
-    vm.update({ visible: true, percent: 100, status: status });
-    vm.$nextTick(function () { return vm.update({ visible: false }); });
-  },
-  error: function error() {
-    this.finish('error');
-  },
-  update: function update(percent) {
-    getVM$1().update({ percent: percent });
-  },
-  config: function config(options) {
-    getVM$1().config(options);
-  },
-  destroy: function destroy() {
-    clearTimer();
-    vm$1 && vm$1.$destroy();
-    vm$1 = null;
-  }
-};
-
-//
-//
-//
-//
-//
-//
-//
-
-var script$U = {
-  props: {
-    transition: String
-  }
-};
-
-/* script */
-var __vue_script__$U = script$U;
-/* template */
-var __vue_render__$X = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    { staticClass: "x-notice-wrapper" },
-    [
-      _c(
-        "transition-group",
-        { attrs: { name: _vm.transition, tag: "div" } },
-        [_vm._t("default")],
-        2
-      )
-    ],
-    1
-  )
-};
-var __vue_staticRenderFns__$X = [];
-__vue_render__$X._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$X = undefined;
-  /* scoped */
-  var __vue_scope_id__$X = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$X = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$X = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$X = normalizeComponent(
-    { render: __vue_render__$X, staticRenderFns: __vue_staticRenderFns__$X },
-    __vue_inject_styles__$X,
-    __vue_script__$U,
-    __vue_scope_id__$X,
-    __vue_is_functional_template__$X,
-    __vue_module_identifier__$X,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-function creator (Component, config, addons) {
-  if ( addons === void 0 ) addons = {};
-
-  var vm, key = 0, getVM = function () { return vm || (vm = new Vue({
-    data: function data() {
-      return { items: [], zIndex: 0 }
-    },
-    watch: {
-      'items.length': function items_length(newval, oldval) {
-        if (newval > oldval) { this.zIndex = getMaxZIndex(); }
-      }
-    },
-    render: function render(h) {
-      var this$1 = this;
-
-      return h(__vue_component__$X, {
-        style: { zIndex: this.zIndex },
-        props: { transition: Component.transition }
-      }, this.items.map(function (ref, i) {
-        var ui = ref.ui;
-        var key = ref.key;
-        var props = ref.props;
-
-        return h(
-          ui,
-          { key: key, props: props, on: { close: function () { return this$1.items.splice(i, 1); } } },
-          props.render ? [props.render(h)] : props.content || props.desc)
-      }))
-    },
-    mounted: function mounted() {
-      document.body.appendChild(this.$el);
-    },
-    beforeDestroy: function beforeDestroy() {
-      this.$el.parentNode && this.$el.parentNode.removeChild(this.$el);
-    },
-    methods: {
-      addItem: function addItem(props) {
-        if ( props === void 0 ) props = {};
-
-        var item = { props: props, ui: Component, key: key++ };
-        this.items.push(item);
-        return item.key
-      },
-      removeItem: function removeItem(key) {
-        var index = this.items.findIndex(function (_) { return _.key === key; });
-        if (index >= 0) { this.items.splice(index, 1); }
-      }
-    }
-  }).$mount()); };
-
-  var defaultConfig = Object.assign({}, {duration: 1.5}, (config || {})),
-    addNotice = function (options, type) { return getVM().addItem(Object.assign({}, defaultConfig, (isStr(options) ? { content: options } : options), {type: type})); },
-    noticeFunc = function (options) { return addNotice(options); }
-
-  ;['info', 'warning', 'error', 'success'].forEach(function (_) { return noticeFunc[_] = function (options) { return addNotice(options, _); }; });
-  noticeFunc.config = function (options) { return defaultConfig = Object.assign({}, defaultConfig, options); };
-  noticeFunc.destroy = function () {
-    vm && vm.$destroy();
-    vm = null;
-  };
-  var loop = function ( k ) {
-    noticeFunc[k] = function (options) { return addons[k](addNotice, options, getVM); };
-  };
-
-  for (var k in addons) loop( k );
-  return noticeFunc
-}
-
-//
-var prefix$1 = 'x-message';
-var script$V = {
-  name: 'XMessage',
-  components: { XIcon: __vue_component__, XCloseIconButton: __vue_component__$7 },
-  transition: prefix$1,
-  props: {
-    duration: Number,
-    onClose: Function,
-    closable: Boolean,
-    background: Boolean,
-    type: {
-      default: 'info',
-      validator: function validator(v) {
-        return ['info', 'success', 'warning', 'error', 'loading'].indexOf(v) !== -1
-      }
-    }
-  },
-  data: function data() {
-    return { prefix: prefix$1 }
-  },
-  computed: {
-    icon: function icon() {
-      return iconTypes[this.type]
-    }
-  },
-  mounted: function mounted() {
-    var this$1 = this;
-
-    if (this.duration) { this.tid = setTimeout(function () { return this$1.close(); }, this.duration * 1000); }
-  },
-  beforeDestroy: function beforeDestroy() {
-    clearTimeout(this.tid);
-  },
-  methods: {
-    close: function close() {
-      this.onClose && this.onClose(), this.$emit('close');
-    }
-  }
-};
-
-/* script */
-var __vue_script__$V = script$V;
-/* template */
-var __vue_render__$Y = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", { class: _vm.prefix }, [
-    _c(
-      "div",
-      {
-        class: [
-          _vm.prefix + "_box",
-          _vm.prefix + "_" + _vm.type,
-          { background: _vm.background }
-        ]
-      },
-      [
-        _c("x-icon", {
-          class: _vm.prefix + "_icon",
-          attrs: { type: _vm.icon }
-        }),
-        _vm._v(" "),
-        _vm._t("default"),
-        _vm._v(" "),
-        _vm.closable
-          ? _c("x-close-icon-button", {
-              class: _vm.prefix + "_close",
-              on: { click: _vm.close }
-            })
-          : _vm._e()
-      ],
-      2
-    )
-  ])
-};
-var __vue_staticRenderFns__$Y = [];
-__vue_render__$Y._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$Y = undefined;
-  /* scoped */
-  var __vue_scope_id__$Y = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$Y = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$Y = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$Y = normalizeComponent(
-    { render: __vue_render__$Y, staticRenderFns: __vue_staticRenderFns__$Y },
-    __vue_inject_styles__$Y,
-    __vue_script__$V,
-    __vue_scope_id__$Y,
-    __vue_is_functional_template__$Y,
-    __vue_module_identifier__$Y,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-var Message = creator(__vue_component__$Y, null, {
-  loading: function loading(addNotice, options, getVM) {
-    var key = addNotice(options, 'loading');
-    return function () { return getVM().removeItem(key); }
-  }
-});
-
-//
-var prefix$2 = 'x-notice';
-var script$W = {
-  name: 'XNotice',
-  components: { XIcon: __vue_component__, XCloseIconButton: __vue_component__$7 },
-  transition: prefix$2,
-  props: {
-    title: String,
-    duration: Number,
-    onClose: Function,
-    type: {
-      default: 'open',
-      validator: function validator(v) {
-        return ['info', 'success', 'warning', 'error', 'open'].indexOf(v) !== -1
-      }
-    }
-  },
-  data: function data() {
-    return { prefix: prefix$2, hasDesc: false }
-  },
-  computed: {
-    icon: function icon() {
-      return iconTypes[this.type]
-    },
-    showIcon: function showIcon() {
-      return this.type !== 'open'
-    }
-  },
-  mounted: function mounted() {
-    var this$1 = this;
-
-    var ref = this.$slots.default;
-    var desc = ref[0];
-    this.hasDesc = desc && (desc.text || desc.children);
-    if (this.duration) { this.tid = setTimeout(function () { return this$1.close(); }, this.duration * 1000); }
-  },
-  beforeDestroy: function beforeDestroy() {
-    clearTimeout(this.tid);
-  },
-  methods: {
-    close: function close() {
-      this.onClose && this.onClose(), this.$emit('close');
-    }
-  }
-};
-
-/* script */
-var __vue_script__$W = script$W;
-/* template */
-var __vue_render__$Z = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", { class: _vm.prefix }, [
-    _c(
-      "div",
-      { class: [_vm.prefix + "_box", { hasDesc: _vm.hasDesc }] },
-      [
-        _vm.showIcon
-          ? _c("x-icon", {
-              class: [_vm.prefix + "_icon", _vm.type],
-              attrs: { type: _vm.icon }
-            })
-          : _vm._e(),
-        _vm._v(" "),
-        _c(
-          "div",
-          [
-            _vm.title
-              ? _c("div", { class: _vm.prefix + "_title" }, [
-                  _vm._v(_vm._s(_vm.title))
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm._t("default")
-          ],
-          2
-        ),
-        _vm._v(" "),
-        _c("x-close-icon-button", {
-          class: _vm.prefix + "_close",
-          on: { click: _vm.close }
-        })
-      ],
-      1
-    )
-  ])
-};
-var __vue_staticRenderFns__$Z = [];
-__vue_render__$Z._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$Z = undefined;
-  /* scoped */
-  var __vue_scope_id__$Z = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$Z = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$Z = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$Z = normalizeComponent(
-    { render: __vue_render__$Z, staticRenderFns: __vue_staticRenderFns__$Z },
-    __vue_inject_styles__$Z,
-    __vue_script__$W,
-    __vue_scope_id__$Z,
-    __vue_is_functional_template__$Z,
-    __vue_module_identifier__$Z,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-var Notice = creator(__vue_component__$Z, { duration: 4.5 }, {
-  open: function open(addNotice, options) {
-    addNotice(options, 'open');
-  }
-});
-
-//
-var S$6 = String, B$7 = Boolean, BTrue = { type: B$7, default: true };
-var script$X = {
-  name: 'XModal',
-  components: { XOverlay: __vue_component__$A, XBtn: __vue_component__$1, XCloseIconButton: __vue_component__$7 },
-  props: {
-    value: B$7,
-    title: S$6,
-    closable: BTrue,
-    maskClosable: BTrue,
-    loading: B$7,
-    scrollable: B$7,
-    fullscreen: B$7,
-    mask: BTrue,
-    okText: { type: S$6, default: '确定' },
-    cancelText: { type: S$6, default: '取消' },
-    width: { type: [Number, S$6], default: 520 },
-    footerHide: B$7,
-    styles: Object,
-    className: S$6,
-    transfer: BTrue,
-    hasCancel: BTrue
-  },
-  data: function data() {
-    return { prefix: 'x-modal', visible: false, zIndex: 1, isLoading: false, isCallLock: false }
-  },
-  computed: {
-    classes: function classes() {
-      return [this.prefix, this.className, { fullscreen: this.fullscreen }]
-    },
-    dialogStyle: function dialogStyle() {
-      return this.fullscreen ? this.styles : Object.assign({}, this.styles, {width: parseSize(this.width)})
-    }
-  },
-  watch: {
-    value: {
-      immediate: true,
-      handler: function handler(val) {
-        this.visible = val;
-      }
-    },
-    visible: function visible(val) {
-      this.$emit('input', val);
-      this.$emit('on-visible-change', val);
-      if (val) {
-        this.isLoading = false;
-        this.zIndex = getMaxZIndex();
-        if (winScrollbarLock.locked || this.scrollable) { return }
-        winScrollbarLock.lock();
-        this.isCallLock = true;
-      }
-    }
-  },
-  mounted: function mounted() {
-    this.transfer && document.body.appendChild(this.$el);
-  },
-  beforeDestroy: function beforeDestroy() {
-    this.onLeave();
-    this.$el.parentNode && this.$el.parentNode.removeChild(this.$el);
-  },
-  methods: {
-    hide: function hide() {
-      this.visible = false;
-    },
-    onMaskClose: function onMaskClose() {
-      if (this.maskClosable) { this.hide(); }
-    },
-    onCancel: function onCancel() {
-      this.hide();
-      this.$emit('on-cancel');
-    },
-    onOk: function onOk() {
-      this.$emit('on-ok');
-      if (this.loading) { return this.isLoading = true }
-      this.hide();
-    },
-    onLeave: function onLeave() {
-      this.$emit('leave');
-      if (this.isCallLock) {
-        winScrollbarLock.unlock();
-        this.isCallLock = false;
-      }
-    }
-  }
-};
-
-/* script */
-var __vue_script__$X = script$X;
-/* template */
-var __vue_render__$_ = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    [
-      _vm.mask && !_vm.fullscreen
-        ? _c("x-overlay", {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.visible,
-                expression: "visible"
-              }
-            ],
-            style: { zIndex: _vm.zIndex },
-            on: { click: _vm.onMaskClose }
-          })
-        : _vm._e(),
-      _vm._v(" "),
-      _c(
-        "transition",
-        { attrs: { name: _vm.prefix }, on: { afterLeave: _vm.onLeave } },
-        [
-          _c(
-            "div",
-            {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.visible,
-                  expression: "visible"
-                }
-              ],
-              class: _vm.classes,
-              style: { zIndex: _vm.zIndex }
-            },
-            [
-              _c(
-                "div",
-                {
-                  class: [_vm.prefix + "_content", { noMask: !_vm.mask }],
-                  style: _vm.dialogStyle
-                },
-                [
-                  _vm.closable
-                    ? _c(
-                        "span",
-                        { class: _vm.prefix + "_close" },
-                        [
-                          _vm._t("close", [
-                            _c("x-close-icon-button", {
-                              attrs: { size: "31" },
-                              on: { click: _vm.hide }
-                            })
-                          ])
-                        ],
-                        2
-                      )
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _vm.title || _vm.$slots.header
-                    ? _c(
-                        "div",
-                        { class: _vm.prefix + "_header" },
-                        [
-                          _vm._t("header", [
-                            _c("div", {
-                              domProps: { innerHTML: _vm._s(_vm.title) }
-                            })
-                          ])
-                        ],
-                        2
-                      )
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { class: _vm.prefix + "_body" },
-                    [_vm._t("default")],
-                    2
-                  ),
-                  _vm._v(" "),
-                  !_vm.footerHide
-                    ? _c(
-                        "div",
-                        { class: _vm.prefix + "_footer" },
-                        [
-                          _vm._t("footer", [
-                            _vm.hasCancel
-                              ? _c(
-                                  "x-btn",
-                                  {
-                                    attrs: { type: "text" },
-                                    on: { click: _vm.onCancel }
-                                  },
-                                  [_vm._v(_vm._s(_vm.cancelText))]
-                                )
-                              : _vm._e(),
-                            _vm._v(" "),
-                            _c(
-                              "x-btn",
-                              {
-                                attrs: {
-                                  type: "primary",
-                                  loading: _vm.isLoading
-                                },
-                                on: { click: _vm.onOk }
-                              },
-                              [_vm._v(_vm._s(_vm.okText))]
-                            )
-                          ])
-                        ],
-                        2
-                      )
-                    : _vm._e()
-                ]
-              )
-            ]
-          )
-        ]
-      )
-    ],
-    1
-  )
-};
-var __vue_staticRenderFns__$_ = [];
-__vue_render__$_._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$_ = undefined;
-  /* scoped */
-  var __vue_scope_id__$_ = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$_ = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$_ = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$_ = normalizeComponent(
-    { render: __vue_render__$_, staticRenderFns: __vue_staticRenderFns__$_ },
-    __vue_inject_styles__$_,
-    __vue_script__$X,
-    __vue_scope_id__$_,
-    __vue_is_functional_template__$_,
-    __vue_module_identifier__$_,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-function objectWithoutProperties (obj, exclude) { var target = {}; for (var k in obj) if (Object.prototype.hasOwnProperty.call(obj, k) && exclude.indexOf(k) === -1) target[k] = obj[k]; return target; }
-var S$7 = String, B$8 = Boolean, F$3 = Function;
-var script$Y = {
-  name: 'XDialog',
-  components: { XIcon: __vue_component__, XModal: __vue_component__$_, XBtn: __vue_component__$1 },
-  props: {
-    value: B$8,
-    title: S$7,
-    content: S$7,
-    width: { default: 416 },
-    okText: { type: S$7, default: '确定' },
-    cancelText: {},
-    loading: B$8,
-    scrollable: B$8,
-    onOk: F$3,
-    onCancel: F$3,
-    type: {
-      validator: function validator(v) {
-        return ['info', 'success', 'warning', 'error', 'confirm'].indexOf(v) !== -1
-      }
-    }
-  },
-  data: function data() {
-    var _self = this;
-    return {
-      prefix: 'x-dialog',
-      listeners: Object.assign({}, this.$listeners,
-        {'on-ok': function on_ok() {
-          _self.onOk && _self.onOk();
-        },
-        'on-cancel': function on_cancel() {
-          _self.onCancel && _self.onCancel();
-        }})
-    }
-  },
-  computed: {
-    icon: function icon() {
-      return iconTypes[this.type]
-    },
-    modalProps: function modalProps() {
-      var ref = this.$props;
-      var content = ref.content;
-      var onOk = ref.onOk;
-      var onCancel = ref.onCancel;
-      var type = ref.type;
-      var rest = objectWithoutProperties( ref, ["content", "onOk", "onCancel", "type"] );
-      var props = rest;
-      return Object.assign({}, props, {closable: false, maskClosable: false, className: this.prefix, hasCancel: this.type === 'confirm'})
-    }
-  }
-};
-
-/* script */
-var __vue_script__$Y = script$Y;
-/* template */
-var __vue_render__$$ = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "x-modal",
-    _vm._g(
-      _vm._b({ class: _vm.prefix + "_wrap" }, "x-modal", _vm.modalProps, false),
-      _vm.listeners
-    ),
-    [
-      _vm._t("default", [
-        _c(
-          "div",
-          { class: _vm.prefix + "_content" },
-          [
-            _c("x-icon", {
-              class: [_vm.prefix + "_icon", _vm.type],
-              attrs: { size: "36", type: _vm.icon }
-            }),
-            _vm._v(" "),
-            _c("div", { domProps: { innerHTML: _vm._s(_vm.content) } })
-          ],
-          1
-        )
-      ])
-    ],
-    2
-  )
-};
-var __vue_staticRenderFns__$$ = [];
-__vue_render__$$._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$$ = undefined;
-  /* scoped */
-  var __vue_scope_id__$$ = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$$ = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$$ = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$$ = normalizeComponent(
-    { render: __vue_render__$$, staticRenderFns: __vue_staticRenderFns__$$ },
-    __vue_inject_styles__$$,
-    __vue_script__$Y,
-    __vue_scope_id__$$,
-    __vue_is_functional_template__$$,
-    __vue_module_identifier__$$,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-function objectWithoutProperties$1 (obj, exclude) { var target = {}; for (var k in obj) if (Object.prototype.hasOwnProperty.call(obj, k) && exclude.indexOf(k) === -1) target[k] = obj[k]; return target; }
-
-var vm$2, getVM$2 = function () { return vm$2 || (vm$2 = new Vue({
-  data: function data() {
-    return { options: {} }
-  },
-  render: function render(h) {
-    var this$1 = this;
-
-    var ref = this.options;
-    var render = ref.render;
-    var rest = objectWithoutProperties$1( ref, ["render"] );
-    var props = rest;
-    return h(__vue_component__$$, {
-      props: props, on: { leave: function () { return this$1.destroy(); } }
-    }, render && [render(h)])
-  },
-  methods: {
-    toggle: function toggle(value) {
-      this.options = Object.assign({}, this.options, {value: value});
-    },
-    show: function show(options) {
-      this.options = Object.assign({}, options, {value: true});
-    },
-    destroy: function destroy() {
-      this.$destroy();
-      vm$2 = null;
-    }
-  }
-}).$mount()); };
-
-__vue_component__$_.service = Object.assign({}, [
-    'info',
-    'success',
-    'warning',
-    'error',
-    'confirm'
-  ].reduce(function (acc, type) {
-    var obj;
-
-    return Object.assign({}, acc,
-      ( obj = {}, obj[type] = function (options) { getVM$2().show(Object.assign({}, options, {type: type})); }, obj ))
-  }, {}),
-  {remove: function remove() {
-    vm$2 && vm$2.toggle(false);
-  }});
-
-//
-var script$Z = {
-  name: 'UiTabs',
-  components: { UiIcon: __vue_component__, UiCloseIconButton: __vue_component__$7, XRender: XRender },
-  data: function data() {
-    return {
-      prefix: 'ui-tabs',
-      childs: [],
-      activeTab: this.value,
-      showNavBtns: false,
-      translateX: 0
-    }
-  },
-  props: {
-    value: [String, Number],
-    type: {
-      default: 'line',
-      validator: function validator(value) {
-        return ['line', 'card'].indexOf(value) !== -1
-      }
-    },
-    size: {
-      validator: function validator(value) {
-        return ['default', 'small'].indexOf(value) !== -1
-      }
-    },
-    closable: Boolean,
-    animated: {
-      type: Boolean,
-      default: true
-    }
-  },
-  computed: {
-    contentStyle: function contentStyle() {
-      var i = this.childs.map(function (_) { return _.key; }).indexOf(this.activeTab);
-      return i > 0 && { transform: ("translateX(" + (-i * 100) + "%)") }
-    }
-  },
-  watch: {
-    value: function value(newval) {
-      this.activeTab = newval;
-    },
-    activeTab: function activeTab(newval) {
-      this.$emit('input', newval);
-    },
-    childs: function childs(newval) {
-      if (newval.length) {
-        if (this.activeTab === undefined) { this.activeTab = this.childs[0].key; }
-      } else {
-        this.activeTab = undefined;
-      }
-    }
-  },
-  mounted: function mounted() {
-    this.onWinResize();
-    window.addEventListener('resize', this.onWinResize);
-  },
-  beforeDestroy: function beforeDestroy() {
-    window.removeEventListener('resize', this.onWinResize);
-  },
-  methods: {
-    navItemClasses: function navItemClasses(item) {
-      return [((this.prefix) + "-nav-item"), { active: item.key === this.activeTab, disabled: item.disabled }]
-    },
-    addItem: function addItem(vm) {
-      var this$1 = this;
-
-      this.$nextTick(function () { return this$1.onWinResize(); });
-      return this.childs.push(vm)
-    },
-    removeItem: function removeItem(vm) {
-      var this$1 = this;
-
-      var i = this.childs.indexOf(vm);
-      this.childs.splice(i, 1);
-      if (vm.key === this.activeTab && this.childs.length) { this.activeTab = this.childs[i > 0 ? i - 1 : 0].key; }
-      this.$nextTick(function () { return this$1.onWinResize(); });
-    },
-    deleteItem: function deleteItem(item) {
-      this.$emit('on-tab-remove', item.key);
-    },
-    onNavItemClick: function onNavItemClick(item) {
-      this.activeTab = item.key;
-      var ref = this.$refs;
-      var scrollView = ref.scrollView;
-      var target = this.$refs[item.key][0];
-      var targetRect = target.getBoundingClientRect();
-      var scrollViewLeft = scrollView.getBoundingClientRect().left + Math.abs(this.translateX);
-      if (scrollViewLeft + scrollView.clientWidth < targetRect.right) {
-        this.onNavNext(target.clientWidth);
-      } else if (scrollViewLeft > targetRect.left) {
-        this.onNavPrev(target.clientWidth);
-      }
-    },
-    isFunc: function isFunc$1(label) {
-      return isFunc(label)
-    },
-    canClose: function canClose(item) {
-      return item.closable === false ? false : this.closable && this.type === 'card'
-    },
-    onNavPrev: function onNavPrev(dis) {
-      var ref = this.$refs.scrollView;
-      var clientWidth = ref.clientWidth;
-      var scrollWidth = ref.scrollWidth;
-      var maxDis = Math.min(Math.abs(this.translateX), dis || Infinity);
-      this.translateX += Math.min(clientWidth, maxDis > 0 ? maxDis : 0);
-    },
-    onNavNext: function onNavNext(dis) {
-      var ref = this.$refs.scrollView;
-      var clientWidth = ref.clientWidth;
-      var scrollWidth = ref.scrollWidth;
-      var maxDis = Math.min(scrollWidth - clientWidth - Math.abs(this.translateX), dis || Infinity);
-      this.translateX -= Math.min(clientWidth, maxDis > 0 ? maxDis : 0);
-    },
-    onWinResize: function onWinResize() {
-      var ref = this.$refs;
-      var scrollView = ref.scrollView;
-      if (!scrollView) { return }
-      var clientWidth = scrollView.clientWidth;
-      var scrollWidth = scrollView.scrollWidth;
-      if (clientWidth + Math.abs(this.translateX) > scrollWidth) {
-        this.translateX = -scrollWidth + clientWidth;
-      }
-      this.showNavBtns = clientWidth < scrollWidth;
-    }
-  }
-};
-
-/* script */
-var __vue_script__$Z = script$Z;
-/* template */
-var __vue_render__$10 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    {
-      class: [
-        _vm.prefix,
-        _vm.prefix + "-" + _vm.size,
-        _vm.prefix + "-" + _vm.type
-      ]
-    },
-    [
-      _c(
-        "div",
-        { class: _vm.prefix + "-bar" },
-        [
-          _c(
-            "div",
-            {
-              class: [
-                _vm.prefix + "-nav-wrap",
-                { showNavBtns: _vm.showNavBtns }
-              ]
-            },
-            [
-              _c(
-                "ul",
-                {
-                  ref: "scrollView",
-                  class: _vm.prefix + "-nav",
-                  style: { transform: "translateX(" + _vm.translateX + "px)" }
-                },
-                _vm._l(_vm.childs, function(item) {
-                  return _c(
-                    "li",
-                    {
-                      key: item.key,
-                      ref: item.key,
-                      refInFor: true,
-                      class: _vm.navItemClasses(item),
-                      on: {
-                        click: function($event) {
-                          return _vm.onNavItemClick(item)
-                        }
-                      }
-                    },
-                    [
-                      item.icon
-                        ? _c("ui-icon", {
-                            class: _vm.prefix + "-icon",
-                            attrs: { type: item.icon }
-                          })
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.isFunc(item.label)
-                        ? _c("XRender", { attrs: { render: item.label } })
-                        : [_vm._v(_vm._s(item.label))],
-                      _vm._v(" "),
-                      _vm.canClose(item)
-                        ? _c("ui-close-icon-button", {
-                            class: _vm.prefix + "-close",
-                            on: {
-                              click: function($event) {
-                                $event.stopPropagation();
-                                return _vm.deleteItem(item)
-                              }
-                            }
-                          })
-                        : _vm._e()
-                    ],
-                    2
-                  )
-                }),
-                0
-              ),
-              _vm._v(" "),
-              _vm.showNavBtns
-                ? [
-                    _c(
-                      "span",
-                      {
-                        class: _vm.prefix + "-nav-prev",
-                        on: {
-                          click: function($event) {
-                            return _vm.onNavPrev()
-                          }
-                        }
-                      },
-                      [_c("ui-icon", { attrs: { type: "ios-arrow-back" } })],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "span",
-                      {
-                        class: _vm.prefix + "-nav-next",
-                        on: {
-                          click: function($event) {
-                            return _vm.onNavNext()
-                          }
-                        }
-                      },
-                      [_c("ui-icon", { attrs: { type: "ios-arrow-forward" } })],
-                      1
-                    )
-                  ]
-                : _vm._e()
-            ],
-            2
-          ),
-          _vm._v(" "),
-          _vm._t("extra")
-        ],
-        2
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          class: [_vm.prefix + "-content", { animated: _vm.animated }],
-          style: _vm.contentStyle
-        },
-        [_vm._t("default")],
-        2
-      )
-    ]
-  )
-};
-var __vue_staticRenderFns__$10 = [];
-__vue_render__$10._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$10 = undefined;
-  /* scoped */
-  var __vue_scope_id__$10 = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$10 = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$10 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$10 = normalizeComponent(
-    { render: __vue_render__$10, staticRenderFns: __vue_staticRenderFns__$10 },
-    __vue_inject_styles__$10,
-    __vue_script__$Z,
-    __vue_scope_id__$10,
-    __vue_is_functional_template__$10,
-    __vue_module_identifier__$10,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-var script$_ = {
-  name: 'UiTabPane',
-  data: function data() {
-    return { key: this.name, parent: null }
-  },
-  props: {
-    name: String,
-    label: [String, Function],
-    icon: String,
-    disabled: Boolean,
-    closable: {
-      type: Boolean,
-      default: null
-    }
-  },
-  mounted: function mounted() {
-    this.parent = findParent(this, 'UiTabs');
-    var len = this.parent.addItem(this);
-    this.key = this.name || len - 1;
-  },
-  beforeDestroy: function beforeDestroy() {
-    this.parent.removeItem(this);
-  }
-};
-
-/* script */
-var __vue_script__$_ = script$_;
-
-/* template */
-var __vue_render__$11 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", { staticClass: "ui-tabs-pane" }, [_vm._t("default")], 2)
-};
-var __vue_staticRenderFns__$11 = [];
-__vue_render__$11._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$11 = undefined;
-  /* scoped */
-  var __vue_scope_id__$11 = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$11 = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$11 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$11 = normalizeComponent(
-    { render: __vue_render__$11, staticRenderFns: __vue_staticRenderFns__$11 },
-    __vue_inject_styles__$11,
-    __vue_script__$_,
-    __vue_scope_id__$11,
-    __vue_is_functional_template__$11,
-    __vue_module_identifier__$11,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-var incKey = 0;
-var script$$ = {
-  name: 'UiUpload',
-  components: { UiIcon: __vue_component__, UiProgress: __vue_component__$q, UiCloseIconButton: __vue_component__$7 },
-  data: function data() {
-    return {
-      prefix: 'ui-upload',
-      fileList: [],
-      dragOver: false
-    }
-  },
-  props: {
-    action: {
-      type: String,
-      required: true
-    },
-    headers: {
-      type: Object,
-      default: function () { return ({}); }
-    },
-    multiple: Boolean,
-    disabled: Boolean,
-    data: Object,
-    name: {
-      type: String,
-      default: 'file'
-    },
-    withCredentials: Boolean,
-    showUploadList: {
-      type: Boolean,
-      default: true
-    },
-    type: {
-      default: 'select',
-      validator: function validator(value) {
-        return ['select', 'drag'].indexOf(value) !== -1
-      }
-    },
-    accept: String,
-    format: {
-      type: Array,
-      default: function () { return []; }
-    },
-    maxSize: Number,
-    beforeUpload: Function,
-    onProgress: Function,
-    onSuccess: Function,
-    onError: Function,
-    onPreview: Function,
-    onRemove: Function,
-    onFormatError: Function,
-    onExceededSize: Function,
-    defaultFileList: {
-      type: Array,
-      default: function () { return []; }
-    }
-  },
-  computed: {
-    hasTip: function hasTip() {
-      return this.$slots.tip !== undefined
-    }
-  },
-  watch: {
-    defaultFileList: {
-      immediate: true,
-      handler: function handler(newval) {
-        this.fileList = newval.map(function (_) { return (Object.assign({}, _, 
-          {key: incKey++,
-          showProgress: false,
-          status: 'success'})); });
-      }
-    }
-  },
-  methods: {
-    selectFile: function selectFile() {
-      this.$refs.File.click();
-    },
-    onDrop: function onDrop(e) {
-      this.dragOver = false;
-      if (this.disabled) { return }
-      this.onFileChange(e);
-    },
-    onFileChange: function onFileChange(e) {
-      var this$1 = this;
-
-      var files = Array.prototype.slice.call(e.target.files || e.dataTransfer.files);
-      files.forEach(function (file) { return this$1.validFormat(file) && this$1.validSize(file) && this$1.upload(file); });
-      this.$nextTick(function () { return e.target.value = ''; });
-    },
-    validFormat: function validFormat(file) {
-      if (this.format.length) {
-        var fileFormat = file.name.split('.').pop().toLowerCase();
-        if (this.format.every(function (_) { return _.toLowerCase() !== fileFormat; })) {
-          this.onFormatError && this.onFormatError(file, this.fileList);
-          return false
-        }
-      }
-      return true
-    },
-    validSize: function validSize(file) {
-      if (this.maxSize && file.size > this.maxSize * 1024) {
-        this.onExceededSize && this.onExceededSize(file, this.fileList);
-        return false
-      }
-      return true
-    },
-    upload: function upload(file) {
-      var this$1 = this;
-
-      var fileItem = {
-        file: file,
-        percentage: 0,
-        key: incKey++,
-        name: file.name,
-        status: 'normal',
-        showProgress: true
-      };
-      this.fileList.push(fileItem);
-      var formData = new FormData();
-      formData.append(this.name, file);
-      this.data && Object.keys(this.data).forEach(function (_) { return formData.append(_, this$1.data[_]); });
-      var xhr = new XMLHttpRequest();
-      xhr.onprogress = function (e) {
-        if (e.total > 0) {
-          fileItem.percentage = e.loaded / e.total * 100;
-        }
-        this$1.onProgress && this$1.onProgress(e, fileItem, this$1.fileList);
-      };
-      xhr.onload = function () {
-        if (xhr.status < 200 && xhr.status >= 300) {
-          fileItem.status = 'wrong';
-          fileItem.showProgress = false;
-          this$1.fileList.splice(this$1.fileList.indexOf(fileItem), 1);
-          return this$1.onError && this$1.onError(new Error(("fail to post " + (this$1.action) + " " + (xhr.status) + "'")), fileItem, this$1.fileList)
-        }
-        fileItem.percentage = 100;
-        fileItem.status = 'success';
-        fileItem.showProgress = false;
-        fileItem.response = xhr.response;
-        this$1.onSuccess && this$1.onSuccess(xhr.response, fileItem, this$1.fileList);
-      };
-      xhr.onerror = function (err) {
-        fileItem.percentage = 100;
-        fileItem.status = 'wrong';
-        fileItem.showProgress = false;
-        this$1.fileList.splice(this$1.fileList.indexOf(fileItem), 1);
-        this$1.onError && this$1.onError(err);
-      };
-      xhr.open('post', this.action, true);
-      xhr.withCredentials = this.withCredentials;
-      Object.keys(this.headers).forEach(function (_) { return xhr.setRequestHeader(_, headers[_]); });
-      xhr.send(formData);
-    },
-    removeItem: function removeItem(item) {
-      this.fileList.splice(this.fileList.indexOf(item), 1);
-      this.onRemove && this.onRemove(item, this.fileList);
-    },
-    previewItem: function previewItem(item) {
-      this.onPreview && this.onPreview(item);
-    },
-    clearFiles: function clearFiles() {
-      this.fileList = [];
-    }
-  }
-};
-
-/* script */
-var __vue_script__$$ = script$$;
-/* template */
-var __vue_render__$12 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", { class: _vm.prefix }, [
-    _c("input", {
-      directives: [
-        { name: "show", rawName: "v-show", value: false, expression: "false" }
-      ],
-      ref: "File",
-      attrs: {
-        type: "file",
-        disabled: _vm.disabled,
-        multiple: _vm.multiple,
-        accept: _vm.accept
-      },
-      on: { change: _vm.onFileChange }
-    }),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        class: [_vm.prefix + "-" + _vm.type, { dragOver: _vm.dragOver }],
-        on: {
-          click: _vm.selectFile,
-          drop: function($event) {
-            $event.preventDefault();
-            return _vm.onDrop($event)
-          },
-          dragover: function($event) {
-            $event.preventDefault();
-            _vm.dragOver = true;
-          },
-          dragleave: function($event) {
-            $event.preventDefault();
-            _vm.dragOver = false;
-          }
-        }
-      },
-      [_vm._t("default")],
-      2
-    ),
-    _vm._v(" "),
-    _vm.showUploadList
-      ? _c(
-          "ul",
-          { class: _vm.prefix + "-list" },
-          _vm._l(_vm.fileList, function(item) {
-            return _c(
-              "li",
-              { key: item.key },
-              [
-                _c(
-                  "div",
-                  { class: _vm.prefix + "-finish" },
-                  [
-                    _c("ui-icon", { attrs: { type: "document" } }),
-                    _vm._v(" "),
-                    _c(
-                      "span",
-                      {
-                        class: _vm.prefix + "-filename",
-                        on: { click: _vm.previewItem }
-                      },
-                      [_vm._v(_vm._s(item.name))]
-                    ),
-                    _vm._v(" "),
-                    _c("b", { class: _vm.prefix + "-spring" }),
-                    _vm._v(" "),
-                    _c("ui-close-icon-button", {
-                      class: _vm.prefix + "-remove",
-                      attrs: { size: "18" },
-                      on: {
-                        click: function($event) {
-                          return _vm.removeItem(item)
-                        }
-                      }
-                    })
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "transition",
-                  { attrs: { name: _vm.prefix + "-progressbar" } },
-                  [
-                    item.showProgress
-                      ? _c("ui-progress", {
-                          class: _vm.prefix + "-progressbar",
-                          attrs: {
-                            strokeWidth: 2,
-                            percent: item.percentage,
-                            status: item.status
-                          }
-                        })
-                      : _vm._e()
-                  ],
-                  1
-                )
-              ],
-              1
-            )
-          }),
-          0
-        )
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.hasTip
-      ? _c("div", { class: _vm.prefix + "-tip" }, [_vm._t("tip")], 2)
-      : _vm._e()
-  ])
-};
-var __vue_staticRenderFns__$12 = [];
-__vue_render__$12._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$12 = undefined;
-  /* scoped */
-  var __vue_scope_id__$12 = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$12 = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$12 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$12 = normalizeComponent(
-    { render: __vue_render__$12, staticRenderFns: __vue_staticRenderFns__$12 },
-    __vue_inject_styles__$12,
-    __vue_script__$$,
-    __vue_scope_id__$12,
-    __vue_is_functional_template__$12,
-    __vue_module_identifier__$12,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-//
-//
-//
-//
-
-var script$10 = {
-  name: 'UiForm',
-  data: function data() {
-    return { fields: [] }
-  },
-  props: {
-    model: Object,
-    rules: Object,
-    inline: Boolean,
-    labelPosition: {
-      default: 'right',
-      validator: function validator(value) {
-        return ['left', 'right', 'top'].indexOf(value) !== -1
-      }
-    },
-    labelWidth: [Number, String],
-    showMessage: {
-      type: Boolean,
-      default: true
-    },
-    autocomplete: {
-      default: 'off',
-      validator: function validator(value) {
-        return ['off', 'on'].indexOf(value) !== -1
-      }
-    }
-  },
-  methods: {
-    addItem: function addItem(vm) {
-      this.fields.push(vm);
-    },
-    removeItem: function removeItem(vm) {
-      this.fields.splice(this.fields.indexOf(vm), 1);
-    },
-    validate: function validate(callback) {
-
-    },
-    validateField: function validateField(prop, callback) {
-
-    },
-    resetFields: function resetFields() {
-
-    }
-  }
-};
-
-/* script */
-var __vue_script__$10 = script$10;
-/* template */
-var __vue_render__$13 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "form",
-    {
-      staticClass: "ui-form",
-      class: [_vm.labelPosition, { inline: _vm.inline }],
-      attrs: { autocomplete: _vm.autocomplete }
-    },
-    [_vm._t("default")],
-    2
-  )
-};
-var __vue_staticRenderFns__$13 = [];
-__vue_render__$13._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$13 = undefined;
-  /* scoped */
-  var __vue_scope_id__$13 = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$13 = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$13 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$13 = normalizeComponent(
-    { render: __vue_render__$13, staticRenderFns: __vue_staticRenderFns__$13 },
-    __vue_inject_styles__$13,
-    __vue_script__$10,
-    __vue_scope_id__$13,
-    __vue_is_functional_template__$13,
-    __vue_module_identifier__$13,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-var script$11 = {
-  name: 'UiFormItem',
-  data: function data() {
-    return { prefix: 'ui-form-item', parent: null }
-  },
-  props: {
-    prop: String,
-    label: String,
-    labelWidth: [Number, String],
-    rules: [Object, Array],
-    showMessage: {
-      type: Boolean,
-      default: true
-    }
-  },
-  computed: {
-    lw: function lw() {
-      return this.labelWidth || (this.parent && this.parent.labelWidth)
-    },
-    hasLabel: function hasLabel() {
-      return this.label || this.$slots.label !== undefined || this.lw
-    },
-    labelStyle: function labelStyle() {
-      return this.lw && { width: parseSize(this.lw) }
-    },
-    showMsg: function showMsg() {
-      return this.showMessage && this.parent && this.parent.showMessage
-    }
-  },
-  mounted: function mounted() {
-    this.parent = findParent(this, 'UiForm');
-    this.parent.addItem(this);
-  },
-  beforeDestroy: function beforeDestroy() {
-    this.parent.removeItem(this);
-  }
-};
-
-/* script */
-var __vue_script__$11 = script$11;
-
-/* template */
-var __vue_render__$14 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", { class: _vm.prefix }, [
-    _vm.hasLabel
-      ? _c(
-          "label",
-          { class: _vm.prefix + "-label", style: _vm.labelStyle },
-          [_vm._t("label", [_vm._v(_vm._s(_vm.label))])],
-          2
-        )
-      : _vm._e(),
-    _vm._v(" "),
-    _c(
-      "div",
-      { class: _vm.prefix + "-content" },
-      [
-        _vm._t("default"),
-        _vm._v(" "),
-        _c("transition", { attrs: { name: "ui-fade" } }, [
-          _vm.showMsg
-            ? _c("div", { class: _vm.prefix + "-error-tip" })
-            : _vm._e()
-        ])
-      ],
-      2
-    )
-  ])
-};
-var __vue_staticRenderFns__$14 = [];
-__vue_render__$14._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$14 = undefined;
-  /* scoped */
-  var __vue_scope_id__$14 = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$14 = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$14 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$14 = normalizeComponent(
-    { render: __vue_render__$14, staticRenderFns: __vue_staticRenderFns__$14 },
-    __vue_inject_styles__$14,
-    __vue_script__$11,
-    __vue_scope_id__$14,
-    __vue_is_functional_template__$14,
-    __vue_module_identifier__$14,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-/**
- * 判断一个元素是否另一个元素的父元素或者自身
- * @param {HTMLElement} par 
- * @param {HTMLElement} el 
- */
-function isSelfOrParent(par, el) {
-  do {
-    if (el === par) { return true }
-    el = el.parentNode;
-  } while (el && el !== document.body)
-  return false
-}
-
-/**
- * 判断一个元素的父元素是否有指定的类
- * @param {HTMLElement} el 
- * @param {String} clsName 
- */
-function hasClassNameOfParent(el, clsName) {
-  return !!findParentByClassName(el, clsName)
-}
-
-/**
- * 通过类名查找父元素
- * @param {HTMLElement} el 
- * @param {String} clsName 
- */
-function findParentByClassName(el, clsName) {
-  do {
-    if (el.classList.contains(clsName)) { return el }
-    el = el.parentNode;
-  } while (el && el !== document.body)
-  return null
-}
-
-//
-var script$12 = {
   data: function data() {
     return { styles: {}, parent: null }
   },
@@ -9104,9 +7234,9 @@ var script$12 = {
 };
 
 /* script */
-var __vue_script__$12 = script$12;
+var __vue_script__$T = script$T;
 /* template */
-var __vue_render__$15 = function() {
+var __vue_render__$W = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -9135,17 +7265,17 @@ var __vue_render__$15 = function() {
     )
   ])
 };
-var __vue_staticRenderFns__$15 = [];
-__vue_render__$15._withStripped = true;
+var __vue_staticRenderFns__$W = [];
+__vue_render__$W._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$15 = undefined;
+  var __vue_inject_styles__$W = undefined;
   /* scoped */
-  var __vue_scope_id__$15 = undefined;
+  var __vue_scope_id__$W = undefined;
   /* module identifier */
-  var __vue_module_identifier__$15 = undefined;
+  var __vue_module_identifier__$W = undefined;
   /* functional template */
-  var __vue_is_functional_template__$15 = false;
+  var __vue_is_functional_template__$W = false;
   /* style inject */
   
   /* style inject SSR */
@@ -9154,769 +7284,53 @@ __vue_render__$15._withStripped = true;
   
 
   
-  var __vue_component__$15 = normalizeComponent(
-    { render: __vue_render__$15, staticRenderFns: __vue_staticRenderFns__$15 },
-    __vue_inject_styles__$15,
-    __vue_script__$12,
-    __vue_scope_id__$15,
-    __vue_is_functional_template__$15,
-    __vue_module_identifier__$15,
+  var __vue_component__$W = normalizeComponent(
+    { render: __vue_render__$W, staticRenderFns: __vue_staticRenderFns__$W },
+    __vue_inject_styles__$W,
+    __vue_script__$T,
+    __vue_scope_id__$W,
+    __vue_is_functional_template__$W,
+    __vue_module_identifier__$W,
     false,
     undefined,
     undefined,
     undefined
   );
 
-//
-var script$13 = {
-  name: 'ui-dropdown',
-  components: { UiOptionList: __vue_component__$15 },
-  data: function data() {
-    return { isVisible: false, timeout: null }
-  },
-  props: {
-    trigger: {
-      default: 'hover',
-      validator: function validator(value) {
-        return ['hover', 'click', 'custom'].indexOf(value) !== -1
-      }
-    },
-    visible: Boolean,
-    placement: {
-      default: 'bottom',
-      validator: function validator(value) {
-        return [
-          'top', 'top-start', 'top-end', 
-          'right', 'right-start', 'right-end', 
-          'bottom', 'bottom-start', 'bottom-end', 
-          'left', 'left-start', 'left-end'
-        ].indexOf(value) !== -1
-      }
-    }
-  },
-  directives: { winclick: winclick },
-  watch: {
-    visible: function visible(newVal) {
-      if (this.trigger === 'custom') { this.isVisible = newVal; }
-    },
-    isVisible: function isVisible(newVal) {
-      this.$emit('on-visible-change', newVal);
-    }
-  },
-  methods: {
-    handleMouseenter: function handleMouseenter() {
-      if (this.trigger === 'hover') { this.isVisible = true; }
-    },
-    handleMouseleave: function handleMouseleave(event) {
-      if (this.trigger === 'hover') { this.timeout = setTimeout(this.close, 150); }
-    },
-    handleClick: function handleClick() {
-      if (this.trigger === 'click') { this.isVisible = true; }
-    },
-    close: function close() {
-      this.isVisible = false;
-    },
-    itemClick: function itemClick(name) {
-      this.close();
-      this.$emit('on-click', name);
-    },
-    handleDropMouseenter: function handleDropMouseenter(event) {
-      clearTimeout(this.timeout);
-    },
-    handleDropMouseleave: function handleDropMouseleave(event) {
-      if (this.trigger === 'hover') { this.isVisible = false; }
-    },
-    /**
-     * 窗口单击事件处理
-     * @param {MouseEvent} event
-     * 模拟方式不是单击 或者下拉菜单不可见 --> 退出
-     * 如果不是挂载元素 也不是该下拉菜单 --> 退出
-     */
-    handleWinClick: function handleWinClick(event) {
-      if (this.trigger !== 'click' || !this.isVisible) { return }
-      if (isSelfOrParent(this.$el, event.target) || 
-        isSelfOrParent(this.$refs.Drop, event.target)) { return }
-      this.isVisible = false;
-      this.$emit('on-clickoutside', event);
-    }
-  }
-};
+/**
+ * 判断一个元素是否另一个元素的父元素或者自身
+ * @param {HTMLElement} par 
+ * @param {HTMLElement} el 
+ */
+function isSelfOrParent(par, el) {
+  do {
+    if (el === par) { return true }
+    el = el.parentNode;
+  } while (el && el !== document.body)
+  return false
+}
 
-/* script */
-var __vue_script__$13 = script$13;
-/* template */
-var __vue_render__$16 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    {
-      directives: [
-        {
-          name: "winclick",
-          rawName: "v-winclick",
-          value: _vm.handleWinClick,
-          expression: "handleWinClick"
-        }
-      ],
-      staticClass: "ui-dropdown"
-    },
-    [
-      _c(
-        "div",
-        {
-          staticClass: "ui-dropdown-rel",
-          on: {
-            mouseenter: _vm.handleMouseenter,
-            mouseleave: _vm.handleMouseleave,
-            click: _vm.handleClick
-          }
-        },
-        [_vm._t("default")],
-        2
-      ),
-      _vm._v(" "),
-      _c(
-        "ui-option-list",
-        {
-          ref: "Drop",
-          attrs: { parentName: _vm.$options.name, visible: _vm.isVisible },
-          nativeOn: {
-            mouseenter: function($event) {
-              return _vm.handleDropMouseenter($event)
-            },
-            mouseleave: function($event) {
-              return _vm.handleDropMouseleave($event)
-            }
-          }
-        },
-        [_vm._t("list")],
-        2
-      )
-    ],
-    1
-  )
-};
-var __vue_staticRenderFns__$16 = [];
-__vue_render__$16._withStripped = true;
+/**
+ * 判断一个元素的父元素是否有指定的类
+ * @param {HTMLElement} el 
+ * @param {String} clsName 
+ */
+function hasClassNameOfParent(el, clsName) {
+  return !!findParentByClassName(el, clsName)
+}
 
-  /* style */
-  var __vue_inject_styles__$16 = undefined;
-  /* scoped */
-  var __vue_scope_id__$16 = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$16 = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$16 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$16 = normalizeComponent(
-    { render: __vue_render__$16, staticRenderFns: __vue_staticRenderFns__$16 },
-    __vue_inject_styles__$16,
-    __vue_script__$13,
-    __vue_scope_id__$16,
-    __vue_is_functional_template__$16,
-    __vue_module_identifier__$16,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-var script$14 = {
-  data: function data() {
-    return { parent: null }
-  },
-  props: {
-    name: String,
-    disabled: Boolean,
-    divided: Boolean,
-    selected: Boolean
-  },
-  methods: {
-    handleClick: function handleClick(event) {
-      if (this.disabled) { return }
-      this.parent && this.parent.itemClick(this.name);
-    }
-  },
-  mounted: function mounted() {
-    this.parent = findParent(this, 'ui-dropdown');
-  }
-};
-
-/* script */
-var __vue_script__$14 = script$14;
-/* template */
-var __vue_render__$17 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "li",
-    { staticClass: "ui-dropdown-item", class: { divided: _vm.divided } },
-    [
-      _c(
-        "div",
-        {
-          staticClass: "ui-dropdown-item-btn",
-          class: { selected: _vm.selected, disabled: _vm.disabled },
-          on: { click: _vm.handleClick }
-        },
-        [_vm._t("default")],
-        2
-      )
-    ]
-  )
-};
-var __vue_staticRenderFns__$17 = [];
-__vue_render__$17._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$17 = undefined;
-  /* scoped */
-  var __vue_scope_id__$17 = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$17 = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$17 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$17 = normalizeComponent(
-    { render: __vue_render__$17, staticRenderFns: __vue_staticRenderFns__$17 },
-    __vue_inject_styles__$17,
-    __vue_script__$14,
-    __vue_scope_id__$17,
-    __vue_is_functional_template__$17,
-    __vue_module_identifier__$17,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-/* script */
-
-/* template */
-var __vue_render__$18 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("ul", { staticClass: "ui-dropdown-menu" }, [_vm._t("default")], 2)
-};
-var __vue_staticRenderFns__$18 = [];
-__vue_render__$18._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$18 = undefined;
-  /* scoped */
-  var __vue_scope_id__$18 = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$18 = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$18 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$18 = normalizeComponent(
-    { render: __vue_render__$18, staticRenderFns: __vue_staticRenderFns__$18 },
-    __vue_inject_styles__$18,
-    {},
-    __vue_scope_id__$18,
-    __vue_is_functional_template__$18,
-    __vue_module_identifier__$18,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-//
-//
-//
-//
-
-var script$15 = {
-  name: 'ui-menu',
-  data: function data() {
-    return {
-      openedNames: this.openNames,
-      currentActiveName: this.activeName
-    }
-  },
-  props: {
-    mode: {
-      default: 'vertical',
-      validator: function validator(value) {
-        return ['horizontal', 'vertical'].indexOf(value) !== -1
-      }
-    },
-    theme: {
-      default: 'light',
-      validator: function validator(value) {
-        return ['light', 'dark', 'primary'].indexOf(value) !== -1
-      }
-    },
-    activeName: [String, Number],
-    openNames: {
-      type: Array,
-      default: function () { return []; }
-    },
-    accordion: Boolean,
-    width: {
-      type: String,
-      default: '240px'
-    }
-  },
-  computed: {
-    styles: function styles() {
-      return this.mode === 'vertical' ? { width: this.width } : {}
-    }
-  },
-  methods: {
-    /**
-     * 更新打开的菜单
-     */
-    updateOpened: function updateOpened(names) {
-      if ( names === void 0 ) names = [];
-
-      this.openedNames = names;
-      this.$emit('update:openNames', names);
-    },
-    /**
-     * 切换子菜单打开状态
-     */
-    toggleSubmenu: function toggleSubmenu(name) {
-      var index = this.openedNames.indexOf(name);
-      if (this.accordion) {
-        this.openedNames = index === -1 ? [name] : [];
-      } else {
-        if (index === -1) {
-          this.openedNames.push(name);
-        } else {
-          this.openedNames.splice(index, 1);
-        }
-      }
-      this.$emit('update:openNames', this.openedNames);
-    },
-    /**
-     * 更新活动菜单
-     */
-    updateActiveName: function updateActiveName(name) {
-      this.currentActiveName = name;
-      this.$emit('update:activeName', name);
-    },
-    /**
-     * 获取活动菜单
-     */
-    getActiveName: function getActiveName() {
-      return this.currentActiveName
-    },
-    /**
-     * 获取模式
-     */
-    getMode: function getMode() {
-      return this.mode
-    },
-    /**
-     * 获取打开的菜单
-     */
-    getOpenedNames: function getOpenedNames() {
-      return this.openedNames
-    },
-    /**
-     * 子菜单可见状态改变
-     */
-    onOpenChange: function onOpenChange(name, isOpen) {
-      this.$emit('on-open-change', name, isOpen);
-    },
-    /**
-     * 菜单选择改变
-     */
-    onSelect: function onSelect(name) {
-      this.$emit('on-select', name);
-    }
-  }
-};
-
-/* script */
-var __vue_script__$15 = script$15;
-/* template */
-var __vue_render__$19 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "ul",
-    { staticClass: "x-menu", class: [_vm.mode, _vm.theme], style: _vm.styles },
-    [_vm._t("default")],
-    2
-  )
-};
-var __vue_staticRenderFns__$19 = [];
-__vue_render__$19._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$19 = undefined;
-  /* scoped */
-  var __vue_scope_id__$19 = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$19 = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$19 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$19 = normalizeComponent(
-    { render: __vue_render__$19, staticRenderFns: __vue_staticRenderFns__$19 },
-    __vue_inject_styles__$19,
-    __vue_script__$15,
-    __vue_scope_id__$19,
-    __vue_is_functional_template__$19,
-    __vue_module_identifier__$19,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-var script$16 = {
-  name: 'ui-menu-submenu',
-  components: { UiIcon: __vue_component__, UiOptionList: __vue_component__$15 },
-  data: function data() {
-    return {
-      visible: false,
-      timeout: null,
-      parent: null
-    }
-  },
-  props: {
-    name: [String, Number]
-  },
-  computed: {
-    active: function active() {
-      return this.visible || this.parent && this.parent.getActiveName() === this.name
-    },
-    isVertical: function isVertical() {
-      return this.parent && this.parent.getMode() === 'vertical'
-    },
-    isOpened: function isOpened() {
-      return this.parent && this.parent.getOpenedNames().indexOf(this.name) !== -1
-    }
-  },
-  watch: {
-    visible: function visible(newVal) {
-      this.parent && this.parent.onOpenChange(this.name, newVal);
-    }
-  },
-  methods: {
-    close: function close() {
-      this.visible = false;
-    },
-    handleMouseenter: function handleMouseenter() {
-      if (this.isVertical) { return }
-      clearTimeout(this.timeout);
-      this.visible = true;
-    },
-    handleMouseleave: function handleMouseleave() {
-      if (this.isVertical) { return }
-      this.timeout = setTimeout(this.close, 150);
-    },
-    handleDropMouseenter: function handleDropMouseenter() {
-      clearTimeout(this.timeout);
-    },
-    handleDropMouseleave: function handleDropMouseleave() {
-      this.timeout = setTimeout(this.close, 150);
-    },
-    getName: function getName() {
-      return this.name
-    },
-    handleTitleClick: function handleTitleClick() {
-      this.parent && this.parent.toggleSubmenu(this.name);
-    }
-  },
-  mounted: function mounted() {
-    this.parent = findParent(this, 'ui-menu');
-  }
-};
-
-/* script */
-var __vue_script__$16 = script$16;
-
-/* template */
-var __vue_render__$1a = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "li",
-    {
-      staticClass: "ui-menu-submenu",
-      class: { vertical: _vm.isVertical, active: _vm.active },
-      on: { mouseenter: _vm.handleMouseenter, mouseleave: _vm.handleMouseleave }
-    },
-    [
-      _c(
-        "div",
-        {
-          staticClass: "ui-menu-submenu-title",
-          on: { click: _vm.handleTitleClick }
-        },
-        [
-          _vm._t("title"),
-          _vm._v(" "),
-          _c("UiIcon", {
-            staticClass: "title-icon",
-            attrs: { type: "ios-arrow-down" }
-          })
-        ],
-        2
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.isVertical && _vm.isOpened,
-              expression: "isVertical && isOpened"
-            }
-          ],
-          staticClass: "vertical"
-        },
-        [_c("ul", [_vm._t("default")], 2)]
-      ),
-      _vm._v(" "),
-      !_vm.isVertical
-        ? _c(
-            "ui-option-list",
-            {
-              staticClass: "ui-menu-submenu-list",
-              attrs: { visible: _vm.visible, parentName: _vm.$options.name },
-              nativeOn: {
-                mouseenter: function($event) {
-                  return _vm.handleDropMouseenter($event)
-                },
-                mouseleave: function($event) {
-                  return _vm.handleDropMouseleave($event)
-                }
-              }
-            },
-            [_c("ul", [_vm._t("default")], 2)]
-          )
-        : _vm._e()
-    ],
-    1
-  )
-};
-var __vue_staticRenderFns__$1a = [];
-__vue_render__$1a._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$1a = undefined;
-  /* scoped */
-  var __vue_scope_id__$1a = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$1a = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$1a = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$1a = normalizeComponent(
-    { render: __vue_render__$1a, staticRenderFns: __vue_staticRenderFns__$1a },
-    __vue_inject_styles__$1a,
-    __vue_script__$16,
-    __vue_scope_id__$1a,
-    __vue_is_functional_template__$1a,
-    __vue_module_identifier__$1a,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-var script$17 = {
-  data: function data() {
-    return {
-      parent: null,
-      menuRoot: null
-    }
-  },
-  props: {
-    name: [String, Number]
-  },
-  computed: {
-    isVertical: function isVertical() {
-      return this.menuRoot && this.menuRoot.getMode() === 'vertical'
-    },
-    active: function active() {
-      if (this.parent) {
-        return this.isVertical && this.menuRoot.getActiveName() === this.name
-      } else {
-        return this.menuRoot && this.menuRoot.getActiveName() === this.name
-      }
-    }
-  },
-  methods: {
-    handleClick: function handleClick() {
-      this.menuRoot && this.menuRoot.updateActiveName(
-        !this.parent || this.isVertical ? this.name : this.parent.getName()
-      );
-      !this.isVertical && this.parent && this.parent.close();
-      this.menuRoot && this.menuRoot.onSelect(this.name);
-    }
-  },
-  mounted: function mounted() {
-    this.menuRoot = findParent(this, 'ui-menu');
-    this.parent = findParent(this, 'ui-menu-submenu');
-  }
-};
-
-/* script */
-var __vue_script__$17 = script$17;
-
-/* template */
-var __vue_render__$1b = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "li",
-    {
-      staticClass: "ui-menu-item",
-      class: { active: _vm.active },
-      on: { click: _vm.handleClick }
-    },
-    [_vm._t("default")],
-    2
-  )
-};
-var __vue_staticRenderFns__$1b = [];
-__vue_render__$1b._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$1b = undefined;
-  /* scoped */
-  var __vue_scope_id__$1b = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$1b = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$1b = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$1b = normalizeComponent(
-    { render: __vue_render__$1b, staticRenderFns: __vue_staticRenderFns__$1b },
-    __vue_inject_styles__$1b,
-    __vue_script__$17,
-    __vue_scope_id__$1b,
-    __vue_is_functional_template__$1b,
-    __vue_module_identifier__$1b,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-//
-//
-//
-//
-//
-
-var script$18 = {
-  props: {
-    title: String
-  }
-};
-
-/* script */
-var __vue_script__$18 = script$18;
-
-/* template */
-var __vue_render__$1c = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("li", { staticClass: "ui-menu-item-group" }, [
-    _c("div", { staticClass: "ui-menu-item-group-title" }, [
-      _vm._v(_vm._s(_vm.title))
-    ]),
-    _vm._v(" "),
-    _c("ul", [_vm._t("default")], 2)
-  ])
-};
-var __vue_staticRenderFns__$1c = [];
-__vue_render__$1c._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$1c = undefined;
-  /* scoped */
-  var __vue_scope_id__$1c = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$1c = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$1c = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$1c = normalizeComponent(
-    { render: __vue_render__$1c, staticRenderFns: __vue_staticRenderFns__$1c },
-    __vue_inject_styles__$1c,
-    __vue_script__$18,
-    __vue_scope_id__$1c,
-    __vue_is_functional_template__$1c,
-    __vue_module_identifier__$1c,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
+/**
+ * 通过类名查找父元素
+ * @param {HTMLElement} el 
+ * @param {String} clsName 
+ */
+function findParentByClassName(el, clsName) {
+  do {
+    if (el.classList.contains(clsName)) { return el }
+    el = el.parentNode;
+  } while (el && el !== document.body)
+  return null
+}
 
 //
 
@@ -9946,9 +7360,9 @@ function addDocClickListener() {
 
 addDocClickListener();
 
-var script$19 = {
+var script$U = {
   name: 'ui-select',
-  components: { UiTag: __vue_component__$9, UiIcon: __vue_component__, UiOptionList: __vue_component__$15 },
+  components: { UiTag: __vue_component__$9, UiIcon: __vue_component__, UiOptionList: __vue_component__$W },
   data: function data() {
     return {
       isCollapsed: false, // 是否展开下拉列表
@@ -10290,9 +7704,9 @@ var script$19 = {
 };
 
 /* script */
-var __vue_script__$19 = script$19;
+var __vue_script__$U = script$U;
 /* template */
-var __vue_render__$1d = function() {
+var __vue_render__$X = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -10472,17 +7886,17 @@ var __vue_render__$1d = function() {
     1
   )
 };
-var __vue_staticRenderFns__$1d = [];
-__vue_render__$1d._withStripped = true;
+var __vue_staticRenderFns__$X = [];
+__vue_render__$X._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$1d = undefined;
+  var __vue_inject_styles__$X = undefined;
   /* scoped */
-  var __vue_scope_id__$1d = undefined;
+  var __vue_scope_id__$X = undefined;
   /* module identifier */
-  var __vue_module_identifier__$1d = undefined;
+  var __vue_module_identifier__$X = undefined;
   /* functional template */
-  var __vue_is_functional_template__$1d = false;
+  var __vue_is_functional_template__$X = false;
   /* style inject */
   
   /* style inject SSR */
@@ -10491,13 +7905,13 @@ __vue_render__$1d._withStripped = true;
   
 
   
-  var __vue_component__$1d = normalizeComponent(
-    { render: __vue_render__$1d, staticRenderFns: __vue_staticRenderFns__$1d },
-    __vue_inject_styles__$1d,
-    __vue_script__$19,
-    __vue_scope_id__$1d,
-    __vue_is_functional_template__$1d,
-    __vue_module_identifier__$1d,
+  var __vue_component__$X = normalizeComponent(
+    { render: __vue_render__$X, staticRenderFns: __vue_staticRenderFns__$X },
+    __vue_inject_styles__$X,
+    __vue_script__$U,
+    __vue_scope_id__$X,
+    __vue_is_functional_template__$X,
+    __vue_module_identifier__$X,
     false,
     undefined,
     undefined,
@@ -10505,7 +7919,7 @@ __vue_render__$1d._withStripped = true;
   );
 
 //
-var script$1a = {
+var script$V = {
   name: 'ui-select-option',
   components: { UiIcon: __vue_component__ },
   data: function data() {
@@ -10544,9 +7958,9 @@ var script$1a = {
 };
 
 /* script */
-var __vue_script__$1a = script$1a;
+var __vue_script__$V = script$V;
 /* template */
-var __vue_render__$1e = function() {
+var __vue_render__$Y = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -10577,6 +7991,2921 @@ var __vue_render__$1e = function() {
         2
       )
     : _vm._e()
+};
+var __vue_staticRenderFns__$Y = [];
+__vue_render__$Y._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$Y = undefined;
+  /* scoped */
+  var __vue_scope_id__$Y = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$Y = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$Y = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$Y = normalizeComponent(
+    { render: __vue_render__$Y, staticRenderFns: __vue_staticRenderFns__$Y },
+    __vue_inject_styles__$Y,
+    __vue_script__$V,
+    __vue_scope_id__$Y,
+    __vue_is_functional_template__$Y,
+    __vue_module_identifier__$Y,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+var N$4 = Number, B$7 = Boolean;
+var script$W = {
+  name: 'XPage',
+  components: { XIcon: __vue_component__, XSelect: __vue_component__$X, XOption: __vue_component__$Y, XInput: __vue_component__$H },
+  props: {
+    current: { type: N$4, default: 1 },
+    total: { type: N$4, default: 0 },
+    pageSize: { type: N$4, default: 10 },
+    pageSizeOpts: { type: Array, default: function () { return [10, 20, 30, 40]; } },
+    placement: {
+      default: 'bottom',
+      validator: function validator(v) {
+        return ['bottom', 'top'].indexOf(v) > -1
+      }
+    },
+    size: {
+      validator: function validator(v) {
+        return v === 'small'
+      }
+    },
+    simple: B$7,
+    showTotal: B$7,
+    showElevator: B$7,
+    showSizer: B$7,
+    transfer: B$7,
+    prevText: String,
+    nextText: String
+  },
+  data: function data() {
+    return { prefix: 'x-page', limit: this.pageSize, currentPage: 1, inputValue: 1 }
+  },
+  computed: {
+    pageCount: function pageCount() {
+      return Math.ceil(this.total / this.limit)
+    },
+    disabledPrev: function disabledPrev() {
+      return this.currentPage === 1
+    },
+    disabledNext: function disabledNext() {
+      return this.currentPage === this.pageCount
+    },
+    showPages: function showPages() {
+      var ref = this;
+      var currentPage = ref.currentPage;
+      var pageCount = ref.pageCount;
+      var nums = [];
+      if (currentPage < 5) {
+        for (var i = 1; i <= currentPage; i++) { nums.push(i); }
+      } else {
+        nums = [currentPage - 2, currentPage - 1, currentPage];
+      }
+      if (pageCount - currentPage <= 3) {
+        for (var i$1 = currentPage + 1; i$1 <= pageCount; i$1++) { nums.push(i$1); }
+      } else {
+        nums.push(currentPage + 1, currentPage + 2);
+      }
+      return nums
+    }
+  },
+  watch: {
+    limit: function limit(val) { // 页大小改变 跳转到首页 并发射页大小改变事件 但不发射当前页改变事件
+      this.goPage(1);
+      this.$emit('on-page-size-change', val);
+    },
+    current: {
+      immediate: true,
+      handler: function handler(val) {
+        this.currentPage = this.inputValue = val;
+      }
+    },
+    pageSize: function pageSize(val) {
+      this.limit = val;
+    }
+  },
+  methods: {
+    goPage: function goPage(page) { // 到第几页 不发射改变事件
+      this.inputValue = page;
+      this.currentPage = page;
+      this.$emit('update:current', page);
+    },
+    toPage: function toPage(page) { // 到第几页 手动触发导致 发射改变事件
+      this.goPage(page);
+      this.$emit('on-change', page);
+    },
+    toPrev: function toPrev() { // 到上1页
+      !this.disabledPrev && this.toPage(this.currentPage - 1);
+    },
+    toNext: function toNext() { // 到下1页
+      !this.disabledNext && this.toPage(this.currentPage + 1);
+    },
+    toPrev5: function toPrev5() { // 到上5页
+      this.toPage(Math.max(this.currentPage - 5, 1));
+    },
+    toNext5: function toNext5() { // 到下5页
+      this.toPage(Math.min(this.currentPage + 5, this.pageCount));
+    },
+    toInputPage: function toInputPage() { // 电梯直达目标页
+      var inputValue = +this.inputValue;
+      if (isNaN(inputValue) || inputValue < 1) {
+        this.toPage(1);
+      } else if (inputValue > this.pageCount) {
+        this.toPage(this.pageCount);
+      } else {
+        this.toPage(inputValue);
+      }
+    },
+    onKeydown: function onKeydown(e) { // 简洁版输入框键盘按下
+      if ([38, 40].indexOf(e.keyCode) > -1) { e.preventDefault(); }
+    },
+    onKeyup: function onKeyup(e) { // 简洁版输入框键盘松开
+      if (e.keyCode === 38) {
+        this.inputValue = this.currentPage = Math.min(this.pageCount, this.currentPage + 1);
+      } else if (e.keyCode === 40) {
+        this.inputValue = this.currentPage = Math.max(1, this.currentPage - 1);
+      }
+    }
+  }
+};
+
+/* script */
+var __vue_script__$W = script$W;
+/* template */
+var __vue_render__$Z = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "ul",
+    { class: [_vm.prefix, _vm.size, { simple: _vm.simple }] },
+    [
+      _vm.showTotal && !_vm.simple
+        ? _c(
+            "span",
+            { class: _vm.prefix + "_total" },
+            [_vm._t("default", [_vm._v("共 " + _vm._s(_vm.total) + " 条")])],
+            2
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "li",
+        {
+          class: { isText: _vm.prevText, disabled: _vm.disabledPrev },
+          on: { click: _vm.toPrev }
+        },
+        [
+          _vm._v("\n    " + _vm._s(_vm.prevText)),
+          _c("x-icon", { attrs: { type: "ios-arrow-left" } })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _vm.simple
+        ? _c(
+            "span",
+            { class: _vm.prefix + "_elevator" },
+            [
+              _c("x-input", {
+                attrs: { size: "small" },
+                on: {
+                  "on-enter": _vm.toInputPage,
+                  "on-keydown": _vm.onKeydown,
+                  "on-keyup": _vm.onKeyup
+                },
+                model: {
+                  value: _vm.inputValue,
+                  callback: function($$v) {
+                    _vm.inputValue = $$v;
+                  },
+                  expression: "inputValue"
+                }
+              }),
+              _vm._v(" "),
+              _c("span", { class: _vm.prefix + "_slash" }, [_vm._v("/")]),
+              _vm._v(" " + _vm._s(_vm.pageCount) + "\n  ")
+            ],
+            1
+          )
+        : [
+            _vm.currentPage >= 5
+              ? [
+                  _c(
+                    "li",
+                    {
+                      class: { active: _vm.currentPage === 1 },
+                      on: {
+                        click: function($event) {
+                          return _vm.toPage(1)
+                        }
+                      }
+                    },
+                    [_vm._v("1")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "li",
+                    {
+                      class: _vm.prefix + "_more",
+                      attrs: { title: "向前5页" },
+                      on: { click: _vm.toPrev5 }
+                    },
+                    [
+                      _c(
+                        "span",
+                        { staticClass: "arrows" },
+                        _vm._l(2, function(i) {
+                          return _c("x-icon", {
+                            key: i,
+                            attrs: { type: "ios-arrow-left" }
+                          })
+                        }),
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("x-icon", {
+                        staticClass: "icon-more",
+                        attrs: { type: "ios-more" }
+                      })
+                    ],
+                    1
+                  )
+                ]
+              : _vm._e(),
+            _vm._v(" "),
+            _vm._l(_vm.showPages, function(_) {
+              return _c(
+                "li",
+                {
+                  key: _,
+                  class: { active: _vm.currentPage === _ },
+                  on: {
+                    click: function($event) {
+                      return _vm.toPage(_)
+                    }
+                  }
+                },
+                [_vm._v(_vm._s(_))]
+              )
+            }),
+            _vm._v(" "),
+            _vm.pageCount - _vm.currentPage >= 4
+              ? [
+                  _c(
+                    "li",
+                    {
+                      class: _vm.prefix + "_more",
+                      attrs: { title: "向后5页" },
+                      on: { click: _vm.toNext5 }
+                    },
+                    [
+                      _c(
+                        "span",
+                        { staticClass: "arrows" },
+                        _vm._l(2, function(i) {
+                          return _c("x-icon", {
+                            key: i,
+                            attrs: { type: "ios-arrow-right" }
+                          })
+                        }),
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("x-icon", {
+                        staticClass: "icon-more",
+                        attrs: { type: "ios-more" }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "li",
+                    {
+                      class: { active: _vm.currentPage === _vm.pageCount },
+                      on: {
+                        click: function($event) {
+                          return _vm.toPage(_vm.pageCount)
+                        }
+                      }
+                    },
+                    [_vm._v(_vm._s(_vm.pageCount))]
+                  )
+                ]
+              : _vm._e()
+          ],
+      _vm._v(" "),
+      _c(
+        "li",
+        {
+          class: { isText: _vm.nextText, disabled: _vm.disabledNext },
+          on: { click: _vm.toNext }
+        },
+        [
+          _vm._v("\n    " + _vm._s(_vm.nextText)),
+          _c("x-icon", { attrs: { type: "ios-arrow-right" } })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      !_vm.simple
+        ? [
+            _vm.showSizer
+              ? _c(
+                  "x-select",
+                  {
+                    class: _vm.prefix + "_sizer",
+                    attrs: {
+                      placement: _vm.placement,
+                      transfer: _vm.transfer,
+                      size: _vm.size
+                    },
+                    model: {
+                      value: _vm.limit,
+                      callback: function($$v) {
+                        _vm.limit = $$v;
+                      },
+                      expression: "limit"
+                    }
+                  },
+                  _vm._l(_vm.pageSizeOpts, function(_) {
+                    return _c("x-option", {
+                      key: _,
+                      attrs: { value: _, label: _ + " 条/页" }
+                    })
+                  }),
+                  1
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.showElevator
+              ? _c(
+                  "span",
+                  { class: _vm.prefix + "_elevator" },
+                  [
+                    _vm._v("\n      跳至"),
+                    _c("x-input", {
+                      attrs: { size: _vm.size },
+                      on: { "on-enter": _vm.toInputPage },
+                      model: {
+                        value: _vm.inputValue,
+                        callback: function($$v) {
+                          _vm.inputValue = $$v;
+                        },
+                        expression: "inputValue"
+                      }
+                    }),
+                    _vm._v("页\n    ")
+                  ],
+                  1
+                )
+              : _vm._e()
+          ]
+        : _vm._e()
+    ],
+    2
+  )
+};
+var __vue_staticRenderFns__$Z = [];
+__vue_render__$Z._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$Z = undefined;
+  /* scoped */
+  var __vue_scope_id__$Z = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$Z = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$Z = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$Z = normalizeComponent(
+    { render: __vue_render__$Z, staticRenderFns: __vue_staticRenderFns__$Z },
+    __vue_inject_styles__$Z,
+    __vue_script__$W,
+    __vue_scope_id__$Z,
+    __vue_is_functional_template__$Z,
+    __vue_module_identifier__$Z,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+//
+//
+//
+//
+//
+//
+
+var script$X = {
+  name: 'XLoadingBar',
+  props: {
+    color: String,
+    failedColor: String,
+    height: {
+      type: Number,
+      default: 2
+    },
+    percent: Number,
+    status: String
+  },
+  data: function data() {
+    return { prefix: 'x-loadingBar' }
+  },
+  computed: {
+    styles: function styles() {
+      return { height: ((this.height) + "px") }
+    },
+    barStyle: function barStyle() {
+      return { transform: ("scaleX(" + (this.percent / 100) + ")"), background: this.status === 'error' ? this.failedColor : this.color }
+    }
+  }
+};
+
+/* script */
+var __vue_script__$X = script$X;
+/* template */
+var __vue_render__$_ = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("transition", { attrs: { name: _vm.prefix } }, [
+    _c("div", { class: _vm.prefix, style: _vm.styles }, [
+      _c("div", {
+        class: [_vm.prefix + "_bar", _vm.status],
+        style: _vm.barStyle
+      })
+    ])
+  ])
+};
+var __vue_staticRenderFns__$_ = [];
+__vue_render__$_._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$_ = undefined;
+  /* scoped */
+  var __vue_scope_id__$_ = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$_ = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$_ = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$_ = normalizeComponent(
+    { render: __vue_render__$_, staticRenderFns: __vue_staticRenderFns__$_ },
+    __vue_inject_styles__$_,
+    __vue_script__$X,
+    __vue_scope_id__$_,
+    __vue_is_functional_template__$_,
+    __vue_module_identifier__$_,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var vm$1, tid, clearTimer = function () { clearInterval(tid), tid = null; },
+  getVM$1 = function () { return vm$1 || (vm$1 = new Vue({
+  data: function data() {
+    return {
+      customOptions: {},
+      options: { percent: 0 }
+    }
+  },
+  render: function render(h) {
+    return h(__vue_component__$_, {
+      style: { zIndex: this.options.zIndex },
+      props: Object.assign({}, this.options, this.customOptions),
+      directives: [{ name: 'show', value: this.options.visible }]
+    })
+  },
+  mounted: function mounted() {
+    document.body.appendChild(this.$el);
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.$el.parentNode && this.$el.parentNode.removeChild(this.$el);
+  },
+  methods: {
+    update: function update(options) {
+      if ( options === void 0 ) options = {};
+
+      this.options = Object.assign({}, this.options, options);
+    },
+    config: function config(options) {
+      if ( options === void 0 ) options = {};
+
+      this.customOptions = Object.assign({}, this.customOptions, options);
+    }
+  }
+}).$mount()); };
+
+var loadingBarService = {
+  start: function start() {
+    var this$1 = this;
+
+    if (tid) { return }
+    getVM$1().update({ visible: true, percent: 0, status: undefined, zIndex: getMaxZIndex() });
+    var percent = 0;
+    tid = setInterval(function () {
+      percent += Math.floor(Math.random() * 3 + 2);
+      if (percent > 90) { clearTimer(); }
+      this$1.update(percent);
+    }, 200);
+  },
+  finish: function finish(status) {
+    clearTimer();
+    var vm = getVM$1();
+    vm.update({ visible: true, percent: 100, status: status });
+    vm.$nextTick(function () { return vm.update({ visible: false }); });
+  },
+  error: function error() {
+    this.finish('error');
+  },
+  update: function update(percent) {
+    getVM$1().update({ percent: percent });
+  },
+  config: function config(options) {
+    getVM$1().config(options);
+  },
+  destroy: function destroy() {
+    clearTimer();
+    vm$1 && vm$1.$destroy();
+    vm$1 = null;
+  }
+};
+
+//
+//
+//
+//
+//
+//
+//
+
+var script$Y = {
+  props: {
+    transition: String
+  }
+};
+
+/* script */
+var __vue_script__$Y = script$Y;
+/* template */
+var __vue_render__$$ = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    { staticClass: "x-notice-wrapper" },
+    [
+      _c(
+        "transition-group",
+        { attrs: { name: _vm.transition, tag: "div" } },
+        [_vm._t("default")],
+        2
+      )
+    ],
+    1
+  )
+};
+var __vue_staticRenderFns__$$ = [];
+__vue_render__$$._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$$ = undefined;
+  /* scoped */
+  var __vue_scope_id__$$ = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$$ = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$$ = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$$ = normalizeComponent(
+    { render: __vue_render__$$, staticRenderFns: __vue_staticRenderFns__$$ },
+    __vue_inject_styles__$$,
+    __vue_script__$Y,
+    __vue_scope_id__$$,
+    __vue_is_functional_template__$$,
+    __vue_module_identifier__$$,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+function creator (Component, config, addons) {
+  if ( addons === void 0 ) addons = {};
+
+  var vm, key = 0, getVM = function () { return vm || (vm = new Vue({
+    data: function data() {
+      return { items: [], zIndex: 0 }
+    },
+    watch: {
+      'items.length': function items_length(newval, oldval) {
+        if (newval > oldval) { this.zIndex = getMaxZIndex(); }
+      }
+    },
+    render: function render(h) {
+      var this$1 = this;
+
+      return h(__vue_component__$$, {
+        style: { zIndex: this.zIndex },
+        props: { transition: Component.transition }
+      }, this.items.map(function (ref, i) {
+        var ui = ref.ui;
+        var key = ref.key;
+        var props = ref.props;
+
+        return h(
+          ui,
+          { key: key, props: props, on: { close: function () { return this$1.items.splice(i, 1); } } },
+          props.render ? [props.render(h)] : props.content || props.desc)
+      }))
+    },
+    mounted: function mounted() {
+      document.body.appendChild(this.$el);
+    },
+    beforeDestroy: function beforeDestroy() {
+      this.$el.parentNode && this.$el.parentNode.removeChild(this.$el);
+    },
+    methods: {
+      addItem: function addItem(props) {
+        if ( props === void 0 ) props = {};
+
+        var item = { props: props, ui: Component, key: key++ };
+        this.items.push(item);
+        return item.key
+      },
+      removeItem: function removeItem(key) {
+        var index = this.items.findIndex(function (_) { return _.key === key; });
+        if (index >= 0) { this.items.splice(index, 1); }
+      }
+    }
+  }).$mount()); };
+
+  var defaultConfig = Object.assign({}, {duration: 1.5}, (config || {})),
+    addNotice = function (options, type) { return getVM().addItem(Object.assign({}, defaultConfig, (isStr(options) ? { content: options } : options), {type: type})); },
+    noticeFunc = function (options) { return addNotice(options); }
+
+  ;['info', 'warning', 'error', 'success'].forEach(function (_) { return noticeFunc[_] = function (options) { return addNotice(options, _); }; });
+  noticeFunc.config = function (options) { return defaultConfig = Object.assign({}, defaultConfig, options); };
+  noticeFunc.destroy = function () {
+    vm && vm.$destroy();
+    vm = null;
+  };
+  var loop = function ( k ) {
+    noticeFunc[k] = function (options) { return addons[k](addNotice, options, getVM); };
+  };
+
+  for (var k in addons) loop( k );
+  return noticeFunc
+}
+
+//
+var prefix$1 = 'x-message';
+var script$Z = {
+  name: 'XMessage',
+  components: { XIcon: __vue_component__, XCloseIconButton: __vue_component__$7 },
+  transition: prefix$1,
+  props: {
+    duration: Number,
+    onClose: Function,
+    closable: Boolean,
+    background: Boolean,
+    type: {
+      default: 'info',
+      validator: function validator(v) {
+        return ['info', 'success', 'warning', 'error', 'loading'].indexOf(v) !== -1
+      }
+    }
+  },
+  data: function data() {
+    return { prefix: prefix$1 }
+  },
+  computed: {
+    icon: function icon() {
+      return iconTypes[this.type]
+    }
+  },
+  mounted: function mounted() {
+    var this$1 = this;
+
+    if (this.duration) { this.tid = setTimeout(function () { return this$1.close(); }, this.duration * 1000); }
+  },
+  beforeDestroy: function beforeDestroy() {
+    clearTimeout(this.tid);
+  },
+  methods: {
+    close: function close() {
+      this.onClose && this.onClose(), this.$emit('close');
+    }
+  }
+};
+
+/* script */
+var __vue_script__$Z = script$Z;
+/* template */
+var __vue_render__$10 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { class: _vm.prefix }, [
+    _c(
+      "div",
+      {
+        class: [
+          _vm.prefix + "_box",
+          _vm.prefix + "_" + _vm.type,
+          { background: _vm.background }
+        ]
+      },
+      [
+        _c("x-icon", {
+          class: _vm.prefix + "_icon",
+          attrs: { type: _vm.icon }
+        }),
+        _vm._v(" "),
+        _vm._t("default"),
+        _vm._v(" "),
+        _vm.closable
+          ? _c("x-close-icon-button", {
+              class: _vm.prefix + "_close",
+              on: { click: _vm.close }
+            })
+          : _vm._e()
+      ],
+      2
+    )
+  ])
+};
+var __vue_staticRenderFns__$10 = [];
+__vue_render__$10._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$10 = undefined;
+  /* scoped */
+  var __vue_scope_id__$10 = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$10 = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$10 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$10 = normalizeComponent(
+    { render: __vue_render__$10, staticRenderFns: __vue_staticRenderFns__$10 },
+    __vue_inject_styles__$10,
+    __vue_script__$Z,
+    __vue_scope_id__$10,
+    __vue_is_functional_template__$10,
+    __vue_module_identifier__$10,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var Message = creator(__vue_component__$10, null, {
+  loading: function loading(addNotice, options, getVM) {
+    var key = addNotice(options, 'loading');
+    return function () { return getVM().removeItem(key); }
+  }
+});
+
+//
+var prefix$2 = 'x-notice';
+var script$_ = {
+  name: 'XNotice',
+  components: { XIcon: __vue_component__, XCloseIconButton: __vue_component__$7 },
+  transition: prefix$2,
+  props: {
+    title: String,
+    duration: Number,
+    onClose: Function,
+    type: {
+      default: 'open',
+      validator: function validator(v) {
+        return ['info', 'success', 'warning', 'error', 'open'].indexOf(v) !== -1
+      }
+    }
+  },
+  data: function data() {
+    return { prefix: prefix$2, hasDesc: false }
+  },
+  computed: {
+    icon: function icon() {
+      return iconTypes[this.type]
+    },
+    showIcon: function showIcon() {
+      return this.type !== 'open'
+    }
+  },
+  mounted: function mounted() {
+    var this$1 = this;
+
+    var ref = this.$slots.default;
+    var desc = ref[0];
+    this.hasDesc = desc && (desc.text || desc.children);
+    if (this.duration) { this.tid = setTimeout(function () { return this$1.close(); }, this.duration * 1000); }
+  },
+  beforeDestroy: function beforeDestroy() {
+    clearTimeout(this.tid);
+  },
+  methods: {
+    close: function close() {
+      this.onClose && this.onClose(), this.$emit('close');
+    }
+  }
+};
+
+/* script */
+var __vue_script__$_ = script$_;
+/* template */
+var __vue_render__$11 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { class: _vm.prefix }, [
+    _c(
+      "div",
+      { class: [_vm.prefix + "_box", { hasDesc: _vm.hasDesc }] },
+      [
+        _vm.showIcon
+          ? _c("x-icon", {
+              class: [_vm.prefix + "_icon", _vm.type],
+              attrs: { type: _vm.icon }
+            })
+          : _vm._e(),
+        _vm._v(" "),
+        _c(
+          "div",
+          [
+            _vm.title
+              ? _c("div", { class: _vm.prefix + "_title" }, [
+                  _vm._v(_vm._s(_vm.title))
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm._t("default")
+          ],
+          2
+        ),
+        _vm._v(" "),
+        _c("x-close-icon-button", {
+          class: _vm.prefix + "_close",
+          on: { click: _vm.close }
+        })
+      ],
+      1
+    )
+  ])
+};
+var __vue_staticRenderFns__$11 = [];
+__vue_render__$11._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$11 = undefined;
+  /* scoped */
+  var __vue_scope_id__$11 = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$11 = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$11 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$11 = normalizeComponent(
+    { render: __vue_render__$11, staticRenderFns: __vue_staticRenderFns__$11 },
+    __vue_inject_styles__$11,
+    __vue_script__$_,
+    __vue_scope_id__$11,
+    __vue_is_functional_template__$11,
+    __vue_module_identifier__$11,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var Notice = creator(__vue_component__$11, { duration: 4.5 }, {
+  open: function open(addNotice, options) {
+    addNotice(options, 'open');
+  }
+});
+
+//
+var S$6 = String, B$8 = Boolean, BTrue = { type: B$8, default: true };
+var script$$ = {
+  name: 'XModal',
+  components: { XOverlay: __vue_component__$A, XBtn: __vue_component__$1, XCloseIconButton: __vue_component__$7 },
+  props: {
+    value: B$8,
+    title: S$6,
+    closable: BTrue,
+    maskClosable: BTrue,
+    loading: B$8,
+    scrollable: B$8,
+    fullscreen: B$8,
+    mask: BTrue,
+    okText: { type: S$6, default: '确定' },
+    cancelText: { type: S$6, default: '取消' },
+    width: { type: [Number, S$6], default: 520 },
+    footerHide: B$8,
+    styles: Object,
+    className: S$6,
+    transfer: BTrue,
+    hasCancel: BTrue
+  },
+  data: function data() {
+    return { prefix: 'x-modal', visible: false, zIndex: 1, isLoading: false, isCallLock: false }
+  },
+  computed: {
+    classes: function classes() {
+      return [this.prefix, this.className, { fullscreen: this.fullscreen }]
+    },
+    dialogStyle: function dialogStyle() {
+      return this.fullscreen ? this.styles : Object.assign({}, this.styles, {width: parseSize(this.width)})
+    }
+  },
+  watch: {
+    value: {
+      immediate: true,
+      handler: function handler(val) {
+        this.visible = val;
+      }
+    },
+    visible: function visible(val) {
+      this.$emit('input', val);
+      this.$emit('on-visible-change', val);
+      if (val) {
+        this.isLoading = false;
+        this.zIndex = getMaxZIndex();
+        if (winScrollbarLock.locked || this.scrollable) { return }
+        winScrollbarLock.lock();
+        this.isCallLock = true;
+      }
+    }
+  },
+  mounted: function mounted() {
+    this.transfer && document.body.appendChild(this.$el);
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.onLeave();
+    this.$el.parentNode && this.$el.parentNode.removeChild(this.$el);
+  },
+  methods: {
+    hide: function hide() {
+      this.visible = false;
+    },
+    onMaskClose: function onMaskClose() {
+      if (this.maskClosable) { this.hide(); }
+    },
+    onCancel: function onCancel() {
+      this.hide();
+      this.$emit('on-cancel');
+    },
+    onOk: function onOk() {
+      this.$emit('on-ok');
+      if (this.loading) { return this.isLoading = true }
+      this.hide();
+    },
+    onLeave: function onLeave() {
+      this.$emit('leave');
+      if (this.isCallLock) {
+        winScrollbarLock.unlock();
+        this.isCallLock = false;
+      }
+    }
+  }
+};
+
+/* script */
+var __vue_script__$$ = script$$;
+/* template */
+var __vue_render__$12 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    [
+      _vm.mask && !_vm.fullscreen
+        ? _c("x-overlay", {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.visible,
+                expression: "visible"
+              }
+            ],
+            style: { zIndex: _vm.zIndex },
+            on: { click: _vm.onMaskClose }
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "transition",
+        { attrs: { name: _vm.prefix }, on: { afterLeave: _vm.onLeave } },
+        [
+          _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.visible,
+                  expression: "visible"
+                }
+              ],
+              class: _vm.classes,
+              style: { zIndex: _vm.zIndex }
+            },
+            [
+              _c(
+                "div",
+                {
+                  class: [_vm.prefix + "_content", { noMask: !_vm.mask }],
+                  style: _vm.dialogStyle
+                },
+                [
+                  _vm.closable
+                    ? _c(
+                        "span",
+                        { class: _vm.prefix + "_close" },
+                        [
+                          _vm._t("close", [
+                            _c("x-close-icon-button", {
+                              attrs: { size: "31" },
+                              on: { click: _vm.hide }
+                            })
+                          ])
+                        ],
+                        2
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.title || _vm.$slots.header
+                    ? _c(
+                        "div",
+                        { class: _vm.prefix + "_header" },
+                        [
+                          _vm._t("header", [
+                            _c("div", {
+                              domProps: { innerHTML: _vm._s(_vm.title) }
+                            })
+                          ])
+                        ],
+                        2
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { class: _vm.prefix + "_body" },
+                    [_vm._t("default")],
+                    2
+                  ),
+                  _vm._v(" "),
+                  !_vm.footerHide
+                    ? _c(
+                        "div",
+                        { class: _vm.prefix + "_footer" },
+                        [
+                          _vm._t("footer", [
+                            _vm.hasCancel
+                              ? _c(
+                                  "x-btn",
+                                  {
+                                    attrs: { type: "text" },
+                                    on: { click: _vm.onCancel }
+                                  },
+                                  [_vm._v(_vm._s(_vm.cancelText))]
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _c(
+                              "x-btn",
+                              {
+                                attrs: {
+                                  type: "primary",
+                                  loading: _vm.isLoading
+                                },
+                                on: { click: _vm.onOk }
+                              },
+                              [_vm._v(_vm._s(_vm.okText))]
+                            )
+                          ])
+                        ],
+                        2
+                      )
+                    : _vm._e()
+                ]
+              )
+            ]
+          )
+        ]
+      )
+    ],
+    1
+  )
+};
+var __vue_staticRenderFns__$12 = [];
+__vue_render__$12._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$12 = undefined;
+  /* scoped */
+  var __vue_scope_id__$12 = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$12 = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$12 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$12 = normalizeComponent(
+    { render: __vue_render__$12, staticRenderFns: __vue_staticRenderFns__$12 },
+    __vue_inject_styles__$12,
+    __vue_script__$$,
+    __vue_scope_id__$12,
+    __vue_is_functional_template__$12,
+    __vue_module_identifier__$12,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+function objectWithoutProperties (obj, exclude) { var target = {}; for (var k in obj) if (Object.prototype.hasOwnProperty.call(obj, k) && exclude.indexOf(k) === -1) target[k] = obj[k]; return target; }
+var S$7 = String, B$9 = Boolean, F$3 = Function;
+var script$10 = {
+  name: 'XDialog',
+  components: { XIcon: __vue_component__, XModal: __vue_component__$12, XBtn: __vue_component__$1 },
+  props: {
+    value: B$9,
+    title: S$7,
+    content: S$7,
+    width: { default: 416 },
+    okText: { type: S$7, default: '确定' },
+    cancelText: {},
+    loading: B$9,
+    scrollable: B$9,
+    onOk: F$3,
+    onCancel: F$3,
+    type: {
+      validator: function validator(v) {
+        return ['info', 'success', 'warning', 'error', 'confirm'].indexOf(v) !== -1
+      }
+    }
+  },
+  data: function data() {
+    var _self = this;
+    return {
+      prefix: 'x-dialog',
+      listeners: Object.assign({}, this.$listeners,
+        {'on-ok': function on_ok() {
+          _self.onOk && _self.onOk();
+        },
+        'on-cancel': function on_cancel() {
+          _self.onCancel && _self.onCancel();
+        }})
+    }
+  },
+  computed: {
+    icon: function icon() {
+      return iconTypes[this.type]
+    },
+    modalProps: function modalProps() {
+      var ref = this.$props;
+      var content = ref.content;
+      var onOk = ref.onOk;
+      var onCancel = ref.onCancel;
+      var type = ref.type;
+      var rest = objectWithoutProperties( ref, ["content", "onOk", "onCancel", "type"] );
+      var props = rest;
+      return Object.assign({}, props, {closable: false, maskClosable: false, className: this.prefix, hasCancel: this.type === 'confirm'})
+    }
+  }
+};
+
+/* script */
+var __vue_script__$10 = script$10;
+/* template */
+var __vue_render__$13 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "x-modal",
+    _vm._g(
+      _vm._b({ class: _vm.prefix + "_wrap" }, "x-modal", _vm.modalProps, false),
+      _vm.listeners
+    ),
+    [
+      _vm._t("default", [
+        _c(
+          "div",
+          { class: _vm.prefix + "_content" },
+          [
+            _c("x-icon", {
+              class: [_vm.prefix + "_icon", _vm.type],
+              attrs: { size: "36", type: _vm.icon }
+            }),
+            _vm._v(" "),
+            _c("div", { domProps: { innerHTML: _vm._s(_vm.content) } })
+          ],
+          1
+        )
+      ])
+    ],
+    2
+  )
+};
+var __vue_staticRenderFns__$13 = [];
+__vue_render__$13._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$13 = undefined;
+  /* scoped */
+  var __vue_scope_id__$13 = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$13 = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$13 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$13 = normalizeComponent(
+    { render: __vue_render__$13, staticRenderFns: __vue_staticRenderFns__$13 },
+    __vue_inject_styles__$13,
+    __vue_script__$10,
+    __vue_scope_id__$13,
+    __vue_is_functional_template__$13,
+    __vue_module_identifier__$13,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+function objectWithoutProperties$1 (obj, exclude) { var target = {}; for (var k in obj) if (Object.prototype.hasOwnProperty.call(obj, k) && exclude.indexOf(k) === -1) target[k] = obj[k]; return target; }
+
+var vm$2, getVM$2 = function () { return vm$2 || (vm$2 = new Vue({
+  data: function data() {
+    return { options: {} }
+  },
+  render: function render(h) {
+    var this$1 = this;
+
+    var ref = this.options;
+    var render = ref.render;
+    var rest = objectWithoutProperties$1( ref, ["render"] );
+    var props = rest;
+    return h(__vue_component__$13, {
+      props: props, on: { leave: function () { return this$1.destroy(); } }
+    }, render && [render(h)])
+  },
+  methods: {
+    toggle: function toggle(value) {
+      this.options = Object.assign({}, this.options, {value: value});
+    },
+    show: function show(options) {
+      this.options = Object.assign({}, options, {value: true});
+    },
+    destroy: function destroy() {
+      this.$destroy();
+      vm$2 = null;
+    }
+  }
+}).$mount()); };
+
+__vue_component__$12.service = Object.assign({}, [
+    'info',
+    'success',
+    'warning',
+    'error',
+    'confirm'
+  ].reduce(function (acc, type) {
+    var obj;
+
+    return Object.assign({}, acc,
+      ( obj = {}, obj[type] = function (options) { getVM$2().show(Object.assign({}, options, {type: type})); }, obj ))
+  }, {}),
+  {remove: function remove() {
+    vm$2 && vm$2.toggle(false);
+  }});
+
+//
+var script$11 = {
+  name: 'UiTabs',
+  components: { UiIcon: __vue_component__, UiCloseIconButton: __vue_component__$7, XRender: XRender },
+  data: function data() {
+    return {
+      prefix: 'ui-tabs',
+      childs: [],
+      activeTab: this.value,
+      showNavBtns: false,
+      translateX: 0
+    }
+  },
+  props: {
+    value: [String, Number],
+    type: {
+      default: 'line',
+      validator: function validator(value) {
+        return ['line', 'card'].indexOf(value) !== -1
+      }
+    },
+    size: {
+      validator: function validator(value) {
+        return ['default', 'small'].indexOf(value) !== -1
+      }
+    },
+    closable: Boolean,
+    animated: {
+      type: Boolean,
+      default: true
+    }
+  },
+  computed: {
+    contentStyle: function contentStyle() {
+      var i = this.childs.map(function (_) { return _.key; }).indexOf(this.activeTab);
+      return i > 0 && { transform: ("translateX(" + (-i * 100) + "%)") }
+    }
+  },
+  watch: {
+    value: function value(newval) {
+      this.activeTab = newval;
+    },
+    activeTab: function activeTab(newval) {
+      this.$emit('input', newval);
+    },
+    childs: function childs(newval) {
+      if (newval.length) {
+        if (this.activeTab === undefined) { this.activeTab = this.childs[0].key; }
+      } else {
+        this.activeTab = undefined;
+      }
+    }
+  },
+  mounted: function mounted() {
+    this.onWinResize();
+    window.addEventListener('resize', this.onWinResize);
+  },
+  beforeDestroy: function beforeDestroy() {
+    window.removeEventListener('resize', this.onWinResize);
+  },
+  methods: {
+    navItemClasses: function navItemClasses(item) {
+      return [((this.prefix) + "-nav-item"), { active: item.key === this.activeTab, disabled: item.disabled }]
+    },
+    addItem: function addItem(vm) {
+      var this$1 = this;
+
+      this.$nextTick(function () { return this$1.onWinResize(); });
+      return this.childs.push(vm)
+    },
+    removeItem: function removeItem(vm) {
+      var this$1 = this;
+
+      var i = this.childs.indexOf(vm);
+      this.childs.splice(i, 1);
+      if (vm.key === this.activeTab && this.childs.length) { this.activeTab = this.childs[i > 0 ? i - 1 : 0].key; }
+      this.$nextTick(function () { return this$1.onWinResize(); });
+    },
+    deleteItem: function deleteItem(item) {
+      this.$emit('on-tab-remove', item.key);
+    },
+    onNavItemClick: function onNavItemClick(item) {
+      this.activeTab = item.key;
+      var ref = this.$refs;
+      var scrollView = ref.scrollView;
+      var target = this.$refs[item.key][0];
+      var targetRect = target.getBoundingClientRect();
+      var scrollViewLeft = scrollView.getBoundingClientRect().left + Math.abs(this.translateX);
+      if (scrollViewLeft + scrollView.clientWidth < targetRect.right) {
+        this.onNavNext(target.clientWidth);
+      } else if (scrollViewLeft > targetRect.left) {
+        this.onNavPrev(target.clientWidth);
+      }
+    },
+    isFunc: function isFunc$1(label) {
+      return isFunc(label)
+    },
+    canClose: function canClose(item) {
+      return item.closable === false ? false : this.closable && this.type === 'card'
+    },
+    onNavPrev: function onNavPrev(dis) {
+      var ref = this.$refs.scrollView;
+      var clientWidth = ref.clientWidth;
+      var scrollWidth = ref.scrollWidth;
+      var maxDis = Math.min(Math.abs(this.translateX), dis || Infinity);
+      this.translateX += Math.min(clientWidth, maxDis > 0 ? maxDis : 0);
+    },
+    onNavNext: function onNavNext(dis) {
+      var ref = this.$refs.scrollView;
+      var clientWidth = ref.clientWidth;
+      var scrollWidth = ref.scrollWidth;
+      var maxDis = Math.min(scrollWidth - clientWidth - Math.abs(this.translateX), dis || Infinity);
+      this.translateX -= Math.min(clientWidth, maxDis > 0 ? maxDis : 0);
+    },
+    onWinResize: function onWinResize() {
+      var ref = this.$refs;
+      var scrollView = ref.scrollView;
+      if (!scrollView) { return }
+      var clientWidth = scrollView.clientWidth;
+      var scrollWidth = scrollView.scrollWidth;
+      if (clientWidth + Math.abs(this.translateX) > scrollWidth) {
+        this.translateX = -scrollWidth + clientWidth;
+      }
+      this.showNavBtns = clientWidth < scrollWidth;
+    }
+  }
+};
+
+/* script */
+var __vue_script__$11 = script$11;
+/* template */
+var __vue_render__$14 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    {
+      class: [
+        _vm.prefix,
+        _vm.prefix + "-" + _vm.size,
+        _vm.prefix + "-" + _vm.type
+      ]
+    },
+    [
+      _c(
+        "div",
+        { class: _vm.prefix + "-bar" },
+        [
+          _c(
+            "div",
+            {
+              class: [
+                _vm.prefix + "-nav-wrap",
+                { showNavBtns: _vm.showNavBtns }
+              ]
+            },
+            [
+              _c(
+                "ul",
+                {
+                  ref: "scrollView",
+                  class: _vm.prefix + "-nav",
+                  style: { transform: "translateX(" + _vm.translateX + "px)" }
+                },
+                _vm._l(_vm.childs, function(item) {
+                  return _c(
+                    "li",
+                    {
+                      key: item.key,
+                      ref: item.key,
+                      refInFor: true,
+                      class: _vm.navItemClasses(item),
+                      on: {
+                        click: function($event) {
+                          return _vm.onNavItemClick(item)
+                        }
+                      }
+                    },
+                    [
+                      item.icon
+                        ? _c("ui-icon", {
+                            class: _vm.prefix + "-icon",
+                            attrs: { type: item.icon }
+                          })
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.isFunc(item.label)
+                        ? _c("XRender", { attrs: { render: item.label } })
+                        : [_vm._v(_vm._s(item.label))],
+                      _vm._v(" "),
+                      _vm.canClose(item)
+                        ? _c("ui-close-icon-button", {
+                            class: _vm.prefix + "-close",
+                            on: {
+                              click: function($event) {
+                                $event.stopPropagation();
+                                return _vm.deleteItem(item)
+                              }
+                            }
+                          })
+                        : _vm._e()
+                    ],
+                    2
+                  )
+                }),
+                0
+              ),
+              _vm._v(" "),
+              _vm.showNavBtns
+                ? [
+                    _c(
+                      "span",
+                      {
+                        class: _vm.prefix + "-nav-prev",
+                        on: {
+                          click: function($event) {
+                            return _vm.onNavPrev()
+                          }
+                        }
+                      },
+                      [_c("ui-icon", { attrs: { type: "ios-arrow-back" } })],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "span",
+                      {
+                        class: _vm.prefix + "-nav-next",
+                        on: {
+                          click: function($event) {
+                            return _vm.onNavNext()
+                          }
+                        }
+                      },
+                      [_c("ui-icon", { attrs: { type: "ios-arrow-forward" } })],
+                      1
+                    )
+                  ]
+                : _vm._e()
+            ],
+            2
+          ),
+          _vm._v(" "),
+          _vm._t("extra")
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          class: [_vm.prefix + "-content", { animated: _vm.animated }],
+          style: _vm.contentStyle
+        },
+        [_vm._t("default")],
+        2
+      )
+    ]
+  )
+};
+var __vue_staticRenderFns__$14 = [];
+__vue_render__$14._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$14 = undefined;
+  /* scoped */
+  var __vue_scope_id__$14 = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$14 = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$14 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$14 = normalizeComponent(
+    { render: __vue_render__$14, staticRenderFns: __vue_staticRenderFns__$14 },
+    __vue_inject_styles__$14,
+    __vue_script__$11,
+    __vue_scope_id__$14,
+    __vue_is_functional_template__$14,
+    __vue_module_identifier__$14,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+var script$12 = {
+  name: 'UiTabPane',
+  data: function data() {
+    return { key: this.name, parent: null }
+  },
+  props: {
+    name: String,
+    label: [String, Function],
+    icon: String,
+    disabled: Boolean,
+    closable: {
+      type: Boolean,
+      default: null
+    }
+  },
+  mounted: function mounted() {
+    this.parent = findParent(this, 'UiTabs');
+    var len = this.parent.addItem(this);
+    this.key = this.name || len - 1;
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.parent.removeItem(this);
+  }
+};
+
+/* script */
+var __vue_script__$12 = script$12;
+
+/* template */
+var __vue_render__$15 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { staticClass: "ui-tabs-pane" }, [_vm._t("default")], 2)
+};
+var __vue_staticRenderFns__$15 = [];
+__vue_render__$15._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$15 = undefined;
+  /* scoped */
+  var __vue_scope_id__$15 = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$15 = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$15 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$15 = normalizeComponent(
+    { render: __vue_render__$15, staticRenderFns: __vue_staticRenderFns__$15 },
+    __vue_inject_styles__$15,
+    __vue_script__$12,
+    __vue_scope_id__$15,
+    __vue_is_functional_template__$15,
+    __vue_module_identifier__$15,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+var incKey = 0;
+var script$13 = {
+  name: 'UiUpload',
+  components: { UiIcon: __vue_component__, UiProgress: __vue_component__$q, UiCloseIconButton: __vue_component__$7 },
+  data: function data() {
+    return {
+      prefix: 'ui-upload',
+      fileList: [],
+      dragOver: false
+    }
+  },
+  props: {
+    action: {
+      type: String,
+      required: true
+    },
+    headers: {
+      type: Object,
+      default: function () { return ({}); }
+    },
+    multiple: Boolean,
+    disabled: Boolean,
+    data: Object,
+    name: {
+      type: String,
+      default: 'file'
+    },
+    withCredentials: Boolean,
+    showUploadList: {
+      type: Boolean,
+      default: true
+    },
+    type: {
+      default: 'select',
+      validator: function validator(value) {
+        return ['select', 'drag'].indexOf(value) !== -1
+      }
+    },
+    accept: String,
+    format: {
+      type: Array,
+      default: function () { return []; }
+    },
+    maxSize: Number,
+    beforeUpload: Function,
+    onProgress: Function,
+    onSuccess: Function,
+    onError: Function,
+    onPreview: Function,
+    onRemove: Function,
+    onFormatError: Function,
+    onExceededSize: Function,
+    defaultFileList: {
+      type: Array,
+      default: function () { return []; }
+    }
+  },
+  computed: {
+    hasTip: function hasTip() {
+      return this.$slots.tip !== undefined
+    }
+  },
+  watch: {
+    defaultFileList: {
+      immediate: true,
+      handler: function handler(newval) {
+        this.fileList = newval.map(function (_) { return (Object.assign({}, _, 
+          {key: incKey++,
+          showProgress: false,
+          status: 'success'})); });
+      }
+    }
+  },
+  methods: {
+    selectFile: function selectFile() {
+      this.$refs.File.click();
+    },
+    onDrop: function onDrop(e) {
+      this.dragOver = false;
+      if (this.disabled) { return }
+      this.onFileChange(e);
+    },
+    onFileChange: function onFileChange(e) {
+      var this$1 = this;
+
+      var files = Array.prototype.slice.call(e.target.files || e.dataTransfer.files);
+      files.forEach(function (file) { return this$1.validFormat(file) && this$1.validSize(file) && this$1.upload(file); });
+      this.$nextTick(function () { return e.target.value = ''; });
+    },
+    validFormat: function validFormat(file) {
+      if (this.format.length) {
+        var fileFormat = file.name.split('.').pop().toLowerCase();
+        if (this.format.every(function (_) { return _.toLowerCase() !== fileFormat; })) {
+          this.onFormatError && this.onFormatError(file, this.fileList);
+          return false
+        }
+      }
+      return true
+    },
+    validSize: function validSize(file) {
+      if (this.maxSize && file.size > this.maxSize * 1024) {
+        this.onExceededSize && this.onExceededSize(file, this.fileList);
+        return false
+      }
+      return true
+    },
+    upload: function upload(file) {
+      var this$1 = this;
+
+      var fileItem = {
+        file: file,
+        percentage: 0,
+        key: incKey++,
+        name: file.name,
+        status: 'normal',
+        showProgress: true
+      };
+      this.fileList.push(fileItem);
+      var formData = new FormData();
+      formData.append(this.name, file);
+      this.data && Object.keys(this.data).forEach(function (_) { return formData.append(_, this$1.data[_]); });
+      var xhr = new XMLHttpRequest();
+      xhr.onprogress = function (e) {
+        if (e.total > 0) {
+          fileItem.percentage = e.loaded / e.total * 100;
+        }
+        this$1.onProgress && this$1.onProgress(e, fileItem, this$1.fileList);
+      };
+      xhr.onload = function () {
+        if (xhr.status < 200 && xhr.status >= 300) {
+          fileItem.status = 'wrong';
+          fileItem.showProgress = false;
+          this$1.fileList.splice(this$1.fileList.indexOf(fileItem), 1);
+          return this$1.onError && this$1.onError(new Error(("fail to post " + (this$1.action) + " " + (xhr.status) + "'")), fileItem, this$1.fileList)
+        }
+        fileItem.percentage = 100;
+        fileItem.status = 'success';
+        fileItem.showProgress = false;
+        fileItem.response = xhr.response;
+        this$1.onSuccess && this$1.onSuccess(xhr.response, fileItem, this$1.fileList);
+      };
+      xhr.onerror = function (err) {
+        fileItem.percentage = 100;
+        fileItem.status = 'wrong';
+        fileItem.showProgress = false;
+        this$1.fileList.splice(this$1.fileList.indexOf(fileItem), 1);
+        this$1.onError && this$1.onError(err);
+      };
+      xhr.open('post', this.action, true);
+      xhr.withCredentials = this.withCredentials;
+      Object.keys(this.headers).forEach(function (_) { return xhr.setRequestHeader(_, headers[_]); });
+      xhr.send(formData);
+    },
+    removeItem: function removeItem(item) {
+      this.fileList.splice(this.fileList.indexOf(item), 1);
+      this.onRemove && this.onRemove(item, this.fileList);
+    },
+    previewItem: function previewItem(item) {
+      this.onPreview && this.onPreview(item);
+    },
+    clearFiles: function clearFiles() {
+      this.fileList = [];
+    }
+  }
+};
+
+/* script */
+var __vue_script__$13 = script$13;
+/* template */
+var __vue_render__$16 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { class: _vm.prefix }, [
+    _c("input", {
+      directives: [
+        { name: "show", rawName: "v-show", value: false, expression: "false" }
+      ],
+      ref: "File",
+      attrs: {
+        type: "file",
+        disabled: _vm.disabled,
+        multiple: _vm.multiple,
+        accept: _vm.accept
+      },
+      on: { change: _vm.onFileChange }
+    }),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        class: [_vm.prefix + "-" + _vm.type, { dragOver: _vm.dragOver }],
+        on: {
+          click: _vm.selectFile,
+          drop: function($event) {
+            $event.preventDefault();
+            return _vm.onDrop($event)
+          },
+          dragover: function($event) {
+            $event.preventDefault();
+            _vm.dragOver = true;
+          },
+          dragleave: function($event) {
+            $event.preventDefault();
+            _vm.dragOver = false;
+          }
+        }
+      },
+      [_vm._t("default")],
+      2
+    ),
+    _vm._v(" "),
+    _vm.showUploadList
+      ? _c(
+          "ul",
+          { class: _vm.prefix + "-list" },
+          _vm._l(_vm.fileList, function(item) {
+            return _c(
+              "li",
+              { key: item.key },
+              [
+                _c(
+                  "div",
+                  { class: _vm.prefix + "-finish" },
+                  [
+                    _c("ui-icon", { attrs: { type: "document" } }),
+                    _vm._v(" "),
+                    _c(
+                      "span",
+                      {
+                        class: _vm.prefix + "-filename",
+                        on: { click: _vm.previewItem }
+                      },
+                      [_vm._v(_vm._s(item.name))]
+                    ),
+                    _vm._v(" "),
+                    _c("b", { class: _vm.prefix + "-spring" }),
+                    _vm._v(" "),
+                    _c("ui-close-icon-button", {
+                      class: _vm.prefix + "-remove",
+                      attrs: { size: "18" },
+                      on: {
+                        click: function($event) {
+                          return _vm.removeItem(item)
+                        }
+                      }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "transition",
+                  { attrs: { name: _vm.prefix + "-progressbar" } },
+                  [
+                    item.showProgress
+                      ? _c("ui-progress", {
+                          class: _vm.prefix + "-progressbar",
+                          attrs: {
+                            strokeWidth: 2,
+                            percent: item.percentage,
+                            status: item.status
+                          }
+                        })
+                      : _vm._e()
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          }),
+          0
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.hasTip
+      ? _c("div", { class: _vm.prefix + "-tip" }, [_vm._t("tip")], 2)
+      : _vm._e()
+  ])
+};
+var __vue_staticRenderFns__$16 = [];
+__vue_render__$16._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$16 = undefined;
+  /* scoped */
+  var __vue_scope_id__$16 = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$16 = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$16 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$16 = normalizeComponent(
+    { render: __vue_render__$16, staticRenderFns: __vue_staticRenderFns__$16 },
+    __vue_inject_styles__$16,
+    __vue_script__$13,
+    __vue_scope_id__$16,
+    __vue_is_functional_template__$16,
+    __vue_module_identifier__$16,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+//
+//
+//
+//
+
+var script$14 = {
+  name: 'UiForm',
+  data: function data() {
+    return { fields: [] }
+  },
+  props: {
+    model: Object,
+    rules: Object,
+    inline: Boolean,
+    labelPosition: {
+      default: 'right',
+      validator: function validator(value) {
+        return ['left', 'right', 'top'].indexOf(value) !== -1
+      }
+    },
+    labelWidth: [Number, String],
+    showMessage: {
+      type: Boolean,
+      default: true
+    },
+    autocomplete: {
+      default: 'off',
+      validator: function validator(value) {
+        return ['off', 'on'].indexOf(value) !== -1
+      }
+    }
+  },
+  methods: {
+    addItem: function addItem(vm) {
+      this.fields.push(vm);
+    },
+    removeItem: function removeItem(vm) {
+      this.fields.splice(this.fields.indexOf(vm), 1);
+    },
+    validate: function validate(callback) {
+
+    },
+    validateField: function validateField(prop, callback) {
+
+    },
+    resetFields: function resetFields() {
+
+    }
+  }
+};
+
+/* script */
+var __vue_script__$14 = script$14;
+/* template */
+var __vue_render__$17 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "form",
+    {
+      staticClass: "ui-form",
+      class: [_vm.labelPosition, { inline: _vm.inline }],
+      attrs: { autocomplete: _vm.autocomplete }
+    },
+    [_vm._t("default")],
+    2
+  )
+};
+var __vue_staticRenderFns__$17 = [];
+__vue_render__$17._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$17 = undefined;
+  /* scoped */
+  var __vue_scope_id__$17 = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$17 = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$17 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$17 = normalizeComponent(
+    { render: __vue_render__$17, staticRenderFns: __vue_staticRenderFns__$17 },
+    __vue_inject_styles__$17,
+    __vue_script__$14,
+    __vue_scope_id__$17,
+    __vue_is_functional_template__$17,
+    __vue_module_identifier__$17,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+var script$15 = {
+  name: 'UiFormItem',
+  data: function data() {
+    return { prefix: 'ui-form-item', parent: null }
+  },
+  props: {
+    prop: String,
+    label: String,
+    labelWidth: [Number, String],
+    rules: [Object, Array],
+    showMessage: {
+      type: Boolean,
+      default: true
+    }
+  },
+  computed: {
+    lw: function lw() {
+      return this.labelWidth || (this.parent && this.parent.labelWidth)
+    },
+    hasLabel: function hasLabel() {
+      return this.label || this.$slots.label !== undefined || this.lw
+    },
+    labelStyle: function labelStyle() {
+      return this.lw && { width: parseSize(this.lw) }
+    },
+    showMsg: function showMsg() {
+      return this.showMessage && this.parent && this.parent.showMessage
+    }
+  },
+  mounted: function mounted() {
+    this.parent = findParent(this, 'UiForm');
+    this.parent.addItem(this);
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.parent.removeItem(this);
+  }
+};
+
+/* script */
+var __vue_script__$15 = script$15;
+
+/* template */
+var __vue_render__$18 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { class: _vm.prefix }, [
+    _vm.hasLabel
+      ? _c(
+          "label",
+          { class: _vm.prefix + "-label", style: _vm.labelStyle },
+          [_vm._t("label", [_vm._v(_vm._s(_vm.label))])],
+          2
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    _c(
+      "div",
+      { class: _vm.prefix + "-content" },
+      [
+        _vm._t("default"),
+        _vm._v(" "),
+        _c("transition", { attrs: { name: "ui-fade" } }, [
+          _vm.showMsg
+            ? _c("div", { class: _vm.prefix + "-error-tip" })
+            : _vm._e()
+        ])
+      ],
+      2
+    )
+  ])
+};
+var __vue_staticRenderFns__$18 = [];
+__vue_render__$18._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$18 = undefined;
+  /* scoped */
+  var __vue_scope_id__$18 = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$18 = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$18 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$18 = normalizeComponent(
+    { render: __vue_render__$18, staticRenderFns: __vue_staticRenderFns__$18 },
+    __vue_inject_styles__$18,
+    __vue_script__$15,
+    __vue_scope_id__$18,
+    __vue_is_functional_template__$18,
+    __vue_module_identifier__$18,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+var script$16 = {
+  name: 'ui-dropdown',
+  components: { UiOptionList: __vue_component__$W },
+  data: function data() {
+    return { isVisible: false, timeout: null }
+  },
+  props: {
+    trigger: {
+      default: 'hover',
+      validator: function validator(value) {
+        return ['hover', 'click', 'custom'].indexOf(value) !== -1
+      }
+    },
+    visible: Boolean,
+    placement: {
+      default: 'bottom',
+      validator: function validator(value) {
+        return [
+          'top', 'top-start', 'top-end', 
+          'right', 'right-start', 'right-end', 
+          'bottom', 'bottom-start', 'bottom-end', 
+          'left', 'left-start', 'left-end'
+        ].indexOf(value) !== -1
+      }
+    }
+  },
+  directives: { winclick: winclick },
+  watch: {
+    visible: function visible(newVal) {
+      if (this.trigger === 'custom') { this.isVisible = newVal; }
+    },
+    isVisible: function isVisible(newVal) {
+      this.$emit('on-visible-change', newVal);
+    }
+  },
+  methods: {
+    handleMouseenter: function handleMouseenter() {
+      if (this.trigger === 'hover') { this.isVisible = true; }
+    },
+    handleMouseleave: function handleMouseleave(event) {
+      if (this.trigger === 'hover') { this.timeout = setTimeout(this.close, 150); }
+    },
+    handleClick: function handleClick() {
+      if (this.trigger === 'click') { this.isVisible = true; }
+    },
+    close: function close() {
+      this.isVisible = false;
+    },
+    itemClick: function itemClick(name) {
+      this.close();
+      this.$emit('on-click', name);
+    },
+    handleDropMouseenter: function handleDropMouseenter(event) {
+      clearTimeout(this.timeout);
+    },
+    handleDropMouseleave: function handleDropMouseleave(event) {
+      if (this.trigger === 'hover') { this.isVisible = false; }
+    },
+    /**
+     * 窗口单击事件处理
+     * @param {MouseEvent} event
+     * 模拟方式不是单击 或者下拉菜单不可见 --> 退出
+     * 如果不是挂载元素 也不是该下拉菜单 --> 退出
+     */
+    handleWinClick: function handleWinClick(event) {
+      if (this.trigger !== 'click' || !this.isVisible) { return }
+      if (isSelfOrParent(this.$el, event.target) || 
+        isSelfOrParent(this.$refs.Drop, event.target)) { return }
+      this.isVisible = false;
+      this.$emit('on-clickoutside', event);
+    }
+  }
+};
+
+/* script */
+var __vue_script__$16 = script$16;
+/* template */
+var __vue_render__$19 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    {
+      directives: [
+        {
+          name: "winclick",
+          rawName: "v-winclick",
+          value: _vm.handleWinClick,
+          expression: "handleWinClick"
+        }
+      ],
+      staticClass: "ui-dropdown"
+    },
+    [
+      _c(
+        "div",
+        {
+          staticClass: "ui-dropdown-rel",
+          on: {
+            mouseenter: _vm.handleMouseenter,
+            mouseleave: _vm.handleMouseleave,
+            click: _vm.handleClick
+          }
+        },
+        [_vm._t("default")],
+        2
+      ),
+      _vm._v(" "),
+      _c(
+        "ui-option-list",
+        {
+          ref: "Drop",
+          attrs: { parentName: _vm.$options.name, visible: _vm.isVisible },
+          nativeOn: {
+            mouseenter: function($event) {
+              return _vm.handleDropMouseenter($event)
+            },
+            mouseleave: function($event) {
+              return _vm.handleDropMouseleave($event)
+            }
+          }
+        },
+        [_vm._t("list")],
+        2
+      )
+    ],
+    1
+  )
+};
+var __vue_staticRenderFns__$19 = [];
+__vue_render__$19._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$19 = undefined;
+  /* scoped */
+  var __vue_scope_id__$19 = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$19 = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$19 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$19 = normalizeComponent(
+    { render: __vue_render__$19, staticRenderFns: __vue_staticRenderFns__$19 },
+    __vue_inject_styles__$19,
+    __vue_script__$16,
+    __vue_scope_id__$19,
+    __vue_is_functional_template__$19,
+    __vue_module_identifier__$19,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+var script$17 = {
+  data: function data() {
+    return { parent: null }
+  },
+  props: {
+    name: String,
+    disabled: Boolean,
+    divided: Boolean,
+    selected: Boolean
+  },
+  methods: {
+    handleClick: function handleClick(event) {
+      if (this.disabled) { return }
+      this.parent && this.parent.itemClick(this.name);
+    }
+  },
+  mounted: function mounted() {
+    this.parent = findParent(this, 'ui-dropdown');
+  }
+};
+
+/* script */
+var __vue_script__$17 = script$17;
+/* template */
+var __vue_render__$1a = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "li",
+    { staticClass: "ui-dropdown-item", class: { divided: _vm.divided } },
+    [
+      _c(
+        "div",
+        {
+          staticClass: "ui-dropdown-item-btn",
+          class: { selected: _vm.selected, disabled: _vm.disabled },
+          on: { click: _vm.handleClick }
+        },
+        [_vm._t("default")],
+        2
+      )
+    ]
+  )
+};
+var __vue_staticRenderFns__$1a = [];
+__vue_render__$1a._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$1a = undefined;
+  /* scoped */
+  var __vue_scope_id__$1a = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$1a = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$1a = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$1a = normalizeComponent(
+    { render: __vue_render__$1a, staticRenderFns: __vue_staticRenderFns__$1a },
+    __vue_inject_styles__$1a,
+    __vue_script__$17,
+    __vue_scope_id__$1a,
+    __vue_is_functional_template__$1a,
+    __vue_module_identifier__$1a,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+/* script */
+
+/* template */
+var __vue_render__$1b = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("ul", { staticClass: "ui-dropdown-menu" }, [_vm._t("default")], 2)
+};
+var __vue_staticRenderFns__$1b = [];
+__vue_render__$1b._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$1b = undefined;
+  /* scoped */
+  var __vue_scope_id__$1b = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$1b = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$1b = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$1b = normalizeComponent(
+    { render: __vue_render__$1b, staticRenderFns: __vue_staticRenderFns__$1b },
+    __vue_inject_styles__$1b,
+    {},
+    __vue_scope_id__$1b,
+    __vue_is_functional_template__$1b,
+    __vue_module_identifier__$1b,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+//
+//
+//
+//
+
+var script$18 = {
+  name: 'ui-menu',
+  data: function data() {
+    return {
+      openedNames: this.openNames,
+      currentActiveName: this.activeName
+    }
+  },
+  props: {
+    mode: {
+      default: 'vertical',
+      validator: function validator(value) {
+        return ['horizontal', 'vertical'].indexOf(value) !== -1
+      }
+    },
+    theme: {
+      default: 'light',
+      validator: function validator(value) {
+        return ['light', 'dark', 'primary'].indexOf(value) !== -1
+      }
+    },
+    activeName: [String, Number],
+    openNames: {
+      type: Array,
+      default: function () { return []; }
+    },
+    accordion: Boolean,
+    width: {
+      type: String,
+      default: '240px'
+    }
+  },
+  computed: {
+    styles: function styles() {
+      return this.mode === 'vertical' ? { width: this.width } : {}
+    }
+  },
+  methods: {
+    /**
+     * 更新打开的菜单
+     */
+    updateOpened: function updateOpened(names) {
+      if ( names === void 0 ) names = [];
+
+      this.openedNames = names;
+      this.$emit('update:openNames', names);
+    },
+    /**
+     * 切换子菜单打开状态
+     */
+    toggleSubmenu: function toggleSubmenu(name) {
+      var index = this.openedNames.indexOf(name);
+      if (this.accordion) {
+        this.openedNames = index === -1 ? [name] : [];
+      } else {
+        if (index === -1) {
+          this.openedNames.push(name);
+        } else {
+          this.openedNames.splice(index, 1);
+        }
+      }
+      this.$emit('update:openNames', this.openedNames);
+    },
+    /**
+     * 更新活动菜单
+     */
+    updateActiveName: function updateActiveName(name) {
+      this.currentActiveName = name;
+      this.$emit('update:activeName', name);
+    },
+    /**
+     * 获取活动菜单
+     */
+    getActiveName: function getActiveName() {
+      return this.currentActiveName
+    },
+    /**
+     * 获取模式
+     */
+    getMode: function getMode() {
+      return this.mode
+    },
+    /**
+     * 获取打开的菜单
+     */
+    getOpenedNames: function getOpenedNames() {
+      return this.openedNames
+    },
+    /**
+     * 子菜单可见状态改变
+     */
+    onOpenChange: function onOpenChange(name, isOpen) {
+      this.$emit('on-open-change', name, isOpen);
+    },
+    /**
+     * 菜单选择改变
+     */
+    onSelect: function onSelect(name) {
+      this.$emit('on-select', name);
+    }
+  }
+};
+
+/* script */
+var __vue_script__$18 = script$18;
+/* template */
+var __vue_render__$1c = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "ul",
+    { staticClass: "x-menu", class: [_vm.mode, _vm.theme], style: _vm.styles },
+    [_vm._t("default")],
+    2
+  )
+};
+var __vue_staticRenderFns__$1c = [];
+__vue_render__$1c._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$1c = undefined;
+  /* scoped */
+  var __vue_scope_id__$1c = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$1c = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$1c = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$1c = normalizeComponent(
+    { render: __vue_render__$1c, staticRenderFns: __vue_staticRenderFns__$1c },
+    __vue_inject_styles__$1c,
+    __vue_script__$18,
+    __vue_scope_id__$1c,
+    __vue_is_functional_template__$1c,
+    __vue_module_identifier__$1c,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+var script$19 = {
+  name: 'ui-menu-submenu',
+  components: { UiIcon: __vue_component__, UiOptionList: __vue_component__$W },
+  data: function data() {
+    return {
+      visible: false,
+      timeout: null,
+      parent: null
+    }
+  },
+  props: {
+    name: [String, Number]
+  },
+  computed: {
+    active: function active() {
+      return this.visible || this.parent && this.parent.getActiveName() === this.name
+    },
+    isVertical: function isVertical() {
+      return this.parent && this.parent.getMode() === 'vertical'
+    },
+    isOpened: function isOpened() {
+      return this.parent && this.parent.getOpenedNames().indexOf(this.name) !== -1
+    }
+  },
+  watch: {
+    visible: function visible(newVal) {
+      this.parent && this.parent.onOpenChange(this.name, newVal);
+    }
+  },
+  methods: {
+    close: function close() {
+      this.visible = false;
+    },
+    handleMouseenter: function handleMouseenter() {
+      if (this.isVertical) { return }
+      clearTimeout(this.timeout);
+      this.visible = true;
+    },
+    handleMouseleave: function handleMouseleave() {
+      if (this.isVertical) { return }
+      this.timeout = setTimeout(this.close, 150);
+    },
+    handleDropMouseenter: function handleDropMouseenter() {
+      clearTimeout(this.timeout);
+    },
+    handleDropMouseleave: function handleDropMouseleave() {
+      this.timeout = setTimeout(this.close, 150);
+    },
+    getName: function getName() {
+      return this.name
+    },
+    handleTitleClick: function handleTitleClick() {
+      this.parent && this.parent.toggleSubmenu(this.name);
+    }
+  },
+  mounted: function mounted() {
+    this.parent = findParent(this, 'ui-menu');
+  }
+};
+
+/* script */
+var __vue_script__$19 = script$19;
+
+/* template */
+var __vue_render__$1d = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "li",
+    {
+      staticClass: "ui-menu-submenu",
+      class: { vertical: _vm.isVertical, active: _vm.active },
+      on: { mouseenter: _vm.handleMouseenter, mouseleave: _vm.handleMouseleave }
+    },
+    [
+      _c(
+        "div",
+        {
+          staticClass: "ui-menu-submenu-title",
+          on: { click: _vm.handleTitleClick }
+        },
+        [
+          _vm._t("title"),
+          _vm._v(" "),
+          _c("UiIcon", {
+            staticClass: "title-icon",
+            attrs: { type: "ios-arrow-down" }
+          })
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.isVertical && _vm.isOpened,
+              expression: "isVertical && isOpened"
+            }
+          ],
+          staticClass: "vertical"
+        },
+        [_c("ul", [_vm._t("default")], 2)]
+      ),
+      _vm._v(" "),
+      !_vm.isVertical
+        ? _c(
+            "ui-option-list",
+            {
+              staticClass: "ui-menu-submenu-list",
+              attrs: { visible: _vm.visible, parentName: _vm.$options.name },
+              nativeOn: {
+                mouseenter: function($event) {
+                  return _vm.handleDropMouseenter($event)
+                },
+                mouseleave: function($event) {
+                  return _vm.handleDropMouseleave($event)
+                }
+              }
+            },
+            [_c("ul", [_vm._t("default")], 2)]
+          )
+        : _vm._e()
+    ],
+    1
+  )
+};
+var __vue_staticRenderFns__$1d = [];
+__vue_render__$1d._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$1d = undefined;
+  /* scoped */
+  var __vue_scope_id__$1d = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$1d = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$1d = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$1d = normalizeComponent(
+    { render: __vue_render__$1d, staticRenderFns: __vue_staticRenderFns__$1d },
+    __vue_inject_styles__$1d,
+    __vue_script__$19,
+    __vue_scope_id__$1d,
+    __vue_is_functional_template__$1d,
+    __vue_module_identifier__$1d,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+var script$1a = {
+  data: function data() {
+    return {
+      parent: null,
+      menuRoot: null
+    }
+  },
+  props: {
+    name: [String, Number]
+  },
+  computed: {
+    isVertical: function isVertical() {
+      return this.menuRoot && this.menuRoot.getMode() === 'vertical'
+    },
+    active: function active() {
+      if (this.parent) {
+        return this.isVertical && this.menuRoot.getActiveName() === this.name
+      } else {
+        return this.menuRoot && this.menuRoot.getActiveName() === this.name
+      }
+    }
+  },
+  methods: {
+    handleClick: function handleClick() {
+      this.menuRoot && this.menuRoot.updateActiveName(
+        !this.parent || this.isVertical ? this.name : this.parent.getName()
+      );
+      !this.isVertical && this.parent && this.parent.close();
+      this.menuRoot && this.menuRoot.onSelect(this.name);
+    }
+  },
+  mounted: function mounted() {
+    this.menuRoot = findParent(this, 'ui-menu');
+    this.parent = findParent(this, 'ui-menu-submenu');
+  }
+};
+
+/* script */
+var __vue_script__$1a = script$1a;
+
+/* template */
+var __vue_render__$1e = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "li",
+    {
+      staticClass: "ui-menu-item",
+      class: { active: _vm.active },
+      on: { click: _vm.handleClick }
+    },
+    [_vm._t("default")],
+    2
+  )
 };
 var __vue_staticRenderFns__$1e = [];
 __vue_render__$1e._withStripped = true;
@@ -10616,23 +10945,24 @@ __vue_render__$1e._withStripped = true;
 //
 //
 //
-//
-//
 
 var script$1b = {
-  props: { label: String }
+  props: {
+    title: String
+  }
 };
 
 /* script */
 var __vue_script__$1b = script$1b;
+
 /* template */
 var __vue_render__$1f = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c("li", { staticClass: "ui-option-group" }, [
-    _c("span", { staticClass: "ui-option-group-title" }, [
-      _vm._v(_vm._s(_vm.label))
+  return _c("li", { staticClass: "ui-menu-item-group" }, [
+    _c("div", { staticClass: "ui-menu-item-group-title" }, [
+      _vm._v(_vm._s(_vm.title))
     ]),
     _vm._v(" "),
     _c("ul", [_vm._t("default")], 2)
@@ -10671,7 +11001,67 @@ __vue_render__$1f._withStripped = true;
   );
 
 //
+//
+//
+//
+//
+//
+//
+//
+
 var script$1c = {
+  props: { label: String }
+};
+
+/* script */
+var __vue_script__$1c = script$1c;
+/* template */
+var __vue_render__$1g = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("li", { staticClass: "ui-option-group" }, [
+    _c("span", { staticClass: "ui-option-group-title" }, [
+      _vm._v(_vm._s(_vm.label))
+    ]),
+    _vm._v(" "),
+    _c("ul", [_vm._t("default")], 2)
+  ])
+};
+var __vue_staticRenderFns__$1g = [];
+__vue_render__$1g._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$1g = undefined;
+  /* scoped */
+  var __vue_scope_id__$1g = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$1g = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$1g = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$1g = normalizeComponent(
+    { render: __vue_render__$1g, staticRenderFns: __vue_staticRenderFns__$1g },
+    __vue_inject_styles__$1g,
+    __vue_script__$1c,
+    __vue_scope_id__$1g,
+    __vue_is_functional_template__$1g,
+    __vue_module_identifier__$1g,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+var script$1d = {
   data: function data() {
     return { zIndex: 0, styles: {} }
   },
@@ -10764,9 +11154,9 @@ var script$1c = {
 };
 
 /* script */
-var __vue_script__$1c = script$1c;
+var __vue_script__$1d = script$1d;
 /* template */
-var __vue_render__$1g = function() {
+var __vue_render__$1h = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -10801,17 +11191,17 @@ var __vue_render__$1g = function() {
     )
   ])
 };
-var __vue_staticRenderFns__$1g = [];
-__vue_render__$1g._withStripped = true;
+var __vue_staticRenderFns__$1h = [];
+__vue_render__$1h._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$1g = undefined;
+  var __vue_inject_styles__$1h = undefined;
   /* scoped */
-  var __vue_scope_id__$1g = undefined;
+  var __vue_scope_id__$1h = undefined;
   /* module identifier */
-  var __vue_module_identifier__$1g = undefined;
+  var __vue_module_identifier__$1h = undefined;
   /* functional template */
-  var __vue_is_functional_template__$1g = false;
+  var __vue_is_functional_template__$1h = false;
   /* style inject */
   
   /* style inject SSR */
@@ -10820,13 +11210,13 @@ __vue_render__$1g._withStripped = true;
   
 
   
-  var __vue_component__$1g = normalizeComponent(
-    { render: __vue_render__$1g, staticRenderFns: __vue_staticRenderFns__$1g },
-    __vue_inject_styles__$1g,
-    __vue_script__$1c,
-    __vue_scope_id__$1g,
-    __vue_is_functional_template__$1g,
-    __vue_module_identifier__$1g,
+  var __vue_component__$1h = normalizeComponent(
+    { render: __vue_render__$1h, staticRenderFns: __vue_staticRenderFns__$1h },
+    __vue_inject_styles__$1h,
+    __vue_script__$1d,
+    __vue_scope_id__$1h,
+    __vue_is_functional_template__$1h,
+    __vue_module_identifier__$1h,
     false,
     undefined,
     undefined,
@@ -10834,8 +11224,8 @@ __vue_render__$1g._withStripped = true;
   );
 
 //
-var script$1d = {
-  components: { UiIcon: __vue_component__, UiPopper: __vue_component__$1g, UiButton: __vue_component__$1 },
+var script$1e = {
+  components: { UiIcon: __vue_component__, UiPopper: __vue_component__$1h, UiButton: __vue_component__$1 },
   data: function data() {
     return { popperVisible: this.value, refElement: null }
   },
@@ -10933,9 +11323,9 @@ var script$1d = {
 };
 
 /* script */
-var __vue_script__$1d = script$1d;
+var __vue_script__$1e = script$1e;
 /* template */
-var __vue_render__$1h = function() {
+var __vue_render__$1i = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -11044,17 +11434,17 @@ var __vue_render__$1h = function() {
     1
   )
 };
-var __vue_staticRenderFns__$1h = [];
-__vue_render__$1h._withStripped = true;
+var __vue_staticRenderFns__$1i = [];
+__vue_render__$1i._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$1h = undefined;
+  var __vue_inject_styles__$1i = undefined;
   /* scoped */
-  var __vue_scope_id__$1h = undefined;
+  var __vue_scope_id__$1i = undefined;
   /* module identifier */
-  var __vue_module_identifier__$1h = undefined;
+  var __vue_module_identifier__$1i = undefined;
   /* functional template */
-  var __vue_is_functional_template__$1h = false;
+  var __vue_is_functional_template__$1i = false;
   /* style inject */
   
   /* style inject SSR */
@@ -11063,13 +11453,13 @@ __vue_render__$1h._withStripped = true;
   
 
   
-  var __vue_component__$1h = normalizeComponent(
-    { render: __vue_render__$1h, staticRenderFns: __vue_staticRenderFns__$1h },
-    __vue_inject_styles__$1h,
-    __vue_script__$1d,
-    __vue_scope_id__$1h,
-    __vue_is_functional_template__$1h,
-    __vue_module_identifier__$1h,
+  var __vue_component__$1i = normalizeComponent(
+    { render: __vue_render__$1i, staticRenderFns: __vue_staticRenderFns__$1i },
+    __vue_inject_styles__$1i,
+    __vue_script__$1e,
+    __vue_scope_id__$1i,
+    __vue_is_functional_template__$1i,
+    __vue_module_identifier__$1i,
     false,
     undefined,
     undefined,
@@ -11077,8 +11467,8 @@ __vue_render__$1h._withStripped = true;
   );
 
 //
-var script$1e = {
-  components: { UiPopper: __vue_component__$1g },
+var script$1f = {
+  components: { UiPopper: __vue_component__$1h },
   data: function data() {
     return { popperVisible: false, refElement: null }
   },
@@ -11122,9 +11512,9 @@ var script$1e = {
 };
 
 /* script */
-var __vue_script__$1e = script$1e;
+var __vue_script__$1f = script$1f;
 /* template */
-var __vue_render__$1i = function() {
+var __vue_render__$1j = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -11170,17 +11560,17 @@ var __vue_render__$1i = function() {
     1
   )
 };
-var __vue_staticRenderFns__$1i = [];
-__vue_render__$1i._withStripped = true;
+var __vue_staticRenderFns__$1j = [];
+__vue_render__$1j._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$1i = undefined;
+  var __vue_inject_styles__$1j = undefined;
   /* scoped */
-  var __vue_scope_id__$1i = undefined;
+  var __vue_scope_id__$1j = undefined;
   /* module identifier */
-  var __vue_module_identifier__$1i = undefined;
+  var __vue_module_identifier__$1j = undefined;
   /* functional template */
-  var __vue_is_functional_template__$1i = false;
+  var __vue_is_functional_template__$1j = false;
   /* style inject */
   
   /* style inject SSR */
@@ -11189,13 +11579,13 @@ __vue_render__$1i._withStripped = true;
   
 
   
-  var __vue_component__$1i = normalizeComponent(
-    { render: __vue_render__$1i, staticRenderFns: __vue_staticRenderFns__$1i },
-    __vue_inject_styles__$1i,
-    __vue_script__$1e,
-    __vue_scope_id__$1i,
-    __vue_is_functional_template__$1i,
-    __vue_module_identifier__$1i,
+  var __vue_component__$1j = normalizeComponent(
+    { render: __vue_render__$1j, staticRenderFns: __vue_staticRenderFns__$1j },
+    __vue_inject_styles__$1j,
+    __vue_script__$1f,
+    __vue_scope_id__$1j,
+    __vue_is_functional_template__$1j,
+    __vue_module_identifier__$1j,
     false,
     undefined,
     undefined,
@@ -11203,8 +11593,8 @@ __vue_render__$1i._withStripped = true;
   );
 
 //
-var script$1f = {
-  components: { UiTooltip: __vue_component__$1i, UiInputNumber: __vue_component__$I },
+var script$1g = {
+  components: { UiTooltip: __vue_component__$1j, UiInputNumber: __vue_component__$I },
   data: function data() {
     return {
       inputValue: this.value,
@@ -11370,9 +11760,9 @@ var script$1f = {
 };
 
 /* script */
-var __vue_script__$1f = script$1f;
+var __vue_script__$1g = script$1g;
 /* template */
-var __vue_render__$1j = function() {
+var __vue_render__$1k = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -11512,389 +11902,6 @@ var __vue_render__$1j = function() {
     1
   )
 };
-var __vue_staticRenderFns__$1j = [];
-__vue_render__$1j._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$1j = undefined;
-  /* scoped */
-  var __vue_scope_id__$1j = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$1j = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$1j = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$1j = normalizeComponent(
-    { render: __vue_render__$1j, staticRenderFns: __vue_staticRenderFns__$1j },
-    __vue_inject_styles__$1j,
-    __vue_script__$1f,
-    __vue_scope_id__$1j,
-    __vue_is_functional_template__$1j,
-    __vue_module_identifier__$1j,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-var script$1g = {
-  components: { UiIcon: __vue_component__, UiSelect: __vue_component__$1d, UiOption: __vue_component__$1e, UiInput: __vue_component__$H },
-  data: function data() {
-    return {
-      limit: this.pageSize,
-      currentPage: this.current,
-      inputValue: this.current
-    }
-  },
-  props: {
-    current: {
-      type: Number,
-      default: 1
-    },
-    total: {
-      type: Number,
-      default: 0
-    },
-    pageSize: {
-      type: Number,
-      default: 10
-    },
-    pageSizeOpts: {
-      type: Array,
-      default: function () { return [10, 20, 30, 40]; }
-    },
-    placement: {
-      default: 'bottom',
-      validator: function validator(value) {
-        return ['bottom', 'top'].indexOf(value) !== -1
-      }
-    },
-    size: {
-      validator: function validator(value) {
-        return value === 'small'
-      }
-    },
-    simple: Boolean,
-    showTotal: Boolean,
-    showElevator: Boolean,
-    showSizer: Boolean
-  },
-  computed: {
-    pageCount: function pageCount() {
-      return Math.ceil(this.total / this.limit)
-    },
-    disabledPrev: function disabledPrev() {
-      return this.currentPage === 1
-    },
-    disabledNext: function disabledNext() {
-      return this.currentPage === this.pageCount
-    },
-    showPages: function showPages() {
-      var ref = this;
-      var currentPage = ref.currentPage;
-      var pageCount = ref.pageCount;
-      var nums = [];
-      if (currentPage < 5) {
-        for (var i = 1; i <= currentPage; i++) { nums.push(i); }
-      } else {
-        nums = [currentPage - 2, currentPage - 1, currentPage];
-      }
-      if (pageCount - currentPage <= 3) {
-        for (var i$1 = currentPage + 1; i$1 <= pageCount; i$1++) { nums.push(i$1); }
-      } else {
-        nums.push(currentPage + 1, currentPage + 2);
-      }
-      return nums
-    }
-  },
-  watch: {
-    limit: function limit(newVal) {
-      this.toPage(1);
-      this.$emit('on-page-size-change', newVal);
-    }
-  },
-  methods: {
-    toPage: function toPage(page) {
-      this.currentPage = page;
-      this.$emit('update:current', page);
-      this.$emit('on-change', page);
-    },
-    toPrev: function toPrev() {
-      !this.disabledPrev && this.toPage(this.currentPage - 1);
-    },
-    toNext: function toNext() {
-      !this.disabledNext && this.toPage(this.currentPage + 1);
-    },
-    toPrev5: function toPrev5() {
-      this.toPage(Math.max(this.currentPage - 5, 1));
-    },
-    toNext5: function toNext5() {
-      this.toPage(Math.min(this.currentPage + 5, this.pageCount));
-    },
-    toInputPage: function toInputPage() {
-      var inputValue = +this.inputValue;
-      if (isNaN(inputValue) || inputValue < 1) {
-        this.toPage(1);
-        this.inputValue = 1;
-      } else if (inputValue > this.pageCount) {
-        this.toPage(this.pageCount);
-        this.inputValue = this.pageCount;
-      } else {
-        this.toPage(inputValue);
-      }
-    }
-  }
-};
-
-/* script */
-var __vue_script__$1g = script$1g;
-/* template */
-var __vue_render__$1k = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    { staticClass: "ui-page", class: [_vm.size, { simple: _vm.simple }] },
-    [
-      _vm.simple
-        ? _c("ul", { staticClass: "ui-page-list simple" }, [
-            _c(
-              "li",
-              {
-                staticClass: "ui-page-arrow prev",
-                class: { disabled: _vm.disabledPrev },
-                on: { click: _vm.toPrev }
-              },
-              [_c("UiIcon", { attrs: { type: "ios-arrow-left" } })],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "ui-page-input" },
-              [
-                _c("UiInput", {
-                  attrs: { size: "small" },
-                  on: { "on-enter": _vm.toInputPage },
-                  model: {
-                    value: _vm.inputValue,
-                    callback: function($$v) {
-                      _vm.inputValue = $$v;
-                    },
-                    expression: "inputValue"
-                  }
-                }),
-                _vm._v(" "),
-                _c("span", [_vm._v("/")]),
-                _vm._v(" " + _vm._s(_vm.pageCount) + "\n    ")
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "li",
-              {
-                staticClass: "ui-page-arrow next",
-                class: { disabled: _vm.disabledNext },
-                on: { click: _vm.toNext }
-              },
-              [_c("UiIcon", { attrs: { type: "ios-arrow-right" } })],
-              1
-            )
-          ])
-        : [
-            _vm.showTotal
-              ? _c(
-                  "span",
-                  { staticClass: "ui-page-count" },
-                  [
-                    _vm._t("default", [
-                      _vm._v("共 " + _vm._s(_vm.total) + " 条")
-                    ])
-                  ],
-                  2
-                )
-              : _vm._e(),
-            _vm._v(" "),
-            _c(
-              "ul",
-              { staticClass: "ui-page-list" },
-              [
-                _c(
-                  "li",
-                  {
-                    staticClass: "ui-page-arrow prev",
-                    class: { disabled: _vm.disabledPrev },
-                    on: { click: _vm.toPrev }
-                  },
-                  [_c("UiIcon", { attrs: { type: "ios-arrow-left" } })],
-                  1
-                ),
-                _vm._v(" "),
-                _vm.currentPage >= 5
-                  ? [
-                      _c(
-                        "li",
-                        {
-                          class: { active: _vm.currentPage === 1 },
-                          on: {
-                            click: function($event) {
-                              return _vm.toPage(1)
-                            }
-                          }
-                        },
-                        [_vm._v("1")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "li",
-                        {
-                          staticClass: "ui-page-more",
-                          attrs: { title: "向前5页" },
-                          on: { click: _vm.toPrev5 }
-                        },
-                        [
-                          _c("UiIcon", { attrs: { type: "ios-arrow-left" } }),
-                          _vm._v(" "),
-                          _c("UiIcon", { attrs: { type: "ios-arrow-left" } }),
-                          _vm._v(" "),
-                          _c("UiIcon", {
-                            staticClass: "icon-more",
-                            attrs: { type: "ios-more" }
-                          })
-                        ],
-                        1
-                      )
-                    ]
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm._l(_vm.showPages, function(item) {
-                  return _c(
-                    "li",
-                    {
-                      key: item,
-                      class: { active: _vm.currentPage === item },
-                      on: {
-                        click: function($event) {
-                          return _vm.toPage(item)
-                        }
-                      }
-                    },
-                    [_vm._v(_vm._s(item))]
-                  )
-                }),
-                _vm._v(" "),
-                _vm.pageCount - _vm.currentPage >= 4
-                  ? [
-                      _c(
-                        "li",
-                        {
-                          staticClass: "ui-page-more",
-                          attrs: { title: "向后5页" },
-                          on: { click: _vm.toNext5 }
-                        },
-                        [
-                          _c("UiIcon", { attrs: { type: "ios-arrow-right" } }),
-                          _vm._v(" "),
-                          _c("UiIcon", { attrs: { type: "ios-arrow-right" } }),
-                          _vm._v(" "),
-                          _c("UiIcon", {
-                            staticClass: "icon-more",
-                            attrs: { type: "ios-more" }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "li",
-                        {
-                          class: { active: _vm.currentPage === _vm.pageCount },
-                          on: {
-                            click: function($event) {
-                              return _vm.toPage(_vm.pageCount)
-                            }
-                          }
-                        },
-                        [_vm._v(_vm._s(_vm.pageCount))]
-                      )
-                    ]
-                  : _vm._e(),
-                _vm._v(" "),
-                _c(
-                  "li",
-                  {
-                    staticClass: "ui-page-arrow next",
-                    class: { disabled: _vm.disabledNext },
-                    on: { click: _vm.toNext }
-                  },
-                  [_c("UiIcon", { attrs: { type: "ios-arrow-right" } })],
-                  1
-                )
-              ],
-              2
-            ),
-            _vm._v(" "),
-            _vm.showSizer
-              ? _c(
-                  "ui-select",
-                  {
-                    staticClass: "ui-page-sizer",
-                    attrs: { size: _vm.size },
-                    model: {
-                      value: _vm.limit,
-                      callback: function($$v) {
-                        _vm.limit = $$v;
-                      },
-                      expression: "limit"
-                    }
-                  },
-                  _vm._l(_vm.pageSizeOpts, function(item) {
-                    return _c("UiOption", {
-                      key: item,
-                      attrs: { value: item, label: item + " 条/页" }
-                    })
-                  }),
-                  1
-                )
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.showElevator
-              ? _c(
-                  "div",
-                  { staticClass: "ui-page-input" },
-                  [
-                    _vm._v("\n      跳至"),
-                    _c("UiInput", {
-                      attrs: { size: _vm.size },
-                      on: { "on-enter": _vm.toInputPage },
-                      model: {
-                        value: _vm.inputValue,
-                        callback: function($$v) {
-                          _vm.inputValue = $$v;
-                        },
-                        expression: "inputValue"
-                      }
-                    }),
-                    _vm._v("页\n    ")
-                  ],
-                  1
-                )
-              : _vm._e()
-          ]
-    ],
-    2
-  )
-};
 var __vue_staticRenderFns__$1k = [];
 __vue_render__$1k._withStripped = true;
 
@@ -11930,7 +11937,7 @@ __vue_render__$1k._withStripped = true;
 //
 var script$1h = {
   name: 'ui-autocomplete',
-  components: { UiInput: __vue_component__$H, UiDrop: __vue_component__$15 },
+  components: { UiInput: __vue_component__$H, UiDrop: __vue_component__$W },
   data: function data() {
     return {
       visible: false,
@@ -12491,7 +12498,7 @@ var comps = {
   Transfer: __vue_component__$K,
   Anchor: __vue_component__$L,
   AnchorLink: __vue_component__$M,
-  Modal: __vue_component__$_,
+  Modal: __vue_component__$12,
   Carousel: __vue_component__$N,
   CarouselItem: __vue_component__$O,
   Tree: __vue_component__$Q,
@@ -12500,29 +12507,29 @@ var comps = {
   Content: __vue_component__$T,
   Footer: __vue_component__$U,
   Sider: __vue_component__$V,
+  Page: __vue_component__$Z,
 
-  Tabs: __vue_component__$10,
-  TabPane: __vue_component__$11,
-  Upload: __vue_component__$12,
-  Form: __vue_component__$13,
-  FormItem: __vue_component__$14,
+  Tabs: __vue_component__$14,
+  TabPane: __vue_component__$15,
+  Upload: __vue_component__$16,
+  Form: __vue_component__$17,
+  FormItem: __vue_component__$18,
   // Cascader,
   // ColorPicker,
-  Select: __vue_component__$1d,
-  Option: __vue_component__$1e,
-  OptionGroup: __vue_component__$1f,
-  Page: __vue_component__$1k,
-  Dropdown: __vue_component__$16,
-  DropdownMenu: __vue_component__$18,
-  DropdownItem: __vue_component__$17,
-  Menu: __vue_component__$19,
-  MenuItem: __vue_component__$1b,
-  Submenu: __vue_component__$1a,
-  MenuGroup: __vue_component__$1c,
-  Tooltip: __vue_component__$1i,
-  Poptip: __vue_component__$1h,
+  Select: __vue_component__$X,
+  Option: __vue_component__$Y,
+  OptionGroup: __vue_component__$1g,
+  Dropdown: __vue_component__$19,
+  DropdownMenu: __vue_component__$1b,
+  DropdownItem: __vue_component__$1a,
+  Menu: __vue_component__$1c,
+  MenuItem: __vue_component__$1e,
+  Submenu: __vue_component__$1d,
+  MenuGroup: __vue_component__$1f,
+  Tooltip: __vue_component__$1j,
+  Poptip: __vue_component__$1i,
   Table: __vue_component__$1o,
-  Slider: __vue_component__$1j,
+  Slider: __vue_component__$1k,
   AutoComplete: __vue_component__$1l
   // ,DatePicker,
   // TimePicker
@@ -12540,7 +12547,7 @@ function index (Vue, options) {
   Vue.prototype.$Notice = Notice;
   Vue.prototype.$Message = Message;
   Vue.prototype.$Spin = __vue_component__$x.service;
-  Vue.prototype.$Modal = __vue_component__$_.service;
+  Vue.prototype.$Modal = __vue_component__$12.service;
   Vue.LoadingBar = Vue.prototype.$Loading = loadingBarService;
   var prefix = typeof options.prefix === 'string' ? options.prefix : 'Ui';
   for (var name in comps) { Vue.component(prefix + name, comps[name]); }

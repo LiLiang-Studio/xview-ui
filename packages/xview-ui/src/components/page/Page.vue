@@ -1,101 +1,80 @@
 <template>
-  <div class="ui-page" :class="[size, {simple}]">
-    <ul v-if="simple" class="ui-page-list simple">
-      <li class="ui-page-arrow prev" :class="{disabled: disabledPrev}" @click="toPrev">
-        <UiIcon type="ios-arrow-left"/>
-      </li>
-      <div class="ui-page-input">
-        <UiInput size="small" v-model="inputValue" @on-enter="toInputPage"/>
-        <span>/</span> {{pageCount}}
-      </div>
-      <li class="ui-page-arrow next" :class="{disabled: disabledNext}" @click="toNext">
-        <UiIcon type="ios-arrow-right"/>
-      </li>
-    </ul>
+  <ul :class="[prefix, size, {simple}]">
+    <span v-if="showTotal && !simple" :class="`${prefix}_total`">
+      <slot>共 {{total}} 条</slot>
+    </span>
+    <li :class="{isText: prevText, disabled: disabledPrev}" @click="toPrev">
+      {{prevText}}<x-icon type="ios-arrow-left"/>
+    </li>
+    <span v-if="simple" :class="`${prefix}_elevator`">
+      <x-input size="small" v-model="inputValue" @on-enter="toInputPage" @on-keydown="onKeydown" @on-keyup="onKeyup"/>
+      <span :class="`${prefix}_slash`">/</span> {{pageCount}}
+    </span>
     <template v-else>
-      <span v-if="showTotal" class="ui-page-count">
-        <slot>共 {{total}} 条</slot>
-      </span>
-      <ul class="ui-page-list">
-        <li class="ui-page-arrow prev" :class="{disabled: disabledPrev}" @click="toPrev">
-          <UiIcon type="ios-arrow-left"/>
+      <template v-if="currentPage >= 5">
+        <li :class="{active: currentPage === 1}" @click="toPage(1)">1</li>
+        <li :class="`${prefix}_more`" title="向前5页" @click="toPrev5">
+          <span class="arrows"><x-icon type="ios-arrow-left" v-for="i in 2" :key="i"/></span>
+          <x-icon class="icon-more" type="ios-more"/>
         </li>
-        <template v-if="currentPage >= 5">
-          <li :class="{active: currentPage === 1}" @click="toPage(1)">1</li>
-          <li class="ui-page-more" title="向前5页" @click="toPrev5">
-            <UiIcon type="ios-arrow-left"/>
-            <UiIcon type="ios-arrow-left"/>
-            <UiIcon class="icon-more" type="ios-more"/>
-          </li>
-        </template>
-        <li v-for="item in showPages" :key="item" :class="{active: currentPage === item}" @click="toPage(item)">{{item}}</li>
-        <template v-if="pageCount - currentPage >= 4">
-          <li class="ui-page-more" title="向后5页" @click="toNext5">
-            <UiIcon type="ios-arrow-right"/>
-            <UiIcon type="ios-arrow-right"/>
-            <UiIcon class="icon-more" type="ios-more"/>
-          </li>
-          <li :class="{active: currentPage === pageCount}" @click="toPage(pageCount)">{{pageCount}}</li>
-        </template>
-        <li class="ui-page-arrow next" :class="{disabled: disabledNext}" @click="toNext">
-          <UiIcon type="ios-arrow-right"/>
+      </template>
+      <li v-for="_ in showPages" :key="_" :class="{active: currentPage === _}" @click="toPage(_)">{{_}}</li>
+      <template v-if="pageCount - currentPage >= 4">
+        <li :class="`${prefix}_more`" title="向后5页" @click="toNext5">
+          <span class="arrows"><x-icon type="ios-arrow-right" v-for="i in 2" :key="i"/></span>
+          <x-icon class="icon-more" type="ios-more"/>
         </li>
-      </ul>
-      <ui-select v-if="showSizer" class="ui-page-sizer" v-model="limit" :size="size">
-        <UiOption v-for="item in pageSizeOpts" :key="item" :value="item" :label="`${item} 条/页`"/>
-      </ui-select>
-      <div v-if="showElevator" class="ui-page-input">
-        跳至<UiInput :size="size" v-model="inputValue" @on-enter="toInputPage"/>页
-      </div>
+        <li :class="{active: currentPage === pageCount}" @click="toPage(pageCount)">{{pageCount}}</li>
+      </template>
     </template>
-  </div>
+    <li :class="{isText: nextText, disabled: disabledNext}" @click="toNext">
+      {{nextText}}<x-icon type="ios-arrow-right"/>
+    </li>
+    <template v-if="!simple">
+      <x-select v-if="showSizer" :class="`${prefix}_sizer`" :placement="placement" :transfer="transfer" :size="size" v-model="limit">
+        <x-option v-for="_ in pageSizeOpts" :key="_" :value="_" :label="`${_} 条/页`"/>
+      </x-select>
+      <span :class="`${prefix}_elevator`" v-if="showElevator">
+        跳至<x-input :size="size" v-model="inputValue" @on-enter="toInputPage"/>页
+      </span>
+    </template>
+  </ul>
 </template>
 <script>
-import UiIcon from '../icon'
-import UiInput from '../input'
-import UiSelect from '../select'
-import UiOption from '../option'
+import XIcon from '../icon'
+import XInput from '../input'
+import XSelect from '../select'
+import XOption from '../option'
+const N = Number, B = Boolean
 export default {
-  components: { UiIcon, UiSelect, UiOption, UiInput },
-  data() {
-    return {
-      limit: this.pageSize,
-      currentPage: this.current,
-      inputValue: this.current
-    }
-  },
+  name: 'XPage',
+  components: { XIcon, XSelect, XOption, XInput },
   props: {
-    current: {
-      type: Number,
-      default: 1
-    },
-    total: {
-      type: Number,
-      default: 0
-    },
-    pageSize: {
-      type: Number,
-      default: 10
-    },
-    pageSizeOpts: {
-      type: Array,
-      default: () => [10, 20, 30, 40]
-    },
+    current: { type: N, default: 1 },
+    total: { type: N, default: 0 },
+    pageSize: { type: N, default: 10 },
+    pageSizeOpts: { type: Array, default: () => [10, 20, 30, 40] },
     placement: {
       default: 'bottom',
-      validator(value) {
-        return ['bottom', 'top'].indexOf(value) !== -1
+      validator(v) {
+        return ['bottom', 'top'].indexOf(v) > -1
       }
     },
     size: {
-      validator(value) {
-        return value === 'small'
+      validator(v) {
+        return v === 'small'
       }
     },
-    simple: Boolean,
-    showTotal: Boolean,
-    showElevator: Boolean,
-    showSizer: Boolean
+    simple: B,
+    showTotal: B,
+    showElevator: B,
+    showSizer: B,
+    transfer: B,
+    prevText: String,
+    nextText: String
+  },
+  data() {
+    return { prefix: 'x-page', limit: this.pageSize, currentPage: 1, inputValue: 1 }
   },
   computed: {
     pageCount() {
@@ -124,39 +103,60 @@ export default {
     }
   },
   watch: {
-    limit(newVal) {
-      this.toPage(1)
-      this.$emit('on-page-size-change', newVal)
+    limit(val) { // 页大小改变 跳转到首页 并发射页大小改变事件 但不发射当前页改变事件
+      this.goPage(1)
+      this.$emit('on-page-size-change', val)
+    },
+    current: {
+      immediate: true,
+      handler(val) {
+        this.currentPage = this.inputValue = val
+      }
+    },
+    pageSize(val) {
+      this.limit = val
     }
   },
   methods: {
-    toPage(page) {
+    goPage(page) { // 到第几页 不发射改变事件
+      this.inputValue = page
       this.currentPage = page
       this.$emit('update:current', page)
+    },
+    toPage(page) { // 到第几页 手动触发导致 发射改变事件
+      this.goPage(page)
       this.$emit('on-change', page)
     },
-    toPrev() {
+    toPrev() { // 到上1页
       !this.disabledPrev && this.toPage(this.currentPage - 1)
     },
-    toNext() {
+    toNext() { // 到下1页
       !this.disabledNext && this.toPage(this.currentPage + 1)
     },
-    toPrev5() {
+    toPrev5() { // 到上5页
       this.toPage(Math.max(this.currentPage - 5, 1))
     },
-    toNext5() {
+    toNext5() { // 到下5页
       this.toPage(Math.min(this.currentPage + 5, this.pageCount))
     },
-    toInputPage() {
+    toInputPage() { // 电梯直达目标页
       let inputValue = +this.inputValue
       if (isNaN(inputValue) || inputValue < 1) {
         this.toPage(1)
-        this.inputValue = 1
       } else if (inputValue > this.pageCount) {
         this.toPage(this.pageCount)
-        this.inputValue = this.pageCount
       } else {
         this.toPage(inputValue)
+      }
+    },
+    onKeydown(e) { // 简洁版输入框键盘按下
+      if ([38, 40].indexOf(e.keyCode) > -1) e.preventDefault()
+    },
+    onKeyup(e) { // 简洁版输入框键盘松开
+      if (e.keyCode === 38) {
+        this.inputValue = this.currentPage = Math.min(this.pageCount, this.currentPage + 1)
+      } else if (e.keyCode === 40) {
+        this.inputValue = this.currentPage = Math.max(1, this.currentPage - 1)
       }
     }
   }
@@ -164,113 +164,96 @@ export default {
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-page-list {
-  display: inline-block;
+@page: .x-page;
+@{page} {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
   li {
-    list-style: none;
-    cursor: pointer;
-    user-select: none;
-    display: inline-block;
-    vertical-align: middle;
-    text-align: center;
     color: #666;
-    border: 1px solid @border-color;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 4px;
     border-radius: 4px;
-    transition: border .2s ease-in-out;
-    line-height: @form-control-normal - 2px;
-    height: @form-control-normal;
-    min-width: @form-control-normal;
-    margin-right: 5px;
-    &:hover:not(.disabled):not(.active) {
+    height: @size-normal;
+    min-width: @size-normal;
+    border: 1px solid @border-color;
+    transition: border-color .2s ease-in-out;
+    &:first-child {
+      margin-left: 0;
+    }
+    &:hover:not(.disabled), &.active:not(.disabled) {
       color: @primary-color;
-    }
-    &.active:not(.disabled), &:hover:not(.disabled):not(.ui-page-more) {
-      border-color: @primary-color;
-    }
-    &.active {
-      color: #fff;
-      background-color: @primary-color;
+      border-color: currentColor;
     }
     &.disabled {
-      cursor: not-allowed;
       color: #ccc;
+      cursor: not-allowed;
     }
-    &.ui-page-arrow {
-      font-size: 14px;
-      &.prev {
-        margin-right: 10px;
-      }
-      &.next {
-        margin-left: 5px;
-      }
-      .ui-icon {
-        line-height: @form-control-normal - 2px;
-      }
-    }
-    &.ui-page-more {
-      position: relative;
-      .icon-more {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #fff;
-        border-radius: 4px;
-        font-size: 20px;
-        color: #ccc;
-      }
-      &:hover {
-        .icon-more {
-          display: none;
-        }
+    &.isText {
+      border: none;
+      .x-icon {
+        display: none;
       }
     }
   }
-}
-
-.ui-page-count {
-  margin-right: 15px;
-}
-
-.ui-page {
-  .ui-page-sizer, .ui-page-input {
-    width: auto;
+  li&_more {
+    border: none;
+    color: #ccc;
+    .icon-more {
+      font-size: 20px;
+    }
+    .arrows {
+      letter-spacing: -5px;
+    }
+    &:not(:hover) .arrows {
+      display: none;
+    }
+    &:hover .icon-more {
+      display: none;
+    }
+  }
+  &_elevator {
+    display: inline-flex;
+    align-items: center;
     margin-left: 15px;
-    display: inline-block;
-    vertical-align: middle;
-  }
-  .ui-page-input {
-    .ui-input {
+    .x-input {
       width: 50px;
       margin: 0 10px;
     }
   }
+  &_total {
+    margin-right: 10px;
+  }
+  &_sizer {
+    width: auto;
+    margin-left: 15px;
+  }
   &.small, &.simple {
-    .ui-page-list li {
+    li {
       border: none;
-      min-width: @form-control-small;
-      height: @form-control-small;
-      line-height: @form-control-small - 2px;
-      &.ui-page-arrow .ui-icon {
-        line-height: @form-control-small - 2px;
-      }
+      height: @size-small;
+      min-width: @size-small;
     }
   }
+  &.small li {
+    margin: 0 2px;
+  }
   &.simple {
-    .ui-page-input {
-      margin-left: 0;
-      .ui-input {
-        margin: 0;
-        width: 40px;
-      }
-      > span {
-        padding: 0 8px;
-      }
+    @{page}_elevator {
+      margin: 0;
     }
+    .x-input {
+      width: 40px;
+      margin: 0;
+    }
+  }
+  &_slash {
+    margin: 0 10px;
   }
 }
 </style>

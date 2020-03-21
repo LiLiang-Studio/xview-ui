@@ -1,5 +1,5 @@
 /*!
- * xview-ui v1.4.1
+ * xview-ui v1.4.3
  * (c) 2019-2020 LiLiang
  * Released under the MIT License.
  */
@@ -8419,34 +8419,148 @@ __vue_render__$Z._withStripped = true;
   );
 
 //
-//
-//
-//
-//
-//
-//
-
 var script$X = {
-  name: 'XLoadingBar',
+  name: 'XTabs',
+  components: { XIcon: __vue_component__, XCloseIconButton: __vue_component__$7, XRender: XRender },
   props: {
-    color: String,
-    failedColor: String,
-    height: {
-      type: Number,
-      default: 2
+    value: [String, Number],
+    type: {
+      default: 'line',
+      validator: function validator(v) {
+        return ['line', 'card'].indexOf(v) > -1
+      }
     },
-    percent: Number,
-    status: String
+    size: {
+      validator: function validator(v) {
+        return ['default', 'small'].indexOf(v) > -1
+      }
+    },
+    closable: Boolean,
+    animated: { type: Boolean, default: true },
+    beforeClose: Function
   },
   data: function data() {
-    return { prefix: 'x-loadingBar' }
+    return {
+      prefix: 'x-tabs',
+      items: [],
+      activeTab: this.value,
+      showNavBtns: false,
+      translateX: 0
+    }
   },
   computed: {
-    styles: function styles() {
-      return { height: ((this.height) + "px") }
+    classes: function classes() {
+      var ref = this;
+      var prefix = ref.prefix;
+      return [prefix, this.size && (prefix + "_" + (this.size)), (prefix + "_" + (this.type))]
     },
-    barStyle: function barStyle() {
-      return { transform: ("scaleX(" + (this.percent / 100) + ")"), background: this.status === 'error' ? this.failedColor : this.color }
+    contentStyle: function contentStyle() {
+      var this$1 = this;
+
+      var index = this.items.findIndex(function (_) { return _.key === this$1.activeTab; });
+      return index > -1 && { transform: ("translateX(" + (-index * 100) + "%)") }
+    }
+  },
+  watch: {
+    value: function value(val) {
+      this.activeTab = val;
+    },
+    activeTab: function activeTab(val) {
+      var this$1 = this;
+
+      this.$emit('input', val);
+      this.$nextTick(function () { return this$1.scrollToCurrent(); });
+    },
+    items: function items(val) {
+      if (val.length) {
+        if (this.activeTab === undefined) { this.activeTab = this.items[0].key; }
+      } else {
+        this.activeTab = undefined;
+      }
+    }
+  },
+  directives: { winresize: winresize },
+  methods: {
+    isFunc: isFunc,
+    tabClass: function tabClass(item) { // 项class
+      return [((this.prefix) + "_navItem"), { active: item.key === this.activeTab, disabled: item.disabled }]
+    },
+    addItem: function addItem(vm) {
+      var this$1 = this;
+ // 添加项组件 仅供子组件调用
+      var len = this.items.push(vm);
+      this.$nextTick(function () { return this$1.winResizeHandler(); });
+      return len
+    },
+    removeItem: function removeItem(vm) {
+      var this$1 = this;
+ // 移除项组件 仅供子组件调用
+      var index = this.items.indexOf(vm);
+      this.items.splice(index, 1);
+      if (vm.key === this.activeTab && this.items.length) {
+        this.activeTab = this.items[index > 0 ? index - 1 : 0].key;
+      }
+      this.$nextTick(function () { return this$1.winResizeHandler(); });
+    },
+    deleteItem: function deleteItem(item) {
+      var this$1 = this;
+ // 删除项 单击关闭按钮调用
+      var fn = function () { return this$1.$emit('on-tab-remove', item.key); };
+      this.beforeClose ? this.beforeClose().then(fn) : fn();
+    },
+    scrollToCurrent: function scrollToCurrent() {
+      var this$1 = this;
+ // 滚动到目标tab
+      if (this.activeTab !== undefined) {
+        var index = this.items.findIndex(function (_) { return _.key === this$1.activeTab; });
+        var ref = this.$refs;
+        var scrollView = ref.scrollView;
+        var el = scrollView.querySelectorAll('li')[index];
+        var rect = el.getBoundingClientRect();
+        var scrollViewLeft = scrollView.getBoundingClientRect().left + Math.abs(this.translateX);
+        var rightMoveDis = scrollViewLeft + scrollView.clientWidth - rect.right;
+        var leftMoveDis = scrollViewLeft - rect.left;
+        if (rightMoveDis < 0) {
+          this.onNavNext(Math.max(-rightMoveDis, el.clientWidth));
+        } else if (leftMoveDis > 0) {
+          this.onNavPrev(Math.max(leftMoveDis, el.clientWidth));
+        }
+      }
+    },
+    onTabClick: function onTabClick(item) { // tab单击
+      this.activeTab = item.key;
+      this.$emit('on-click', item.key);
+    },
+    canClose: function canClose(item) { // 是否可关闭
+      return item.closable === false ? false : (item.closable || this.closable) && this.type === 'card'
+    },
+    onNavPrev: function onNavPrev(dis) { // 向前导航
+      var ref = this.$refs.scrollView;
+      var clientWidth = ref.clientWidth;
+      var maxDis = Math.abs(this.translateX);
+      this.translateX += dis ? Math.min(maxDis, dis) : Math.min(clientWidth, maxDis > 0 ? maxDis : 0);
+    },
+    onNavNext: function onNavNext(dis) { // 向后导航
+      var ref = this.$refs.scrollView;
+      var clientWidth = ref.clientWidth;
+      var scrollWidth = ref.scrollWidth;
+      var maxDis = scrollWidth - clientWidth - Math.abs(this.translateX);
+      this.translateX -= dis ? Math.min(maxDis, dis) : Math.min(clientWidth, maxDis > 0 ? maxDis : 0);
+    },
+    winResizeHandler: function winResizeHandler() { // 窗口大小改变处理
+      var ref = this.$refs;
+      var scrollView = ref.scrollView;
+      if (scrollView) {
+        var clientWidth = scrollView.clientWidth;
+        var scrollWidth = scrollView.scrollWidth;
+        if (clientWidth + Math.abs(this.translateX) > scrollWidth) {
+          this.translateX = -scrollWidth + clientWidth;
+        }
+        this.showNavBtns = clientWidth < scrollWidth;
+      }
+    },
+    onWinResize: function onWinResize() { // 窗口大小改变节流处理 指令专用
+      return throttle(this.winResizeHandler, 50)
     }
   }
 };
@@ -8458,14 +8572,124 @@ var __vue_render__$_ = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c("transition", { attrs: { name: _vm.prefix } }, [
-    _c("div", { class: _vm.prefix, style: _vm.styles }, [
-      _c("div", {
-        class: [_vm.prefix + "_bar", _vm.status],
-        style: _vm.barStyle
-      })
-    ])
-  ])
+  return _c(
+    "div",
+    {
+      directives: [
+        {
+          name: "winresize",
+          rawName: "v-winresize",
+          value: _vm.onWinResize(),
+          expression: "onWinResize()"
+        }
+      ],
+      class: _vm.classes
+    },
+    [
+      _c(
+        "div",
+        { class: _vm.prefix + "_bar" },
+        [
+          _c(
+            "div",
+            {
+              class: [_vm.prefix + "_navWrap", { showNavBtns: _vm.showNavBtns }]
+            },
+            [
+              _c("div", { class: _vm.prefix + "_scrollWrap" }, [
+                _c(
+                  "ul",
+                  {
+                    ref: "scrollView",
+                    class: _vm.prefix + "_nav",
+                    style: { transform: "translateX(" + _vm.translateX + "px)" }
+                  },
+                  _vm._l(_vm.items, function(_) {
+                    return _c(
+                      "li",
+                      {
+                        key: _.key,
+                        class: _vm.tabClass(_),
+                        on: {
+                          click: function($event) {
+                            return _vm.onTabClick(_)
+                          }
+                        }
+                      },
+                      [
+                        _.icon
+                          ? _c("x-icon", {
+                              class: _vm.prefix + "_icon",
+                              attrs: { type: _.icon }
+                            })
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.isFunc(_.label)
+                          ? _c("x-render", { attrs: { render: _.label } })
+                          : [_vm._v(_vm._s(_.label))],
+                        _vm._v(" "),
+                        _vm.canClose(_)
+                          ? _c("x-close-icon-button", {
+                              class: _vm.prefix + "_close",
+                              on: {
+                                click: function($event) {
+                                  $event.stopPropagation();
+                                  return _vm.deleteItem(_)
+                                }
+                              }
+                            })
+                          : _vm._e()
+                      ],
+                      2
+                    )
+                  }),
+                  0
+                )
+              ]),
+              _vm._v(" "),
+              _vm.showNavBtns
+                ? [
+                    _c("x-icon", {
+                      class: _vm.prefix + "_navPrev",
+                      attrs: { type: "ios-arrow-back" },
+                      on: {
+                        click: function($event) {
+                          return _vm.onNavPrev()
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("x-icon", {
+                      class: _vm.prefix + "_navNext",
+                      attrs: { type: "ios-arrow-forward" },
+                      on: {
+                        click: function($event) {
+                          return _vm.onNavNext()
+                        }
+                      }
+                    })
+                  ]
+                : _vm._e()
+            ],
+            2
+          ),
+          _vm._v(" "),
+          _vm._t("extra")
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          class: [_vm.prefix + "_content", { animated: _vm.animated }],
+          style: _vm.contentStyle
+        },
+        [_vm._t("default")],
+        2
+      )
+    ]
+  )
 };
 var __vue_staticRenderFns__$_ = [];
 __vue_render__$_._withStripped = true;
@@ -8499,6 +8723,153 @@ __vue_render__$_._withStripped = true;
     undefined
   );
 
+//
+var S$6 = String, B$8 = Boolean;
+var script$Y = {
+  name: 'XTabPane',
+  data: function data() {
+    return { key: this.name }
+  },
+  props: {
+    name: S$6,
+    label: [S$6, Function],
+    icon: S$6,
+    disabled: B$8,
+    closable: { type: B$8, default: null }
+  },
+  mounted: function mounted() {
+    this.parent = findParent(this, 'XTabs');
+    var len = this.parent.addItem(this);
+    if (this.key === undefined) { this.key = len - 1; }
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.parent.removeItem(this);
+  }
+};
+
+/* script */
+var __vue_script__$Y = script$Y;
+
+/* template */
+var __vue_render__$$ = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { staticClass: "x-tabs-pane" }, [_vm._t("default")], 2)
+};
+var __vue_staticRenderFns__$$ = [];
+__vue_render__$$._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$$ = undefined;
+  /* scoped */
+  var __vue_scope_id__$$ = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$$ = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$$ = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$$ = normalizeComponent(
+    { render: __vue_render__$$, staticRenderFns: __vue_staticRenderFns__$$ },
+    __vue_inject_styles__$$,
+    __vue_script__$Y,
+    __vue_scope_id__$$,
+    __vue_is_functional_template__$$,
+    __vue_module_identifier__$$,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+//
+//
+//
+//
+//
+//
+
+var script$Z = {
+  name: 'XLoadingBar',
+  props: {
+    color: String,
+    failedColor: String,
+    height: {
+      type: Number,
+      default: 2
+    },
+    percent: Number,
+    status: String
+  },
+  data: function data() {
+    return { prefix: 'x-loadingBar' }
+  },
+  computed: {
+    styles: function styles() {
+      return { height: ((this.height) + "px") }
+    },
+    barStyle: function barStyle() {
+      return { transform: ("scaleX(" + (this.percent / 100) + ")"), background: this.status === 'error' ? this.failedColor : this.color }
+    }
+  }
+};
+
+/* script */
+var __vue_script__$Z = script$Z;
+/* template */
+var __vue_render__$10 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("transition", { attrs: { name: _vm.prefix } }, [
+    _c("div", { class: _vm.prefix, style: _vm.styles }, [
+      _c("div", {
+        class: [_vm.prefix + "_bar", _vm.status],
+        style: _vm.barStyle
+      })
+    ])
+  ])
+};
+var __vue_staticRenderFns__$10 = [];
+__vue_render__$10._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$10 = undefined;
+  /* scoped */
+  var __vue_scope_id__$10 = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$10 = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$10 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$10 = normalizeComponent(
+    { render: __vue_render__$10, staticRenderFns: __vue_staticRenderFns__$10 },
+    __vue_inject_styles__$10,
+    __vue_script__$Z,
+    __vue_scope_id__$10,
+    __vue_is_functional_template__$10,
+    __vue_module_identifier__$10,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
 var vm$1, tid, clearTimer = function () { clearInterval(tid), tid = null; },
   getVM$1 = function () { return vm$1 || (vm$1 = new Vue({
   data: function data() {
@@ -8508,7 +8879,7 @@ var vm$1, tid, clearTimer = function () { clearInterval(tid), tid = null; },
     }
   },
   render: function render(h) {
-    return h(__vue_component__$_, {
+    return h(__vue_component__$10, {
       style: { zIndex: this.options.zIndex },
       props: Object.assign({}, this.options, this.customOptions),
       directives: [{ name: 'show', value: this.options.visible }]
@@ -8577,16 +8948,16 @@ var loadingBarService = {
 //
 //
 
-var script$Y = {
+var script$_ = {
   props: {
     transition: String
   }
 };
 
 /* script */
-var __vue_script__$Y = script$Y;
+var __vue_script__$_ = script$_;
 /* template */
-var __vue_render__$$ = function() {
+var __vue_render__$11 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -8604,17 +8975,17 @@ var __vue_render__$$ = function() {
     1
   )
 };
-var __vue_staticRenderFns__$$ = [];
-__vue_render__$$._withStripped = true;
+var __vue_staticRenderFns__$11 = [];
+__vue_render__$11._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$$ = undefined;
+  var __vue_inject_styles__$11 = undefined;
   /* scoped */
-  var __vue_scope_id__$$ = undefined;
+  var __vue_scope_id__$11 = undefined;
   /* module identifier */
-  var __vue_module_identifier__$$ = undefined;
+  var __vue_module_identifier__$11 = undefined;
   /* functional template */
-  var __vue_is_functional_template__$$ = false;
+  var __vue_is_functional_template__$11 = false;
   /* style inject */
   
   /* style inject SSR */
@@ -8623,13 +8994,13 @@ __vue_render__$$._withStripped = true;
   
 
   
-  var __vue_component__$$ = normalizeComponent(
-    { render: __vue_render__$$, staticRenderFns: __vue_staticRenderFns__$$ },
-    __vue_inject_styles__$$,
-    __vue_script__$Y,
-    __vue_scope_id__$$,
-    __vue_is_functional_template__$$,
-    __vue_module_identifier__$$,
+  var __vue_component__$11 = normalizeComponent(
+    { render: __vue_render__$11, staticRenderFns: __vue_staticRenderFns__$11 },
+    __vue_inject_styles__$11,
+    __vue_script__$_,
+    __vue_scope_id__$11,
+    __vue_is_functional_template__$11,
+    __vue_module_identifier__$11,
     false,
     undefined,
     undefined,
@@ -8651,7 +9022,7 @@ function creator (Component, config, addons) {
     render: function render(h) {
       var this$1 = this;
 
-      return h(__vue_component__$$, {
+      return h(__vue_component__$11, {
         style: { zIndex: this.zIndex },
         props: { transition: Component.transition }
       }, this.items.map(function (ref, i) {
@@ -8706,7 +9077,7 @@ function creator (Component, config, addons) {
 
 //
 var prefix$1 = 'x-message';
-var script$Z = {
+var script$$ = {
   name: 'XMessage',
   components: { XIcon: __vue_component__, XCloseIconButton: __vue_component__$7 },
   transition: prefix$1,
@@ -8746,9 +9117,9 @@ var script$Z = {
 };
 
 /* script */
-var __vue_script__$Z = script$Z;
+var __vue_script__$$ = script$$;
 /* template */
-var __vue_render__$10 = function() {
+var __vue_render__$12 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -8781,17 +9152,17 @@ var __vue_render__$10 = function() {
     )
   ])
 };
-var __vue_staticRenderFns__$10 = [];
-__vue_render__$10._withStripped = true;
+var __vue_staticRenderFns__$12 = [];
+__vue_render__$12._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$10 = undefined;
+  var __vue_inject_styles__$12 = undefined;
   /* scoped */
-  var __vue_scope_id__$10 = undefined;
+  var __vue_scope_id__$12 = undefined;
   /* module identifier */
-  var __vue_module_identifier__$10 = undefined;
+  var __vue_module_identifier__$12 = undefined;
   /* functional template */
-  var __vue_is_functional_template__$10 = false;
+  var __vue_is_functional_template__$12 = false;
   /* style inject */
   
   /* style inject SSR */
@@ -8800,20 +9171,20 @@ __vue_render__$10._withStripped = true;
   
 
   
-  var __vue_component__$10 = normalizeComponent(
-    { render: __vue_render__$10, staticRenderFns: __vue_staticRenderFns__$10 },
-    __vue_inject_styles__$10,
-    __vue_script__$Z,
-    __vue_scope_id__$10,
-    __vue_is_functional_template__$10,
-    __vue_module_identifier__$10,
+  var __vue_component__$12 = normalizeComponent(
+    { render: __vue_render__$12, staticRenderFns: __vue_staticRenderFns__$12 },
+    __vue_inject_styles__$12,
+    __vue_script__$$,
+    __vue_scope_id__$12,
+    __vue_is_functional_template__$12,
+    __vue_module_identifier__$12,
     false,
     undefined,
     undefined,
     undefined
   );
 
-var Message = creator(__vue_component__$10, null, {
+var Message = creator(__vue_component__$12, null, {
   loading: function loading(addNotice, options, getVM) {
     var key = addNotice(options, 'loading');
     return function () { return getVM().removeItem(key); }
@@ -8822,7 +9193,7 @@ var Message = creator(__vue_component__$10, null, {
 
 //
 var prefix$2 = 'x-notice';
-var script$_ = {
+var script$10 = {
   name: 'XNotice',
   components: { XIcon: __vue_component__, XCloseIconButton: __vue_component__$7 },
   transition: prefix$2,
@@ -8867,9 +9238,9 @@ var script$_ = {
 };
 
 /* script */
-var __vue_script__$_ = script$_;
+var __vue_script__$10 = script$10;
 /* template */
-var __vue_render__$11 = function() {
+var __vue_render__$13 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -8908,17 +9279,17 @@ var __vue_render__$11 = function() {
     )
   ])
 };
-var __vue_staticRenderFns__$11 = [];
-__vue_render__$11._withStripped = true;
+var __vue_staticRenderFns__$13 = [];
+__vue_render__$13._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$11 = undefined;
+  var __vue_inject_styles__$13 = undefined;
   /* scoped */
-  var __vue_scope_id__$11 = undefined;
+  var __vue_scope_id__$13 = undefined;
   /* module identifier */
-  var __vue_module_identifier__$11 = undefined;
+  var __vue_module_identifier__$13 = undefined;
   /* functional template */
-  var __vue_is_functional_template__$11 = false;
+  var __vue_is_functional_template__$13 = false;
   /* style inject */
   
   /* style inject SSR */
@@ -8927,45 +9298,45 @@ __vue_render__$11._withStripped = true;
   
 
   
-  var __vue_component__$11 = normalizeComponent(
-    { render: __vue_render__$11, staticRenderFns: __vue_staticRenderFns__$11 },
-    __vue_inject_styles__$11,
-    __vue_script__$_,
-    __vue_scope_id__$11,
-    __vue_is_functional_template__$11,
-    __vue_module_identifier__$11,
+  var __vue_component__$13 = normalizeComponent(
+    { render: __vue_render__$13, staticRenderFns: __vue_staticRenderFns__$13 },
+    __vue_inject_styles__$13,
+    __vue_script__$10,
+    __vue_scope_id__$13,
+    __vue_is_functional_template__$13,
+    __vue_module_identifier__$13,
     false,
     undefined,
     undefined,
     undefined
   );
 
-var Notice = creator(__vue_component__$11, { duration: 4.5 }, {
+var Notice = creator(__vue_component__$13, { duration: 4.5 }, {
   open: function open(addNotice, options) {
     addNotice(options, 'open');
   }
 });
 
 //
-var S$6 = String, B$8 = Boolean, BTrue = { type: B$8, default: true };
-var script$$ = {
+var S$7 = String, B$9 = Boolean, BTrue = { type: B$9, default: true };
+var script$11 = {
   name: 'XModal',
   components: { XOverlay: __vue_component__$A, XBtn: __vue_component__$1, XCloseIconButton: __vue_component__$7 },
   props: {
-    value: B$8,
-    title: S$6,
+    value: B$9,
+    title: S$7,
     closable: BTrue,
     maskClosable: BTrue,
-    loading: B$8,
-    scrollable: B$8,
-    fullscreen: B$8,
+    loading: B$9,
+    scrollable: B$9,
+    fullscreen: B$9,
     mask: BTrue,
-    okText: { type: S$6, default: '确定' },
-    cancelText: { type: S$6, default: '取消' },
-    width: { type: [Number, S$6], default: 520 },
-    footerHide: B$8,
+    okText: { type: S$7, default: '确定' },
+    cancelText: { type: S$7, default: '取消' },
+    width: { type: [Number, S$7], default: 520 },
+    footerHide: B$9,
     styles: Object,
-    className: S$6,
+    className: S$7,
     transfer: BTrue,
     hasCancel: BTrue
   },
@@ -9033,9 +9404,9 @@ var script$$ = {
 };
 
 /* script */
-var __vue_script__$$ = script$$;
+var __vue_script__$11 = script$11;
 /* template */
-var __vue_render__$12 = function() {
+var __vue_render__$14 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -9164,17 +9535,17 @@ var __vue_render__$12 = function() {
     1
   )
 };
-var __vue_staticRenderFns__$12 = [];
-__vue_render__$12._withStripped = true;
+var __vue_staticRenderFns__$14 = [];
+__vue_render__$14._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$12 = undefined;
+  var __vue_inject_styles__$14 = undefined;
   /* scoped */
-  var __vue_scope_id__$12 = undefined;
+  var __vue_scope_id__$14 = undefined;
   /* module identifier */
-  var __vue_module_identifier__$12 = undefined;
+  var __vue_module_identifier__$14 = undefined;
   /* functional template */
-  var __vue_is_functional_template__$12 = false;
+  var __vue_is_functional_template__$14 = false;
   /* style inject */
   
   /* style inject SSR */
@@ -9183,13 +9554,13 @@ __vue_render__$12._withStripped = true;
   
 
   
-  var __vue_component__$12 = normalizeComponent(
-    { render: __vue_render__$12, staticRenderFns: __vue_staticRenderFns__$12 },
-    __vue_inject_styles__$12,
-    __vue_script__$$,
-    __vue_scope_id__$12,
-    __vue_is_functional_template__$12,
-    __vue_module_identifier__$12,
+  var __vue_component__$14 = normalizeComponent(
+    { render: __vue_render__$14, staticRenderFns: __vue_staticRenderFns__$14 },
+    __vue_inject_styles__$14,
+    __vue_script__$11,
+    __vue_scope_id__$14,
+    __vue_is_functional_template__$14,
+    __vue_module_identifier__$14,
     false,
     undefined,
     undefined,
@@ -9208,19 +9579,19 @@ __vue_render__$12._withStripped = true;
 //
 
 function objectWithoutProperties (obj, exclude) { var target = {}; for (var k in obj) if (Object.prototype.hasOwnProperty.call(obj, k) && exclude.indexOf(k) === -1) target[k] = obj[k]; return target; }
-var S$7 = String, B$9 = Boolean, F$3 = Function;
-var script$10 = {
+var S$8 = String, B$a = Boolean, F$3 = Function;
+var script$12 = {
   name: 'XDialog',
-  components: { XIcon: __vue_component__, XModal: __vue_component__$12, XBtn: __vue_component__$1 },
+  components: { XIcon: __vue_component__, XModal: __vue_component__$14, XBtn: __vue_component__$1 },
   props: {
-    value: B$9,
-    title: S$7,
-    content: S$7,
+    value: B$a,
+    title: S$8,
+    content: S$8,
     width: { default: 416 },
-    okText: { type: S$7, default: '确定' },
+    okText: { type: S$8, default: '确定' },
     cancelText: {},
-    loading: B$9,
-    scrollable: B$9,
+    loading: B$a,
+    scrollable: B$a,
     onOk: F$3,
     onCancel: F$3,
     type: {
@@ -9260,9 +9631,9 @@ var script$10 = {
 };
 
 /* script */
-var __vue_script__$10 = script$10;
+var __vue_script__$12 = script$12;
 /* template */
-var __vue_render__$13 = function() {
+var __vue_render__$15 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -9291,414 +9662,6 @@ var __vue_render__$13 = function() {
     ],
     2
   )
-};
-var __vue_staticRenderFns__$13 = [];
-__vue_render__$13._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$13 = undefined;
-  /* scoped */
-  var __vue_scope_id__$13 = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$13 = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$13 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$13 = normalizeComponent(
-    { render: __vue_render__$13, staticRenderFns: __vue_staticRenderFns__$13 },
-    __vue_inject_styles__$13,
-    __vue_script__$10,
-    __vue_scope_id__$13,
-    __vue_is_functional_template__$13,
-    __vue_module_identifier__$13,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-function objectWithoutProperties$1 (obj, exclude) { var target = {}; for (var k in obj) if (Object.prototype.hasOwnProperty.call(obj, k) && exclude.indexOf(k) === -1) target[k] = obj[k]; return target; }
-
-var vm$2, getVM$2 = function () { return vm$2 || (vm$2 = new Vue({
-  data: function data() {
-    return { options: {} }
-  },
-  render: function render(h) {
-    var this$1 = this;
-
-    var ref = this.options;
-    var render = ref.render;
-    var rest = objectWithoutProperties$1( ref, ["render"] );
-    var props = rest;
-    return h(__vue_component__$13, {
-      props: props, on: { leave: function () { return this$1.destroy(); } }
-    }, render && [render(h)])
-  },
-  methods: {
-    toggle: function toggle(value) {
-      this.options = Object.assign({}, this.options, {value: value});
-    },
-    show: function show(options) {
-      this.options = Object.assign({}, options, {value: true});
-    },
-    destroy: function destroy() {
-      this.$destroy();
-      vm$2 = null;
-    }
-  }
-}).$mount()); };
-
-__vue_component__$12.service = Object.assign({}, [
-    'info',
-    'success',
-    'warning',
-    'error',
-    'confirm'
-  ].reduce(function (acc, type) {
-    var obj;
-
-    return Object.assign({}, acc,
-      ( obj = {}, obj[type] = function (options) { getVM$2().show(Object.assign({}, options, {type: type})); }, obj ))
-  }, {}),
-  {remove: function remove() {
-    vm$2 && vm$2.toggle(false);
-  }});
-
-//
-var script$11 = {
-  name: 'UiTabs',
-  components: { UiIcon: __vue_component__, UiCloseIconButton: __vue_component__$7, XRender: XRender },
-  data: function data() {
-    return {
-      prefix: 'ui-tabs',
-      childs: [],
-      activeTab: this.value,
-      showNavBtns: false,
-      translateX: 0
-    }
-  },
-  props: {
-    value: [String, Number],
-    type: {
-      default: 'line',
-      validator: function validator(value) {
-        return ['line', 'card'].indexOf(value) !== -1
-      }
-    },
-    size: {
-      validator: function validator(value) {
-        return ['default', 'small'].indexOf(value) !== -1
-      }
-    },
-    closable: Boolean,
-    animated: {
-      type: Boolean,
-      default: true
-    }
-  },
-  computed: {
-    contentStyle: function contentStyle() {
-      var i = this.childs.map(function (_) { return _.key; }).indexOf(this.activeTab);
-      return i > 0 && { transform: ("translateX(" + (-i * 100) + "%)") }
-    }
-  },
-  watch: {
-    value: function value(newval) {
-      this.activeTab = newval;
-    },
-    activeTab: function activeTab(newval) {
-      this.$emit('input', newval);
-    },
-    childs: function childs(newval) {
-      if (newval.length) {
-        if (this.activeTab === undefined) { this.activeTab = this.childs[0].key; }
-      } else {
-        this.activeTab = undefined;
-      }
-    }
-  },
-  mounted: function mounted() {
-    this.onWinResize();
-    window.addEventListener('resize', this.onWinResize);
-  },
-  beforeDestroy: function beforeDestroy() {
-    window.removeEventListener('resize', this.onWinResize);
-  },
-  methods: {
-    navItemClasses: function navItemClasses(item) {
-      return [((this.prefix) + "-nav-item"), { active: item.key === this.activeTab, disabled: item.disabled }]
-    },
-    addItem: function addItem(vm) {
-      var this$1 = this;
-
-      this.$nextTick(function () { return this$1.onWinResize(); });
-      return this.childs.push(vm)
-    },
-    removeItem: function removeItem(vm) {
-      var this$1 = this;
-
-      var i = this.childs.indexOf(vm);
-      this.childs.splice(i, 1);
-      if (vm.key === this.activeTab && this.childs.length) { this.activeTab = this.childs[i > 0 ? i - 1 : 0].key; }
-      this.$nextTick(function () { return this$1.onWinResize(); });
-    },
-    deleteItem: function deleteItem(item) {
-      this.$emit('on-tab-remove', item.key);
-    },
-    onNavItemClick: function onNavItemClick(item) {
-      this.activeTab = item.key;
-      var ref = this.$refs;
-      var scrollView = ref.scrollView;
-      var target = this.$refs[item.key][0];
-      var targetRect = target.getBoundingClientRect();
-      var scrollViewLeft = scrollView.getBoundingClientRect().left + Math.abs(this.translateX);
-      if (scrollViewLeft + scrollView.clientWidth < targetRect.right) {
-        this.onNavNext(target.clientWidth);
-      } else if (scrollViewLeft > targetRect.left) {
-        this.onNavPrev(target.clientWidth);
-      }
-    },
-    isFunc: function isFunc$1(label) {
-      return isFunc(label)
-    },
-    canClose: function canClose(item) {
-      return item.closable === false ? false : this.closable && this.type === 'card'
-    },
-    onNavPrev: function onNavPrev(dis) {
-      var ref = this.$refs.scrollView;
-      var clientWidth = ref.clientWidth;
-      var scrollWidth = ref.scrollWidth;
-      var maxDis = Math.min(Math.abs(this.translateX), dis || Infinity);
-      this.translateX += Math.min(clientWidth, maxDis > 0 ? maxDis : 0);
-    },
-    onNavNext: function onNavNext(dis) {
-      var ref = this.$refs.scrollView;
-      var clientWidth = ref.clientWidth;
-      var scrollWidth = ref.scrollWidth;
-      var maxDis = Math.min(scrollWidth - clientWidth - Math.abs(this.translateX), dis || Infinity);
-      this.translateX -= Math.min(clientWidth, maxDis > 0 ? maxDis : 0);
-    },
-    onWinResize: function onWinResize() {
-      var ref = this.$refs;
-      var scrollView = ref.scrollView;
-      if (!scrollView) { return }
-      var clientWidth = scrollView.clientWidth;
-      var scrollWidth = scrollView.scrollWidth;
-      if (clientWidth + Math.abs(this.translateX) > scrollWidth) {
-        this.translateX = -scrollWidth + clientWidth;
-      }
-      this.showNavBtns = clientWidth < scrollWidth;
-    }
-  }
-};
-
-/* script */
-var __vue_script__$11 = script$11;
-/* template */
-var __vue_render__$14 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    {
-      class: [
-        _vm.prefix,
-        _vm.prefix + "-" + _vm.size,
-        _vm.prefix + "-" + _vm.type
-      ]
-    },
-    [
-      _c(
-        "div",
-        { class: _vm.prefix + "-bar" },
-        [
-          _c(
-            "div",
-            {
-              class: [
-                _vm.prefix + "-nav-wrap",
-                { showNavBtns: _vm.showNavBtns }
-              ]
-            },
-            [
-              _c(
-                "ul",
-                {
-                  ref: "scrollView",
-                  class: _vm.prefix + "-nav",
-                  style: { transform: "translateX(" + _vm.translateX + "px)" }
-                },
-                _vm._l(_vm.childs, function(item) {
-                  return _c(
-                    "li",
-                    {
-                      key: item.key,
-                      ref: item.key,
-                      refInFor: true,
-                      class: _vm.navItemClasses(item),
-                      on: {
-                        click: function($event) {
-                          return _vm.onNavItemClick(item)
-                        }
-                      }
-                    },
-                    [
-                      item.icon
-                        ? _c("ui-icon", {
-                            class: _vm.prefix + "-icon",
-                            attrs: { type: item.icon }
-                          })
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.isFunc(item.label)
-                        ? _c("XRender", { attrs: { render: item.label } })
-                        : [_vm._v(_vm._s(item.label))],
-                      _vm._v(" "),
-                      _vm.canClose(item)
-                        ? _c("ui-close-icon-button", {
-                            class: _vm.prefix + "-close",
-                            on: {
-                              click: function($event) {
-                                $event.stopPropagation();
-                                return _vm.deleteItem(item)
-                              }
-                            }
-                          })
-                        : _vm._e()
-                    ],
-                    2
-                  )
-                }),
-                0
-              ),
-              _vm._v(" "),
-              _vm.showNavBtns
-                ? [
-                    _c(
-                      "span",
-                      {
-                        class: _vm.prefix + "-nav-prev",
-                        on: {
-                          click: function($event) {
-                            return _vm.onNavPrev()
-                          }
-                        }
-                      },
-                      [_c("ui-icon", { attrs: { type: "ios-arrow-back" } })],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "span",
-                      {
-                        class: _vm.prefix + "-nav-next",
-                        on: {
-                          click: function($event) {
-                            return _vm.onNavNext()
-                          }
-                        }
-                      },
-                      [_c("ui-icon", { attrs: { type: "ios-arrow-forward" } })],
-                      1
-                    )
-                  ]
-                : _vm._e()
-            ],
-            2
-          ),
-          _vm._v(" "),
-          _vm._t("extra")
-        ],
-        2
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          class: [_vm.prefix + "-content", { animated: _vm.animated }],
-          style: _vm.contentStyle
-        },
-        [_vm._t("default")],
-        2
-      )
-    ]
-  )
-};
-var __vue_staticRenderFns__$14 = [];
-__vue_render__$14._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$14 = undefined;
-  /* scoped */
-  var __vue_scope_id__$14 = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$14 = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$14 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$14 = normalizeComponent(
-    { render: __vue_render__$14, staticRenderFns: __vue_staticRenderFns__$14 },
-    __vue_inject_styles__$14,
-    __vue_script__$11,
-    __vue_scope_id__$14,
-    __vue_is_functional_template__$14,
-    __vue_module_identifier__$14,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-var script$12 = {
-  name: 'UiTabPane',
-  data: function data() {
-    return { key: this.name, parent: null }
-  },
-  props: {
-    name: String,
-    label: [String, Function],
-    icon: String,
-    disabled: Boolean,
-    closable: {
-      type: Boolean,
-      default: null
-    }
-  },
-  mounted: function mounted() {
-    this.parent = findParent(this, 'UiTabs');
-    var len = this.parent.addItem(this);
-    this.key = this.name || len - 1;
-  },
-  beforeDestroy: function beforeDestroy() {
-    this.parent.removeItem(this);
-  }
-};
-
-/* script */
-var __vue_script__$12 = script$12;
-
-/* template */
-var __vue_render__$15 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", { staticClass: "ui-tabs-pane" }, [_vm._t("default")], 2)
 };
 var __vue_staticRenderFns__$15 = [];
 __vue_render__$15._withStripped = true;
@@ -9731,6 +9694,53 @@ __vue_render__$15._withStripped = true;
     undefined,
     undefined
   );
+
+function objectWithoutProperties$1 (obj, exclude) { var target = {}; for (var k in obj) if (Object.prototype.hasOwnProperty.call(obj, k) && exclude.indexOf(k) === -1) target[k] = obj[k]; return target; }
+
+var vm$2, getVM$2 = function () { return vm$2 || (vm$2 = new Vue({
+  data: function data() {
+    return { options: {} }
+  },
+  render: function render(h) {
+    var this$1 = this;
+
+    var ref = this.options;
+    var render = ref.render;
+    var rest = objectWithoutProperties$1( ref, ["render"] );
+    var props = rest;
+    return h(__vue_component__$15, {
+      props: props, on: { leave: function () { return this$1.destroy(); } }
+    }, render && [render(h)])
+  },
+  methods: {
+    toggle: function toggle(value) {
+      this.options = Object.assign({}, this.options, {value: value});
+    },
+    show: function show(options) {
+      this.options = Object.assign({}, options, {value: true});
+    },
+    destroy: function destroy() {
+      this.$destroy();
+      vm$2 = null;
+    }
+  }
+}).$mount()); };
+
+__vue_component__$14.service = Object.assign({}, [
+    'info',
+    'success',
+    'warning',
+    'error',
+    'confirm'
+  ].reduce(function (acc, type) {
+    var obj;
+
+    return Object.assign({}, acc,
+      ( obj = {}, obj[type] = function (options) { getVM$2().show(Object.assign({}, options, {type: type})); }, obj ))
+  }, {}),
+  {remove: function remove() {
+    vm$2 && vm$2.toggle(false);
+  }});
 
 //
 var incKey = 0;
@@ -12502,7 +12512,7 @@ var comps = {
   Transfer: __vue_component__$K,
   Anchor: __vue_component__$L,
   AnchorLink: __vue_component__$M,
-  Modal: __vue_component__$12,
+  Modal: __vue_component__$14,
   Carousel: __vue_component__$N,
   CarouselItem: __vue_component__$O,
   Tree: __vue_component__$Q,
@@ -12512,9 +12522,9 @@ var comps = {
   Footer: __vue_component__$U,
   Sider: __vue_component__$V,
   Page: __vue_component__$Z,
+  Tabs: __vue_component__$_,
+  TabPane: __vue_component__$$,
 
-  Tabs: __vue_component__$14,
-  TabPane: __vue_component__$15,
   Upload: __vue_component__$16,
   Form: __vue_component__$17,
   FormItem: __vue_component__$18,
@@ -12551,7 +12561,7 @@ function index (Vue, options) {
   Vue.prototype.$Notice = Notice;
   Vue.prototype.$Message = Message;
   Vue.prototype.$Spin = __vue_component__$x.service;
-  Vue.prototype.$Modal = __vue_component__$12.service;
+  Vue.prototype.$Modal = __vue_component__$14.service;
   Vue.LoadingBar = Vue.prototype.$Loading = loadingBarService;
   var prefix = typeof options.prefix === 'string' ? options.prefix : 'Ui';
   for (var name in comps) { Vue.component(prefix + name, comps[name]); }

@@ -58,6 +58,8 @@ import Content from './components/content' // 布局内容
 import Footer from './components/footer' // 布局脚
 import Sider from './components/sider' // 布局边栏
 import Page from './components/page' // 分页器
+import Tabs from './components/tabs' // 标签页
+import TabPane from './components/tab-pane' // 标签页项
 
 import loadingBarService from './components/loading-bar' // 加载条
 import Spin from './components/spin' // 加载中
@@ -68,9 +70,6 @@ import Modal from './components/modal' // 模态框
 /**
  * 待优化组件
  */
-// 标签页
-import Tabs from './components/tabs'
-import TabPane from './components/tab-pane'
 // 上传
 import Upload from './components/upload'
 // 表单
@@ -163,9 +162,9 @@ const comps = {
   Footer,
   Sider,
   Page,
-
   Tabs,
   TabPane,
+
   Upload,
   Form,
   FormItem,

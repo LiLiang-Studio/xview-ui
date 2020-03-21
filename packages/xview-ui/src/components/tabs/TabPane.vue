@@ -1,29 +1,27 @@
 <template>
-  <div class="ui-tabs-pane">
+  <div class="x-tabs-pane">
     <slot></slot>
   </div>
 </template>
 <script>
 import { findParent } from '../../tools'
+const S = String, B = Boolean
 export default {
-  name: 'UiTabPane',
+  name: 'XTabPane',
   data() {
-    return { key: this.name, parent: null }
+    return { key: this.name }
   },
   props: {
-    name: String,
-    label: [String, Function],
-    icon: String,
-    disabled: Boolean,
-    closable: {
-      type: Boolean,
-      default: null
-    }
+    name: S,
+    label: [S, Function],
+    icon: S,
+    disabled: B,
+    closable: { type: B, default: null }
   },
   mounted() {
-    this.parent = findParent(this, 'UiTabs')
+    this.parent = findParent(this, 'XTabs')
     let len = this.parent.addItem(this)
-    this.key = this.name || len - 1
+    if (this.key === undefined) this.key = len - 1
   },
   beforeDestroy() {
     this.parent.removeItem(this)

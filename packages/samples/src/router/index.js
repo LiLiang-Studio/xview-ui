@@ -5,6 +5,7 @@ import HomeRouter from '../pages/HomeRouter.vue'
 Vue.use(Router)
 
 const coms = {
+  Tabs: () => import('../pages/Tabs.vue'),
   Page: () => import('../pages/Page.vue'),
   Layout: () => import('../pages/Layout.vue'),
   Tree: () => import('../pages/Tree.vue'),
@@ -57,7 +58,6 @@ const coms = {
   Menu: () => import('../pages/Menu.vue'),
   Dropdown: () => import('../pages/Dropdown.vue'),
   Select: () => import('../pages/Select.vue'),
-  Tabs: () => import('../pages/Tabs.vue'),
   Upload: () => import('../pages/Upload.vue')
 }
 

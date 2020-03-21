@@ -1,228 +1,255 @@
 <template>
-  <div :class="[prefix, `${prefix}-${size}`, `${prefix}-${type}`]">
-    <div :class="`${prefix}-bar`">
-      <div :class="[`${prefix}-nav-wrap`, {showNavBtns}]">
-        <ul ref="scrollView" :class="`${prefix}-nav`" :style="{transform: `translateX(${translateX}px)`}">
-          <li v-for="item in childs" :key="item.key" :ref="item.key" :class="navItemClasses(item)" @click="onNavItemClick(item)">
-            <ui-icon v-if="item.icon" :class="`${prefix}-icon`" :type="item.icon"/>
-            <XRender v-if="isFunc(item.label)" :render="item.label"/>
-            <template v-else>{{item.label}}</template>
-            <ui-close-icon-button :class="`${prefix}-close`" v-if="canClose(item)" @click.stop="deleteItem(item)"/>
-          </li>
-        </ul>
+  <div :class="classes" v-winresize="onWinResize()">
+    <!-- 导航面板 -->
+    <div :class="`${prefix}_bar`">
+      <!-- tab项 -->
+      <div :class="[`${prefix}_navWrap`, {showNavBtns}]">
+        <!-- tabs -->
+        <div :class="`${prefix}_scrollWrap`">
+          <ul ref="scrollView" :class="`${prefix}_nav`" :style="{transform: `translateX(${translateX}px)`}">
+            <li v-for="_ in items" :key="_.key" :class="tabClass(_)" @click="onTabClick(_)">
+              <!-- 图标 -->
+              <x-icon v-if="_.icon" :class="`${prefix}_icon`" :type="_.icon"/>
+              <!-- 调用渲染函数 -->
+              <x-render v-if="isFunc(_.label)" :render="_.label"/>
+              <!-- label文本 -->
+              <template v-else>{{_.label}}</template>
+              <!-- ❎关闭按钮 -->
+              <x-close-icon-button :class="`${prefix}_close`" v-if="canClose(_)" @click.stop="deleteItem(_)"/>
+            </li>
+          </ul>
+        </div>
+        <!-- 方向导航按钮 -->
         <template v-if="showNavBtns">
-          <span :class="`${prefix}-nav-prev`" @click="onNavPrev()">
-            <ui-icon type="ios-arrow-back"/>
-          </span>
-          <span :class="`${prefix}-nav-next`" @click="onNavNext()">
-            <ui-icon type="ios-arrow-forward"/>
-          </span>
+          <!-- 👈向前 -->
+          <x-icon type="ios-arrow-back" :class="`${prefix}_navPrev`" @click="onNavPrev()"/>
+          <!-- 👉向后 -->
+          <x-icon type="ios-arrow-forward" :class="`${prefix}_navNext`" @click="onNavNext()"/>
         </template>
       </div>
+      <!-- 附加内容 -->
       <slot name="extra"></slot>
     </div>
-    <div :class="[`${prefix}-content`, {animated}]" :style="contentStyle"><slot></slot></div>
+    <!-- 内容区 -->
+    <div :class="[`${prefix}_content`, {animated}]" :style="contentStyle"><slot></slot></div>
   </div>
 </template>
 <script>
-import UiIcon from '../icon'
-import UiCloseIconButton from '../close-icon-button'
-import { XRender, isFunc } from '../../tools'
+import XIcon from '../icon'
+import XCloseIconButton from '../close-icon-button'
+import { XRender, isFunc, throttle } from '../../tools'
+import { winresize } from '../../directives'
 export default {
-  name: 'UiTabs',
-  components: { UiIcon, UiCloseIconButton, XRender },
+  name: 'XTabs',
+  components: { XIcon, XCloseIconButton, XRender },
+  props: {
+    value: [String, Number],
+    type: {
+      default: 'line',
+      validator(v) {
+        return ['line', 'card'].indexOf(v) > -1
+      }
+    },
+    size: {
+      validator(v) {
+        return ['default', 'small'].indexOf(v) > -1
+      }
+    },
+    closable: Boolean,
+    animated: { type: Boolean, default: true },
+    beforeClose: Function
+  },
   data() {
     return {
-      prefix: 'ui-tabs',
-      childs: [],
+      prefix: 'x-tabs',
+      items: [],
       activeTab: this.value,
       showNavBtns: false,
       translateX: 0
     }
   },
-  props: {
-    value: [String, Number],
-    type: {
-      default: 'line',
-      validator(value) {
-        return ['line', 'card'].indexOf(value) !== -1
-      }
-    },
-    size: {
-      validator(value) {
-        return ['default', 'small'].indexOf(value) !== -1
-      }
-    },
-    closable: Boolean,
-    animated: {
-      type: Boolean,
-      default: true
-    }
-  },
   computed: {
+    classes() {
+      let { prefix } = this
+      return [prefix, this.size && `${prefix}_${this.size}`, `${prefix}_${this.type}`]
+    },
     contentStyle() {
-      let i = this.childs.map(_ => _.key).indexOf(this.activeTab)
-      return i > 0 && { transform: `translateX(${-i * 100}%)` }
+      let index = this.items.findIndex(_ => _.key === this.activeTab)
+      return index > -1 && { transform: `translateX(${-index * 100}%)` }
     }
   },
   watch: {
-    value(newval) {
-      this.activeTab = newval
+    value(val) {
+      this.activeTab = val
     },
-    activeTab(newval) {
-      this.$emit('input', newval)
+    activeTab(val) {
+      this.$emit('input', val)
+      this.$nextTick(() => this.scrollToCurrent())
     },
-    childs(newval) {
-      if (newval.length) {
-        if (this.activeTab === undefined) this.activeTab = this.childs[0].key
+    items(val) {
+      if (val.length) {
+        if (this.activeTab === undefined) this.activeTab = this.items[0].key
       } else {
         this.activeTab = undefined
       }
     }
   },
-  mounted() {
-    this.onWinResize()
-    window.addEventListener('resize', this.onWinResize)
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.onWinResize)
-  },
+  directives: { winresize },
   methods: {
-    navItemClasses(item) {
-      return [`${this.prefix}-nav-item`, { active: item.key === this.activeTab, disabled: item.disabled }]
+    isFunc,
+    tabClass(item) { // 项class
+      return [`${this.prefix}_navItem`, { active: item.key === this.activeTab, disabled: item.disabled }]
     },
-    addItem(vm) {
-      this.$nextTick(() => this.onWinResize())
-      return this.childs.push(vm)
+    addItem(vm) { // 添加项组件 仅供子组件调用
+      let len = this.items.push(vm)
+      this.$nextTick(() => this.winResizeHandler())
+      return len
     },
-    removeItem(vm) {
-      let i = this.childs.indexOf(vm)
-      this.childs.splice(i, 1)
-      if (vm.key === this.activeTab && this.childs.length) this.activeTab = this.childs[i > 0 ? i - 1 : 0].key
-      this.$nextTick(() => this.onWinResize())
+    removeItem(vm) { // 移除项组件 仅供子组件调用
+      let index = this.items.indexOf(vm)
+      this.items.splice(index, 1)
+      if (vm.key === this.activeTab && this.items.length) {
+        this.activeTab = this.items[index > 0 ? index - 1 : 0].key
+      }
+      this.$nextTick(() => this.winResizeHandler())
     },
-    deleteItem(item) {
-      this.$emit('on-tab-remove', item.key)
+    deleteItem(item) { // 删除项 单击关闭按钮调用
+      const fn = () => this.$emit('on-tab-remove', item.key)
+      this.beforeClose ? this.beforeClose().then(fn) : fn()
     },
-    onNavItemClick(item) {
+    scrollToCurrent() { // 滚动到目标tab
+      if (this.activeTab !== undefined) {
+        let index = this.items.findIndex(_ => _.key === this.activeTab)
+        let { scrollView } = this.$refs
+        let el = scrollView.querySelectorAll('li')[index]
+        let rect = el.getBoundingClientRect()
+        let scrollViewLeft = scrollView.getBoundingClientRect().left + Math.abs(this.translateX)
+        let rightMoveDis = scrollViewLeft + scrollView.clientWidth - rect.right
+        let leftMoveDis = scrollViewLeft - rect.left
+        if (rightMoveDis < 0) {
+          this.onNavNext(Math.max(-rightMoveDis, el.clientWidth))
+        } else if (leftMoveDis > 0) {
+          this.onNavPrev(Math.max(leftMoveDis, el.clientWidth))
+        }
+      }
+    },
+    onTabClick(item) { // tab单击
       this.activeTab = item.key
-      const { scrollView } = this.$refs
-      const target = this.$refs[item.key][0]
-      let targetRect = target.getBoundingClientRect()
-      let scrollViewLeft = scrollView.getBoundingClientRect().left + Math.abs(this.translateX)
-      if (scrollViewLeft + scrollView.clientWidth < targetRect.right) {
-        this.onNavNext(target.clientWidth)
-      } else if (scrollViewLeft > targetRect.left) {
-        this.onNavPrev(target.clientWidth)
-      }
+      this.$emit('on-click', item.key)
     },
-    isFunc(label) {
-      return isFunc(label)
+    canClose(item) { // 是否可关闭
+      return item.closable === false ? false : (item.closable || this.closable) && this.type === 'card'
     },
-    canClose(item) {
-      return item.closable === false ? false : this.closable && this.type === 'card'
+    onNavPrev(dis) { // 向前导航
+      let { clientWidth } = this.$refs.scrollView
+      let maxDis = Math.abs(this.translateX)
+      this.translateX += dis ? Math.min(maxDis, dis) : Math.min(clientWidth, maxDis > 0 ? maxDis : 0)
     },
-    onNavPrev(dis) {
+    onNavNext(dis) { // 向后导航
       let { clientWidth, scrollWidth } = this.$refs.scrollView
-      let maxDis = Math.min(Math.abs(this.translateX), dis || Infinity)
-      this.translateX += Math.min(clientWidth, maxDis > 0 ? maxDis : 0)
+      let maxDis = scrollWidth - clientWidth - Math.abs(this.translateX)
+      this.translateX -= dis ? Math.min(maxDis, dis) : Math.min(clientWidth, maxDis > 0 ? maxDis : 0)
     },
-    onNavNext(dis) {
-      let { clientWidth, scrollWidth } = this.$refs.scrollView
-      let maxDis = Math.min(scrollWidth - clientWidth - Math.abs(this.translateX), dis || Infinity)
-      this.translateX -= Math.min(clientWidth, maxDis > 0 ? maxDis : 0)
-    },
-    onWinResize() {
+    winResizeHandler() { // 窗口大小改变处理
       let { scrollView } = this.$refs
-      if (!scrollView) return
-      let { clientWidth, scrollWidth } = scrollView
-      if (clientWidth + Math.abs(this.translateX) > scrollWidth) {
-        this.translateX = -scrollWidth + clientWidth
+      if (scrollView) {
+        let { clientWidth, scrollWidth } = scrollView
+        if (clientWidth + Math.abs(this.translateX) > scrollWidth) {
+          this.translateX = -scrollWidth + clientWidth
+        }
+        this.showNavBtns = clientWidth < scrollWidth
       }
-      this.showNavBtns = clientWidth < scrollWidth
+    },
+    onWinResize() { // 窗口大小改变节流处理 指令专用
+      return throttle(this.winResizeHandler, 50)
     }
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-tabs {
+@tabs: .x-tabs;
+@navBtnWidth: 32px;
+@{tabs} {
   overflow: hidden;
   position: relative;
   font-size: 14px;
-  &-bar {
+  &_bar, &_navPrev, &_navNext {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
     border-bottom: 1px solid @border-color;
   }
-  &-nav-wrap {
-    position: relative;
-    bottom: -1px;
+  &_bar {
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  &_navWrap {
     overflow: hidden;
     white-space: nowrap;
+    position: relative;
+    bottom: -1px;
     &.showNavBtns {
-      padding: 0 16px;
+      padding: 0 @navBtnWidth;
     }
   }
-  &-nav {
+  &_scrollWrap {
+    overflow: hidden;
+  }
+  &_nav {
     list-style: none;
     transition: all .3s ease-in-out;
   }
-  &-nav-prev, &-nav-next {
+  &_navPrev, &_navNext {
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 15px;
+    width: @navBtnWidth;
     cursor: pointer;
-    display: flex;
-    align-items: center;
     justify-content: center;
-    background-color: #fff;
-    border-bottom: 1px solid @border-color;
   }
-  &-nav-prev {
+  &_navPrev {
     left: 0;
   }
-  &-nav-next {
+  &_navNext {
     right: 0;
   }
-  &-nav-item {
+  &_navItem {
+    display: inline-flex;
+    align-items: center;
     cursor: pointer;
-    display: inline-block;
-    padding: 7px 16px;
+    height: 36px;
+    padding: 0 16px;
     border-bottom: 2px solid transparent;
-    transition: color .3s ease-in-out;
+    transition: color .2s ease-in-out;
     + li {
       margin-left: 16px;
     }
     &:hover, &.active {
       color: @primary-color;
+      @{tabs}_close {
+        width: 22px;
+        margin-right: -10px;
+      }
     }
     &.active {
-      border-bottom-color: @primary-color;
+      border-bottom-color: currentColor;
     }
     &.disabled {
       color: #ccc;
       pointer-events: none;
     }
   }
-  &-nav-item:hover &-close, &-nav-item.active &-close {
-    width: 14px;
-  }
-  &-icon {
+  &_icon {
     margin-right: 8px;
   }
-  &-close {
+  &_close {
     width: 0;
-    height: 22px;
+    padding: 0;
     overflow: hidden;
-    text-align: right;
-    vertical-align: middle;
+    text-align: center;
     transition: all .3s ease-in-out;
   }
-  &-content {
+  &_content {
     display: flex;
     &.animated {
       transition: all .3s ease-in-out;
@@ -231,10 +258,14 @@ export default {
   &-pane {
     min-width: 100%;
   }
-  &-line&-small {
+  &_line&_small {
     font-size: 12px;
+    @{tabs}_navItem {
+      height: 32px;
+    }
   }
-  &-card &-nav-item {
+  &_card &_navItem {
+    height: 32px;
     border-radius: 4px 4px 0 0;
     background-color: @bg-color;
     border: 1px solid @border-color;
@@ -243,6 +274,7 @@ export default {
     }
     &.active {
       background-color: #fff;
+      border-color: @primary-color;
       border-bottom-color: transparent;
     }
   }

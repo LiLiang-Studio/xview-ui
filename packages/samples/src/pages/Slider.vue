@@ -18,8 +18,8 @@
 
     <div class="page-sub-title">显示间断点</div>
     <p>通过设置属性 show-stops 可以显示间断点，建议在 step 间隔不密集时使用。</p><br>
-    <Slider v-model="value6" :step="12" show-stops></Slider>
-    <Slider v-model="value7" :step="9" show-stops range></Slider>
+    <Slider v-model="value6" :step="10" show-stops></Slider>
+    <Slider v-model="value7" :step="10" show-stops range></Slider>
 
     <div class="page-sub-title">带有输入框</div>
     <p>通过设置属性 show-input 可以显示数字输入框，配合使用，仅在单滑块模式下有效。</p><br>

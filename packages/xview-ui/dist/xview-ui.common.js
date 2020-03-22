@@ -1,5 +1,5 @@
 /*!
- * xview-ui v1.4.4
+ * xview-ui v1.4.4-1
  * (c) 2019-2020 LiLiang
  * Released under the MIT License.
  */
@@ -9107,7 +9107,7 @@ var script$$ = {
     marks: Object
   },
   data: function data() {
-    return { prefix: 'x-slider', inputValue: this.value, rightDown: false, leftDown: false }
+    return { prefix: 'x-slider', inputValue: this.value, oldValue: this.value, rightDown: false, leftDown: false }
   },
   computed: {
     inputProps: function inputProps() { // 输入框属性
@@ -9167,6 +9167,7 @@ var script$$ = {
       var this$1 = this;
 
       this.$emit('input', val);
+      this.$emit('on-input', val);
       var ref = this.$refs;
       var LTip = ref.LeftTooltip;
       var RTip = ref.RightTooltip;
@@ -9218,6 +9219,7 @@ var script$$ = {
       }
     },
     addWinEvents: function addWinEvents() {
+      this.oldValue = this.range ? [].concat( this.inputValue ) : this.inputValue;
       document.body.classList.add(((this.prefix) + "_move"));
       window.addEventListener('mouseup', this.onMouseup);
       window.addEventListener('mousemove', this.onMousemove);
@@ -9226,6 +9228,16 @@ var script$$ = {
       if (this.rightDown || this.leftDown) { this.update(e); }
     },
     onMouseup: function onMouseup() {
+      var ref = this;
+      var oldValue = ref.oldValue;
+      var inputValue = ref.inputValue;
+      var ref$1 = this.range ? oldValue : [oldValue];
+      var a = ref$1[0];
+      var b = ref$1[1];
+      var ref$2 = this.range ? inputValue : [inputValue];
+      var m = ref$2[0];
+      var n = ref$2[1];
+      if (a !== m || b !== n) { this.$emit('on-change', inputValue); }
       document.body.classList.remove(((this.prefix) + "_move"));
       this.rightDown = this.leftDown = false;
       window.removeEventListener('mouseup', this.onMouseup);

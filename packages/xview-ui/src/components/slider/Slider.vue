@@ -60,7 +60,7 @@ export default {
     marks: Object
   },
   data() {
-    return { prefix: 'x-slider', inputValue: this.value, rightDown: false, leftDown: false }
+    return { prefix: 'x-slider', inputValue: this.value, oldValue: this.value, rightDown: false, leftDown: false }
   },
   computed: {
     inputProps() { // 输入框属性
@@ -106,6 +106,7 @@ export default {
     },
     inputValue(val) {
       this.$emit('input', val)
+      this.$emit('on-input', val)
       let { LeftTooltip: LTip, RightTooltip: RTip } = this.$refs
       this.$nextTick(() => this.leftDown ? LTip && LTip.setPosition() : this.rightDown ? RTip && RTip.setPosition() : 1)
     }
@@ -149,6 +150,7 @@ export default {
       }
     },
     addWinEvents() {
+      this.oldValue = this.range ? [...this.inputValue] : this.inputValue
       document.body.classList.add(`${this.prefix}_move`)
       window.addEventListener('mouseup', this.onMouseup)
       window.addEventListener('mousemove', this.onMousemove)
@@ -157,6 +159,10 @@ export default {
       if (this.rightDown || this.leftDown) this.update(e)
     },
     onMouseup() {
+      let { oldValue, inputValue } = this
+      let [a, b] = this.range ? oldValue : [oldValue]
+      let [m, n] = this.range ? inputValue : [inputValue]
+      if (a !== m || b !== n) this.$emit('on-change', inputValue)
       document.body.classList.remove(`${this.prefix}_move`)
       this.rightDown = this.leftDown = false
       window.removeEventListener('mouseup', this.onMouseup)

@@ -60,6 +60,7 @@ import Sider from './components/sider' // 布局边栏
 import Page from './components/page' // 分页器
 import Tabs from './components/tabs' // 标签页
 import TabPane from './components/tab-pane' // 标签页项
+import Slider from './components/slider' // 滑块
 
 import loadingBarService from './components/loading-bar' // 加载条
 import Spin from './components/spin' // 加载中
@@ -96,8 +97,6 @@ import OptionGroup from './components/option-group'
 import Poptip from './components/poptip'
 // 文字提示
 import Tooltip from './components/tooltip'
-// 滑块
-import Slider from './components/slider'
 // 自动完成
 import AutoComplete from './components/auto-complete'
 // 表格
@@ -164,6 +163,7 @@ const comps = {
   Page,
   Tabs,
   TabPane,
+  Slider,
 
   Upload,
   Form,
@@ -183,7 +183,6 @@ const comps = {
   Tooltip,
   Poptip,
   Table,
-  Slider,
   AutoComplete
   // ,DatePicker,
   // TimePicker

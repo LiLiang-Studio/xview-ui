@@ -57,5 +57,8 @@
   "bugs": {
     "url": "https://github.com/LiLiang-Studio/xview-ui/issues"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@popperjs/core": "^2.1.1"
+  }
 }

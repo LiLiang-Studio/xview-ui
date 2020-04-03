@@ -843,6 +843,11 @@
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
 
+"@popperjs/core@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.npmjs.org/@popperjs/core/-/core-2.1.1.tgz#12c572ab88ef7345b43f21883fca26631c223085"
+  integrity sha512-sLqWxCzC5/QHLhziXSCAksBxHfOnQlhPRVgPK0egEw+ktWvG75T2k+aYWVjVh9+WKeT3tlG3ZNbZQvZLmfuOIw==
+
 "@rollup/plugin-buble@^0.21.0":
   version "0.21.0"
   resolved "https://registry.npmjs.org/@rollup/plugin-buble/-/plugin-buble-0.21.0.tgz#76d2a9c62ae1f1122a3a87526669a736cd86c148"
@@ -8653,6 +8658,11 @@ xtend@^4.0.0, xtend@~4.0.1:
   version "4.0.2"
   resolved "https://registry.npmjs.org/xtend/-/xtend-4.0.2.tgz#bb72779f5fa465186b1f438f674fa347fdb5db54"
   integrity sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==
+
+xview-ui@^1.0.0:
+  version "1.4.4"
+  resolved "https://registry.npmjs.org/xview-ui/-/xview-ui-1.4.4.tgz#5fdb88e41c95d8b902fb794739c524850cea78ea"
+  integrity sha512-ug2jTtjvAYN/H7MFl/uHLg3JJwmMtyqXuq5SfaSTsKyqDU2xHXY7ZTNLINYIYXqCVXvgKAI/J3+eHQq+2ntlbA==
 
 "y18n@^3.2.1 || ^4.0.0", y18n@^4.0.0:
   version "4.0.0"

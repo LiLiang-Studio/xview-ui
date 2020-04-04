@@ -83,7 +83,7 @@ export default {
       return { left: [btnClass, 'left', { down: this.leftDown }], right: [btnClass, 'right', { down: this.rightDown }] }
     },
     tipProps() { // 文字提示属性
-      let prop = { placement: 'top' }, always = this.showTip === 'always'
+      let prop = { placement: 'top', transfer: true }, always = this.showTip === 'always'
       return { left: { ...prop, always: this.leftDown || always }, right: { ...prop, always: this.rightDown || always } }
     },
     tipContent() { // 文字提示内容
@@ -108,7 +108,7 @@ export default {
       this.$emit('input', val)
       this.$emit('on-input', val)
       let { LeftTooltip: LTip, RightTooltip: RTip } = this.$refs
-      this.$nextTick(() => this.leftDown ? LTip && LTip.setPosition() : this.rightDown ? RTip && RTip.setPosition() : 1)
+      this.$nextTick(() => this.leftDown ? LTip && LTip.updatePosition() : this.rightDown ? RTip && RTip.updatePosition() : 1)
     }
   },
   methods: {

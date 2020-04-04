@@ -55,6 +55,6 @@ p {
 }
 
 .app-content-wrapper {
-  padding: 0 16px;
+  padding: 0 16px 200px;
 }
 </style>

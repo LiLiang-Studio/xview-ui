@@ -61,6 +61,7 @@ import Page from './components/page' // 分页器
 import Tabs from './components/tabs' // 标签页
 import TabPane from './components/tab-pane' // 标签页项
 import Slider from './components/slider' // 滑块
+import Tooltip from './components/tooltip' // 文字提示
 
 import loadingBarService from './components/loading-bar' // 加载条
 import Spin from './components/spin' // 加载中
@@ -95,8 +96,6 @@ import Option from './components/option'
 import OptionGroup from './components/option-group'
 // 气泡提示
 import Poptip from './components/poptip'
-// 文字提示
-import Tooltip from './components/tooltip'
 // 自动完成
 import AutoComplete from './components/auto-complete'
 // 表格
@@ -164,6 +163,7 @@ const comps = {
   Tabs,
   TabPane,
   Slider,
+  Tooltip,
 
   Upload,
   Form,
@@ -180,7 +180,6 @@ const comps = {
   MenuItem,
   Submenu,
   MenuGroup,
-  Tooltip,
   Poptip,
   Table,
   AutoComplete

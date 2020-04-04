@@ -1,73 +1,94 @@
 <template>
-  <div class="ui-tooltip">
-    <div class="ui-tooltip-rel" ref="Ref" @mouseenter="handleMouseenter" @mouseleave="handleMouseleave">
+  <x-popper v-bind="popperProps" @mouseenter.native="onMouseenter" @mouseleave.native="onMouseleave">
+    <template v-slot:reference>
       <slot></slot>
+    </template>
+    <div :class="[`${prefix}_content`, theme]" :style="contentStyle">
+      <slot name="content">{{content}}</slot>
     </div>
-    <ui-popper ref="Popper" hasArrow :refElement="refElement" :placement="placement" :visible="always || popperVisible">
-      <div class="ui-tooltip-content">
-        <slot name="content">{{content}}</slot>
-      </div>
-    </ui-popper>
-  </div>
+  </x-popper>
 </template>
 <script>
-import UiPopper from '../popper'
+import { parseSize } from '../../tools'
+import XPopper from '../popper/Index.vue'
+const N = Number, B = Boolean, NS = [N, String]
 export default {
-  components: { UiPopper },
-  data() {
-    return { popperVisible: false, refElement: null }
-  },
+  name: 'XTooltip',
+  components: { XPopper },
   props: {
-    content: [String, Number],
+    content: NS,
     placement: String,
-    disabled: Boolean,
-    delay: {
-      type: Number,
-      default: 0
+    disabled: B,
+    delay: { type: N, default: 0 },
+    always: B,
+    theme: {
+      default: 'dark',
+      validator(v) {
+        return ['dark', 'light'].indexOf(v) > -1
+      }
     },
-    always: Boolean
+    maxWidth: NS,
+    offset: N,
+    transfer: B,
+    options: Object
   },
-  watch: {
-    disabled(newVal) {
-      if (newVal) this.popperVisible = false
+  data() {
+    return { visible: false, prefix: 'x-tooltip' }
+  },
+  computed: {
+    contentStyle() {
+      return { maxWidth: parseSize(this.maxWidth) }
+    },
+    popperProps() {
+      return {
+        ref: 'popper',
+        offset: this.offset,
+        options: this.options,
+        transfer: this.transfer,
+        placement: this.placement,
+        arrowClass: `${this.prefix}_arrow ${this.theme}`,
+        visible: !this.disabled && (this.always || this.visible)
+      }
     }
   },
   methods: {
-    handleMouseenter() {
+    onMouseenter() {
       if (this.disabled) return
-      this.timeout = setTimeout(() => {
-        this.popperVisible = true
+      this.tid = setTimeout(() => {
+        this.visible = true
         this.$emit('on-popper-show')
       }, this.delay)
     },
-    handleMouseleave() {
-      clearTimeout(this.timeout)
-      this.popperVisible = false
+    onMouseleave() {
+      clearTimeout(this.tid)
+      this.visible = false
       this.$emit('on-popper-hide')
     },
-    setPosition() {
-      this.$refs.Popper.setPosition()
+    updatePosition() {
+      this.$refs.popper.update()
     }
-  },
-  mounted() {
-    this.refElement = this.$refs.Ref.children[0]
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-tooltip, .ui-tooltip-rel {
-  display: inline-block;
-}
-
-.ui-tooltip-content {
-  max-width: 250px;
-  min-height: 34px;
-  padding: 8px 12px;
-  color: #fff;
-  background-color: fade(@content-color, 96%);
-  border-radius: 4px;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, .2);
-  white-space: nowrap;
+.x-tooltip {
+  &_content {
+    max-width: 500px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, .2);
+    &.dark {
+      color: #fff;
+      background: @content-color;
+    }
+  }
+  &_arrow {
+    &.dark:before {
+      border-color: @content-color;
+      background: @content-color;
+    }
+  }
 }
 </style>

@@ -5,6 +5,7 @@ import HomeRouter from '../pages/HomeRouter.vue'
 Vue.use(Router)
 
 const coms = {
+  Tooltip: () => import('../pages/Tooltip.vue'),
   Slider: () => import('../pages/Slider.vue'),
   Tabs: () => import('../pages/Tabs.vue'),
   Page: () => import('../pages/Page.vue'),
@@ -54,7 +55,6 @@ const coms = {
   Form: () => import('../pages/Form.vue'),
   Table: () => import('../pages/Table.vue'),
   Poptip: () => import('../pages/Poptip.vue'),
-  Tooltip: () => import('../pages/Tooltip.vue'),
   Menu: () => import('../pages/Menu.vue'),
   Dropdown: () => import('../pages/Dropdown.vue'),
   Select: () => import('../pages/Select.vue'),

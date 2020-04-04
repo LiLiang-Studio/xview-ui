@@ -2,7 +2,7 @@
 <transition :name="transitionName">
   <div class="ui-popper" v-show="visible" :x-placement="placement" :class="{hasArrow}" :style="{...styles, zIndex}">
     <slot></slot>
-    <span v-if="hasArrow" class="ui-popper-arrow" :class="arrowClass"></span>
+    <span v-show="hasArrow" class="ui-popper-arrow" :class="arrowClass"></span>
   </div>
 </transition>
 </template>

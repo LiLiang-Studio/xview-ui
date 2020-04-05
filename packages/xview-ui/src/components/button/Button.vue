@@ -99,8 +99,9 @@ export default {
   padding: 0 15px;
   border-radius: 3px;
   border: 1px solid;
-  + @{prefix} {
-    margin-right: 10px;
+  margin-right: 10px;
+  &:last-child {
+    margin-right: 0;
   }
   &:after {
     content: '';

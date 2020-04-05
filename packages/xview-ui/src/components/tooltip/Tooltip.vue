@@ -1,5 +1,5 @@
 <template>
-  <x-popper v-bind="popperProps" @mouseenter.native="onMouseenter" @mouseleave.native="onMouseleave">
+  <x-popper v-bind="popperProps" v-on="popperListeners">
     <template v-slot:reference>
       <slot></slot>
     </template>
@@ -9,15 +9,14 @@
   </x-popper>
 </template>
 <script>
+import XPopper from '../popper'
 import { parseSize } from '../../tools'
-import XPopper from '../popper/Index.vue'
 const N = Number, B = Boolean, NS = [N, String]
 export default {
   name: 'XTooltip',
   components: { XPopper },
   props: {
     content: NS,
-    placement: String,
     disabled: B,
     delay: { type: N, default: 0 },
     always: B,
@@ -27,10 +26,7 @@ export default {
         return ['dark', 'light'].indexOf(v) > -1
       }
     },
-    maxWidth: NS,
-    offset: N,
-    transfer: B,
-    options: Object
+    maxWidth: NS
   },
   data() {
     return { visible: false, prefix: 'x-tooltip' }
@@ -41,29 +37,29 @@ export default {
     },
     popperProps() {
       return {
+        ...this.$attrs,
         ref: 'popper',
-        offset: this.offset,
-        options: this.options,
-        transfer: this.transfer,
-        placement: this.placement,
         arrowClass: `${this.prefix}_arrow ${this.theme}`,
         visible: !this.disabled && (this.always || this.visible)
+      }
+    },
+    popperListeners() {
+      const _self = this
+      return {
+        ...this.$listeners,
+        mouseenter() {
+          if (!_self.disabled) {
+            _self.tid = setTimeout(() => _self.visible = true, _self.delay)
+          }
+        },
+        mouseleave() {
+          clearTimeout(_self.tid)
+          _self.visible = false
+        }
       }
     }
   },
   methods: {
-    onMouseenter() {
-      if (this.disabled) return
-      this.tid = setTimeout(() => {
-        this.visible = true
-        this.$emit('on-popper-show')
-      }, this.delay)
-    },
-    onMouseleave() {
-      clearTimeout(this.tid)
-      this.visible = false
-      this.$emit('on-popper-hide')
-    },
     updatePosition() {
       this.$refs.popper.update()
     }

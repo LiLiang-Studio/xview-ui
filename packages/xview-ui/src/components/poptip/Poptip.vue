@@ -1,244 +1,174 @@
 <template>
-  <div class="ui-poptip" v-winclick="handleWinClick">
-    <div class="ui-poptip-rel" ref="Ref"
-      @mouseenter="handleMouseenter" @mouseleave="handleMouseleave" 
-      @mousedown="handleMousedown" @mouseup="handleMouseup"
-      @click="handleClick">
+  <x-popper v-bind="popperProps" v-on="popperListeners">
+    <template v-slot:reference>
       <slot></slot>
-    </div>
-    <ui-popper ref="Popper" arrowClass="ui-poptip-arrow" hasArrow :refElement="refElement"
-      :class="[{confirm}, popperClass]" :style="popperStyles" :placement="placement" :visible="popperVisible">
-      <div class="ui-poptip-body">
-        <div class="ui-poptip-title">
-          <UiIcon v-if="confirm" class="ui-poptip-confirm-icon" type="help-circled"/>
-          <slot name="title">{{title}}</slot>
-        </div>
-        <div v-if="hasContent" class="ui-poptip-content">
-          <slot name="content">{{content}}</slot>
-        </div>
-        <div v-if="confirm" class="ui-poptip-actions">
-          <ui-button type="text" size="small" @click="onCancel">{{cancelText}}</ui-button>
-          <ui-button type="primary" size="small" @click="onOK">{{okText}}</ui-button>
-        </div>
+    </template>
+    <div :class="[`${prefix}_body`, {confirm}, popperClass]" :style="bodyStyle" v-clickoutside="onClickoutside">
+      <div v-if="showTitle" :class="`${prefix}_title`" :style="contentStyle">
+        <x-icon v-if="confirm" :class="`${prefix}_icon`" type="help-circled"/>
+        <slot name="title">{{title}}</slot>
       </div>
-    </ui-popper>
-  </div>
+      <div v-if="showContent" :class="`${prefix}_content`" :style="contentStyle">
+        <slot name="content">{{content}}</slot>
+      </div>
+      <div v-if="confirm" :class="`${prefix}_actions`">
+        <x-btn type="text" size="small" @click="onCancel">{{cancelText}}</x-btn>
+        <x-btn type="primary" size="small" @click="onOK">{{okText}}</x-btn>
+      </div>
+    </div>
+  </x-popper>
 </template>
 <script>
-import UiIcon from '../icon'
-import UiPopper from '../popper'
-import UiButton from '../button'
-import { isSelfOrParent } from '../../utils'
-import { winclick } from '../../directives'
+import XIcon from '../icon'
+import XBtn from '../button'
+import XPopper from '../popper'
+import { clickoutside } from '../../directives'
+import { parseSize, isInside } from '../../tools'
+const S = String, B = Boolean, NS = [Number, String]
 export default {
-  components: { UiIcon, UiPopper, UiButton },
-  data() {
-    return { popperVisible: this.value, refElement: null }
-  },
+  components: { XIcon, XBtn, XPopper },
   props: {
     trigger: {
       default: 'click',
-      validator(value) {
-        return ['hover', 'click', 'focus'].indexOf(value) !== -1
+      validator(v) {
+        return ['hover', 'click', 'focus'].indexOf(v) > -1
       }
     },
-    title: [String, Number],
-    content: [String, Number],
-    placement: {
-      type: String,
-      default: 'top'
-    },
-    width: [String, Number],
-    confirm: Boolean,
-    okText: {
-      type: String,
-      default: '确定'
-    },
-    cancelText: {
-      type: String,
-      default: '取消'
-    },
-    popperClass: String,
-    value: Boolean
+    title: NS,
+    content: NS,
+    width: NS,
+    confirm: B,
+    disabled: B,
+    okText: { type: S, default: '确定' },
+    cancelText: { type: S, default: '取消' },
+    popperClass: S,
+    padding: { type: S, default: '8px 16px' },
+    value: B
+  },
+  data() {
+    return { visible: this.value, prefix: 'x-poptip' }
   },
   computed: {
-    hasContent() {
-      return this.content || this.$slots.content !== undefined
+    showTitle() {
+      return this.title || this.$slots.title
     },
-    popperStyles() {
-      return this.width ? { width: `${parseInt(this.width)}px` } : {}
+    showContent() {
+      return !this.confirm && (this.content || this.$slots.content)
+    },
+    bodyStyle() {
+      return this.width && { width: parseSize(this.width) }
+    },
+    contentStyle() {
+      return !this.confirm && { padding: this.padding }
+    },
+    popperProps() {
+      return {
+        placement: 'top',
+        ...this.$attrs,
+        ref: 'popper',
+        hasArrow: true,
+        visible: !this.disabled && this.visible
+      }
+    },
+    listenHover() {
+      return !this.disabled && !this.confirm && this.trigger === 'hover'
+    },
+    listenDownUp() {
+      return !this.disabled && !this.confirm && this.trigger === 'focus'
+    },
+    popperListeners() {
+      const _self = this
+      return {
+        ...this.$listeners,
+        mouseenter() {
+          if (_self.listenHover) _self.visible = true
+        },
+        mouseleave() {
+          if (_self.listenHover) _self.visible = false
+        },
+        mousedown() {
+          if (_self.listenDownUp) _self.visible = true
+        },
+        mouseup(e) {
+          if (_self.listenDownUp) _self.visible = false
+        },
+        click(e) {
+          const ref = _self.$refs.popper.getReference(), isInput = e.target.tagName.toLowerCase() === 'input'
+          if (
+            !_self.disabled && isInside(e, ref) &&
+            (_self.trigger === 'click' || (_self.trigger === 'focus' && isInput))
+          ) _self.visible = true
+        }
+      }
     }
   },
-  directives: { winclick },
+  directives: { clickoutside },
   watch: {
-    popperVisible(newVal) {
-      this.$emit('input', newVal)
-      this.$emit(`on-popper-${newVal ? 'show' : 'hide'}`)
+    visible(val) {
+      this.$emit('input', val)
     },
-    value(newVal) {
-      this.popperVisible = newVal
+    value(val) {
+      this.visible = val
     }
   },
   methods: {
-    handleMouseenter() {
-      if (this.confirm) return
-      if (this.trigger === 'hover') this.popperVisible = true
-    },
-    handleMouseleave() {
-      if (this.confirm) return
-      if (this.trigger === 'hover') this.popperVisible = false
-    },
-    handleMousedown() {
-      if (this.confirm) return
-      if (this.trigger === 'focus') this.popperVisible = true
-    },
-    handleMouseup() {
-      if (this.confirm) return
-      if (this.trigger === 'focus') this.popperVisible = false
-    },
-    handleClick() {
-      if (this.trigger === 'click') {
-        this.popperVisible = !this.popperVisible
-      }
-    },
-    /**
-     * 窗口单击处理
-     * @param {MouseEvent} event
-     */
-    handleWinClick(event) {
-      if (this.trigger !== 'click') return
-      let { target } = event
-      if (
-        isSelfOrParent(this.$el, target) || 
-        isSelfOrParent(this.$refs.Popper.$el, target)
-      ) return
-      this.popperVisible = false
+    onClickoutside() {
+      this.visible = false
     },
     onCancel() {
-      this.popperVisible = false
+      this.visible = false
       this.$emit('on-cancel')
     },
     onOK() {
-      this.popperVisible = false
+      this.visible = false
       this.$emit('on-ok')
     }
-  },
-  mounted() {
-    this.refElement = this.$refs.Ref.children[0]
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-poptip, .ui-poptip-rel {
-  display: inline-block;
-}
-
-.ui-poptip-body {
-  min-width: 150px;
-  background-color: #fff;
-  border-radius: 4px;
-  box-shadow: 0 1px 6px rgba(0,0,0,.2);
-}
-
-.ui-poptip-title, .ui-poptip-content {
-  padding: 8px 16px;
-}
-
-.ui-poptip-title {
-  position: relative;
-  font-size: 14px;
-  &:after {
-    content: '';
-    display: block;
-    height: 1px;
-    position: absolute;
-    left: 8px;
-    right: 8px;
-    bottom: 0;
-    background-color: @divider-color;
-  }
-}
-
-.ui-poptip-actions {
-  text-align: right;
-  padding: 8px 16px 16px;
-  button + button {
-    margin-left: 4px;
-  }
-}
-
-.ui-poptip-confirm-icon {
-  color: @warning-color;
-  margin-right: 4px;
-  position: absolute;
-  left: 20px;
-  line-height: inherit;
-}
-
-.ui-popper {
-  &.confirm {
-    max-width: 300px;
-    .ui-poptip-title {
-      padding: 16px 16px 8px 36px;
+@prefix: .x-poptip;
+@{prefix} {
+  &_body {
+    min-width: 150px;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 6px rgba(0,0,0,.2);
+    &.confirm {
+      max-width: 300px;
+      @{prefix}_title {
+        padding: 16px 16px 8px;
+        &:after {
+          border-bottom: none;
+        }
+      }
     }
   }
-  .ui-poptip-arrow:after {
-    content: '';
-    border: 5px;
-    width: 0;
-    height: 0;
-    position: absolute;
-    border-color: transparent;
-    border-style: solid;
-  }
-  &[x-placement^=top] {
-    .ui-poptip-arrow:after {
-      bottom: 1px;
-      margin-left: -5px;
-      border-bottom-width: 0;
-      border-top-width: 5px;
-      border-top-color: #fff;
-    }
-    .ui-popper-arrow.ui-poptip-arrow {
-      border-top-color: rgba(217, 217, 217, .5);
+  &_title {
+    position: relative;
+    color: @title-color;
+    &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 8px;
+      right: 8px;
+      bottom: 0;
+      border-bottom: 1px solid @divider-color;
     }
   }
-  &[x-placement^=right] {
-    .ui-poptip-arrow:after {
-      left: 1px;
-      bottom: -5px;
-      border-left-width: 0;
-      border-right-width: 5px;
-      border-right-color: #fff;
-    }
-    .ui-popper-arrow.ui-poptip-arrow {
-      border-right-color: rgba(217, 217, 217, .5);
-    }
+  &_content {
+    color: @content-color;
   }
-  &[x-placement^=bottom] {
-    .ui-poptip-arrow:after {
-      top: 1px;
-      margin-left: -5px;
-      border-top-width: 0;
-      border-bottom-width: 5px;
-      border-bottom-color: #fff;
-    }
-    .ui-popper-arrow.ui-poptip-arrow {
-      border-bottom-color: rgba(217, 217, 217, .5);
-    }
+  &_actions {
+    text-align: right;
+    padding: 8px 16px 16px;
   }
-  &[x-placement^=left] {
-    .ui-poptip-arrow:after {
-      right: 1px;
-      border-right-width: 0;
-      border-left-width: 5px;
-      border-left-color: #fff;
-      bottom: -5px;
-    }
-    .ui-popper-arrow.ui-poptip-arrow {
-      border-left-color: rgba(217, 217, 217, .5);
-    }
+  &_icon {
+    color: @warning-color;
+    margin-right: 4px;
+    font-size: 16px;
   }
 }
 </style>

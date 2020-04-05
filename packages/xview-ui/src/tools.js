@@ -186,3 +186,17 @@ export function getOffset(el) {
   offset.bottom = offset.top + offset.height
   return offset
 }
+
+/**
+ * 是否在内部
+ * @param {Event} e
+ * @param {HTMLElement} el
+ */
+export const isInside = (e, el) => {
+  let tar = e.target
+  while (tar) {
+    if (tar === el) return true
+    tar = tar.parentElement
+  }
+  return false
+}

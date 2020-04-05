@@ -21,6 +21,8 @@ export default {
 <style lang="less">
 .com-sidebar-nav {
   padding-bottom: 30px;
+  position: relative;
+  z-index: 10;
   .title {
     padding: 0 12px;
     line-height: 48px;

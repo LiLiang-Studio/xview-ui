@@ -5,7 +5,7 @@
 
     <div class="page-sub-title">基础用法</div>
     <p>最简单的用法。</p><br>
-    <Tooltip content="这里是提示文字">当鼠标经过这段文字时，会显示一个气泡框</Tooltip>
+    <Tooltip content="这里是提示文字" @on-popper-show="show(true)" @on-popper-hide="show(false)">当鼠标经过这段文字时，会显示一个气泡框</Tooltip>
 
     <div class="page-sub-title">位置</div>
     <p>组件提供了12个不同的方向显示Tooltip，具体配置可查看API。</p><br>
@@ -110,6 +110,11 @@ export default {
     return {
       disabled: false
     };
+  },
+  methods: {
+    show(visible) {
+      this.$Message(visible ? '显示' : '隐藏')
+    }
   }
 };
 </script>

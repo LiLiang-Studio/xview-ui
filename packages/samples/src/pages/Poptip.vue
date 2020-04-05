@@ -6,15 +6,12 @@
       <br>Poptip 还 confirm 确认框，与 Modal 不同的是，它会出现在就近元素，相对轻量。
     </p>
 
-    <div class="page-sub-title">
-      支持三种触发方式：鼠标悬停、点击、聚焦。默认是点击。
-      <br>注意 Poptip 内的文本使用了 white-space: nowrap;，
-      <br>即不自动换行，如需展示很多内容并自动换行时，建议给内容 slot 增加样式 white-space: normal;。
-    </div>
+    <div class="page-sub-title">基础用法</div>
+    <p>支持三种触发方式：鼠标悬停、点击、聚焦。默认是点击。</p><br>
     <Poptip trigger="hover" title="Title" content="content">
       <Button>Hover</Button>
     </Poptip>
-    <Poptip title="Title" content="content">
+    <Poptip transfer title="Title" content="content" @on-popper-show="show(true)" @on-popper-hide="show(false)">
       <Button>Click</Button>
     </Poptip>
     <Poptip trigger="focus" title="Title" content="content">
@@ -24,7 +21,8 @@
       <Input placeholder="Input focus"/>
     </Poptip>
 
-    <div class="page-sub-title">组件提供了12个不同的方向显示Poptip，具体配置可查看API。。</div>
+    <div class="page-sub-title">位置</div>
+    <p>组件提供了12个不同的方向显示Poptip，具体配置可查看API。</p><br>
     <div class="top">
       <Poptip title="Title" content="content" placement="top-start">
         <Button>Top Left</Button>
@@ -80,20 +78,22 @@
       </Poptip>
     </div>
 
-    <div class="page-sub-title">通过v-model来控制提示框的显示和隐藏。</div>
+    <div class="page-sub-title">从浮层内关闭</div>
+    <p>通过v-model来控制提示框的显示和隐藏。</p><br>
     <Poptip v-model="visible">
-      <a>Click</a>
+      <a>click激活</a>
       <div slot="title">
-        <i>Custom title</i>
+        <i>自定义标题</i>
       </div>
       <div slot="content">
-        <a @click="close">close</a>
+        <a @click="close">关闭提示框</a>
       </div>
     </Poptip>
 
-    <div class="page-sub-title">通过自定义 slot 来实现复杂的内容。</div>
+    <div class="page-sub-title">嵌套复杂内容</div>
+    <p>通过自定义 slot 来实现复杂的内容。</p><br>
     <Poptip placement="right" width="400">
-      <Button type="ghost">Click</Button>
+      <Button>Click</Button>
       <div class="api" slot="content">
         <table>
           <thead>
@@ -134,17 +134,23 @@
       </div>
     </Poptip>
 
-    <div class="page-sub-title">
+    <div class="page-sub-title">宽度</div>
+    <p>设置最大宽度</p><br>
+    <Poptip width="200" content="史蒂夫·乔布斯（Steve Jobs），1955年2月24日生于美国加利福尼亚州旧金山，美国发明家、企业家、美国苹果公司联合创办人。">
+        <Button>长文本</Button>
+    </Poptip>
+
+    <div class="page-sub-title">确认框</div>
+    <p>
       通过设置属性confirm开启确认框模式。
-      确认框只会以 click 的形式激活，并且只会显示 title 的内容，忽略 content。
-    </div>
+      确认框只会以 click 的形式激活，并且只会显示 title 的内容，忽略 content。</p><br>
     <Poptip
       confirm
-      title="Are you sure you want to delete this item?"
+      title="您确认删除这条内容吗？"
       @on-ok="ok"
       @on-cancel="cancel"
     >
-      <Button>Delete</Button>
+      <Button>删除</Button>
     </Poptip>
     <Poptip
       confirm
@@ -154,7 +160,7 @@
       ok-text="yes"
       cancel-text="no"
     >
-      <Button>Internationalization</Button>
+      <Button>国际化</Button>
     </Poptip>
   </div>
 </template>
@@ -174,6 +180,9 @@ export default {
     },
     cancel() {
       this.$Message.info("You click cancel");
+    },
+    show(visible) {
+      this.$Message(visible ? '显示' : '隐藏')
     }
   }
 };

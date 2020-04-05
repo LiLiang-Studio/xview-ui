@@ -5,7 +5,7 @@
     </label>
     <div :class="`${prefix}-content`">
       <slot></slot>
-      <transition name="ui-fade">
+      <transition name="x-animate-fade">
         <div v-if="showMsg" :class="`${prefix}-error-tip`"></div>
       </transition>
     </div>

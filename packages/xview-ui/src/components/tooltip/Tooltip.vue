@@ -72,9 +72,6 @@ export default {
   &_content {
     max-width: 500px;
     padding: 8px 12px;
-    border-radius: 4px;
-    background-color: #fff;
-    box-shadow: 0 1px 6px rgba(0, 0, 0, .2);
     &.dark {
       color: #fff;
       background: @content-color;

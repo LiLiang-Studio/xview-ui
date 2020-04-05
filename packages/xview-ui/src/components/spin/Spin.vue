@@ -1,5 +1,5 @@
 <template>
-  <transition :name="prefix">
+  <transition name="x-animate-fade">
     <div :class="[prefix, {fix}]">
       <div>
         <slot>
@@ -32,10 +32,6 @@ export default {
 .@{spin} {
   text-align: center;
   color: @primary-color;
-  transition: opacity .2s ease-in-out;
-  &-enter, &-leave-to {
-    opacity: 0;
-  }
   &.fix {
     position: absolute;
     top: 0;

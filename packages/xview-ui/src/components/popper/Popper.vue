@@ -3,9 +3,11 @@
     <span ref="reference" :class="`${prefix}_reference`">
       <slot name="reference"></slot>
     </span>
-    <transition :name="transitionName || prefix">
+    <transition :name="transitionName || 'x-animate-fade'">
       <div v-show="visible" ref="popper" :class="`${prefix}_popper`" :style="{zIndex}">
-        <slot></slot>
+        <div :class="`${prefix}_content`">
+          <slot></slot>
+        </div>
         <div v-show="hasArrow || arrowClass" ref="arrow" :class="[`${prefix}_arrow`, arrowClass]"></div>
       </div>
     </transition>
@@ -137,11 +139,11 @@ export default {
       border-color: lighten(@border-color, 5%);
     }
   }
-  &_popper {
-    transition: opacity .2s;
-  }
-  &-enter, &-leave-to {
-    opacity: 0;
+  &_content {
+    overflow: hidden;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, .2);
   }
 }
 [data-popper-placement^='top'] {

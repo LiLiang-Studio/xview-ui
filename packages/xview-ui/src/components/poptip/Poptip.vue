@@ -86,15 +86,20 @@ export default {
         mouseleave() {
           if (_self.listenHover) _self.visible = false
         },
-        mousedown() {
-          if (_self.listenDownUp) _self.visible = true
+        mousedown(e) {
+          if (_self.listenDownUp && !_self.getTarget(e).isDisabledInput) _self.visible = true
         },
         mouseup(e) {
-          let isInput = e.target.tagName.toLowerCase() === 'input'
-          if (_self.listenDownUp && !isInput) _self.visible = false
+          let target = _self.getTarget(e)
+          if (_self.listenDownUp && (!target.isInput || target.disabled)) _self.visible = false
         },
         click(e) {
-          if (!_self.disabled && _self.trigger === 'click' && isInside(e, _self.getRef())) _self.visible = true
+          if (
+            !_self.disabled &&
+            _self.trigger === 'click' &&
+            !_self.getTarget(e).isDisabledInput &&
+            isInside(e, _self.getRef())
+          ) _self.visible = true
         }
       }
     }
@@ -122,6 +127,10 @@ export default {
     },
     getRef() {
       return this.$refs.popper.getRef()
+    },
+    getTarget(e) {
+      let tar = e.target, { disabled } = tar, isInput = tar.tagName.toLowerCase() === 'input'
+      return { disabled, isInput, isDisabledInput: isInput && disabled }
     }
   }
 }
@@ -132,9 +141,6 @@ export default {
 @{prefix} {
   &_body {
     min-width: 150px;
-    background: #fff;
-    border-radius: 4px;
-    box-shadow: 0 1px 6px rgba(0,0,0,.2);
     &.confirm {
       max-width: 300px;
       @{prefix}_title {

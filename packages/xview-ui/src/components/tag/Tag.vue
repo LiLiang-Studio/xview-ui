@@ -105,7 +105,7 @@ export default {
     opacity: .85;
   }
   &.fade {
-    transition: opacity .2s ease-in-out;
+    transition: opacity .22s;
   }
   &.color:not(&_border):not(&_dot) {
     border: none;

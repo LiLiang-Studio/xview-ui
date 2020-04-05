@@ -90,6 +90,9 @@ export default {
         this.popper = createPopper(this.getReference(), popper, options)
       }
     },
+    getRef() {
+      return this.$refs.reference
+    },
     getReference() {
       let { reference } = this.$refs
       return [

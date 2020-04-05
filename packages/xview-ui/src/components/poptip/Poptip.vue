@@ -90,14 +90,11 @@ export default {
           if (_self.listenDownUp) _self.visible = true
         },
         mouseup(e) {
-          if (_self.listenDownUp) _self.visible = false
+          let isInput = e.target.tagName.toLowerCase() === 'input'
+          if (_self.listenDownUp && !isInput) _self.visible = false
         },
         click(e) {
-          const ref = _self.$refs.popper.getReference(), isInput = e.target.tagName.toLowerCase() === 'input'
-          if (
-            !_self.disabled && isInside(e, ref) &&
-            (_self.trigger === 'click' || (_self.trigger === 'focus' && isInput))
-          ) _self.visible = true
+          if (!_self.disabled && _self.trigger === 'click' && isInside(e, _self.getRef())) _self.visible = true
         }
       }
     }
@@ -112,8 +109,8 @@ export default {
     }
   },
   methods: {
-    onClickoutside() {
-      this.visible = false
+    onClickoutside(e) {
+      if (!isInside(e, this.getRef())) this.visible = false
     },
     onCancel() {
       this.visible = false
@@ -122,6 +119,9 @@ export default {
     onOK() {
       this.visible = false
       this.$emit('on-ok')
+    },
+    getRef() {
+      return this.$refs.popper.getRef()
     }
   }
 }

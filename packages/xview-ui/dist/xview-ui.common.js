@@ -1,5 +1,5 @@
 /*!
- * xview-ui v1.4.6-1
+ * xview-ui v1.4.6-2
  * (c) 2019-2020 LiLiang
  * Released under the MIT License.
  */
@@ -10653,6 +10653,9 @@ var script$Z = {
         this.popper = createPopper(this.getReference(), popper, options);
       }
     },
+    getRef: function getRef() {
+      return this.$refs.reference
+    },
     getReference: function getReference() {
       var ref = this.$refs;
       var reference = ref.reference;
@@ -11305,14 +11308,11 @@ var script$10 = {
           if (_self.listenDownUp) { _self.visible = true; }
         },
         mouseup: function mouseup(e) {
-          if (_self.listenDownUp) { _self.visible = false; }
+          var isInput = e.target.tagName.toLowerCase() === 'input';
+          if (_self.listenDownUp && !isInput) { _self.visible = false; }
         },
         click: function click(e) {
-          var ref = _self.$refs.popper.getReference(), isInput = e.target.tagName.toLowerCase() === 'input';
-          if (
-            !_self.disabled && isInside(e, ref) &&
-            (_self.trigger === 'click' || (_self.trigger === 'focus' && isInput))
-          ) { _self.visible = true; }
+          if (!_self.disabled && _self.trigger === 'click' && isInside(e, _self.getRef())) { _self.visible = true; }
         }})
     }
   },
@@ -11326,8 +11326,8 @@ var script$10 = {
     }
   },
   methods: {
-    onClickoutside: function onClickoutside() {
-      this.visible = false;
+    onClickoutside: function onClickoutside(e) {
+      if (!isInside(e, this.getRef())) { this.visible = false; }
     },
     onCancel: function onCancel() {
       this.visible = false;
@@ -11336,6 +11336,9 @@ var script$10 = {
     onOK: function onOK() {
       this.visible = false;
       this.$emit('on-ok');
+    },
+    getRef: function getRef() {
+      return this.$refs.popper.getRef()
     }
   }
 };

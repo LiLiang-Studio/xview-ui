@@ -46,7 +46,7 @@ class ListenManager {
    * @param {HTMLElement} el 
    */
   removeHandler(el) {
-    this.handlers.splice(this.handlers.find(_ => _.el === el), 1)
+    this.handlers.splice(this.handlers.findIndex(_ => _.el === el), 1)
   }
 
   /**

@@ -1,5 +1,5 @@
 /*!
- * xview-ui v1.4.6
+ * xview-ui v1.4.6-1
  * (c) 2019-2020 LiLiang
  * Released under the MIT License.
  */
@@ -784,7 +784,7 @@ ListenManager.prototype.addHandler = function addHandler (el, fn) {
  * @param {HTMLElement} el 
  */
 ListenManager.prototype.removeHandler = function removeHandler (el) {
-  this.handlers.splice(this.handlers.find(function (_) { return _.el === el; }), 1);
+  this.handlers.splice(this.handlers.findIndex(function (_) { return _.el === el; }), 1);
 };
 
 /**

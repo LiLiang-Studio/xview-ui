@@ -22,6 +22,7 @@ export default {
   props: {
     offset: { type: Number, default: 0 },
     options: Object,
+    adaptive: { type: B, default: true },
     hasArrow: B,
     arrowClass: S,
     transitionName: S,
@@ -81,6 +82,13 @@ export default {
             name: 'offset',
             options: {
               offset: [this.offset, 0]
+            }
+          },
+          {
+            name: 'computeStyles',
+            options: {
+              adaptive: this.adaptive,
+              gpuAcceleration: false
             }
           }
         ].concat(modifiers || []),

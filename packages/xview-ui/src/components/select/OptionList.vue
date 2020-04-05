@@ -1,5 +1,5 @@
 <template>
-  <transition name="ui-dropdown">
+  <transition name="x-animate-dropdown">
     <div class="ui-select-dropdown" v-show="visible" :class="{multiple}" :style="styles">
       <div class="ui-select-empty">
         <slot name="empty"></slot>

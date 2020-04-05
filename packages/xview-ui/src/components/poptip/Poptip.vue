@@ -26,6 +26,7 @@ import { clickoutside } from '../../directives'
 import { parseSize, isInside } from '../../tools'
 const S = String, B = Boolean, NS = [Number, String]
 export default {
+  name: 'XPoptip',
   components: { XIcon, XBtn, XPopper },
   props: {
     trigger: {

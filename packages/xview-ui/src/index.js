@@ -63,6 +63,9 @@ import TabPane from './components/tab-pane' // 标签页项
 import Slider from './components/slider' // 滑块
 import Tooltip from './components/tooltip' // 文字提示
 import Poptip from './components/poptip' // 气泡提示
+import Dropdown from './components/dropdown' // 下拉菜单容器
+import DropdownItem from './components/dropdown-item' // 下拉菜单项
+import DropdownMenu from './components/dropdown-menu' // 下拉菜单
 
 import loadingBarService from './components/loading-bar' // 加载条
 import Spin from './components/spin' // 加载中
@@ -82,10 +85,6 @@ import FormItem from './components/form-item'
 // import ColorPicker from './components/color-picker'
 // // 级联选择
 // import Cascader from './components/cascader'
-// 下拉菜单
-import Dropdown from './components/dropdown'
-import DropdownItem from './components/dropdown-item'
-import DropdownMenu from './components/dropdown-menu'
 // 菜单
 import Menu from './components/menu'
 import Submenu from './components/submenu'
@@ -164,6 +163,9 @@ const comps = {
   Slider,
   Tooltip,
   Poptip,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
 
   Upload,
   Form,
@@ -173,9 +175,6 @@ const comps = {
   Select,
   Option,
   OptionGroup,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
   Menu,
   MenuItem,
   Submenu,

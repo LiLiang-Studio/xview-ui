@@ -1,5 +1,3 @@
 <template>
-  <ul class="ui-dropdown-menu">
-    <slot></slot>
-  </ul>
+  <ul><slot></slot></ul>
 </template>

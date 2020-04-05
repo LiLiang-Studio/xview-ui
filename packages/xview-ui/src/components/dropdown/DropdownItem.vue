@@ -1,64 +1,58 @@
 <template>
-  <li class="ui-dropdown-item" :class="{divided}">
-    <div class="ui-dropdown-item-btn" :class="{ selected, disabled}" @click="handleClick"><slot></slot></div>
+  <li :class="prefix" @click="onClick">
+    <div :class="`${prefix}_divider`" v-if="divided"></div>
+    <div :class="[`${prefix}_inner`, {selected, disabled}]">
+      <slot></slot>
+    </div>
   </li>
 </template>
 <script>
 import { findParent } from '../../tools'
 export default {
-  data() {
-    return { parent: null }
-  },
+  name: 'XDropdownItem',
   props: {
     name: String,
     disabled: Boolean,
     divided: Boolean,
     selected: Boolean
   },
+  data() {
+    return { prefix: 'x-dropdown-item' }
+  },
   methods: {
-    handleClick(event) {
-      if (this.disabled) return
-      this.parent && this.parent.itemClick(this.name)
+    onClick() {
+      !this.disabled && this.parent && this.parent.itemClick(this.name)
     }
   },
   mounted() {
-    this.parent = findParent(this, 'ui-dropdown')
+    this.parent = findParent(this, 'XDropdown')
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-dropdown-item {
+.x-dropdown-item {
   list-style: none;
-  line-height: normal;
-  font-size: 12px;
-  color: @content-color;
-  &.divided {
-    margin-top: 5px;
-    border-top: 1px solid @divider-color;
-    &:before {
-      content: '';
-      display: block;
-      height: 5px;
+  &_inner {
+    cursor: pointer;
+    padding: 7px 16px;
+    transition: all .2s;
+    white-space: nowrap;
+    color: @content-color;
+    &.selected {
+      color: @primary-color;
+    }
+    &:not(.disabled):hover, &.selected:not(.disabled) {
+      background: darken(@bg-color, 2%);
+    }
+    &.disabled {
+      cursor: not-allowed;
+      color: @disabled-color;
     }
   }
-}
-
-.ui-dropdown-item-btn {
-  padding: 7px 16px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background-color .2s ease-in-out;
-  &:hover:not(.disabled) {
-    background-color: @disabled-bg-color;
-  }
-  &.selected:not(.disabled) {
-    color: #fff;
-    background-color: @primary-color;
-  }
-  &.disabled {
-    color: @disabled-color;
-    cursor: not-allowed;
+  &_divider {
+    margin: 5px 0;
+    border-top: 1px solid @divider-color;
   }
 }
 </style>

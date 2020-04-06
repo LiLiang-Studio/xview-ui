@@ -1,44 +1,35 @@
 <template>
-  <li class="ui-menu-item" :class="{active}" @click="handleClick">
+  <li :class="['x-menu-item', {active}]" @click="onClick">
     <slot></slot>
   </li>
 </template>
 <script>
 import { findParent } from '../../tools'
 export default {
-  data() {
-    return {
-      parent: null,
-      menuRoot: null
-    }
-  },
+  name: 'XMenuItem',
   props: {
     name: [String, Number]
   },
+  data() {
+    return { submenu: null, menu: null }
+  },
   computed: {
-    isVertical() {
-      return this.menuRoot && this.menuRoot.getMode() === 'vertical'
+    isHor() {
+      return this.menu && this.menu.mode === 'horizontal'
     },
     active() {
-      if (this.parent) {
-        return this.isVertical && this.menuRoot.getActiveName() === this.name
-      } else {
-        return this.menuRoot && this.menuRoot.getActiveName() === this.name
-      }
-    }
-  },
-  methods: {
-    handleClick() {
-      this.menuRoot && this.menuRoot.updateActiveName(
-        !this.parent || this.isVertical ? this.name : this.parent.getName()
-      )
-      !this.isVertical && this.parent && this.parent.close()
-      this.menuRoot && this.menuRoot.onSelect(this.name)
+      return this.menu && this.menu.activedItemName === this.name
     }
   },
   mounted() {
-    this.menuRoot = findParent(this, 'ui-menu')
-    this.parent = findParent(this, 'ui-menu-submenu')
+    this.menu = findParent(this, 'XMenu')
+    this.submenu = findParent(this, 'XSubmenu')
+  },
+  methods: {
+    onClick() {
+      this.menu && this.menu.updateActiveName(this.name)
+      this.isHor && this.submenu && this.submenu.show(false)
+    }
   }
 }
 </script>

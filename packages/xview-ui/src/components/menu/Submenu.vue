@@ -1,79 +1,93 @@
 <template>
-  <li class="ui-menu-submenu" :class="{vertical: isVertical, active}" @mouseenter="handleMouseenter" @mouseleave="handleMouseleave">
-    <div class="ui-menu-submenu-title" @click="handleTitleClick">
+  <x-popper v-if="isHor" :class="prefix" v-bind="popperProps" @mouseenter="onMouseenter" @mouseleave="onMouseleave">
+    <div slot="reference" :class="titleClass">
       <slot name="title"></slot>
-      <UiIcon class="title-icon" type="ios-arrow-down"/>
+      <x-icon :class="[`${prefix}_arrow`, {isOpened: visible}]" type="ios-arrow-down"/>
     </div>
-    <div v-show="isVertical && isOpened" class="vertical">
-      <ul><slot></slot></ul>
+    <ul :class="`${prefix}_list`">
+      <slot></slot>
+    </ul>
+  </x-popper>
+  <li v-else :class="prefix">
+    <div :class="titleClass" @click="onTitleClick">
+      <slot name="title"></slot>
+      <span :class="`${prefix}_spring`"></span>
+      <x-icon :class="[`${prefix}_arrow`, {isOpened}]" type="ios-arrow-down"/>
     </div>
-    <ui-option-list v-if="!isVertical" class="ui-menu-submenu-list" :visible="visible" :parentName="$options.name"
-      @mouseenter.native="handleDropMouseenter" @mouseleave.native="handleDropMouseleave">
-      <ul><slot></slot></ul>
-    </ui-option-list>
+    <ul v-show="isOpened">
+      <slot></slot>
+    </ul>
   </li>
 </template>
 <script>
-import UiIcon from '../icon'
-import UiOptionList from './../select/OptionList.vue'
-import { findParent } from '../../tools'
+import XIcon from '../icon'
+import XPopper from '../popper'
+import { findParent, findChildrens } from '../../tools'
 export default {
-  name: 'ui-menu-submenu',
-  components: { UiIcon, UiOptionList },
-  data() {
-    return {
-      visible: false,
-      timeout: null,
-      parent: null
-    }
-  },
+  name: 'XSubmenu',
+  components: { XIcon, XPopper },
   props: {
     name: [String, Number]
   },
+  data() {
+    return {
+      prefix: 'x-submenu',
+      visible: false,
+      menu: null,
+      active: false,
+      isOpened: false
+    }
+  },
   computed: {
-    active() {
-      return this.visible || this.parent && this.parent.getActiveName() === this.name
+    popperProps() {
+      return { adaptive: false, visible: this.visible, transitionName: 'x-animate-dropdown' }
     },
-    isVertical() {
-      return this.parent && this.parent.getMode() === 'vertical'
+    isHor() {
+      return this.menu && this.menu.mode === 'horizontal'
     },
-    isOpened() {
-      return this.parent && this.parent.getOpenedNames().indexOf(this.name) !== -1
+    titleClass() {
+      return [`${this.prefix}_title`, { active: this.visible || this.active }]
     }
   },
   watch: {
-    visible(newVal) {
-      this.parent && this.parent.onOpenChange(this.name, newVal)
-    }
-  },
-  methods: {
-    close() {
-      this.visible = false
-    },
-    handleMouseenter() {
-      if (this.isVertical) return
-      clearTimeout(this.timeout)
-      this.visible = true
-    },
-    handleMouseleave() {
-      if (this.isVertical) return
-      this.timeout = setTimeout(this.close, 150)
-    },
-    handleDropMouseenter() {
-      clearTimeout(this.timeout)
-    },
-    handleDropMouseleave() {
-      this.timeout = setTimeout(this.close, 150)
-    },
-    getName() {
-      return this.name
-    },
-    handleTitleClick() {
-      this.parent && this.parent.toggleSubmenu(this.name)
+    visible(val) {
+      this.menu && this.menu.onOpenChange()
     }
   },
   mounted() {
-    this.parent = findParent(this, 'ui-menu')
+    this.menu = findParent(this, 'XMenu')
+    // 观察激活菜单名字变化
+    this.unwatchActivedName = this.$watch(() => {
+      return this.menu && this.menu.activedItemName
+    }, val => {
+      this.active = findChildrens(this, 'XMenuItem').some(_ => _.name === val)
+    }, { immediate: true })
+    // 观察展开的子菜单名字列表变化
+    this.unwatchOpenedNames = this.$watch(() => {
+      return this.menu && this.menu.openedNames
+    }, val => {
+      let children = findChildrens(this, 'XSubmenu')
+      this.isOpened = val.indexOf(this.name) > -1 || children.some(_ => val.indexOf(_.name) > -1)
+    }, { immediate: true })
+  },
+  beforeDestroy() {
+    this.unwatchActivedName()
+    this.unwatchOpenedNames()
+  },
+  methods: {
+    show(visible) {
+      this.visible = visible
+    },
+    onMouseenter() {
+      clearTimeout(this.tid)
+      if (this.isHor) this.show(true)
+    },
+    onMouseleave() {
+      if (this.isHor) this.tid = setTimeout(() => this.show(false), 150)
+    },
+    onTitleClick() {
+      this.menu && this.menu.toggleSubmenu(this.name)
+    }
   }
 }
 </script>

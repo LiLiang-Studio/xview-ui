@@ -1,6 +1,6 @@
 <template>
-  <li class="ui-menu-item-group">
-    <div class="ui-menu-item-group-title">{{title}}</div>
+  <li>
+    <div class="x-menu-group_title">{{title}}</div>
     <ul><slot></slot></ul>
   </li>
 </template>

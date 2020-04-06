@@ -3,11 +3,11 @@
     <div class="page-title">Menu 导航菜单</div>
     <p>为页面和功能提供导航的菜单列表，常用于网站顶部和左侧。</p>
 
-    <div class="page-sub-title">
+    <div class="page-sub-title">顶部导航</div>
+    <p>
       水平的顶部导航菜单。
       通过设置属性 theme 为 light、dark、primary 可以选择主题。
-      通过事件 on-select 可以得到点击菜单的 name 值，从而控制页面路由或自定义操作。
-    </div>
+      通过事件 on-select 可以得到点击菜单的 name 值，从而控制页面路由或自定义操作。</p><br>
     <Menu mode="horizontal" :theme="theme1" active-name="1" @on-open-change="handleOpenChange" @on-select="handleSelect">
       <MenuItem name="1">
         <Icon type="ios-paper"></Icon>内容管理
@@ -41,12 +41,12 @@
       <Radio label="primary"></Radio>
     </RadioGroup>
 
-    <div class="page-sub-title">
+    <div class="page-sub-title">侧栏导航</div>
+    <p>
       垂直导航菜单，可以内嵌子菜单。
       设置 active-name 可以选中指定的菜单，设置 open-names 可以展开指定的子菜单。
       设置属性 accordion 可以开启手风琴模式，每次只能展开一个子菜单。
-      通过设置属性 theme 为 light、dark 可以选择主题，侧栏菜单不支持 primary 主题。
-    </div>
+      通过设置属性 theme 为 light、dark 可以选择主题，侧栏菜单不支持 primary 主题。</p><br>
     <Row>
       <Col span="8">
         <Menu :theme="theme2">
@@ -155,7 +155,8 @@
       <Radio label="dark"></Radio>
     </RadioGroup>
 
-    <div class="page-sub-title">垂直菜单，子菜单内嵌在菜单区域。</div>
+    <div class="page-sub-title">内嵌菜单</div>
+    <p>垂直菜单，子菜单内嵌在菜单区域。</p><br>
     <Menu active-name="1-2" :open-names="['1']">
       <Submenu name="1">
         <template slot="title">
@@ -193,7 +194,8 @@
       </Submenu>
     </Menu>
 
-    <div class="page-sub-title">使用 MenuGroup 组件进行分组。</div>
+    <div class="page-sub-title">分组</div>
+    <p>使用 MenuGroup 组件进行分组。</p><br>
     <Menu :theme="theme3" active-name="1">
       <MenuGroup title="内容管理">
         <MenuItem name="1">

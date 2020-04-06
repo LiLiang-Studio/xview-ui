@@ -66,6 +66,10 @@ import Poptip from './components/poptip' // 气泡提示
 import Dropdown from './components/dropdown' // 下拉菜单容器
 import DropdownItem from './components/dropdown-item' // 下拉菜单项
 import DropdownMenu from './components/dropdown-menu' // 下拉菜单
+import Menu from './components/menu' // 菜单
+import Submenu from './components/submenu' // 子菜单
+import MenuItem from './components/menu-item' // 菜单项
+import MenuGroup from './components/menu-group' // 菜单组
 
 import loadingBarService from './components/loading-bar' // 加载条
 import Spin from './components/spin' // 加载中
@@ -85,11 +89,6 @@ import FormItem from './components/form-item'
 // import ColorPicker from './components/color-picker'
 // // 级联选择
 // import Cascader from './components/cascader'
-// 菜单
-import Menu from './components/menu'
-import Submenu from './components/submenu'
-import MenuItem from './components/menu-item'
-import MenuGroup from './components/menu-group'
 // 下拉选择框
 import Select from './components/select'
 import Option from './components/option'
@@ -166,6 +165,10 @@ const comps = {
   Dropdown,
   DropdownMenu,
   DropdownItem,
+  Menu,
+  MenuItem,
+  Submenu,
+  MenuGroup,
 
   Upload,
   Form,
@@ -175,10 +178,6 @@ const comps = {
   Select,
   Option,
   OptionGroup,
-  Menu,
-  MenuItem,
-  Submenu,
-  MenuGroup,
   Table,
   AutoComplete
   // ,DatePicker,

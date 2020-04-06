@@ -21,11 +21,9 @@ export default {
   },
   methods: {
     onClick() {
-      !this.disabled && this.parent && this.parent.itemClick(this.name)
+      let parent = findParent(this, 'XDropdown')
+      !this.disabled && parent && parent.itemClick(this.name)
     }
-  },
-  mounted() {
-    this.parent = findParent(this, 'XDropdown')
   }
 }
 </script>

@@ -1,5 +1,5 @@
 /*!
- * xview-ui v1.4.9
+ * xview-ui v1.5.0
  * (c) 2019-2020 LiLiang
  * Released under the MIT License.
  */
@@ -201,17 +201,12 @@ function getOffset(el) {
 }
 
 /**
- * 是否在内部
+ * 事件目标是否在元素外部
  * @param {Event} e
  * @param {HTMLElement} el
  */
-var isInside = function (e, el) {
-  var tar = e.target;
-  while (tar) {
-    if (tar === el) { return true }
-    tar = tar.parentElement;
-  }
-  return false
+var isOutside = function (e, el) {
+  return e.target !== el && Array.from(el.querySelectorAll('*')).indexOf(e.target) < 0
 };
 
 var tools = /*#__PURE__*/Object.freeze({
@@ -235,7 +230,7 @@ var tools = /*#__PURE__*/Object.freeze({
   setAutoHeight: setAutoHeight,
   dateFormat: dateFormat,
   getOffset: getOffset,
-  isInside: isInside
+  isOutside: isOutside
 });
 
 //
@@ -830,9 +825,7 @@ var winresize = createEventDirective(window, 'resize');
 // 窗口滚动指令
 var winscroll = createEventDirective(window, 'scroll');
 // 目标元素之外单击指令
-var clickoutside = createEventDirective(
-  window, 'mouseup', function (el, cb) { return function (e) { return isFunc(cb) && !isInside(e, el) && cb(e); }; }
-);
+var clickoutside = createEventDirective(window, 'click', function (el, cb) { return function (e) { return isOutside(e, el) && cb(e); }; });
 
 //
 var script$4 = {
@@ -10597,6 +10590,7 @@ var script$Z = {
   data: function data() {
     return { prefix: 'x-popper', zIndex: 0 }
   },
+  directives: { clickoutside: clickoutside },
   watch: {
     visible: function visible(val) {
       this.onVisible();
@@ -10659,15 +10653,10 @@ var script$Z = {
         this.popper = createPopper(this.getReference(), popper, options);
       }
     },
-    getRef: function getRef() {
-      return this.$refs.reference
-    },
     getReference: function getReference() {
       var ref = this.$refs;
       var reference = ref.reference;
-      return [
-        reference ].concat( Array.from(reference.querySelectorAll('*'))
-      ).find(function (el) { return el.offsetWidth && el.offsetHeight; }) || reference
+      return [reference ].concat( Array.from(reference.querySelectorAll('*'))).find(function (el) { return el.offsetWidth && el.offsetHeight; }) || reference
     },
     update: function update() {
       this.popper && this.popper.update();
@@ -10679,6 +10668,12 @@ var script$Z = {
         this.zIndex = getMaxZIndex();
         this.$nextTick(function () { return this$1.createPopper(); });
       }
+    },
+    onClickoutside: function onClickoutside(e) {
+      if (isOutside(e, this.$el) && this.visible) { this.$emit('clickoutside', e); }
+    },
+    onRefClick: function onRefClick(e) {
+      this.$emit('ref-click', e);
     }
   }
 };
@@ -10696,7 +10691,11 @@ var __vue_render__$10 = function() {
     [
       _c(
         "span",
-        { ref: "reference", class: _vm.prefix + "_reference" },
+        {
+          ref: "reference",
+          class: _vm.prefix + "_reference",
+          on: { click: _vm.onRefClick }
+        },
         [_vm._t("reference")],
         2
       ),
@@ -10714,6 +10713,12 @@ var __vue_render__$10 = function() {
                   rawName: "v-show",
                   value: _vm.visible,
                   expression: "visible"
+                },
+                {
+                  name: "clickoutside",
+                  rawName: "v-clickoutside",
+                  value: _vm.onClickoutside,
+                  expression: "onClickoutside"
                 }
               ],
               ref: "popper",
@@ -11300,8 +11305,7 @@ var script$10 = {
     popperProps: function popperProps() {
       return Object.assign({}, {placement: 'top'},
         this.$attrs,
-        {ref: 'popper',
-        hasArrow: true,
+        {hasArrow: true,
         visible: !this.disabled && this.visible})
     },
     listenHover: function listenHover() {
@@ -11326,17 +11330,14 @@ var script$10 = {
           var target = _self.getTarget(e);
           if (_self.listenDownUp && (!target.isInput || target.disabled)) { _self.visible = false; }
         },
-        click: function click(e) {
-          if (
-            !_self.disabled &&
-            _self.trigger === 'click' &&
-            !_self.getTarget(e).isDisabledInput &&
-            isInside(e, _self.getRef())
-          ) { _self.visible = true; }
+        'ref-click': function ref_click(e) {
+          if (!_self.disabled && _self.trigger === 'click' && !_self.getTarget(e).isDisabledInput) { _self.visible = true; }
+        },
+        clickoutside: function clickoutside() {
+          _self.visible = false;
         }})
     }
   },
-  directives: { clickoutside: clickoutside },
   watch: {
     visible: function visible(val) {
       this.$emit('input', val);
@@ -11346,9 +11347,6 @@ var script$10 = {
     }
   },
   methods: {
-    onClickoutside: function onClickoutside(e) {
-      if (!isInside(e, this.getRef())) { this.visible = false; }
-    },
     onCancel: function onCancel() {
       this.visible = false;
       this.$emit('on-cancel');
@@ -11356,9 +11354,6 @@ var script$10 = {
     onOK: function onOK() {
       this.visible = false;
       this.$emit('on-ok');
-    },
-    getRef: function getRef() {
-      return this.$refs.popper.getRef()
     },
     getTarget: function getTarget(e) {
       var tar = e.target;
@@ -11406,14 +11401,6 @@ var __vue_render__$13 = function() {
       _c(
         "div",
         {
-          directives: [
-            {
-              name: "clickoutside",
-              rawName: "v-clickoutside",
-              value: _vm.onClickoutside,
-              expression: "onClickoutside"
-            }
-          ],
           class: [
             _vm.prefix + "_body",
             { confirm: _vm.confirm },
@@ -11531,13 +11518,11 @@ var script$11 = {
   computed: {
     popperProps: function popperProps() {
       return Object.assign({}, this.$attrs,
-        {ref: 'popper',
-        adaptive: false,
+        {adaptive: false,
         transitionName: 'x-animate-dropdown',
         visible: this.trigger === 'custom' ? this.visible : this.isVisible})
     }
   },
-  directives: { clickoutside: clickoutside },
   methods: {
     onMouseenter: function onMouseenter() {
       if (this.trigger === 'hover') {
@@ -11551,10 +11536,10 @@ var script$11 = {
       if (this.trigger === 'hover') { this.tid = setTimeout(function () { return this$1.isVisible = false; }, 150); }
     },
     onPopperMouseleave: function onPopperMouseleave(e) {
-      if (!isInside(e, this.$el)) { this.onMouseleave(); }
+      if (isOutside(e, this.$el)) { this.onMouseleave(); }
     },
-    onClick: function onClick(e) {
-      if (this.trigger === 'click' && isInside(e, this.$refs.popper.getRef())) { this.isVisible = true; }
+    onRefClick: function onRefClick(e) {
+      if (this.trigger === 'click') { this.isVisible = true; }
     },
     onContextmenu: function onContextmenu(e) {
       if (this.trigger === 'contextMenu') {
@@ -11565,9 +11550,8 @@ var script$11 = {
     show: function show(visible) {
       this.$emit('on-visible-change', visible);
     },
-    onClickoutside: function onClickoutside(e) {
+    onClickoutside: function onClickoutside() {
       this.isVisible = false;
-      this.$emit('on-clickoutside', e);
     },
     itemClick: function itemClick(name) {
       this.isVisible = false;
@@ -11590,14 +11574,15 @@ var __vue_render__$14 = function() {
         on: {
           mouseenter: _vm.onMouseenter,
           mouseleave: _vm.onMouseleave,
-          click: _vm.onClick,
           contextmenu: _vm.onContextmenu,
           "on-popper-show": function($event) {
             return _vm.show(true)
           },
           "on-popper-hide": function($event) {
             return _vm.show(false)
-          }
+          },
+          "ref-click": _vm.onRefClick,
+          clickoutside: _vm.onClickoutside
         },
         scopedSlots: _vm._u(
           [
@@ -11622,14 +11607,6 @@ var __vue_render__$14 = function() {
       _c(
         "div",
         {
-          directives: [
-            {
-              name: "clickoutside",
-              rawName: "v-clickoutside",
-              value: _vm.onClickoutside,
-              expression: "onClickoutside"
-            }
-          ],
           staticClass: "x-dropdown",
           on: {
             mouseenter: _vm.onMouseenter,

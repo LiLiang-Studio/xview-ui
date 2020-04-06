@@ -1,19 +1,18 @@
 <template>
   <x-popper v-bind="popperProps" 
-    @mouseenter="onMouseenter" @mouseleave="onMouseleave" @click="onClick" @contextmenu="onContextmenu"
-    @on-popper-show="show(true)" @on-popper-hide="show(false)">
+    @mouseenter="onMouseenter" @mouseleave="onMouseleave" @contextmenu="onContextmenu"
+    @on-popper-show="show(true)" @on-popper-hide="show(false)" @ref-click="onRefClick" @clickoutside="onClickoutside">
     <template v-slot:reference>
       <slot></slot>
     </template>
-    <div class="x-dropdown" v-clickoutside="onClickoutside" @mouseenter="onMouseenter" @mouseleave="onPopperMouseleave">
+    <div class="x-dropdown" @mouseenter="onMouseenter" @mouseleave="onPopperMouseleave">
       <slot name="list"></slot>
     </div>
   </x-popper>
 </template>
 <script>
 import XPopper from '../popper'
-import { isInside } from '../../tools'
-import { clickoutside } from '../../directives'
+import { isOutside } from '../../tools'
 export default {
   name: 'XDropdown',
   components: { XPopper },
@@ -33,14 +32,12 @@ export default {
     popperProps() {
       return {
         ...this.$attrs,
-        ref: 'popper',
         adaptive: false,
         transitionName: 'x-animate-dropdown',
         visible: this.trigger === 'custom' ? this.visible : this.isVisible
       }
     }
   },
-  directives: { clickoutside },
   methods: {
     onMouseenter() {
       if (this.trigger === 'hover') {
@@ -52,10 +49,10 @@ export default {
       if (this.trigger === 'hover') this.tid = setTimeout(() => this.isVisible = false, 150)
     },
     onPopperMouseleave(e) {
-      if (!isInside(e, this.$el)) this.onMouseleave()
+      if (isOutside(e, this.$el)) this.onMouseleave()
     },
-    onClick(e) {
-      if (this.trigger === 'click' && isInside(e, this.$refs.popper.getRef())) this.isVisible = true
+    onRefClick(e) {
+      if (this.trigger === 'click') this.isVisible = true
     },
     onContextmenu(e) {
       if (this.trigger === 'contextMenu') {
@@ -66,9 +63,8 @@ export default {
     show(visible) {
       this.$emit('on-visible-change', visible)
     },
-    onClickoutside(e) {
+    onClickoutside() {
       this.isVisible = false
-      this.$emit('on-clickoutside', e)
     },
     itemClick(name) {
       this.isVisible = false

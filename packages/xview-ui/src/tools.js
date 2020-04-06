@@ -188,15 +188,10 @@ export function getOffset(el) {
 }
 
 /**
- * 是否在内部
+ * 事件目标是否在元素外部
  * @param {Event} e
  * @param {HTMLElement} el
  */
-export const isInside = (e, el) => {
-  let tar = e.target
-  while (tar) {
-    if (tar === el) return true
-    tar = tar.parentElement
-  }
-  return false
+export const isOutside = (e, el) => {
+  return e.target !== el && Array.from(el.querySelectorAll('*')).indexOf(e.target) < 0
 }

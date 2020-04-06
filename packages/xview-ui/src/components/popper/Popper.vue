@@ -1,10 +1,10 @@
 <template>
   <div :class="prefix" v-on="$listeners">
-    <span ref="reference" :class="`${prefix}_reference`">
+    <span ref="reference" :class="`${prefix}_reference`" @click="onRefClick">
       <slot name="reference"></slot>
     </span>
     <transition :name="transitionName || 'x-animate-fade'">
-      <div v-show="visible" ref="popper" :class="`${prefix}_popper`" :style="{zIndex}">
+      <div v-show="visible" ref="popper" :class="`${prefix}_popper`" :style="{zIndex}" v-clickoutside="onClickoutside">
         <div :class="`${prefix}_content`">
           <slot></slot>
         </div>
@@ -15,7 +15,8 @@
 </template>
 <script>
 import { createPopper } from '@popperjs/core'
-import { getMaxZIndex } from '../../tools'
+import { getMaxZIndex, isOutside } from '../../tools'
+import { clickoutside } from '../../directives'
 const S = String, B = Boolean
 export default {
   name: 'XPopper',
@@ -43,6 +44,7 @@ export default {
   data() {
     return { prefix: 'x-popper', zIndex: 0 }
   },
+  directives: { clickoutside },
   watch: {
     visible(val) {
       this.onVisible()
@@ -100,15 +102,9 @@ export default {
         this.popper = createPopper(this.getReference(), popper, options)
       }
     },
-    getRef() {
-      return this.$refs.reference
-    },
     getReference() {
       let { reference } = this.$refs
-      return [
-        reference, 
-        ...Array.from(reference.querySelectorAll('*'))
-      ].find(el => el.offsetWidth && el.offsetHeight) || reference
+      return [reference, ...Array.from(reference.querySelectorAll('*'))].find(el => el.offsetWidth && el.offsetHeight) || reference
     },
     update() {
       this.popper && this.popper.update()
@@ -118,6 +114,12 @@ export default {
         this.zIndex = getMaxZIndex()
         this.$nextTick(() => this.createPopper())
       }
+    },
+    onClickoutside(e) {
+      if (isOutside(e, this.$el) && this.visible) this.$emit('clickoutside', e)
+    },
+    onRefClick(e) {
+      this.$emit('ref-click', e)
     }
   }
 }

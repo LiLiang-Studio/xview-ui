@@ -1,4 +1,4 @@
-import { isFunc, isInside } from '../tools'
+import { isFunc, isOutside } from '../tools'
 
 /**
  * 事件监听管理器
@@ -95,6 +95,4 @@ export const winresize = createEventDirective(window, 'resize')
 // 窗口滚动指令
 export const winscroll = createEventDirective(window, 'scroll')
 // 目标元素之外单击指令
-export const clickoutside = createEventDirective(
-  window, 'mouseup', (el, cb) => e => isFunc(cb) && !isInside(e, el) && cb(e)
-)
+export const clickoutside = createEventDirective(window, 'click', (el, cb) => e => isOutside(e, el) && cb(e))

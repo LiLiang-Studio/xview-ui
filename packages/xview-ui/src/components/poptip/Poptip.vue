@@ -3,7 +3,7 @@
     <template v-slot:reference>
       <slot></slot>
     </template>
-    <div :class="[`${prefix}_body`, {confirm}, popperClass]" :style="bodyStyle" v-clickoutside="onClickoutside">
+    <div :class="[`${prefix}_body`, {confirm}, popperClass]" :style="bodyStyle">
       <div v-if="showTitle" :class="`${prefix}_title`" :style="contentStyle">
         <x-icon v-if="confirm" :class="`${prefix}_icon`" type="help-circled"/>
         <slot name="title">{{title}}</slot>
@@ -22,8 +22,7 @@
 import XIcon from '../icon'
 import XBtn from '../button'
 import XPopper from '../popper'
-import { clickoutside } from '../../directives'
-import { parseSize, isInside } from '../../tools'
+import { parseSize } from '../../tools'
 const S = String, B = Boolean, NS = [Number, String]
 export default {
   name: 'XPoptip',
@@ -66,7 +65,6 @@ export default {
       return {
         placement: 'top',
         ...this.$attrs,
-        ref: 'popper',
         hasArrow: true,
         visible: !this.disabled && this.visible
       }
@@ -94,18 +92,15 @@ export default {
           let target = _self.getTarget(e)
           if (_self.listenDownUp && (!target.isInput || target.disabled)) _self.visible = false
         },
-        click(e) {
-          if (
-            !_self.disabled &&
-            _self.trigger === 'click' &&
-            !_self.getTarget(e).isDisabledInput &&
-            isInside(e, _self.getRef())
-          ) _self.visible = true
+        'ref-click'(e) {
+          if (!_self.disabled && _self.trigger === 'click' && !_self.getTarget(e).isDisabledInput) _self.visible = true
+        },
+        clickoutside() {
+          _self.visible = false
         }
       }
     }
   },
-  directives: { clickoutside },
   watch: {
     visible(val) {
       this.$emit('input', val)
@@ -115,9 +110,6 @@ export default {
     }
   },
   methods: {
-    onClickoutside(e) {
-      if (!isInside(e, this.getRef())) this.visible = false
-    },
     onCancel() {
       this.visible = false
       this.$emit('on-cancel')
@@ -125,9 +117,6 @@ export default {
     onOK() {
       this.visible = false
       this.$emit('on-ok')
-    },
-    getRef() {
-      return this.$refs.popper.getRef()
     },
     getTarget(e) {
       let tar = e.target, { disabled } = tar, isInput = tar.tagName.toLowerCase() === 'input'

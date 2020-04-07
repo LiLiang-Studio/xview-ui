@@ -72,6 +72,10 @@ export default {
       transform: rotateZ(90deg);
     }
   }
+  &_body {
+    overflow: hidden;
+    transition: height .22s ease-in-out;
+  }
   &_content {
     padding: 16px;
     background-color: #fff;

@@ -11,24 +11,26 @@ export default {
     name: [String, Number]
   },
   data() {
-    return { submenu: null, menu: null }
-  },
-  computed: {
-    isHor() {
-      return this.menu && this.menu.mode === 'horizontal'
-    },
-    active() {
-      return this.menu && this.menu.activedItemName === this.name
-    }
+    return { active: false }
   },
   mounted() {
-    this.menu = findParent(this, 'XMenu')
-    this.submenu = findParent(this, 'XSubmenu')
+    const menu = findParent(this, 'XMenu')
+    this.unwatchActivedName = this.$watch(
+      () => menu.activedItemName,
+      val => this.active = val === this.name,
+      { immediate: true }
+    )
+  },
+  beforeDestroy() {
+    this.unwatchActivedName()
   },
   methods: {
     onClick() {
-      this.menu && this.menu.updateActiveName(this.name)
-      this.isHor && this.submenu && this.submenu.show(false)
+      const menu = findParent(this, 'XMenu'), 
+        submenu = findParent(this, 'XSubmenu')
+      menu.updateActiveName(this.name)
+      menu.$emit('on-select', this.name)
+      if (menu.mode === 'horizontal' && submenu) submenu.show(false)
     }
   }
 }

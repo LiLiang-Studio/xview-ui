@@ -4,7 +4,7 @@
       <slot name="title"></slot>
       <x-icon :class="[`${prefix}_arrow`, {isOpened: visible}]" type="ios-arrow-down"/>
     </div>
-    <ul :class="`${prefix}_list`">
+    <ul :class="`${prefix}_list`" :style="listStyle">
       <slot></slot>
     </ul>
   </x-popper>
@@ -14,69 +14,66 @@
       <span :class="`${prefix}_spring`"></span>
       <x-icon :class="[`${prefix}_arrow`, {isOpened}]" type="ios-arrow-down"/>
     </div>
-    <ul v-show="isOpened">
-      <slot></slot>
-    </ul>
+    <x-collapse-transition>
+      <ul v-show="isOpened" :class="`${prefix}_list`">
+        <slot></slot>
+      </ul>
+    </x-collapse-transition>
   </li>
 </template>
 <script>
 import XIcon from '../icon'
 import XPopper from '../popper'
+import XCollapseTransition from '../collapse-transition'
 import { findParent, findChildrens } from '../../tools'
 export default {
   name: 'XSubmenu',
-  components: { XIcon, XPopper },
+  components: { XIcon, XPopper, XCollapseTransition },
   props: {
     name: [String, Number]
   },
   data() {
-    return {
-      prefix: 'x-submenu',
-      visible: false,
-      menu: null,
-      active: false,
-      isOpened: false
-    }
+    return { prefix: 'x-submenu', visible: false, active: false, isOpened: false, isHor: false, listStyle: null }
   },
   computed: {
     popperProps() {
       return { adaptive: false, visible: this.visible, transitionName: 'x-animate-dropdown' }
     },
-    isHor() {
-      return this.menu && this.menu.mode === 'horizontal'
-    },
     titleClass() {
       return [`${this.prefix}_title`, { active: this.visible || this.active }]
     }
   },
-  watch: {
-    visible(val) {
-      this.menu && this.menu.onOpenChange()
-    }
-  },
   mounted() {
-    this.menu = findParent(this, 'XMenu')
-    // 观察激活菜单名字变化
-    this.unwatchActivedName = this.$watch(() => {
-      return this.menu && this.menu.activedItemName
-    }, val => {
-      this.active = findChildrens(this, 'XMenuItem').some(_ => _.name === val)
-    }, { immediate: true })
-    // 观察展开的子菜单名字列表变化
-    this.unwatchOpenedNames = this.$watch(() => {
-      return this.menu && this.menu.openedNames
-    }, val => {
-      let children = findChildrens(this, 'XSubmenu')
-      this.isOpened = val.indexOf(this.name) > -1 || children.some(_ => val.indexOf(_.name) > -1)
-    }, { immediate: true })
+    const menu = findParent(this, 'XMenu')
+    this.unwatchMode = this.$watch(
+      () => menu.mode,
+      val => this.isHor = val === 'horizontal',
+      { immediate: true }
+    )
+    this.unwatchActivedName = this.$watch(
+      () => menu.activedItemName,
+      val => this.active = findChildrens(this, 'XMenuItem').some(_ => _.name === val),
+      { immediate: true }
+    )
+    this.unwatchOpenedNames = this.$watch(
+      () => menu.openedNames,
+      val => this.isOpened = val.indexOf(this.name) > -1
+        // || findChildrens(this, 'XSubmenu').some(_ => val.indexOf(_.name) > -1)
+        ,
+      { immediate: true }
+    )
   },
   beforeDestroy() {
+    this.unwatchMode()
     this.unwatchActivedName()
     this.unwatchOpenedNames()
   },
   methods: {
     show(visible) {
       this.visible = visible
+      if (visible && this.isHor) {
+        this.listStyle = { minWidth: `${this.$el.offsetWidth}px` }
+      }
     },
     onMouseenter() {
       clearTimeout(this.tid)
@@ -86,7 +83,7 @@ export default {
       if (this.isHor) this.tid = setTimeout(() => this.show(false), 150)
     },
     onTitleClick() {
-      this.menu && this.menu.toggleSubmenu(this.name)
+      findParent(this, 'XMenu').toggleSubmenu(this)
     }
   }
 }

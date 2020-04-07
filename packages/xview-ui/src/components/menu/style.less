@@ -13,10 +13,6 @@
   color: #999;
 }
 
-@{submenu}_list {
-  min-width: 140px;
-}
-
 @{menu}_horizontal@{menu}_light {
   &, > @{submenu} @{submenu}_title, > @{menuItem} {
     &:after {
@@ -133,6 +129,10 @@
 
 @{menu}_vertical {
   border-right: 1px solid @border-color;
+  @{submenu}_list {
+    overflow: hidden;
+    transition: height .22s ease-in-out;
+  }
   @{menuItem}, @{submenu}_title {
     padding: 14px 24px;
   }

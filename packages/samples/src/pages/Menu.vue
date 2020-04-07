@@ -157,7 +157,7 @@
 
     <div class="page-sub-title">内嵌菜单</div>
     <p>垂直菜单，子菜单内嵌在菜单区域。</p><br>
-    <Menu active-name="1-2" :open-names="['1']">
+    <Menu active-name="1-2" :open-names="['333']">
       <Submenu name="1">
         <template slot="title">
           <Icon type="ios-analytics"></Icon>Navigation One
@@ -181,6 +181,16 @@
           <template slot="title">Submenu</template>
           <MenuItem name="3-1">Option 7</MenuItem>
           <MenuItem name="3-2">Option 8</MenuItem>
+        </Submenu>
+        <Submenu name="33">
+          <template slot="title">Submenu2</template>
+          <MenuItem name="3-13">Option 73</MenuItem>
+          <MenuItem name="3-23">Option 83</MenuItem>
+          <Submenu name="333">
+            <template slot="title">默认展开</template>
+            <MenuItem name="3-133">Option 733</MenuItem>
+            <MenuItem name="3-233">Option 833</MenuItem>
+          </Submenu>
         </Submenu>
       </Submenu>
       <Submenu name="4">

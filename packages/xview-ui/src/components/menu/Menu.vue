@@ -5,6 +5,7 @@
 </template>
 <script>
 import './style.less'
+import { findParent, findChildrens } from '../../tools'
 export default {
   name: 'XMenu',
   props: {
@@ -21,22 +22,17 @@ export default {
       }
     },
     activeName: [String, Number],
-    openNames: {
-      type: Array,
-      default: () => []
-    },
-    accordion: { type: Boolean, default: true },
-    width: {
-      type: String,
-      default: '240px'
-    }
+    openNames: { type: Array, default: () => [] },
+    accordion: Boolean,
+    width: { type: String, default: '240px' }
   },
   data() {
     return { prefix: 'x-menu', openedNames: this.openNames, activedItemName: this.activeName }
   },
   computed: {
     classes() {
-      return [this.prefix, `${this.prefix}_${this.mode}`, `${this.prefix}_${this.theme}`]
+      let { prefix } = this
+      return [prefix, `${prefix}_${this.mode}`, `${prefix}_${this.theme}`]
     },
     styles() {
       return this.mode === 'vertical' && { width: this.width }
@@ -44,36 +40,35 @@ export default {
   },
   watch: {
     openedNames(val) {
-      this.onOpenChange()
+      this.$emit('on-open-change', val)
     }
   },
   methods: {
-    updateOpened(names = []) { // 更新展开的子目录 -> API方法 名字不可修改
-      this.openedNames = names
-      this.$emit('update:openNames', names)
-    },
-    updateActiveName(name) { // 更新当前选择项 -> API方法 名字不可修改
+    updateActiveName(name) {
       this.activedItemName = name
-      this.$emit('update:activeName', name)
     },
-    toggleSubmenu(name) {
-      let index = this.openedNames.indexOf(name)
-      if (this.accordion) {
-        this.openedNames = index === -1 ? [name] : []
-      } else {
-        if (index === -1) {
-          this.openedNames.push(name)
-        } else {
+    toggleSubmenu(vm) {
+      let index = this.openedNames.indexOf(vm.name)
+      if (this.accordion || 2) {
+        const parent = findParent(vm, 'XSubmenu') || this
+        const siblings = findChildrens(parent, 'XSubmenu')
+        const children = findChildrens(vm, 'XSubmenu')
+        if (index > -1) {
           this.openedNames.splice(index, 1)
+          children.forEach(_ => {
+            let i = this.openedNames.indexOf(_.name)
+            if (i > -1) this.openedNames.splice(i, 1)
+          })
+        } else {
+          siblings.forEach(_ => {
+            let i = this.openedNames.indexOf(_.name)
+            if (i > -1) this.openedNames.splice(i, 1)
+          })
+          this.openedNames.push(vm.name)
         }
+      } else {
+        index < 0 ? this.openedNames.push(vm.name) : this.openedNames.splice(index, 1)
       }
-      this.$emit('update:openNames', this.openedNames)
-    },
-    onOpenChange() {
-      this.$emit('on-open-change', this.openedNames)
-    },
-    onSelect(name) {
-      this.$emit('on-select', name)
     }
   }
 }

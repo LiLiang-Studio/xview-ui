@@ -4,17 +4,22 @@
       <x-icon v-if="!hideArrow" :class="[`${prefix}_icon`, {expand}]" type="ios-arrow-forward"/>
       <slot></slot>
     </div>
-    <div v-show="expand" :class="`${prefix}_content`">
-      <slot name="content"></slot>
-    </div>
+    <x-collapse-transition>
+      <div v-show="expand" :class="`${prefix}_body`">
+        <div :class="`${prefix}_content`">
+          <slot name="content"></slot>
+        </div>
+      </div>
+    </x-collapse-transition>
   </div>
 </template>
 <script>
 import XIcon from '../icon'
+import XCollapseTransition from '../collapse-transition'
 import { findParent } from '../../tools'
 export default {
   name: 'XPanel',
-  components: { XIcon },
+  components: { XIcon, XCollapseTransition },
   props: { name: String, hideArrow: Boolean },
   data() {
     return { prefix: 'x-panel' }

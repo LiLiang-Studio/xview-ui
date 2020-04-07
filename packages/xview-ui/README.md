@@ -11,7 +11,7 @@
 
 > Like iview with usage, but it is more lightweight and has better performance.
 
-> Demo address [xview-ui](https://liliang2019.gitee.io/xview-ui)
+> Demo address [https://liliang2019.gitee.io/xview-ui](https://liliang2019.gitee.io/xview-ui)
 
 ### Install
 

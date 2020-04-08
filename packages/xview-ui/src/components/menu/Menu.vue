@@ -47,27 +47,31 @@ export default {
     updateActiveName(name) {
       this.activedItemName = name
     },
+    addOpenedNames(name) {
+      this.openedNames.push(name)
+    },
+    removeOpenedNames(vms) {
+      vms.forEach(_ => {
+        let i = this.openedNames.indexOf(_.name)
+        i > -1 && this.openedNames.splice(i, 1)
+      })
+    },
     toggleSubmenu(vm) {
       let index = this.openedNames.indexOf(vm.name)
-      if (this.accordion || 2) {
-        const parent = findParent(vm, 'XSubmenu') || this
-        const siblings = findChildrens(parent, 'XSubmenu')
-        const children = findChildrens(vm, 'XSubmenu')
-        if (index > -1) {
-          this.openedNames.splice(index, 1)
-          children.forEach(_ => {
-            let i = this.openedNames.indexOf(_.name)
-            if (i > -1) this.openedNames.splice(i, 1)
-          })
-        } else {
-          siblings.forEach(_ => {
-            let i = this.openedNames.indexOf(_.name)
-            if (i > -1) this.openedNames.splice(i, 1)
-          })
+      if (this.accordion) {
+        const siblings = vm.getSiblings()
+        if (index < 0) { // 不在里面 -> 添加到里面并折叠兄弟及其所有子菜单
+          this.removeOpenedNames(siblings.reduce((acc, _) => [...acc, ..._.getSubAll()], siblings))
           this.openedNames.push(vm.name)
+        } else { // 在里面 -> 移除其及其所有子菜单
+          this.removeOpenedNames([vm, ...vm.getSubAll()])
         }
       } else {
-        index < 0 ? this.openedNames.push(vm.name) : this.openedNames.splice(index, 1)
+        if (index < 0) {
+          this.openedNames.push(vm.name)
+        } else {
+          this.removeOpenedNames([vm, ...vm.getSubAll()])
+        }
       }
     }
   }

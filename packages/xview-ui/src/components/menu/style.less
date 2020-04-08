@@ -133,7 +133,7 @@
     overflow: hidden;
     transition: height .22s ease-in-out;
   }
-  @{menuItem}, @{submenu}_title {
+  @{menuItem}, @{submenu}_title, @{menuGroup}_title {
     padding: 14px 24px;
   }
   @{menuItem} {
@@ -152,11 +152,6 @@
   }
   @{submenu}_spring {
     flex: 1;
-  }
-  @{menuGroup}_title {
-    height: 48px;
-    line-height: 48px;
-    padding-left: 24px;
   }
   &@{menu}_light {
     @{menuItem} {

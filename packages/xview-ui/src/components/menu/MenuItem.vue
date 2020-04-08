@@ -1,11 +1,13 @@
 <template>
-  <li :class="['x-menu-item', {active}]" @click="onClick">
+  <li :class="['x-menu-item', {active}]" :style="titleStyle" @click="onClick">
     <slot></slot>
   </li>
 </template>
 <script>
 import { findParent } from '../../tools'
+import { watchMode } from './utils'
 export default {
+  mixins: [watchMode],
   name: 'XMenuItem',
   props: {
     name: [String, Number]

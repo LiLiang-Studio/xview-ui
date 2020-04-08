@@ -9,7 +9,7 @@
     </ul>
   </x-popper>
   <li v-else :class="prefix">
-    <div :class="titleClass" @click="onTitleClick">
+    <div :class="titleClass" :style="titleStyle" @click="onTitleClick">
       <slot name="title"></slot>
       <span :class="`${prefix}_spring`"></span>
       <x-icon :class="[`${prefix}_arrow`, {isOpened}]" type="ios-arrow-down"/>
@@ -26,14 +26,16 @@ import XIcon from '../icon'
 import XPopper from '../popper'
 import XCollapseTransition from '../collapse-transition'
 import { findParent, findChildrens } from '../../tools'
+import { watchMode } from './utils'
 export default {
+  mixins: [watchMode],
   name: 'XSubmenu',
   components: { XIcon, XPopper, XCollapseTransition },
   props: {
     name: [String, Number]
   },
   data() {
-    return { prefix: 'x-submenu', visible: false, active: false, isOpened: false, isHor: false, listStyle: null }
+    return { prefix: 'x-submenu', visible: false, active: false, isOpened: false, listStyle: null }
   },
   computed: {
     popperProps() {
@@ -45,11 +47,6 @@ export default {
   },
   mounted() {
     const menu = findParent(this, 'XMenu')
-    this.unwatchMode = this.$watch(
-      () => menu.mode,
-      val => this.isHor = val === 'horizontal',
-      { immediate: true }
-    )
     this.unwatchActivedName = this.$watch(
       () => menu.activedItemName,
       val => this.active = findChildrens(this, 'XMenuItem').some(_ => _.name === val),
@@ -57,14 +54,16 @@ export default {
     )
     this.unwatchOpenedNames = this.$watch(
       () => menu.openedNames,
-      val => this.isOpened = val.indexOf(this.name) > -1
-        // || findChildrens(this, 'XSubmenu').some(_ => val.indexOf(_.name) > -1)
-        ,
+      val => {
+        if (menu.openedNames.indexOf(this.name) < 0 && this.hasExpandedChild()) {
+          menu.addOpenedNames(this.name)
+        }
+        this.isOpened = val.indexOf(this.name) > -1
+      },
       { immediate: true }
     )
   },
   beforeDestroy() {
-    this.unwatchMode()
     this.unwatchActivedName()
     this.unwatchOpenedNames()
   },
@@ -84,6 +83,25 @@ export default {
     },
     onTitleClick() {
       findParent(this, 'XMenu').toggleSubmenu(this)
+    },
+    getSubAll() {
+      let arr = [], waitCheck = findChildrens(this, 'XSubmenu')
+      while (waitCheck.length) {
+        let current = waitCheck.pop()
+        arr.push(current)
+        waitCheck.push(...findChildrens(current, 'XSubmenu'))
+      }
+      return arr
+    },
+    getSiblings() {
+      return findChildrens(
+        findParent(this, 'XSubmenu') || findParent(this, 'XMenu'),
+        'XSubmenu'
+      ).filter(_ => _.name !== this.name)
+    },
+    hasExpandedChild() {
+      const menu = findParent(this, 'XMenu')
+      return this.getSubAll().some(_ => menu.openedNames.indexOf(_.name) > -1)
     }
   }
 }

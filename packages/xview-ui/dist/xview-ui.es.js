@@ -1,5 +1,5 @@
 /*!
- * xview-ui v1.5.7
+ * xview-ui v1.5.7-1
  * (c) 2019-2020 LiLiang
  * Released under the MIT License.
  */
@@ -9398,7 +9398,7 @@ var script$V = {
     searchValue: function searchValue(val) {
       var this$1 = this;
 
-      if (this.filterable && val) {
+      if (this.filterable) {
         this.throttleSearch && this.throttleSearch();
         if (this.multiple) {
           this.$nextTick(function () {
@@ -9413,7 +9413,7 @@ var script$V = {
     var this$1 = this;
 
     this.throttleSearch = throttle(function () {
-      if (this$1.remote) {
+      if (this$1.remote && this$1.searchValue) {
         this$1.remoteMethod && this$1.remoteMethod(this$1.searchValue);
       } else {
         var val = (this$1.searchValue + '').toLowerCase();

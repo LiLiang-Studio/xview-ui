@@ -147,7 +147,7 @@ export default {
       val.forEach(_ => _.selected = this.selectedValue.indexOf(_.value) > -1)
     },
     searchValue(val) {
-      if (this.filterable && val) {
+      if (this.filterable) {
         this.throttleSearch && this.throttleSearch()
         if (this.multiple) {
           this.$nextTick(() => {
@@ -160,7 +160,7 @@ export default {
   },
   mounted() {
     this.throttleSearch = throttle(() => {
-      if (this.remote) {
+      if (this.remote && this.searchValue) {
         this.remoteMethod && this.remoteMethod(this.searchValue)
       } else {
         let val = (this.searchValue + '').toLowerCase()

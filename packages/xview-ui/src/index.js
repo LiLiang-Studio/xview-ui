@@ -70,6 +70,9 @@ import Menu from './components/menu' // 菜单
 import Submenu from './components/submenu' // 子菜单
 import MenuItem from './components/menu-item' // 菜单项
 import MenuGroup from './components/menu-group' // 菜单组
+import Select from './components/select' // 下拉选择框
+import Option from './components/option' // 下拉选择框选项
+import OptionGroup from './components/option-group' // 下拉选择框选项组
 
 import loadingBarService from './components/loading-bar' // 加载条
 import Spin from './components/spin' // 加载中
@@ -89,12 +92,8 @@ import FormItem from './components/form-item'
 // import ColorPicker from './components/color-picker'
 // // 级联选择
 // import Cascader from './components/cascader'
-// 下拉选择框
-import Select from './components/select'
-import Option from './components/option'
-import OptionGroup from './components/option-group'
 // 自动完成
-import AutoComplete from './components/auto-complete'
+// import AutoComplete from './components/auto-complete'
 // 表格
 import Table from './components/table/Table.vue'
 // 日期选择器
@@ -169,17 +168,17 @@ const comps = {
   MenuItem,
   Submenu,
   MenuGroup,
+  Select,
+  Option,
+  OptionGroup,
 
   Upload,
   Form,
   FormItem,
   // Cascader,
   // ColorPicker,
-  Select,
-  Option,
-  OptionGroup,
   Table,
-  AutoComplete
+  // AutoComplete
   // ,DatePicker,
   // TimePicker
 }

@@ -3,17 +3,18 @@
     <div class="page-title">Select 选择器</div>
     <p>使用模拟的增强下拉选择器来代替浏览器原生的选择器。选择器支持单选、多选、搜索，以及键盘快捷操作。</p>
 
-    <div class="page-sub-title">
+    <div class="page-sub-title">基础用法</div>
+    <p>
       基本用法。可以使用 v-model 双向绑定数据。
       <br>单选时，value 只接受字符串和数字类型，多选时，只接受数组类型，组件会自动根据Option的value来返回选中的数据。
       <br>可以给Select添加 style 样式，比如宽度。
-      <br>在展开选择器后，可以使用键盘的up和down快速上下选择，按下Enter选择，按下Esc收起选择器。
-    </div>
+      <br>在展开选择器后，可以使用键盘的up和down快速上下选择，按下Enter选择，按下Esc收起选择器。</p><br>
     <Select v-model="model1" style="width:200px">
       <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
     </Select>
 
-    <div class="page-sub-title">通过设置size属性为large和small将输入框设置为大和小尺寸，不设置为默认（中）尺寸。</div>
+    <div class="page-sub-title">尺寸</div>
+    <p>通过设置size属性为large和small将输入框设置为大和小尺寸，不设置为默认（中）尺寸。</p><br>
     <Select v-model="model2" size="small" style="width:100px">
       <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
     </Select>
@@ -24,7 +25,8 @@
       <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
     </Select>
 
-    <div class="page-sub-title">通过给Select设置属性disabled禁用整个选择器。通过给Option设置属性disabled可以禁用当前项。</div>
+    <div class="page-sub-title">禁用</div>
+    <p>通过给Select设置属性disabled禁用整个选择器。通过给Option设置属性disabled可以禁用当前项。</p><br>
     <Select v-model="model5" disabled style="width:200px">
       <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
     </Select>
@@ -34,12 +36,14 @@
       <Option value="shenzhen">Sydney</Option>
     </Select>
 
-    <div class="page-sub-title">通过设置属性clearable可以清空已选项，仅适用于单选模式。</div>
+    <div class="page-sub-title">可清空</div>
+    <p>通过设置属性clearable可以清空已选项，仅适用于单选模式。</p><br>
     <Select v-model="model8" clearable style="width:200px">
       <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
     </Select>
 
-    <div class="page-sub-title">使用OptionGroup可将选项进行分组。</div>
+    <div class="page-sub-title">分组</div>
+    <p>使用OptionGroup可将选项进行分组。</p><br>
     <Select v-model="model7" style="width:200px">
       <OptionGroup label="Hot Cities">
         <Option v-for="item in cityList1" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -71,15 +75,44 @@
       </Option>
     </Select>
 
-    <div class="page-sub-title">通过设置属性multiple可以开启多选模式。多选模式下，model 接受数组类型的数据，所返回的也是数组。</div>
+    <div class="page-sub-title">多选</div>
+    <p>通过设置属性multiple可以开启多选模式。多选模式下，model 接受数组类型的数据，所返回的也是数组。</p><br>
     <Select v-model="model10" multiple style="width:260px">
       <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
     </Select>
 
-    <div class="page-sub-title">
+    <div class="page-sub-title">前缀图标</div>
+    <p>设置 prefix 属性或 slot 可以在 Select 内显示前缀图标。</p><br>
+    <Select v-model="model15" prefix="ios-home" style="width:200px">
+      <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+    </Select>
+    <Select v-model="model15" style="width:200px">
+      <Avatar src="https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar" slot="prefix" size="small" />
+      <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+    </Select>
+
+    <div class="page-sub-title">标签集合</div>
+    <p>
+      设置属性 max-tag-count 可指定最多显示的 tag 数量，超出后折叠。<br>
+      设置属性 max-tag-placeholder 可以自定义 tag 超出后折叠的显示内容。
+    </p><br>
+    <Row>
+      <Col span="12" style="padding-right:10px">
+        <Select v-model="model16" multiple :max-tag-count="2">
+          <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        </Select>
+      </Col>
+      <Col span="12">
+        <Select v-model="model16" multiple :max-tag-count="2" :max-tag-placeholder="maxTagPlaceholder">
+          <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        </Select>
+      </Col>
+    </Row>
+
+    <div class="page-sub-title">可搜索</div>
+    <p>
       通过设置属性filterable可以开启搜索模式。
-      单选和多选都支持搜索模式。多选搜索时，可以使用键盘Delete快捷删除最后一个已选项。
-    </div>
+      单选和多选都支持搜索模式。多选搜索时，可以使用键盘Delete快捷删除最后一个已选项。</p><br>
     <Row>
       <Col span="12" style="padding-right:10px">
         <Select v-model="model11" filterable>
@@ -97,7 +130,7 @@
     <p>
       远程搜索需同时设置 filterable、remote、remote-method、loading 四个 props，其中 loading 用于控制是否正在搜索中，
       remote-method 是远程搜索的方法。注意：需要给 Option 设置 key。设置初始显示值，需设置 label 属性。本例为美国州名，尝试输入一些字母。
-    </p>
+    </p><br>
     <Row>
       <Col span="12" style="padding-right:10px">
         <Select
@@ -209,6 +242,8 @@ export default {
       loading1: false,
       options1: [],
       model14: [],
+      model15: '',
+      model16: [],
       loading2: false,
       options2: [],
       list: [
@@ -303,6 +338,9 @@ export default {
       } else {
         this.options2 = [];
       }
+    },
+    maxTagPlaceholder (num) {
+      return 'more '+ num;
     }
   }
 };

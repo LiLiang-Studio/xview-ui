@@ -1,192 +1,140 @@
 <template>
-  <div class="ui-select" :class="{disabled}">
-    <!-- 选择框 -->
-    <div class="ui-select-selection" tabindex="0"
-      :class="[size, {isCollapsed, clearable: showClear, multiple, filterable, disabled}]"
-      @click="toggleCollapse" @focus="handleFocus" @keydown="handleKeydown">
-      <!-- 多选 -->
-      <template v-if="multiple">
-        <ui-tag closable v-for="item in selectedItems" 
-          :key="item.value" :fade="false" @on-close="removeSelectedItem(item)">
-          {{item.label || item.value}}
-        </ui-tag>
-        <!-- 占位 -->
-        <input class="ui-select-search placeholder" readonly 
-          v-if="!(filterable || selectedItems.length)" :placeholder="placeholder">
-        <!-- 搜索框 -->
-        <input ref="Input" class="ui-select-search"
-          v-if="filterable" v-model="searchValue"
-          :style="multipleInputStyles" :placeholder="multiplePlaceholder"
-          @blur="handleSearchBlur">
-        <!-- 测输入框内容宽度文本 -->
-        <span class="ui-select-search-text" ref="SearchText">{{searchText}}</span>
-      </template>
-      <!-- 单选 -->
-      <div class="ui-select-single" v-else>
-        <!-- 搜索框 -->
-        <input ref="Input" class="ui-select-search" 
-          v-if="filterable" v-model="searchValue" :placeholder="placeholder" @blur="handleSearchBlur">
-        <!-- 标签 -->
-        <template v-else>
-          <span class="ui-select-label" v-if="selectedLabelOfSingle">{{selectedLabelOfSingle}}</span>
-          <span class="ui-select-placeholder" v-else>{{placeholder}}</span>
+  <div :class="prefixCls">
+    <x-popper v-bind="popperProps" @clickoutside="onClickoutside">
+      <div tabindex="0" slot="reference" :class="boxClass" @click="onToggle" @focus="onFocus" @keydown="onKeydown">
+        <template v-if="multiple">
+          <x-tag closable :fade="false"
+            v-for="_ in selectedValue" :key="_" @on-close.stop="removeSelected(_)">{{getLabel(_)}}</x-tag>
+          <input v-if="!filterable && !selectedValue.length"
+            :class="`${prefixCls}_input placeholder`" readonly :placeholder="placeholder">
+          <input v-if="filterable" ref="Input" :class="`${prefixCls}_input`" v-model="searchValue"
+            :style="inputStyle" :placeholder="inputPlaceholder" @blur="onInputBlur">
+          <span :class="`${prefixCls}_inputText`" ref="SearchText">{{searchText}}</span>
         </template>
+        <template v-else>
+          <input v-if="filterable"
+            ref="Input" :class="`${prefixCls}_input`" :placeholder="placeholder" v-model="searchValue" @blur="onInputBlur">
+          <template v-else>
+            <span v-if="selectedValue.length" :class="`${prefixCls}_label`">{{singleLabel}}</span>
+            <span v-else :class="`${prefixCls}_placeholder`">{{placeholder}}</span>
+          </template>
+        </template>
+        <div :class="`${prefixCls}_arrow`">
+          <x-icon :class="`${prefixCls}_clearIcon`" type="ios-close" @click.native.stop="onClear"/>
+          <x-icon :class="`${prefixCls}_downIcon`" type="ios-arrow-down"/>
+        </div>
       </div>
-      <!-- 箭头图标 -->
-      <div class="ui-select-arrow">
-        <UiIcon class="ui-select-clear-icon" type="ios-close" @click.native.stop="clearValue"/>
-        <UiIcon class="ui-select-down-icon" type="arrow-down-b"/>
-      </div>
-    </div>
-    <!-- 选项列表 -->
-    <ui-option-list ref="UiOptionList" :visible="isCollapsed">
-      <span v-if="isEmpty" slot="empty">{{loading ? loadingText : notFoundText}}</span>
-      <ul><slot></slot></ul>
-    </ui-option-list>
+      <ul :class="[`${prefixCls}_options`, {multiple}]" :style="listStyle">
+        <slot>
+          <li :class="`${prefixCls}_empty`">{{loading ? loadingText : notFoundText}}</li>
+        </slot>
+      </ul>
+    </x-popper>
   </div>
 </template>
 <script>
-import UiTag from '../tag'
-import UiIcon from '../icon'
-import UiOptionList from './OptionList.vue'
-import { hasClassNameOfParent, findParentByClassName, isSelfOrParent } from './../../utils'
-
-// 目标选项列表组件
-let currentSelect = null
-
-/**
- * 关闭目标选项列表下拉框
- * @param {MouseEvent} event
- */
-function closeSelect(event) {
-  if (!(currentSelect && currentSelect.isCollapsed)) return
-  let domSelect = findParentByClassName(event.target, 'ui-select')
-  let isDropdown = hasClassNameOfParent(event.target, 'ui-select-dropdown')
-  let isDisabled = domSelect && domSelect.classList.contains('disabled')
-  if (isDropdown || (domSelect && !isDisabled)) return
-  currentSelect.$data.isCollapsed = false
-}
-
-/**
- * 添加窗口单击事件监听器
- */
-function addDocClickListener() {
-  // console.log('监听器被添加')
-  window.addEventListener('click', closeSelect)
-}
-
-/**
- * 移除窗口单击事件监听器
- */
-function removeDocClickListener() {
-  // console.log('监听器被移除')
-  window.removeEventListener('click', closeSelect)
-}
-
-addDocClickListener()
-
+import XTag from '../tag'
+import XIcon from '../icon'
+import XPopper from '../popper'
+const N = Number, S = String, B = Boolean
 export default {
-  name: 'ui-select',
-  components: { UiTag, UiIcon, UiOptionList },
+  name: 'XSelect',
+  components: { XTag, XIcon, XPopper },
+  props: {
+    value: [S, N, Array],
+    multiple: B,
+    disabled: B,
+    clearable: B,
+    filterable: B,
+    remote: B,
+    remoteMethod: Function,
+    loading: B,
+    loadingText: { type: S, default: '加载中' },
+    label: [S, N, Array],
+    size: {
+      validator(v) {
+        return ['large', 'small', 'default'].indexOf(v) > -1
+      }
+    },
+    placeholder: { type: S, default: '请选择' },
+    notFoundText: { type: S, default: '无匹配数据' },
+    labelInValue: B,
+    prefix: S,
+    maxTagCount: N,
+    maxTagPlaceholder: Function,
+    allowCreate: B
+  },
   data() {
     return {
-      isCollapsed: false, // 是否展开下拉列表
-      selectedItem: {}, // 选择的item，单选
-      selectedItems: [], // 选择的items，多选
-      children: [], // Option组件数组
-      searchValue: '' // 搜索值
-    }
-  },
-  props: {
-    value: [String, Number, Array],
-    multiple: Boolean,
-    disabled: Boolean,
-    clearable: Boolean,
-    filterable: Boolean,
-    remote: Boolean,
-    remoteMethod: Function,
-    loading: Boolean,
-    loadingText: {
-      type: String,
-      default: '加载中'
-    },
-    label: [String, Number, Array],
-    size: {
-      validator(value) {
-        return ['large', 'small', 'default'].indexOf(value) !== -1
-      }
-    },
-    placeholder: {
-      type: String,
-      default: '请选择'
-    },
-    notFoundText: {
-      type: String,
-      default: '无匹配数据'
-    },
-    placement: {
-      default: 'bottom',
-      validator(value) {
-        return ['bottom', 'top'].indexOf(value) !== -1
-      }
+      visible: false,
+      prefixCls: 'x-select',
+      listStyle: null,
+      selectedValue: this.getModel(),
+      children: [],
+      searchValue: ''
     }
   },
   computed: {
-    /**
-     * 单选选中的标签
-     */
-    selectedLabelOfSingle() {
-      return this.selectedItem.label || this.selectedItem.value
+    popperProps() {
+      return {
+        ...this.$attrs,
+        ref: 'Popper',
+        adaptive: false,
+        visible: this.visible,
+        placement: 'bottom-start',
+        transitionName: 'x-animate-dropdown'
+      }
     },
-    /**
-     * 是否显示清除按钮
-     */
-    showClear() {
-      return this.clearable && (this.multiple ? this.selectedItems.length : this.selectedItem.value)
+    boxClass() {
+      return [
+        `${this.prefixCls}_selection`,
+        this.size && `${this.prefixCls}_${this.size}`,
+        {
+          listVisible: this.visible,
+          disabled: this.disabled,
+          multiple: this.multiple,
+          filterable: this.filterable,
+          clearable: this.clearable && this.selectedValue.length
+        }
+      ]
     },
-    isEmpty() {
-      return this.children.every(_ => _.isDelete)
+    inputStyle() {
+      return this.selectedValue.length && { width: '20px' }
     },
-    multipleInputStyles() {
-      return this.selectedItems.length ? { width: '20px' } : {}
-    },
-    multiplePlaceholder() {
-      return this.selectedItems.length === 0 && this.placeholder
+    inputPlaceholder() {
+      return !this.selectedValue.length && this.placeholder
     },
     searchText() {
       return this.searchValue.replace(/\s/gm, val => '&nbsp;')
+    },
+    singleLabel() {
+      let vm = this.children.find(_ => this.selectedValue.indexOf(_.value) > -1)
+      return vm && (vm.label || vm.value)
     }
   },
   watch: {
-    /**
-     * 值改变
-     */
-    value(newVal) {
-      this.updateModel(newVal)
-    },
-    /**
-     * 选择的值改变，单选
-     */
-    selectedItem(newVal) {
-      this.syncModel()
-    },
-    /**
-     * 选择的值改变，多选
-     */
-    selectedItems(newVal) {
-      if (this.isCollapsed) {
-        this.$nextTick(() => this.$refs.UiOptionList.updatePosition())
+    visible(val) {
+      if (val) {
+        this.$nextTick(() => this.listStyle = { minWidth: `${this.$el.offsetWidth}px` })
       }
     },
-    /**
-     * 搜索值改变
-     */
+    value: 'updateModel',
+    selectedValue(val) {
+      this.$emit('input', this.multiple ? val : val[0])
+      this.children.forEach(_ => _.selected = val.indexOf(_.value) > -1)
+      if (this.multiple && this.visible) {
+        clearTimeout(this.tid)
+        this.tid = setTimeout(() => this.$refs.Popper.update(), 50)
+      }
+    },
+    children(val) {
+      val.forEach(_ => _.selected = this.selectedValue.indexOf(_.value) > -1)
+    },
+
     searchValue(newVal) {
       if (!this.filterable) return
-      // 远程搜索
       if (this.remote) {
         this.remoteMethod && this.remoteMethod(newVal)
-      // 本地搜索
       } else {
         let _newVal = newVal.toLowerCase()
         this.children.forEach(_ => {
@@ -196,157 +144,99 @@ export default {
         })
       }
       if (!this.multiple) return
-      // 更新文本框框宽度
       this.$nextTick(() => {
         this.$refs.Input.style.width = 
-          newVal || this.selectedItems.length ? 
+          newVal || this.selectedValue.length ? 
           Math.min(this.$refs.SearchText.offsetWidth, this.$el.offsetWidth - 25) + 'px' : ''
       })
     }
   },
   methods: {
-    /**
-     * 显示所有Option组件
-     */
+    getModel() {
+      return this.multiple ? this.value : ['', null, undefined].indexOf(this.value) < 0 ? [this.value] : []
+    },
+    updateModel(val) {
+      this.selectedValue = this.getModel(val)
+    },
+    updateSelected(val) {
+      if (this.multiple) {
+        this.filterable && this.$refs.Input.focus()
+        let index = this.selectedValue.indexOf(val)
+        index < 0 ? this.selectedValue.push(val) : this.selectedValue.splice(index, 1)
+      } else {
+        this.visible = false
+        this.selectedValue = [val]
+      }
+      this.children.forEach(_ => _.focus = _.value === val)
+    },
+    removeSelected(val) {
+      this.selectedValue.splice(this.selectedValue.indexOf(val), 1)
+    },
+    addItem(vm) {
+      this.children.push(vm)
+    },
+    removeItem(vm) {
+      this.children.splice(this.children.indexOf(vm), 1)
+    },
+    getLabel(value) {
+      let vm = this.children.find(_ => _.value === value)
+      return vm ? vm.label || vm.value : value
+    },
+    onClickoutside() {
+      this.visible = false
+    },
+    onToggle() {
+      this.visible = !this.visible
+    },
+
+    onClear() {
+      this.selectedValue = []
+    },
     showAll() {
       this.children.forEach(_ => _.$data.isDelete = false)
     },
-    /**
-     * 切换显示和隐藏选项列表
-     */
-    toggleCollapse(flag) {
-      if (this.disabled) return
-      this.isCollapsed = typeof flag === 'boolean' ? flag : !this.isCollapsed
-      if (this.isCollapsed) {
-        if (currentSelect && currentSelect !== this) {
-          currentSelect.$data.isCollapsed = false
-        }
-        currentSelect = this
-        this.showAll()
-      }
-      this.$emit('on-open-change', this.isCollapsed)
-    },
-    /**
-     * 是否被选中的Option组件
-     * @param {Vue.default} vm
-     */
-    isSelectedChild(vm) {
-      return this.multiple ? this.inSelectedItems(vm.value) : this.selectedItem.value === vm.value
-    },
-    /**
-     * 是否在选择的items中
-     * @param {String|Number} value
-     */
-    inSelectedItems(value) {
-      return this.selectedItems.some(_ => _.value === value)
-    },
-    /**
-     * 根据值，移除选择的item
-     * @param {String|Number} value
-     */
-    removeSelectedItemByValue(value) {
-      let index = this.selectedItems.map(_ => _.value).indexOf(value)
-      this.selectedItems.splice(index, 1)
-    },
-    /**
-     * 移除选择的item
-     * @param {Object} item
-     */
-    removeSelectedItem(item) {
-      this.selectedItems.splice(this.selectedItems.indexOf(item), 1)
-      this.syncModel()
-    },
-    /**
-     * 添加选择的item
-     */
-    addSelectedItem(value, label) {
-      this.selectedItems.push({ value, label })
-    },
-    /**
-     * 更新选择的值
-     * @param {Vue.default} vm
-     */
-    updateSelectedValue(vm) {
-      if (this.multiple) {
-        this.filterable && this.$refs.Input.focus()
-        this.inSelectedItems(vm.value) ? this.removeSelectedItemByValue(vm.value) : this.addSelectedItem(vm.value, vm.label)
-        this.syncModel()
-      } else {
-        this.isCollapsed = false
-        this.selectedItem = { value: vm.value, label: vm.label }
-        if (this.filterable) {
-          this.searchValue = this.getCheckedTextOfSingle()
-        }
-      }
-    },
     getCheckedTextOfSingle() {
-      return (this.selectedItem.label || this.selectedItem.value) + ''
+      return ''
     },
-    /**
-     * 添加Option组件实例
-     * @param {Vue.default} vm
-     */
-    addChild(vm) {
-      this.children.push(vm)
-    },
-    /**
-     * 移除Option组件实例
-     * @param {Vue.default} vm
-     */
-    removeChild(vm) {
-      this.children.splice(this.children.indexOf(vm), 1)
-    },
-    /**
-     * 清除选中的值
-     */
-    clearValue() {
-      if (this.multiple) {
-        this.selectedItems = []
-      } else {
-        this.selectedItem = {}
-      }
-      this.isCollapsed = false
-    },
-    /**
-     * 选择框得到焦点处理
-     */
-    handleFocus() {
+    onFocus() {
       if (this.filterable) this.$refs.Input.focus()
     },
     /**
-     * 选择框键盘按下事件处理
-     * @param {KeyboardEvent} event
+     * @param {KeyboardEvent} e
      */
-    handleKeydown(event) {
+    onKeydown(e) {
       const K_UP = 38, K_DOWN = 40, K_ESC = 27, K_ENTER = 13, K_DEL = 46, K_BACKSPACE = 8
-      let { keyCode } = event
+      let { keyCode } = e
       if ([K_UP, K_DOWN, K_ESC].indexOf(keyCode) !== -1) {
-        event.preventDefault()
+        e.preventDefault()
       }
       if (keyCode === K_ENTER) {
-        this.isCollapsed && this.updateValueByFocusOption()
+        this.visible && this.updateValueByFocusOption()
       } else if (keyCode === K_UP) {
-        if (this.isCollapsed) this.setOptionFocus('up')
+        if (this.visible) this.setOptionFocus('up')
       } else if (keyCode === K_DOWN) {
-        this.isCollapsed ? this.setOptionFocus() : this.toggleCollapse(true)
+        if (this.visible) {
+          this.setOptionFocus()
+        } else {
+          this.visible = true
+        }
       } else if (keyCode === K_ESC) {
-        this.isCollapsed = false
+        this.visible = false
       } else if (keyCode === K_DEL || keyCode === K_BACKSPACE) {
         if (!(this.multiple && this.filterable) || this.searchValue) return
-        this.selectedItems.pop()
+        this.selectedValue.pop()
       }
     },
     /**
-     * 获取得到焦点的Option
+     * @param {MouseEvent} event
      */
+    onInputBlur(e) {
+      
+    },
     updateValueByFocusOption() {
       let vm =  this.children.find(_ => _.focus)
-      if (vm) this.updateSelectedValue(vm)
+      if (vm) this.updateSelected(vm.value)
     },
-    /**
-     * 设置焦点Option
-     * @param {String} dir
-     */
     setOptionFocus(dir = 'down') {
       let arr = this.children.filter(_ => !_.isDelete)
       let len = arr.length
@@ -369,175 +259,160 @@ export default {
       let vm = arr[focusIndex]
       vm.$data.focus = true
       vm.$el.scrollIntoViewIfNeeded()
-    },
-    /**
-     * 搜索框失去焦点处理
-     * @param {MouseEvent} event
-     */
-    handleSearchBlur(event) {
-      if (!this.filterable || this.multiple) return
-      let { relatedTarget } = event
-      if (
-        relatedTarget && 
-        (isSelfOrParent(this.$el, relatedTarget) || 
-        isSelfOrParent(this.$refs.UiOptionList.$el, relatedTarget))
-      ) return
-      this.searchValue = this.getCheckedTextOfSingle()
-    },
-    /**
-     * 更新模型数据
-     * @param {String|Number|Array} value
-     */
-    updateModel(value) {
-      if (this.multiple) {
-        this.selectedItems = value.map(_ => ({ value: _, label: this.getLabelByValue(_) }))
-      } else {
-        this.selectedItem = { value, label: this.getLabelByValue(value) }
-      }
-    },
-    /**
-     * 向父组件同步模型数据
-     */
-    syncModel() {
-      let value = this.multiple ? this.selectedItems.map(_ => _.value) : this.selectedItem.value
-      this.$emit('input', value)
-      this.$emit('on-change', value)
-    },
-    /**
-     * 通过值获取标签
-     * @param {String|Number} value
-     */
-    getLabelByValue(value) {
-      let vm = this.children.find(_ => _.value === value)
-      return vm && vm.label
     }
-  },
-  mounted() {
-    this.updateModel(this.value)
-  },
-  beforeDestroy() {
-    if (currentSelect === this) currentSelect = null
   }
 }
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-select {
+@prefix: .x-select;
+@{prefix} {
+  width: 100%;
   display: inline-block;
-  width: 100%;
   vertical-align: middle;
-}
-
-.ui-select-selection {
-  height: @form-control-normal;
-  border: 1px solid @border-color;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: border .2s ease-in-out;
-  position: relative;
-  outline: none;
-  background-color: #fff;
-  transition: all .2s ease-in-out;
-  padding: 0 24px 0 8px;
-  &.large {
-    height: @form-control-large;
+  .x-popper, .x-popper_reference {
+    width: 100%;
   }
-  &.small {
-    height: @form-control-small;
-  }
-  &.multiple {
-    height: auto;
-    padding-left: 4px;
-    min-height: @form-control-normal;
-    &.large {
-      min-height: @form-control-large;
+  &_selection {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    background: #fff;
+    border-radius: 4px;
+    height: @size-normal;
+    padding: 0 24px 0 8px;
+    color: @content-color;
+    border: 1px solid @border-color;
+    transition: all .2s ease-in-out;
+    &.listVisible {
+      .control-shadow(@primary-color);
+      @{prefix}_arrow {
+        transform: rotate(180deg);
+      }
     }
-    &.small {
-      min-height: @form-control-small;
+    &.multiple {
+      height: auto;
+      padding-left: 4px;
+      min-height: @size-normal;
+      @{prefix}_input {
+        height: @size-normal;
+      }
     }
-    .ui-select-search {
-      height: @form-control-normal - 2px;
+    &:hover:not(.disabled), &:focus:not(.disabled), &.listVisible {
+      border-color: @primary-color;
     }
-  }
-  &:focus:not(.disabled), &:hover:not(.disabled), &.isCollapsed {
-    border-color: @primary-color;
-  }
-  &.clearable:hover:not(.disabled) {
-    .ui-select-clear-icon {
-      display: inline-block;
+    &.clearable:hover:not(.disabled) {
+      @{prefix}_clearIcon {
+        display: inline-block;
+      }
+      @{prefix}_downIcon {
+        display: none;
+      }
     }
-    .ui-select-down-icon {
-      display: none;
-    }
-  }
-  &.isCollapsed {
-    .form-control-shadow(@primary-color);
-    .ui-select-arrow {
-      transform: rotate(180deg);
-    }
-  }
-  &.disabled {
-    &, .ui-select-input {
+    &.disabled {
       cursor: not-allowed;
+      color: @disabled-color;
+      background: lighten(@disabled-color, 18%);
     }
-    background-color: @disabled-bg-color;
+    .x-tag {
+      margin: 3px 4px 3px 0;
+    }
   }
-  .ui-tag {
-    margin: 3px 4px 3px 0;
+  &_small {
+    height: @size-small;
   }
-}
-
-.ui-select-search-text {
-  position: absolute;
-  top: 0;
-  left: 0;
-  min-width: 20px;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-.ui-select-clear-icon {
-  display: none;
-}
-
-.ui-select-single {
-  height: 100%;
-  color: @content-color;
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-}
-
-.ui-select-placeholder {
-  color: @disabled-color;
-}
-
-.ui-select-search {
-  width: 100%;
-  height: 100%;
-  outline: none;
-  border: none;
-  color: @content-color;
-  font-size: 12px;
-  &::placeholder {
+  &_large {
+    height: @size-large;
+  }
+  &_inputText {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 20px;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  &_clearIcon {
+    display: none;
+  }
+  &_downIcon {
+    font-weight: bold;
+  }
+  &_placeholder {
     color: @disabled-color;
   }
-  &.placeholder {
-    cursor: pointer;
+  &_input {
+    width: 100%;
+    height: 100%;
+    outline: none;
+    border: none;
+    color: @content-color;
+    font-size: 12px;
+    &::placeholder {
+      color: @disabled-color;
+    }
+    &.placeholder {
+      cursor: pointer;
+    }
   }
-}
-
-.ui-select-arrow {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: @sub-color;
-  font-size: 14px;
-  transition: transform .2s ease-in-out;
+  &_arrow {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: @sub-color;
+    font-size: 14px;
+    transition: transform .2s ease-in-out;
+  }
+  &-option {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    list-style: none;
+    padding: 7px 16px;
+    line-height: 1.2;
+    &.focus:not(.disabled), &:hover:not(.disabled) {
+      background: darken(@bg-color, 2%);
+    }
+    &.selected:not(.disabled) {
+      color: @primary-color;
+    }
+    &.disabled {
+      cursor: not-allowed;
+      color: @disabled-color;
+    }
+    &_content {
+      flex: 1;
+    }
+    &_doneIcon {
+      margin-left: 16px;
+    }
+    &-group_title {
+      padding-left: 8px;
+      color: #999;
+      font-size: 12px;
+      height: 30px;
+      line-height: 30px;
+    }
+  }
+  &_options {
+    padding: 5px 0;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  &_options:not(.multiple) &-option_doneIcon {
+    display: none;
+  }
+  &_empty {
+    text-align: center;
+    color: @disabled-color;
+  }
 }
 </style>

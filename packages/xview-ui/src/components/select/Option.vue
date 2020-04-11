@@ -1,82 +1,55 @@
 <template>
-  <li class="ui-select-option" tabindex="-1" v-if="!isDelete" :class="{selected, multiple, focus, disabled}" @click="handleClick">
-    <slot>{{label || value}}</slot>
-    <UiIcon v-if="selected && multiple" class="ui-select-option-icon" type="android-done"/>
+  <li :class="classes" v-if="!removed" @click="onClick">
+    <div :class="`${prefix}_content`">
+      <slot>{{label || value}}</slot>
+    </div>
+    <x-icon v-if="selected" :class="`${prefix}_doneIcon`" type="android-done"/>
   </li>
 </template>
 <script>
-import UiIcon from '../icon'
+import XIcon from '../icon'
 import { findParent } from '../../tools'
 export default {
-  name: 'ui-select-option',
-  components: { UiIcon },
+  name: 'XOption',
+  components: { XIcon },
+  props: {
+    label: String,
+    disabled: Boolean,
+    tag: [String, Number],
+    value: [String, Number]
+  },
   data() {
     return {
-      parent: null,
-      isDelete: false,
-      focus: false
+      focus: false,
+      removed: false,
+      selected: false,
+      prefix: 'x-select-option'
     }
-  },
-  props: {
-    value: [String, Number],
-    label: String,
-    disabled: Boolean
   },
   computed: {
-    selected() {
-      return this.parent && this.parent.isSelectedChild(this)
-    },
-    multiple() {
-      return this.parent && this.parent.multiple
-    }
-  },
-  methods: {
-    handleClick() {
-      if (this.disabled) return
-      if (this.parent) this.parent.updateSelectedValue(this)
+    classes() {
+      return [
+        this.prefix,
+        {
+          focus: this.focus,
+          selected: this.selected,
+          disabled: this.disabled
+        }
+      ]
     }
   },
   mounted() {
-    this.parent = findParent(this, 'ui-select')
-    this.parent && this.parent.addChild(this)
+    this.parent = findParent(this, 'XSelect')
+    this.parent.addItem(this)
   },
   beforeDestroy() {
-    this.parent && this.parent.removeChild(this)
+    this.parent.removeItem(this)
+    this.parent = null
+  },
+  methods: {
+    onClick() {
+      if (!this.disabled) this.parent.updateSelected(this.value)
+    }
   }
 }
 </script>
-<style lang="less">
-@import url("../../styles/vars.less");
-.ui-select-option {
-  padding: 7px 16px;
-  list-style: none;
-  outline: none;
-  cursor: pointer;
-  line-height: 1.2;
-  position: relative;
-  &.focus:not(.disabled), &:hover:not(.disabled) {
-    background-color: @disabled-bg-color;
-  }
-  &.selected:not(.multiple):not(.disabled) {
-    color: #fff;
-    background-color: @primary-color;
-    &.focus {
-      background-color: darken(@primary-color, 8%);
-    }
-  }
-  &.disabled {
-    color: @disabled-color;
-    cursor: not-allowed;
-  }
-  &.selected.multiple {
-    color: @primary-color;
-  }
-}
-
-.ui-select-option-icon {
-  position: absolute;
-  top: 8px;
-  right: 16px;
-  font-size: 14px;
-}
-</style>

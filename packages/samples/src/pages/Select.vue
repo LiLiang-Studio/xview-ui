@@ -143,6 +143,7 @@
           <Option
             v-for="(option, index) in options1"
             :value="option.value"
+            :label="option.label"
             :key="index"
           >{{option.label}}</Option>
         </Select>
@@ -150,6 +151,7 @@
       <Col span="12">
         <Select
           v-model="model14"
+          :label="label14"
           multiple
           filterable
           remote
@@ -159,6 +161,7 @@
           <Option
             v-for="(option, index) in options2"
             :value="option.value"
+            :label="option.label"
             :key="index"
           >{{option.label}}</Option>
         </Select>
@@ -241,7 +244,8 @@ export default {
       model13: "",
       loading1: false,
       options1: [],
-      model14: [],
+      model14: [1, 3],
+      label14: ['Alabama', 'Arizona'],
       model15: '',
       model16: [],
       loading2: false,
@@ -302,18 +306,18 @@ export default {
   },
   methods: {
     remoteMethod1(query) {
-      if (query !== "") {
+      if (query) {
         this.loading1 = true;
         setTimeout(() => {
           this.loading1 = false;
-          const list = this.list.map(item => {
+          const list = this.list.map((item, index) => {
             return {
-              value: item,
+              value: index + 1,
               label: item
             };
           });
           this.options1 = list.filter(
-            item => item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
+            item => (item.label + '').toLowerCase().indexOf((query + '').toLowerCase()) > -1
           );
         }, 200);
       } else {
@@ -321,18 +325,18 @@ export default {
       }
     },
     remoteMethod2(query) {
-      if (query !== "") {
+      if (query) {
         this.loading2 = true;
         setTimeout(() => {
           this.loading2 = false;
-          const list = this.list.map(item => {
+          const list = this.list.map((item, index) => {
             return {
-              value: item,
+              value: index + 1,
               label: item
             };
           });
           this.options2 = list.filter(
-            item => item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
+            item => (item.label + '').toLowerCase().indexOf((query + '').toLowerCase()) > -1
           );
         }, 200);
       } else {

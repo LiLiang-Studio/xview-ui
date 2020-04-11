@@ -15,7 +15,6 @@ export default {
   props: {
     label: String,
     disabled: Boolean,
-    tag: [String, Number],
     value: [String, Number]
   },
   data() {
@@ -23,7 +22,7 @@ export default {
       focus: false,
       removed: false,
       selected: false,
-      prefix: 'x-select-option'
+      prefix: 'x-option'
     }
   },
   computed: {
@@ -48,8 +47,35 @@ export default {
   },
   methods: {
     onClick() {
-      if (!this.disabled) this.parent.updateSelected(this.value)
+      if (!this.disabled) this.parent.updateSelected(this)
     }
   }
 }
 </script>
+<style lang="less">
+@import url("../../styles/vars.less");
+.x-option {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  list-style: none;
+  padding: 7px 16px;
+  line-height: 1.2;
+  &.focus:not(.disabled), &:hover:not(.disabled) {
+    background: darken(@bg-color, 2%);
+  }
+  &.selected:not(.disabled) {
+    color: @primary-color;
+  }
+  &.disabled {
+    cursor: not-allowed;
+    color: @disabled-color;
+  }
+  &_content {
+    flex: 1;
+  }
+  &_doneIcon {
+    margin-left: 16px;
+  }
+}
+</style>

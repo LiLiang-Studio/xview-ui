@@ -1,5 +1,5 @@
 /*!
- * xview-ui v1.5.4
+ * xview-ui v1.5.7
  * (c) 2019-2020 LiLiang
  * Released under the MIT License.
  */
@@ -821,9 +821,6 @@ var createEventDirective = function (object, eventName, cb) {
     }
   }
 };
-
-// 窗口单击指令
-var winclick = createEventDirective(window, 'click');
 // 窗口改变大小指令
 var winresize = createEventDirective(window, 'resize');
 // 窗口滚动指令
@@ -7301,1613 +7298,6 @@ __vue_render__$W._withStripped = true;
     undefined
   );
 
-//
-var script$U = {
-  data: function data() {
-    return { styles: {}, parent: null }
-  },
-  props: { visible: Boolean, parentName: String },
-  computed: {
-    multiple: function multiple() {
-      return this.parent && this.parent.multiple
-    }
-  },
-  watch: {
-    /**
-     * 可见时，更新层索引和位置信息
-     */
-    visible: function visible(newVal) {
-      if (!newVal) { return }
-      this.styles = Object.assign({}, {zIndex: getMaxZIndex()}, this.getPosition());
-    }
-  },
-  methods: {
-    /**
-     * 获取位置信息
-     */
-    getPosition: function getPosition() {
-      if (!this.parent) { return {} }
-      var offset = getOffset(this.parent.$el);
-      return { minWidth: ((offset.width) + "px"), top: ((offset.top + offset.height) + "px"), left: ((offset.left) + "px") }
-    },
-    /**
-     * 更新位置，仅可见时更新
-     */
-    updatePosition: function updatePosition() {
-      if (this.visible) {
-        this.styles = Object.assign({}, this.styles, this.getPosition());
-      }
-    }
-  },
-  /**
-   * 挂载完成后，将挂载元素插入文档主体尾部
-   */
-  mounted: function mounted() {
-    document.body.appendChild(this.$el);
-    this.parent = findParent(this, this.parentName || 'ui-select');
-    window.addEventListener('resize', this.updatePosition);
-  },
-  /**
-   * 注销之前，移除挂载元素
-   */
-  beforeDestroy: function beforeDestroy() {
-    window.removeEventListener('resize', this.updatePosition);
-    this.$el.parentNode && this.$el.parentNode.removeChild(this.$el);
-  }
-};
-
-/* script */
-var __vue_script__$U = script$U;
-/* template */
-var __vue_render__$X = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("transition", { attrs: { name: "x-animate-dropdown" } }, [
-    _c(
-      "div",
-      {
-        directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value: _vm.visible,
-            expression: "visible"
-          }
-        ],
-        staticClass: "ui-select-dropdown",
-        class: { multiple: _vm.multiple },
-        style: _vm.styles
-      },
-      [
-        _c("div", { staticClass: "ui-select-empty" }, [_vm._t("empty")], 2),
-        _vm._v(" "),
-        _vm._t("default")
-      ],
-      2
-    )
-  ])
-};
-var __vue_staticRenderFns__$X = [];
-__vue_render__$X._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$X = undefined;
-  /* scoped */
-  var __vue_scope_id__$X = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$X = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$X = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$X = normalizeComponent(
-    { render: __vue_render__$X, staticRenderFns: __vue_staticRenderFns__$X },
-    __vue_inject_styles__$X,
-    __vue_script__$U,
-    __vue_scope_id__$X,
-    __vue_is_functional_template__$X,
-    __vue_module_identifier__$X,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-/**
- * 判断一个元素是否另一个元素的父元素或者自身
- * @param {HTMLElement} par 
- * @param {HTMLElement} el 
- */
-function isSelfOrParent(par, el) {
-  do {
-    if (el === par) { return true }
-    el = el.parentNode;
-  } while (el && el !== document.body)
-  return false
-}
-
-/**
- * 判断一个元素的父元素是否有指定的类
- * @param {HTMLElement} el 
- * @param {String} clsName 
- */
-function hasClassNameOfParent(el, clsName) {
-  return !!findParentByClassName(el, clsName)
-}
-
-/**
- * 通过类名查找父元素
- * @param {HTMLElement} el 
- * @param {String} clsName 
- */
-function findParentByClassName(el, clsName) {
-  do {
-    if (el.classList.contains(clsName)) { return el }
-    el = el.parentNode;
-  } while (el && el !== document.body)
-  return null
-}
-
-//
-
-// 目标选项列表组件
-var currentSelect = null;
-
-/**
- * 关闭目标选项列表下拉框
- * @param {MouseEvent} event
- */
-function closeSelect(event) {
-  if (!(currentSelect && currentSelect.isCollapsed)) { return }
-  var domSelect = findParentByClassName(event.target, 'ui-select');
-  var isDropdown = hasClassNameOfParent(event.target, 'ui-select-dropdown');
-  var isDisabled = domSelect && domSelect.classList.contains('disabled');
-  if (isDropdown || (domSelect && !isDisabled)) { return }
-  currentSelect.$data.isCollapsed = false;
-}
-
-/**
- * 添加窗口单击事件监听器
- */
-function addDocClickListener() {
-  // console.log('监听器被添加')
-  window.addEventListener('click', closeSelect);
-}
-
-addDocClickListener();
-
-var script$V = {
-  name: 'ui-select',
-  components: { UiTag: __vue_component__$9, UiIcon: __vue_component__, UiOptionList: __vue_component__$X },
-  data: function data() {
-    return {
-      isCollapsed: false, // 是否展开下拉列表
-      selectedItem: {}, // 选择的item，单选
-      selectedItems: [], // 选择的items，多选
-      children: [], // Option组件数组
-      searchValue: '' // 搜索值
-    }
-  },
-  props: {
-    value: [String, Number, Array],
-    multiple: Boolean,
-    disabled: Boolean,
-    clearable: Boolean,
-    filterable: Boolean,
-    remote: Boolean,
-    remoteMethod: Function,
-    loading: Boolean,
-    loadingText: {
-      type: String,
-      default: '加载中'
-    },
-    label: [String, Number, Array],
-    size: {
-      validator: function validator(value) {
-        return ['large', 'small', 'default'].indexOf(value) !== -1
-      }
-    },
-    placeholder: {
-      type: String,
-      default: '请选择'
-    },
-    notFoundText: {
-      type: String,
-      default: '无匹配数据'
-    },
-    placement: {
-      default: 'bottom',
-      validator: function validator(value) {
-        return ['bottom', 'top'].indexOf(value) !== -1
-      }
-    }
-  },
-  computed: {
-    /**
-     * 单选选中的标签
-     */
-    selectedLabelOfSingle: function selectedLabelOfSingle() {
-      return this.selectedItem.label || this.selectedItem.value
-    },
-    /**
-     * 是否显示清除按钮
-     */
-    showClear: function showClear() {
-      return this.clearable && (this.multiple ? this.selectedItems.length : this.selectedItem.value)
-    },
-    isEmpty: function isEmpty() {
-      return this.children.every(function (_) { return _.isDelete; })
-    },
-    multipleInputStyles: function multipleInputStyles() {
-      return this.selectedItems.length ? { width: '20px' } : {}
-    },
-    multiplePlaceholder: function multiplePlaceholder() {
-      return this.selectedItems.length === 0 && this.placeholder
-    },
-    searchText: function searchText() {
-      return this.searchValue.replace(/\s/gm, function (val) { return '&nbsp;'; })
-    }
-  },
-  watch: {
-    /**
-     * 值改变
-     */
-    value: function value(newVal) {
-      this.updateModel(newVal);
-    },
-    /**
-     * 选择的值改变，单选
-     */
-    selectedItem: function selectedItem(newVal) {
-      this.syncModel();
-    },
-    /**
-     * 选择的值改变，多选
-     */
-    selectedItems: function selectedItems(newVal) {
-      var this$1 = this;
-
-      if (this.isCollapsed) {
-        this.$nextTick(function () { return this$1.$refs.UiOptionList.updatePosition(); });
-      }
-    },
-    /**
-     * 搜索值改变
-     */
-    searchValue: function searchValue(newVal) {
-      var this$1 = this;
-
-      if (!this.filterable) { return }
-      // 远程搜索
-      if (this.remote) {
-        this.remoteMethod && this.remoteMethod(newVal);
-      // 本地搜索
-      } else {
-        var _newVal = newVal.toLowerCase();
-        this.children.forEach(function (_) {
-          var _val = ('' + _.value).toLowerCase();
-          var _label = _.label === undefined ? '' : ('' + _.label).toLowerCase();
-          _.$data.isDelete = _val.indexOf(_newVal) === -1 && _label.indexOf(_newVal) === -1;
-        });
-      }
-      if (!this.multiple) { return }
-      // 更新文本框框宽度
-      this.$nextTick(function () {
-        this$1.$refs.Input.style.width = 
-          newVal || this$1.selectedItems.length ? 
-          Math.min(this$1.$refs.SearchText.offsetWidth, this$1.$el.offsetWidth - 25) + 'px' : '';
-      });
-    }
-  },
-  methods: {
-    /**
-     * 显示所有Option组件
-     */
-    showAll: function showAll() {
-      this.children.forEach(function (_) { return _.$data.isDelete = false; });
-    },
-    /**
-     * 切换显示和隐藏选项列表
-     */
-    toggleCollapse: function toggleCollapse(flag) {
-      if (this.disabled) { return }
-      this.isCollapsed = typeof flag === 'boolean' ? flag : !this.isCollapsed;
-      if (this.isCollapsed) {
-        if (currentSelect && currentSelect !== this) {
-          currentSelect.$data.isCollapsed = false;
-        }
-        currentSelect = this;
-        this.showAll();
-      }
-      this.$emit('on-open-change', this.isCollapsed);
-    },
-    /**
-     * 是否被选中的Option组件
-     * @param {Vue.default} vm
-     */
-    isSelectedChild: function isSelectedChild(vm) {
-      return this.multiple ? this.inSelectedItems(vm.value) : this.selectedItem.value === vm.value
-    },
-    /**
-     * 是否在选择的items中
-     * @param {String|Number} value
-     */
-    inSelectedItems: function inSelectedItems(value) {
-      return this.selectedItems.some(function (_) { return _.value === value; })
-    },
-    /**
-     * 根据值，移除选择的item
-     * @param {String|Number} value
-     */
-    removeSelectedItemByValue: function removeSelectedItemByValue(value) {
-      var index = this.selectedItems.map(function (_) { return _.value; }).indexOf(value);
-      this.selectedItems.splice(index, 1);
-    },
-    /**
-     * 移除选择的item
-     * @param {Object} item
-     */
-    removeSelectedItem: function removeSelectedItem(item) {
-      this.selectedItems.splice(this.selectedItems.indexOf(item), 1);
-      this.syncModel();
-    },
-    /**
-     * 添加选择的item
-     */
-    addSelectedItem: function addSelectedItem(value, label) {
-      this.selectedItems.push({ value: value, label: label });
-    },
-    /**
-     * 更新选择的值
-     * @param {Vue.default} vm
-     */
-    updateSelectedValue: function updateSelectedValue(vm) {
-      if (this.multiple) {
-        this.filterable && this.$refs.Input.focus();
-        this.inSelectedItems(vm.value) ? this.removeSelectedItemByValue(vm.value) : this.addSelectedItem(vm.value, vm.label);
-        this.syncModel();
-      } else {
-        this.isCollapsed = false;
-        this.selectedItem = { value: vm.value, label: vm.label };
-        if (this.filterable) {
-          this.searchValue = this.getCheckedTextOfSingle();
-        }
-      }
-    },
-    getCheckedTextOfSingle: function getCheckedTextOfSingle() {
-      return (this.selectedItem.label || this.selectedItem.value) + ''
-    },
-    /**
-     * 添加Option组件实例
-     * @param {Vue.default} vm
-     */
-    addChild: function addChild(vm) {
-      this.children.push(vm);
-    },
-    /**
-     * 移除Option组件实例
-     * @param {Vue.default} vm
-     */
-    removeChild: function removeChild(vm) {
-      this.children.splice(this.children.indexOf(vm), 1);
-    },
-    /**
-     * 清除选中的值
-     */
-    clearValue: function clearValue() {
-      if (this.multiple) {
-        this.selectedItems = [];
-      } else {
-        this.selectedItem = {};
-      }
-      this.isCollapsed = false;
-    },
-    /**
-     * 选择框得到焦点处理
-     */
-    handleFocus: function handleFocus() {
-      if (this.filterable) { this.$refs.Input.focus(); }
-    },
-    /**
-     * 选择框键盘按下事件处理
-     * @param {KeyboardEvent} event
-     */
-    handleKeydown: function handleKeydown(event) {
-      var K_UP = 38, K_DOWN = 40, K_ESC = 27, K_ENTER = 13, K_DEL = 46, K_BACKSPACE = 8;
-      var keyCode = event.keyCode;
-      if ([K_UP, K_DOWN, K_ESC].indexOf(keyCode) !== -1) {
-        event.preventDefault();
-      }
-      if (keyCode === K_ENTER) {
-        this.isCollapsed && this.updateValueByFocusOption();
-      } else if (keyCode === K_UP) {
-        if (this.isCollapsed) { this.setOptionFocus('up'); }
-      } else if (keyCode === K_DOWN) {
-        this.isCollapsed ? this.setOptionFocus() : this.toggleCollapse(true);
-      } else if (keyCode === K_ESC) {
-        this.isCollapsed = false;
-      } else if (keyCode === K_DEL || keyCode === K_BACKSPACE) {
-        if (!(this.multiple && this.filterable) || this.searchValue) { return }
-        this.selectedItems.pop();
-      }
-    },
-    /**
-     * 获取得到焦点的Option
-     */
-    updateValueByFocusOption: function updateValueByFocusOption() {
-      var vm =  this.children.find(function (_) { return _.focus; });
-      if (vm) { this.updateSelectedValue(vm); }
-    },
-    /**
-     * 设置焦点Option
-     * @param {String} dir
-     */
-    setOptionFocus: function setOptionFocus(dir) {
-      if ( dir === void 0 ) dir = 'down';
-
-      var arr = this.children.filter(function (_) { return !_.isDelete; });
-      var len = arr.length;
-      if (!len) { return }
-      var focusIndex = arr.map(function (_) { return _.focus; }).indexOf(true);
-      this.children.forEach(function (_) { return _.$data.focus = false; });
-      if (dir === 'down') {
-        if (focusIndex < len - 1) {
-          focusIndex++;
-        } else {
-          focusIndex = 0;
-        }
-      } else {
-        if (focusIndex <= 0) {
-          focusIndex = len - 1;
-        } else {
-          focusIndex--;
-        }
-      }
-      var vm = arr[focusIndex];
-      vm.$data.focus = true;
-      vm.$el.scrollIntoViewIfNeeded();
-    },
-    /**
-     * 搜索框失去焦点处理
-     * @param {MouseEvent} event
-     */
-    handleSearchBlur: function handleSearchBlur(event) {
-      if (!this.filterable || this.multiple) { return }
-      var relatedTarget = event.relatedTarget;
-      if (
-        relatedTarget && 
-        (isSelfOrParent(this.$el, relatedTarget) || 
-        isSelfOrParent(this.$refs.UiOptionList.$el, relatedTarget))
-      ) { return }
-      this.searchValue = this.getCheckedTextOfSingle();
-    },
-    /**
-     * 更新模型数据
-     * @param {String|Number|Array} value
-     */
-    updateModel: function updateModel(value) {
-      var this$1 = this;
-
-      if (this.multiple) {
-        this.selectedItems = value.map(function (_) { return ({ value: _, label: this$1.getLabelByValue(_) }); });
-      } else {
-        this.selectedItem = { value: value, label: this.getLabelByValue(value) };
-      }
-    },
-    /**
-     * 向父组件同步模型数据
-     */
-    syncModel: function syncModel() {
-      var value = this.multiple ? this.selectedItems.map(function (_) { return _.value; }) : this.selectedItem.value;
-      this.$emit('input', value);
-      this.$emit('on-change', value);
-    },
-    /**
-     * 通过值获取标签
-     * @param {String|Number} value
-     */
-    getLabelByValue: function getLabelByValue(value) {
-      var vm = this.children.find(function (_) { return _.value === value; });
-      return vm && vm.label
-    }
-  },
-  mounted: function mounted() {
-    this.updateModel(this.value);
-  },
-  beforeDestroy: function beforeDestroy() {
-    if (currentSelect === this) { currentSelect = null; }
-  }
-};
-
-/* script */
-var __vue_script__$V = script$V;
-/* template */
-var __vue_render__$Y = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    { staticClass: "ui-select", class: { disabled: _vm.disabled } },
-    [
-      _c(
-        "div",
-        {
-          staticClass: "ui-select-selection",
-          class: [
-            _vm.size,
-            {
-              isCollapsed: _vm.isCollapsed,
-              clearable: _vm.showClear,
-              multiple: _vm.multiple,
-              filterable: _vm.filterable,
-              disabled: _vm.disabled
-            }
-          ],
-          attrs: { tabindex: "0" },
-          on: {
-            click: _vm.toggleCollapse,
-            focus: _vm.handleFocus,
-            keydown: _vm.handleKeydown
-          }
-        },
-        [
-          _vm.multiple
-            ? [
-                _vm._l(_vm.selectedItems, function(item) {
-                  return _c(
-                    "ui-tag",
-                    {
-                      key: item.value,
-                      attrs: { closable: "", fade: false },
-                      on: {
-                        "on-close": function($event) {
-                          return _vm.removeSelectedItem(item)
-                        }
-                      }
-                    },
-                    [
-                      _vm._v(
-                        "\n        " +
-                          _vm._s(item.label || item.value) +
-                          "\n      "
-                      )
-                    ]
-                  )
-                }),
-                _vm._v(" "),
-                !(_vm.filterable || _vm.selectedItems.length)
-                  ? _c("input", {
-                      staticClass: "ui-select-search placeholder",
-                      attrs: { readonly: "", placeholder: _vm.placeholder }
-                    })
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.filterable
-                  ? _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.searchValue,
-                          expression: "searchValue"
-                        }
-                      ],
-                      ref: "Input",
-                      staticClass: "ui-select-search",
-                      style: _vm.multipleInputStyles,
-                      attrs: { placeholder: _vm.multiplePlaceholder },
-                      domProps: { value: _vm.searchValue },
-                      on: {
-                        blur: _vm.handleSearchBlur,
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.searchValue = $event.target.value;
-                        }
-                      }
-                    })
-                  : _vm._e(),
-                _vm._v(" "),
-                _c(
-                  "span",
-                  { ref: "SearchText", staticClass: "ui-select-search-text" },
-                  [_vm._v(_vm._s(_vm.searchText))]
-                )
-              ]
-            : _c(
-                "div",
-                { staticClass: "ui-select-single" },
-                [
-                  _vm.filterable
-                    ? _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.searchValue,
-                            expression: "searchValue"
-                          }
-                        ],
-                        ref: "Input",
-                        staticClass: "ui-select-search",
-                        attrs: { placeholder: _vm.placeholder },
-                        domProps: { value: _vm.searchValue },
-                        on: {
-                          blur: _vm.handleSearchBlur,
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.searchValue = $event.target.value;
-                          }
-                        }
-                      })
-                    : [
-                        _vm.selectedLabelOfSingle
-                          ? _c("span", { staticClass: "ui-select-label" }, [
-                              _vm._v(_vm._s(_vm.selectedLabelOfSingle))
-                            ])
-                          : _c(
-                              "span",
-                              { staticClass: "ui-select-placeholder" },
-                              [_vm._v(_vm._s(_vm.placeholder))]
-                            )
-                      ]
-                ],
-                2
-              ),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "ui-select-arrow" },
-            [
-              _c("UiIcon", {
-                staticClass: "ui-select-clear-icon",
-                attrs: { type: "ios-close" },
-                nativeOn: {
-                  click: function($event) {
-                    $event.stopPropagation();
-                    return _vm.clearValue($event)
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("UiIcon", {
-                staticClass: "ui-select-down-icon",
-                attrs: { type: "arrow-down-b" }
-              })
-            ],
-            1
-          )
-        ],
-        2
-      ),
-      _vm._v(" "),
-      _c(
-        "ui-option-list",
-        { ref: "UiOptionList", attrs: { visible: _vm.isCollapsed } },
-        [
-          _vm.isEmpty
-            ? _c("span", { attrs: { slot: "empty" }, slot: "empty" }, [
-                _vm._v(_vm._s(_vm.loading ? _vm.loadingText : _vm.notFoundText))
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _c("ul", [_vm._t("default")], 2)
-        ]
-      )
-    ],
-    1
-  )
-};
-var __vue_staticRenderFns__$Y = [];
-__vue_render__$Y._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$Y = undefined;
-  /* scoped */
-  var __vue_scope_id__$Y = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$Y = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$Y = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$Y = normalizeComponent(
-    { render: __vue_render__$Y, staticRenderFns: __vue_staticRenderFns__$Y },
-    __vue_inject_styles__$Y,
-    __vue_script__$V,
-    __vue_scope_id__$Y,
-    __vue_is_functional_template__$Y,
-    __vue_module_identifier__$Y,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-var script$W = {
-  name: 'ui-select-option',
-  components: { UiIcon: __vue_component__ },
-  data: function data() {
-    return {
-      parent: null,
-      isDelete: false,
-      focus: false
-    }
-  },
-  props: {
-    value: [String, Number],
-    label: String,
-    disabled: Boolean
-  },
-  computed: {
-    selected: function selected() {
-      return this.parent && this.parent.isSelectedChild(this)
-    },
-    multiple: function multiple() {
-      return this.parent && this.parent.multiple
-    }
-  },
-  methods: {
-    handleClick: function handleClick() {
-      if (this.disabled) { return }
-      if (this.parent) { this.parent.updateSelectedValue(this); }
-    }
-  },
-  mounted: function mounted() {
-    this.parent = findParent(this, 'ui-select');
-    this.parent && this.parent.addChild(this);
-  },
-  beforeDestroy: function beforeDestroy() {
-    this.parent && this.parent.removeChild(this);
-  }
-};
-
-/* script */
-var __vue_script__$W = script$W;
-/* template */
-var __vue_render__$Z = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return !_vm.isDelete
-    ? _c(
-        "li",
-        {
-          staticClass: "ui-select-option",
-          class: {
-            selected: _vm.selected,
-            multiple: _vm.multiple,
-            focus: _vm.focus,
-            disabled: _vm.disabled
-          },
-          attrs: { tabindex: "-1" },
-          on: { click: _vm.handleClick }
-        },
-        [
-          _vm._t("default", [_vm._v(_vm._s(_vm.label || _vm.value))]),
-          _vm._v(" "),
-          _vm.selected && _vm.multiple
-            ? _c("UiIcon", {
-                staticClass: "ui-select-option-icon",
-                attrs: { type: "android-done" }
-              })
-            : _vm._e()
-        ],
-        2
-      )
-    : _vm._e()
-};
-var __vue_staticRenderFns__$Z = [];
-__vue_render__$Z._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$Z = undefined;
-  /* scoped */
-  var __vue_scope_id__$Z = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$Z = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$Z = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$Z = normalizeComponent(
-    { render: __vue_render__$Z, staticRenderFns: __vue_staticRenderFns__$Z },
-    __vue_inject_styles__$Z,
-    __vue_script__$W,
-    __vue_scope_id__$Z,
-    __vue_is_functional_template__$Z,
-    __vue_module_identifier__$Z,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-var N$4 = Number, B$7 = Boolean;
-var script$X = {
-  name: 'XPage',
-  components: { XIcon: __vue_component__, XSelect: __vue_component__$Y, XOption: __vue_component__$Z, XInput: __vue_component__$I },
-  props: {
-    current: { type: N$4, default: 1 },
-    total: { type: N$4, default: 0 },
-    pageSize: { type: N$4, default: 10 },
-    pageSizeOpts: { type: Array, default: function () { return [10, 20, 30, 40]; } },
-    placement: {
-      default: 'bottom',
-      validator: function validator(v) {
-        return ['bottom', 'top'].indexOf(v) > -1
-      }
-    },
-    size: {
-      validator: function validator(v) {
-        return v === 'small'
-      }
-    },
-    simple: B$7,
-    showTotal: B$7,
-    showElevator: B$7,
-    showSizer: B$7,
-    transfer: B$7,
-    prevText: String,
-    nextText: String
-  },
-  data: function data() {
-    return { prefix: 'x-page', limit: this.pageSize, currentPage: 1, inputValue: 1 }
-  },
-  computed: {
-    pageCount: function pageCount() {
-      return Math.ceil(this.total / this.limit)
-    },
-    disabledPrev: function disabledPrev() {
-      return this.currentPage === 1
-    },
-    disabledNext: function disabledNext() {
-      return this.currentPage === this.pageCount
-    },
-    showPages: function showPages() {
-      var ref = this;
-      var currentPage = ref.currentPage;
-      var pageCount = ref.pageCount;
-      var nums = [];
-      if (currentPage < 5) {
-        for (var i = 1; i <= currentPage; i++) { nums.push(i); }
-      } else {
-        nums = [currentPage - 2, currentPage - 1, currentPage];
-      }
-      if (pageCount - currentPage <= 3) {
-        for (var i$1 = currentPage + 1; i$1 <= pageCount; i$1++) { nums.push(i$1); }
-      } else {
-        nums.push(currentPage + 1, currentPage + 2);
-      }
-      return nums
-    }
-  },
-  watch: {
-    limit: function limit(val) { // 页大小改变 跳转到首页 并发射页大小改变事件 但不发射当前页改变事件
-      this.goPage(1);
-      this.$emit('on-page-size-change', val);
-    },
-    current: {
-      immediate: true,
-      handler: function handler(val) {
-        this.currentPage = this.inputValue = val;
-      }
-    },
-    pageSize: function pageSize(val) {
-      this.limit = val;
-    }
-  },
-  methods: {
-    goPage: function goPage(page) { // 到第几页 不发射改变事件
-      this.inputValue = page;
-      this.currentPage = page;
-      this.$emit('update:current', page);
-    },
-    toPage: function toPage(page) { // 到第几页 手动触发导致 发射改变事件
-      this.goPage(page);
-      this.$emit('on-change', page);
-    },
-    toPrev: function toPrev() { // 到上1页
-      !this.disabledPrev && this.toPage(this.currentPage - 1);
-    },
-    toNext: function toNext() { // 到下1页
-      !this.disabledNext && this.toPage(this.currentPage + 1);
-    },
-    toPrev5: function toPrev5() { // 到上5页
-      this.toPage(Math.max(this.currentPage - 5, 1));
-    },
-    toNext5: function toNext5() { // 到下5页
-      this.toPage(Math.min(this.currentPage + 5, this.pageCount));
-    },
-    toInputPage: function toInputPage() { // 电梯直达目标页
-      var inputValue = +this.inputValue;
-      if (isNaN(inputValue) || inputValue < 1) {
-        this.toPage(1);
-      } else if (inputValue > this.pageCount) {
-        this.toPage(this.pageCount);
-      } else {
-        this.toPage(inputValue);
-      }
-    },
-    onKeydown: function onKeydown(e) { // 简洁版输入框键盘按下
-      if ([38, 40].indexOf(e.keyCode) > -1) { e.preventDefault(); }
-    },
-    onKeyup: function onKeyup(e) { // 简洁版输入框键盘松开
-      if (e.keyCode === 38) {
-        this.inputValue = this.currentPage = Math.min(this.pageCount, this.currentPage + 1);
-      } else if (e.keyCode === 40) {
-        this.inputValue = this.currentPage = Math.max(1, this.currentPage - 1);
-      }
-    }
-  }
-};
-
-/* script */
-var __vue_script__$X = script$X;
-/* template */
-var __vue_render__$_ = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "ul",
-    { class: [_vm.prefix, _vm.size, { simple: _vm.simple }] },
-    [
-      _vm.showTotal && !_vm.simple
-        ? _c(
-            "span",
-            { class: _vm.prefix + "_total" },
-            [_vm._t("default", [_vm._v("共 " + _vm._s(_vm.total) + " 条")])],
-            2
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _c(
-        "li",
-        {
-          class: { isText: _vm.prevText, disabled: _vm.disabledPrev },
-          on: { click: _vm.toPrev }
-        },
-        [
-          _vm._v("\n    " + _vm._s(_vm.prevText)),
-          _c("x-icon", { attrs: { type: "ios-arrow-left" } })
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _vm.simple
-        ? _c(
-            "span",
-            { class: _vm.prefix + "_elevator" },
-            [
-              _c("x-input", {
-                attrs: { size: "small" },
-                on: {
-                  "on-enter": _vm.toInputPage,
-                  "on-keydown": _vm.onKeydown,
-                  "on-keyup": _vm.onKeyup
-                },
-                model: {
-                  value: _vm.inputValue,
-                  callback: function($$v) {
-                    _vm.inputValue = $$v;
-                  },
-                  expression: "inputValue"
-                }
-              }),
-              _vm._v(" "),
-              _c("span", { class: _vm.prefix + "_slash" }, [_vm._v("/")]),
-              _vm._v(" " + _vm._s(_vm.pageCount) + "\n  ")
-            ],
-            1
-          )
-        : [
-            _vm.currentPage >= 5
-              ? [
-                  _c(
-                    "li",
-                    {
-                      class: { active: _vm.currentPage === 1 },
-                      on: {
-                        click: function($event) {
-                          return _vm.toPage(1)
-                        }
-                      }
-                    },
-                    [_vm._v("1")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "li",
-                    {
-                      class: _vm.prefix + "_more",
-                      attrs: { title: "向前5页" },
-                      on: { click: _vm.toPrev5 }
-                    },
-                    [
-                      _c(
-                        "span",
-                        { staticClass: "arrows" },
-                        _vm._l(2, function(i) {
-                          return _c("x-icon", {
-                            key: i,
-                            attrs: { type: "ios-arrow-left" }
-                          })
-                        }),
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("x-icon", {
-                        staticClass: "icon-more",
-                        attrs: { type: "ios-more" }
-                      })
-                    ],
-                    1
-                  )
-                ]
-              : _vm._e(),
-            _vm._v(" "),
-            _vm._l(_vm.showPages, function(_) {
-              return _c(
-                "li",
-                {
-                  key: _,
-                  class: { active: _vm.currentPage === _ },
-                  on: {
-                    click: function($event) {
-                      return _vm.toPage(_)
-                    }
-                  }
-                },
-                [_vm._v(_vm._s(_))]
-              )
-            }),
-            _vm._v(" "),
-            _vm.pageCount - _vm.currentPage >= 4
-              ? [
-                  _c(
-                    "li",
-                    {
-                      class: _vm.prefix + "_more",
-                      attrs: { title: "向后5页" },
-                      on: { click: _vm.toNext5 }
-                    },
-                    [
-                      _c(
-                        "span",
-                        { staticClass: "arrows" },
-                        _vm._l(2, function(i) {
-                          return _c("x-icon", {
-                            key: i,
-                            attrs: { type: "ios-arrow-right" }
-                          })
-                        }),
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("x-icon", {
-                        staticClass: "icon-more",
-                        attrs: { type: "ios-more" }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "li",
-                    {
-                      class: { active: _vm.currentPage === _vm.pageCount },
-                      on: {
-                        click: function($event) {
-                          return _vm.toPage(_vm.pageCount)
-                        }
-                      }
-                    },
-                    [_vm._v(_vm._s(_vm.pageCount))]
-                  )
-                ]
-              : _vm._e()
-          ],
-      _vm._v(" "),
-      _c(
-        "li",
-        {
-          class: { isText: _vm.nextText, disabled: _vm.disabledNext },
-          on: { click: _vm.toNext }
-        },
-        [
-          _vm._v("\n    " + _vm._s(_vm.nextText)),
-          _c("x-icon", { attrs: { type: "ios-arrow-right" } })
-        ],
-        1
-      ),
-      _vm._v(" "),
-      !_vm.simple
-        ? [
-            _vm.showSizer
-              ? _c(
-                  "x-select",
-                  {
-                    class: _vm.prefix + "_sizer",
-                    attrs: {
-                      placement: _vm.placement,
-                      transfer: _vm.transfer,
-                      size: _vm.size
-                    },
-                    model: {
-                      value: _vm.limit,
-                      callback: function($$v) {
-                        _vm.limit = $$v;
-                      },
-                      expression: "limit"
-                    }
-                  },
-                  _vm._l(_vm.pageSizeOpts, function(_) {
-                    return _c("x-option", {
-                      key: _,
-                      attrs: { value: _, label: _ + " 条/页" }
-                    })
-                  }),
-                  1
-                )
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.showElevator
-              ? _c(
-                  "span",
-                  { class: _vm.prefix + "_elevator" },
-                  [
-                    _vm._v("\n      跳至"),
-                    _c("x-input", {
-                      attrs: { size: _vm.size },
-                      on: { "on-enter": _vm.toInputPage },
-                      model: {
-                        value: _vm.inputValue,
-                        callback: function($$v) {
-                          _vm.inputValue = $$v;
-                        },
-                        expression: "inputValue"
-                      }
-                    }),
-                    _vm._v("页\n    ")
-                  ],
-                  1
-                )
-              : _vm._e()
-          ]
-        : _vm._e()
-    ],
-    2
-  )
-};
-var __vue_staticRenderFns__$_ = [];
-__vue_render__$_._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$_ = undefined;
-  /* scoped */
-  var __vue_scope_id__$_ = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$_ = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$_ = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$_ = normalizeComponent(
-    { render: __vue_render__$_, staticRenderFns: __vue_staticRenderFns__$_ },
-    __vue_inject_styles__$_,
-    __vue_script__$X,
-    __vue_scope_id__$_,
-    __vue_is_functional_template__$_,
-    __vue_module_identifier__$_,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-var script$Y = {
-  name: 'XTabs',
-  components: { XIcon: __vue_component__, XCloseIconButton: __vue_component__$7, XRender: XRender },
-  props: {
-    value: [String, Number],
-    type: {
-      default: 'line',
-      validator: function validator(v) {
-        return ['line', 'card'].indexOf(v) > -1
-      }
-    },
-    size: {
-      validator: function validator(v) {
-        return ['default', 'small'].indexOf(v) > -1
-      }
-    },
-    closable: Boolean,
-    animated: { type: Boolean, default: true },
-    beforeClose: Function
-  },
-  data: function data() {
-    return {
-      prefix: 'x-tabs',
-      items: [],
-      activeTab: this.value,
-      showNavBtns: false,
-      translateX: 0
-    }
-  },
-  computed: {
-    classes: function classes() {
-      var ref = this;
-      var prefix = ref.prefix;
-      return [prefix, this.size && (prefix + "_" + (this.size)), (prefix + "_" + (this.type))]
-    },
-    contentStyle: function contentStyle() {
-      var this$1 = this;
-
-      var index = this.items.findIndex(function (_) { return _.key === this$1.activeTab; });
-      return index > -1 && { transform: ("translateX(" + (-index * 100) + "%)") }
-    }
-  },
-  watch: {
-    value: function value(val) {
-      this.activeTab = val;
-    },
-    activeTab: function activeTab(val) {
-      var this$1 = this;
-
-      this.$emit('input', val);
-      this.$nextTick(function () { return this$1.scrollToCurrent(); });
-    },
-    items: function items(val) {
-      if (val.length) {
-        if (this.activeTab === undefined) { this.activeTab = this.items[0].key; }
-      } else {
-        this.activeTab = undefined;
-      }
-    }
-  },
-  directives: { winresize: winresize },
-  methods: {
-    isFunc: isFunc,
-    tabClass: function tabClass(item) { // 项class
-      return [((this.prefix) + "_navItem"), { active: item.key === this.activeTab, disabled: item.disabled }]
-    },
-    addItem: function addItem(vm) {
-      var this$1 = this;
- // 添加项组件 仅供子组件调用
-      var len = this.items.push(vm);
-      this.$nextTick(function () { return this$1.winResizeHandler(); });
-      return len
-    },
-    removeItem: function removeItem(vm) {
-      var this$1 = this;
- // 移除项组件 仅供子组件调用
-      var index = this.items.indexOf(vm);
-      this.items.splice(index, 1);
-      if (vm.key === this.activeTab && this.items.length) {
-        this.activeTab = this.items[index > 0 ? index - 1 : 0].key;
-      }
-      this.$nextTick(function () { return this$1.winResizeHandler(); });
-    },
-    deleteItem: function deleteItem(item) {
-      var this$1 = this;
- // 删除项 单击关闭按钮调用
-      var fn = function () { return this$1.$emit('on-tab-remove', item.key); };
-      this.beforeClose ? this.beforeClose().then(fn) : fn();
-    },
-    scrollToCurrent: function scrollToCurrent() {
-      var this$1 = this;
- // 滚动到目标tab
-      if (this.activeTab !== undefined) {
-        var index = this.items.findIndex(function (_) { return _.key === this$1.activeTab; });
-        var ref = this.$refs;
-        var scrollView = ref.scrollView;
-        var el = scrollView.querySelectorAll('li')[index];
-        var rect = el.getBoundingClientRect();
-        var scrollViewLeft = scrollView.getBoundingClientRect().left + Math.abs(this.translateX);
-        var rightMoveDis = scrollViewLeft + scrollView.clientWidth - rect.right;
-        var leftMoveDis = scrollViewLeft - rect.left;
-        if (rightMoveDis < 0) {
-          this.onNavNext(Math.max(-rightMoveDis, el.clientWidth));
-        } else if (leftMoveDis > 0) {
-          this.onNavPrev(Math.max(leftMoveDis, el.clientWidth));
-        }
-      }
-    },
-    onTabClick: function onTabClick(item) { // tab单击
-      this.activeTab = item.key;
-      this.$emit('on-click', item.key);
-    },
-    canClose: function canClose(item) { // 是否可关闭
-      return item.closable === false ? false : (item.closable || this.closable) && this.type === 'card'
-    },
-    onNavPrev: function onNavPrev(dis) { // 向前导航
-      var ref = this.$refs.scrollView;
-      var clientWidth = ref.clientWidth;
-      var maxDis = Math.abs(this.translateX);
-      this.translateX += dis ? Math.min(maxDis, dis) : Math.min(clientWidth, maxDis > 0 ? maxDis : 0);
-    },
-    onNavNext: function onNavNext(dis) { // 向后导航
-      var ref = this.$refs.scrollView;
-      var clientWidth = ref.clientWidth;
-      var scrollWidth = ref.scrollWidth;
-      var maxDis = scrollWidth - clientWidth - Math.abs(this.translateX);
-      this.translateX -= dis ? Math.min(maxDis, dis) : Math.min(clientWidth, maxDis > 0 ? maxDis : 0);
-    },
-    winResizeHandler: function winResizeHandler() { // 窗口大小改变处理
-      var ref = this.$refs;
-      var scrollView = ref.scrollView;
-      if (scrollView) {
-        var clientWidth = scrollView.clientWidth;
-        var scrollWidth = scrollView.scrollWidth;
-        if (clientWidth + Math.abs(this.translateX) > scrollWidth) {
-          this.translateX = -scrollWidth + clientWidth;
-        }
-        this.showNavBtns = clientWidth < scrollWidth;
-      }
-    },
-    onWinResize: function onWinResize() { // 窗口大小改变节流处理 指令专用
-      return throttle(this.winResizeHandler, 50)
-    }
-  }
-};
-
-/* script */
-var __vue_script__$Y = script$Y;
-/* template */
-var __vue_render__$$ = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    {
-      directives: [
-        {
-          name: "winresize",
-          rawName: "v-winresize",
-          value: _vm.onWinResize(),
-          expression: "onWinResize()"
-        }
-      ],
-      class: _vm.classes
-    },
-    [
-      _c(
-        "div",
-        { class: _vm.prefix + "_bar" },
-        [
-          _c(
-            "div",
-            {
-              class: [_vm.prefix + "_navWrap", { showNavBtns: _vm.showNavBtns }]
-            },
-            [
-              _c("div", { class: _vm.prefix + "_scrollWrap" }, [
-                _c(
-                  "ul",
-                  {
-                    ref: "scrollView",
-                    class: _vm.prefix + "_nav",
-                    style: { transform: "translateX(" + _vm.translateX + "px)" }
-                  },
-                  _vm._l(_vm.items, function(_) {
-                    return _c(
-                      "li",
-                      {
-                        key: _.key,
-                        class: _vm.tabClass(_),
-                        on: {
-                          click: function($event) {
-                            return _vm.onTabClick(_)
-                          }
-                        }
-                      },
-                      [
-                        _.icon
-                          ? _c("x-icon", {
-                              class: _vm.prefix + "_icon",
-                              attrs: { type: _.icon }
-                            })
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _vm.isFunc(_.label)
-                          ? _c("x-render", { attrs: { render: _.label } })
-                          : [_vm._v(_vm._s(_.label))],
-                        _vm._v(" "),
-                        _vm.canClose(_)
-                          ? _c("x-close-icon-button", {
-                              class: _vm.prefix + "_close",
-                              on: {
-                                click: function($event) {
-                                  $event.stopPropagation();
-                                  return _vm.deleteItem(_)
-                                }
-                              }
-                            })
-                          : _vm._e()
-                      ],
-                      2
-                    )
-                  }),
-                  0
-                )
-              ]),
-              _vm._v(" "),
-              _vm.showNavBtns
-                ? [
-                    _c("x-icon", {
-                      class: _vm.prefix + "_navPrev",
-                      attrs: { type: "ios-arrow-back" },
-                      on: {
-                        click: function($event) {
-                          return _vm.onNavPrev()
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("x-icon", {
-                      class: _vm.prefix + "_navNext",
-                      attrs: { type: "ios-arrow-forward" },
-                      on: {
-                        click: function($event) {
-                          return _vm.onNavNext()
-                        }
-                      }
-                    })
-                  ]
-                : _vm._e()
-            ],
-            2
-          ),
-          _vm._v(" "),
-          _vm._t("extra")
-        ],
-        2
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          class: [_vm.prefix + "_content", { animated: _vm.animated }],
-          style: _vm.contentStyle
-        },
-        [_vm._t("default")],
-        2
-      )
-    ]
-  )
-};
-var __vue_staticRenderFns__$$ = [];
-__vue_render__$$._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$$ = undefined;
-  /* scoped */
-  var __vue_scope_id__$$ = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$$ = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$$ = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$$ = normalizeComponent(
-    { render: __vue_render__$$, staticRenderFns: __vue_staticRenderFns__$$ },
-    __vue_inject_styles__$$,
-    __vue_script__$Y,
-    __vue_scope_id__$$,
-    __vue_is_functional_template__$$,
-    __vue_module_identifier__$$,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-var S$6 = String, B$8 = Boolean;
-var script$Z = {
-  name: 'XTabPane',
-  data: function data() {
-    return { key: this.name }
-  },
-  props: {
-    name: S$6,
-    label: [S$6, Function],
-    icon: S$6,
-    disabled: B$8,
-    closable: { type: B$8, default: null }
-  },
-  mounted: function mounted() {
-    this.parent = findParent(this, 'XTabs');
-    var len = this.parent.addItem(this);
-    if (this.key === undefined) { this.key = len - 1; }
-  },
-  beforeDestroy: function beforeDestroy() {
-    this.parent.removeItem(this);
-  }
-};
-
-/* script */
-var __vue_script__$Z = script$Z;
-
-/* template */
-var __vue_render__$10 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", { staticClass: "x-tabs-pane" }, [_vm._t("default")], 2)
-};
-var __vue_staticRenderFns__$10 = [];
-__vue_render__$10._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$10 = undefined;
-  /* scoped */
-  var __vue_scope_id__$10 = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$10 = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$10 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$10 = normalizeComponent(
-    { render: __vue_render__$10, staticRenderFns: __vue_staticRenderFns__$10 },
-    __vue_inject_styles__$10,
-    __vue_script__$Z,
-    __vue_scope_id__$10,
-    __vue_is_functional_template__$10,
-    __vue_module_identifier__$10,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
 function getBoundingClientRect(element) {
   var rect = element.getBoundingClientRect();
   return {
@@ -10653,18 +9043,18 @@ popperGenerator({
 //
 
 function objectWithoutProperties (obj, exclude) { var target = {}; for (var k in obj) if (Object.prototype.hasOwnProperty.call(obj, k) && exclude.indexOf(k) === -1) target[k] = obj[k]; return target; }
-var S$7 = String, B$9 = Boolean;
-var script$_ = {
+var S$6 = String, B$7 = Boolean;
+var script$U = {
   name: 'XPopper',
   props: {
     offset: { type: Number, default: 0 },
     options: Object,
-    adaptive: { type: B$9, default: true },
-    hasArrow: B$9,
-    arrowClass: S$7,
-    transitionName: S$7,
-    visible: B$9,
-    transfer: B$9,
+    adaptive: { type: B$7, default: true },
+    hasArrow: B$7,
+    arrowClass: S$6,
+    transitionName: S$6,
+    visible: B$7,
+    transfer: B$7,
     placement: {
       default: 'bottom',
       validator: function validator(v) {
@@ -10769,9 +9159,9 @@ var script$_ = {
 };
 
 /* script */
-var __vue_script__$_ = script$_;
+var __vue_script__$U = script$U;
 /* template */
-var __vue_render__$11 = function() {
+var __vue_render__$X = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -10843,17 +9233,17 @@ var __vue_render__$11 = function() {
     1
   )
 };
-var __vue_staticRenderFns__$11 = [];
-__vue_render__$11._withStripped = true;
+var __vue_staticRenderFns__$X = [];
+__vue_render__$X._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$11 = undefined;
+  var __vue_inject_styles__$X = undefined;
   /* scoped */
-  var __vue_scope_id__$11 = undefined;
+  var __vue_scope_id__$X = undefined;
   /* module identifier */
-  var __vue_module_identifier__$11 = undefined;
+  var __vue_module_identifier__$X = undefined;
   /* functional template */
-  var __vue_is_functional_template__$11 = false;
+  var __vue_is_functional_template__$X = false;
   /* style inject */
   
   /* style inject SSR */
@@ -10862,13 +9252,536 @@ __vue_render__$11._withStripped = true;
   
 
   
-  var __vue_component__$11 = normalizeComponent(
-    { render: __vue_render__$11, staticRenderFns: __vue_staticRenderFns__$11 },
-    __vue_inject_styles__$11,
-    __vue_script__$_,
-    __vue_scope_id__$11,
-    __vue_is_functional_template__$11,
-    __vue_module_identifier__$11,
+  var __vue_component__$X = normalizeComponent(
+    { render: __vue_render__$X, staticRenderFns: __vue_staticRenderFns__$X },
+    __vue_inject_styles__$X,
+    __vue_script__$U,
+    __vue_scope_id__$X,
+    __vue_is_functional_template__$X,
+    __vue_module_identifier__$X,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var Cache = function Cache(value, label) {
+  var obj;
+
+  this.data = ['', null, undefined].indexOf(value) > -1 ? {} :
+    isArr(value) ? value.reduce(function (acc, _, i) {
+      var obj;
+
+      return (Object.assign({}, acc, ( obj = {}, obj[_] = label[i], obj )));
+  }, {}) : ( obj = {}, obj[value] = label, obj );
+};
+
+Cache.prototype.add = function add (item) {
+  this.data[item.value] = item.label || item.value;
+};
+
+Cache.prototype.remove = function remove (value) {
+  delete this.data[value];
+};
+
+Cache.prototype.getLabel = function getLabel (value) {
+  return this.data[value]
+};
+
+Cache.prototype.clear = function clear () {
+  this.data = {};
+};
+
+//
+var N$4 = Number, S$7 = String, B$8 = Boolean, SNA = [S$7, N$4, Array];
+var script$V = {
+  name: 'XSelect',
+  components: { XTag: __vue_component__$9, XIcon: __vue_component__, XPopper: __vue_component__$X },
+  props: {
+    value: SNA,
+    multiple: B$8,
+    disabled: B$8,
+    clearable: B$8,
+    filterable: B$8,
+    remote: B$8,
+    remoteMethod: Function,
+    loading: B$8,
+    loadingText: { type: S$7, default: '加载中' },
+    label: SNA,
+    size: {
+      validator: function validator(v) {
+        return ['large', 'small', 'default'].indexOf(v) > -1
+      }
+    },
+    placeholder: { type: S$7, default: '请选择' },
+    notFoundText: { type: S$7, default: '无匹配数据' },
+    prefix: S$7,
+    maxTagCount: N$4,
+    maxTagPlaceholder: Function
+  },
+  data: function data() {
+    return {
+      visible: false,
+      prefixCls: 'x-select',
+      listStyle: null,
+      selectedValue: this.getModel(),
+      children: [],
+      searchValue: '',
+      cache: new Cache(this.value, this.label)
+    }
+  },
+  computed: {
+    popperProps: function popperProps() {
+      return Object.assign({}, this.$attrs,
+        {ref: 'Popper',
+        adaptive: false,
+        visible: this.visible,
+        placement: 'bottom-start',
+        transitionName: 'x-animate-dropdown'})
+    },
+    boxClass: function boxClass() {
+      return [
+        ((this.prefixCls) + "_selection"),
+        this.size && ((this.prefixCls) + "_" + (this.size)),
+        {
+          listVisible: this.visible,
+          disabled: this.disabled,
+          multiple: this.multiple,
+          filterable: this.filterable,
+          clearable: this.clearable && this.selectedValue.length
+        }
+      ]
+    },
+    inputStyle: function inputStyle() {
+      return this.selectedValue.length && { width: '20px' }
+    },
+    inputPlaceholder: function inputPlaceholder() {
+      return !this.selectedValue.length && this.placeholder
+    },
+    searchText: function searchText() {
+      return this.searchValue.replace(/\s/gm, function (val) { return '&nbsp;'; })
+    },
+    singleLabel: function singleLabel() {
+      var val = this.selectedValue[0];
+      var vm = this.children.find(function (_) { return _.value === val; });
+      return this.remote ? this.cache.getLabel(val) : vm && (vm.label || vm.value)
+    },
+    showedValues: function showedValues() {
+      return this.maxTagCount ? this.selectedValue.slice(0, this.maxTagCount) : this.selectedValue
+    },
+    moreValue: function moreValue() {
+      var moreCount = this.maxTagCount ? this.selectedValue.length - this.maxTagCount : 0;
+      return moreCount > 0 ? this.maxTagPlaceholder ? this.maxTagPlaceholder(moreCount) : ("+ " + moreCount + "...") : 0
+    },
+    isEmpty: function isEmpty() {
+      return this.children.every(function (_) { return _.removed; })
+    }
+  },
+  watch: {
+    visible: function visible(val) {
+      var this$1 = this;
+
+      val && this.$nextTick(function () { return this$1.listStyle = { minWidth: ((this$1.$el.offsetWidth) + "px") }; });
+    },
+    value: 'updateModel',
+    selectedValue: function selectedValue(val) {
+      var this$1 = this;
+
+      this.$emit('input', this.multiple ? val : val[0]);
+      this.children.forEach(function (_) { return _.selected = val.indexOf(_.value) > -1; });
+      if (this.multiple && this.visible) {
+        clearTimeout(this.tid);
+        this.tid = setTimeout(function () { return this$1.$refs.Popper.update(); }, 50);
+      }
+    },
+    children: function children(val) {
+      var this$1 = this;
+
+      val.forEach(function (_) { return _.selected = this$1.selectedValue.indexOf(_.value) > -1; });
+    },
+    searchValue: function searchValue(val) {
+      var this$1 = this;
+
+      if (this.filterable && val) {
+        this.throttleSearch && this.throttleSearch();
+        if (this.multiple) {
+          this.$nextTick(function () {
+            this$1.$refs.Input.style.width = val || this$1.selectedValue.length ?
+              Math.min(this$1.$refs.SearchText.offsetWidth, this$1.$el.offsetWidth - 25) + 'px' : '';
+          });
+        }
+      }
+    }
+  },
+  mounted: function mounted() {
+    var this$1 = this;
+
+    this.throttleSearch = throttle(function () {
+      if (this$1.remote) {
+        this$1.remoteMethod && this$1.remoteMethod(this$1.searchValue);
+      } else {
+        var val = (this$1.searchValue + '').toLowerCase();
+        this$1.children.forEach(function (_) {
+          var optionVal = (_.value + '').toLowerCase();
+          var optionLabel = _.label === undefined ? '' : (_.label + '').toLowerCase();
+          _.removed = optionVal.indexOf(val) < 0 && optionLabel.indexOf(val) < 0;
+        });
+      }
+    }, 1000);
+  },
+  methods: {
+    getModel: function getModel() {
+      return this.multiple ? this.value : ['', null, undefined].indexOf(this.value) < 0 ? [this.value] : []
+    },
+    updateModel: function updateModel(val) {
+      this.selectedValue = this.getModel(val);
+    },
+    updateSelected: function updateSelected(vm) {
+      if (this.multiple) {
+        this.filterable && this.$refs.Input.focus();
+        var index = this.selectedValue.indexOf(vm.value);
+        if (index < 0) {
+          this.cache.add(vm);
+          this.selectedValue.push(vm.value);
+        } else {
+          this.cache.remove(vm.value);
+          this.selectedValue.splice(index, 1);
+        }
+      } else {
+        this.toggle(false);
+        this.cache.add(vm);
+        this.selectedValue = [vm.value];
+        if (this.filterable) { this.searchValue = vm.label || vm.value; }
+      }
+      this.$refs.Box.focus();
+      this.children.forEach(function (_) { return _.focus = _.value === vm.value; });
+      this.$emit('on-change', this.selectedValue);
+    },
+    removeSelected: function removeSelected(val) {
+      this.cache.remove(val);
+      this.selectedValue.splice(this.selectedValue.indexOf(val), 1);
+      this.$emit('on-change', this.selectedValue);
+    },
+    addItem: function addItem(vm) {
+      this.children.push(vm);
+    },
+    removeItem: function removeItem(vm) {
+      this.children.splice(this.children.indexOf(vm), 1);
+    },
+    getLabel: function getLabel(value) {
+      var vm = this.children.find(function (_) { return _.value === value; });
+      return this.remote ? this.cache.getLabel(value) : vm ? vm.label || vm.value : value
+    },
+    setOptionFocus: function setOptionFocus(isUp) {
+      if (this.visible) {
+        var children = this.children.filter(function (_) { return !_.removed && !_.disabled; }), len = children.length;
+        if (len) {
+          var index = children.findIndex(function (_) { return _.focus; });
+          this.children.forEach(function (_) { return _.focus = false; });
+          index = isUp ? (index <= 0 ? len - 1 : index - 1) : (index < len - 1 ? index + 1 : 0);
+          var vm = children[index];
+          vm.focus = true;
+          vm.$el.scrollIntoViewIfNeeded();
+        }
+      } else {
+        this.toggle();
+      }
+    },
+    toggle: function toggle(visible) {
+      this.visible = visible === undefined ? !this.visible : visible;
+    },
+    onClick: function onClick() {
+      if (!this.disabled) { this.toggle(); }
+    },
+    onClear: function onClear() {
+      this.selectedValue = [];
+    },
+    show: function show(visible) {
+      this.$emit('on-open-change', visible);
+    },
+    onFocus: function onFocus() {
+      if (!this.disabled && this.filterable) { this.$refs.Input.focus(); }
+    },
+    onKeydown: function onKeydown(e) {
+      if (!this.disabled) {
+        var keyCode = e.keyCode;
+        var UP = 38, DOWN = 40, ESC = 27, ENTER = 13, DEL = 46, BACKSPACE = 8, TAB = 9;
+        if (
+          [UP, DOWN].indexOf(keyCode) > -1 ||
+          (this.visible && [ESC, TAB].indexOf(keyCode) > -1)
+        ) { e.preventDefault(); }
+        if (keyCode === ENTER) {
+          if (this.visible) {
+            var vm =  this.children.find(function (_) { return _.focus && !_.removed; });
+            vm ? this.updateSelected(vm) : this.toggle();
+          }
+        } else if (keyCode === UP) {
+          this.setOptionFocus(true);
+        } else if (keyCode === DOWN) {
+          this.setOptionFocus();
+        } else if (keyCode === ESC) {
+          this.toggle(false);
+        } else if ([DEL, BACKSPACE].indexOf(keyCode) > -1) {
+          this.multiple && this.filterable && !this.searchValue && this.selectedValue.pop();
+        }
+      }
+    },
+    onInputBlur: function onInputBlur() {
+      var this$1 = this;
+
+      setTimeout(function () { return this$1.searchValue = this$1.singleLabel; }, 300);
+    }
+  }
+};
+
+/* script */
+var __vue_script__$V = script$V;
+/* template */
+var __vue_render__$Y = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    { class: _vm.prefixCls },
+    [
+      _c(
+        "x-popper",
+        _vm._b(
+          {
+            on: {
+              clickoutside: function($event) {
+                return _vm.toggle(false)
+              },
+              "on-popper-show": function($event) {
+                return _vm.show(true)
+              },
+              "on-popper-hide": function($event) {
+                return _vm.show(false)
+              }
+            }
+          },
+          "x-popper",
+          _vm.popperProps,
+          false
+        ),
+        [
+          _c(
+            "div",
+            {
+              ref: "Box",
+              class: _vm.boxClass,
+              attrs: { slot: "reference", tabindex: "0" },
+              on: {
+                click: _vm.onClick,
+                focus: _vm.onFocus,
+                keydown: _vm.onKeydown
+              },
+              slot: "reference"
+            },
+            [
+              _vm.prefix || _vm.$slots.prefix
+                ? [
+                    _vm._t("prefix", [
+                      _c("x-icon", { attrs: { type: _vm.prefix } })
+                    ])
+                  ]
+                : _vm._e(),
+              _vm._v(" "),
+              _c(
+                "div",
+                { class: _vm.prefixCls + "_middle" },
+                [
+                  _vm.multiple
+                    ? [
+                        _vm._l(_vm.showedValues, function(_) {
+                          return _c(
+                            "x-tag",
+                            {
+                              key: _,
+                              attrs: { closable: "", fade: false },
+                              on: {
+                                "on-close": function($event) {
+                                  $event.stopPropagation();
+                                  return _vm.removeSelected(_)
+                                }
+                              }
+                            },
+                            [_vm._v(_vm._s(_vm.getLabel(_)))]
+                          )
+                        }),
+                        _vm._v(" "),
+                        _vm.moreValue
+                          ? _c("x-tag", { attrs: { fade: false } }, [
+                              _vm._v(_vm._s(_vm.moreValue))
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        !_vm.filterable && !_vm.selectedValue.length
+                          ? _c("input", {
+                              class: _vm.prefixCls + "_input placeholder",
+                              attrs: { placeholder: _vm.placeholder }
+                            })
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.filterable
+                          ? _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.searchValue,
+                                  expression: "searchValue"
+                                }
+                              ],
+                              ref: "Input",
+                              class: _vm.prefixCls + "_input",
+                              style: _vm.inputStyle,
+                              attrs: { placeholder: _vm.inputPlaceholder },
+                              domProps: { value: _vm.searchValue },
+                              on: {
+                                input: [
+                                  function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.searchValue = $event.target.value;
+                                  },
+                                  function($event) {
+                                    return _vm.toggle(true)
+                                  }
+                                ]
+                              }
+                            })
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c(
+                          "span",
+                          {
+                            ref: "SearchText",
+                            class: _vm.prefixCls + "_inputText"
+                          },
+                          [_vm._v(_vm._s(_vm.searchText))]
+                        )
+                      ]
+                    : [
+                        _vm.filterable
+                          ? _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.searchValue,
+                                  expression: "searchValue"
+                                }
+                              ],
+                              ref: "Input",
+                              class: _vm.prefixCls + "_input",
+                              attrs: { placeholder: _vm.placeholder },
+                              domProps: { value: _vm.searchValue },
+                              on: {
+                                blur: _vm.onInputBlur,
+                                input: [
+                                  function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.searchValue = $event.target.value;
+                                  },
+                                  function($event) {
+                                    return _vm.toggle(true)
+                                  }
+                                ]
+                              }
+                            })
+                          : [
+                              _vm.selectedValue.length
+                                ? _c(
+                                    "span",
+                                    { class: _vm.prefixCls + "_label" },
+                                    [_vm._v(_vm._s(_vm.singleLabel))]
+                                  )
+                                : _c(
+                                    "span",
+                                    { class: _vm.prefixCls + "_placeholder" },
+                                    [_vm._v(_vm._s(_vm.placeholder))]
+                                  )
+                            ]
+                      ]
+                ],
+                2
+              ),
+              _vm._v(" "),
+              _c("x-icon", {
+                class: _vm.prefixCls + "_clearIcon",
+                attrs: { type: "ios-close" },
+                on: {
+                  click: function($event) {
+                    $event.stopPropagation();
+                    return _vm.onClear($event)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("x-icon", {
+                class: _vm.prefixCls + "_arrowIcon",
+                attrs: { type: "ios-arrow-down" }
+              })
+            ],
+            2
+          ),
+          _vm._v(" "),
+          _c(
+            "ul",
+            {
+              class: [_vm.prefixCls + "_options", { multiple: _vm.multiple }],
+              style: _vm.listStyle
+            },
+            [
+              _vm.isEmpty
+                ? _c("li", { class: _vm.prefixCls + "_empty" }, [
+                    _vm._v(
+                      _vm._s(_vm.loading ? _vm.loadingText : _vm.notFoundText)
+                    )
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm._t("default")
+            ],
+            2
+          )
+        ]
+      )
+    ],
+    1
+  )
+};
+var __vue_staticRenderFns__$Y = [];
+__vue_render__$Y._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$Y = undefined;
+  /* scoped */
+  var __vue_scope_id__$Y = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$Y = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$Y = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$Y = normalizeComponent(
+    { render: __vue_render__$Y, staticRenderFns: __vue_staticRenderFns__$Y },
+    __vue_inject_styles__$Y,
+    __vue_script__$V,
+    __vue_scope_id__$Y,
+    __vue_is_functional_template__$Y,
+    __vue_module_identifier__$Y,
     false,
     undefined,
     undefined,
@@ -10876,15 +9789,882 @@ __vue_render__$11._withStripped = true;
   );
 
 //
-var N$5 = Number, B$a = Boolean, NS$2 = [N$5, String];
-var script$$ = {
+var script$W = {
+  name: 'XOption',
+  components: { XIcon: __vue_component__ },
+  props: {
+    label: String,
+    disabled: Boolean,
+    value: [String, Number]
+  },
+  data: function data() {
+    return {
+      focus: false,
+      removed: false,
+      selected: false,
+      prefix: 'x-option'
+    }
+  },
+  computed: {
+    classes: function classes() {
+      return [
+        this.prefix,
+        {
+          focus: this.focus,
+          selected: this.selected,
+          disabled: this.disabled
+        }
+      ]
+    }
+  },
+  mounted: function mounted() {
+    this.parent = findParent(this, 'XSelect');
+    this.parent.addItem(this);
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.parent.removeItem(this);
+    this.parent = null;
+  },
+  methods: {
+    onClick: function onClick() {
+      if (!this.disabled) { this.parent.updateSelected(this); }
+    }
+  }
+};
+
+/* script */
+var __vue_script__$W = script$W;
+/* template */
+var __vue_render__$Z = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return !_vm.removed
+    ? _c(
+        "li",
+        { class: _vm.classes, on: { click: _vm.onClick } },
+        [
+          _c(
+            "div",
+            { class: _vm.prefix + "_content" },
+            [_vm._t("default", [_vm._v(_vm._s(_vm.label || _vm.value))])],
+            2
+          ),
+          _vm._v(" "),
+          _vm.selected
+            ? _c("x-icon", {
+                class: _vm.prefix + "_doneIcon",
+                attrs: { type: "android-done" }
+              })
+            : _vm._e()
+        ],
+        1
+      )
+    : _vm._e()
+};
+var __vue_staticRenderFns__$Z = [];
+__vue_render__$Z._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$Z = undefined;
+  /* scoped */
+  var __vue_scope_id__$Z = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$Z = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$Z = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$Z = normalizeComponent(
+    { render: __vue_render__$Z, staticRenderFns: __vue_staticRenderFns__$Z },
+    __vue_inject_styles__$Z,
+    __vue_script__$W,
+    __vue_scope_id__$Z,
+    __vue_is_functional_template__$Z,
+    __vue_module_identifier__$Z,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+var N$5 = Number, B$9 = Boolean;
+var script$X = {
+  name: 'XPage',
+  components: { XIcon: __vue_component__, XSelect: __vue_component__$Y, XOption: __vue_component__$Z, XInput: __vue_component__$I },
+  props: {
+    current: { type: N$5, default: 1 },
+    total: { type: N$5, default: 0 },
+    pageSize: { type: N$5, default: 10 },
+    pageSizeOpts: { type: Array, default: function () { return [10, 20, 30, 40]; } },
+    placement: {
+      default: 'bottom',
+      validator: function validator(v) {
+        return ['bottom', 'top'].indexOf(v) > -1
+      }
+    },
+    size: {
+      validator: function validator(v) {
+        return v === 'small'
+      }
+    },
+    simple: B$9,
+    showTotal: B$9,
+    showElevator: B$9,
+    showSizer: B$9,
+    transfer: B$9,
+    prevText: String,
+    nextText: String
+  },
+  data: function data() {
+    return { prefix: 'x-page', limit: this.pageSize, currentPage: 1, inputValue: 1 }
+  },
+  computed: {
+    pageCount: function pageCount() {
+      return Math.ceil(this.total / this.limit)
+    },
+    disabledPrev: function disabledPrev() {
+      return this.currentPage === 1
+    },
+    disabledNext: function disabledNext() {
+      return this.currentPage === this.pageCount
+    },
+    showPages: function showPages() {
+      var ref = this;
+      var currentPage = ref.currentPage;
+      var pageCount = ref.pageCount;
+      var nums = [];
+      if (currentPage < 5) {
+        for (var i = 1; i <= currentPage; i++) { nums.push(i); }
+      } else {
+        nums = [currentPage - 2, currentPage - 1, currentPage];
+      }
+      if (pageCount - currentPage <= 3) {
+        for (var i$1 = currentPage + 1; i$1 <= pageCount; i$1++) { nums.push(i$1); }
+      } else {
+        nums.push(currentPage + 1, currentPage + 2);
+      }
+      return nums
+    }
+  },
+  watch: {
+    limit: function limit(val) { // 页大小改变 跳转到首页 并发射页大小改变事件 但不发射当前页改变事件
+      this.goPage(1);
+      this.$emit('on-page-size-change', val);
+    },
+    current: {
+      immediate: true,
+      handler: function handler(val) {
+        this.currentPage = this.inputValue = val;
+      }
+    },
+    pageSize: function pageSize(val) {
+      this.limit = val;
+    }
+  },
+  methods: {
+    goPage: function goPage(page) { // 到第几页 不发射改变事件
+      this.inputValue = page;
+      this.currentPage = page;
+      this.$emit('update:current', page);
+    },
+    toPage: function toPage(page) { // 到第几页 手动触发导致 发射改变事件
+      this.goPage(page);
+      this.$emit('on-change', page);
+    },
+    toPrev: function toPrev() { // 到上1页
+      !this.disabledPrev && this.toPage(this.currentPage - 1);
+    },
+    toNext: function toNext() { // 到下1页
+      !this.disabledNext && this.toPage(this.currentPage + 1);
+    },
+    toPrev5: function toPrev5() { // 到上5页
+      this.toPage(Math.max(this.currentPage - 5, 1));
+    },
+    toNext5: function toNext5() { // 到下5页
+      this.toPage(Math.min(this.currentPage + 5, this.pageCount));
+    },
+    toInputPage: function toInputPage() { // 电梯直达目标页
+      var inputValue = +this.inputValue;
+      if (isNaN(inputValue) || inputValue < 1) {
+        this.toPage(1);
+      } else if (inputValue > this.pageCount) {
+        this.toPage(this.pageCount);
+      } else {
+        this.toPage(inputValue);
+      }
+    },
+    onKeydown: function onKeydown(e) { // 简洁版输入框键盘按下
+      if ([38, 40].indexOf(e.keyCode) > -1) { e.preventDefault(); }
+    },
+    onKeyup: function onKeyup(e) { // 简洁版输入框键盘松开
+      if (e.keyCode === 38) {
+        this.inputValue = this.currentPage = Math.min(this.pageCount, this.currentPage + 1);
+      } else if (e.keyCode === 40) {
+        this.inputValue = this.currentPage = Math.max(1, this.currentPage - 1);
+      }
+    }
+  }
+};
+
+/* script */
+var __vue_script__$X = script$X;
+/* template */
+var __vue_render__$_ = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "ul",
+    { class: [_vm.prefix, _vm.size, { simple: _vm.simple }] },
+    [
+      _vm.showTotal && !_vm.simple
+        ? _c(
+            "span",
+            { class: _vm.prefix + "_total" },
+            [_vm._t("default", [_vm._v("共 " + _vm._s(_vm.total) + " 条")])],
+            2
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "li",
+        {
+          class: { isText: _vm.prevText, disabled: _vm.disabledPrev },
+          on: { click: _vm.toPrev }
+        },
+        [
+          _vm._v("\n    " + _vm._s(_vm.prevText)),
+          _c("x-icon", { attrs: { type: "ios-arrow-left" } })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _vm.simple
+        ? _c(
+            "span",
+            { class: _vm.prefix + "_elevator" },
+            [
+              _c("x-input", {
+                attrs: { size: "small" },
+                on: {
+                  "on-enter": _vm.toInputPage,
+                  "on-keydown": _vm.onKeydown,
+                  "on-keyup": _vm.onKeyup
+                },
+                model: {
+                  value: _vm.inputValue,
+                  callback: function($$v) {
+                    _vm.inputValue = $$v;
+                  },
+                  expression: "inputValue"
+                }
+              }),
+              _vm._v(" "),
+              _c("span", { class: _vm.prefix + "_slash" }, [_vm._v("/")]),
+              _vm._v(" " + _vm._s(_vm.pageCount) + "\n  ")
+            ],
+            1
+          )
+        : [
+            _vm.currentPage >= 5
+              ? [
+                  _c(
+                    "li",
+                    {
+                      class: { active: _vm.currentPage === 1 },
+                      on: {
+                        click: function($event) {
+                          return _vm.toPage(1)
+                        }
+                      }
+                    },
+                    [_vm._v("1")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "li",
+                    {
+                      class: _vm.prefix + "_more",
+                      attrs: { title: "向前5页" },
+                      on: { click: _vm.toPrev5 }
+                    },
+                    [
+                      _c(
+                        "span",
+                        { staticClass: "arrows" },
+                        _vm._l(2, function(i) {
+                          return _c("x-icon", {
+                            key: i,
+                            attrs: { type: "ios-arrow-left" }
+                          })
+                        }),
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("x-icon", {
+                        staticClass: "icon-more",
+                        attrs: { type: "ios-more" }
+                      })
+                    ],
+                    1
+                  )
+                ]
+              : _vm._e(),
+            _vm._v(" "),
+            _vm._l(_vm.showPages, function(_) {
+              return _c(
+                "li",
+                {
+                  key: _,
+                  class: { active: _vm.currentPage === _ },
+                  on: {
+                    click: function($event) {
+                      return _vm.toPage(_)
+                    }
+                  }
+                },
+                [_vm._v(_vm._s(_))]
+              )
+            }),
+            _vm._v(" "),
+            _vm.pageCount - _vm.currentPage >= 4
+              ? [
+                  _c(
+                    "li",
+                    {
+                      class: _vm.prefix + "_more",
+                      attrs: { title: "向后5页" },
+                      on: { click: _vm.toNext5 }
+                    },
+                    [
+                      _c(
+                        "span",
+                        { staticClass: "arrows" },
+                        _vm._l(2, function(i) {
+                          return _c("x-icon", {
+                            key: i,
+                            attrs: { type: "ios-arrow-right" }
+                          })
+                        }),
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("x-icon", {
+                        staticClass: "icon-more",
+                        attrs: { type: "ios-more" }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "li",
+                    {
+                      class: { active: _vm.currentPage === _vm.pageCount },
+                      on: {
+                        click: function($event) {
+                          return _vm.toPage(_vm.pageCount)
+                        }
+                      }
+                    },
+                    [_vm._v(_vm._s(_vm.pageCount))]
+                  )
+                ]
+              : _vm._e()
+          ],
+      _vm._v(" "),
+      _c(
+        "li",
+        {
+          class: { isText: _vm.nextText, disabled: _vm.disabledNext },
+          on: { click: _vm.toNext }
+        },
+        [
+          _vm._v("\n    " + _vm._s(_vm.nextText)),
+          _c("x-icon", { attrs: { type: "ios-arrow-right" } })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      !_vm.simple
+        ? [
+            _vm.showSizer
+              ? _c(
+                  "x-select",
+                  {
+                    class: _vm.prefix + "_sizer",
+                    attrs: {
+                      placement: _vm.placement,
+                      transfer: _vm.transfer,
+                      size: _vm.size
+                    },
+                    model: {
+                      value: _vm.limit,
+                      callback: function($$v) {
+                        _vm.limit = $$v;
+                      },
+                      expression: "limit"
+                    }
+                  },
+                  _vm._l(_vm.pageSizeOpts, function(_) {
+                    return _c("x-option", {
+                      key: _,
+                      attrs: { value: _, label: _ + " 条/页" }
+                    })
+                  }),
+                  1
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.showElevator
+              ? _c(
+                  "span",
+                  { class: _vm.prefix + "_elevator" },
+                  [
+                    _vm._v("\n      跳至"),
+                    _c("x-input", {
+                      attrs: { size: _vm.size },
+                      on: { "on-enter": _vm.toInputPage },
+                      model: {
+                        value: _vm.inputValue,
+                        callback: function($$v) {
+                          _vm.inputValue = $$v;
+                        },
+                        expression: "inputValue"
+                      }
+                    }),
+                    _vm._v("页\n    ")
+                  ],
+                  1
+                )
+              : _vm._e()
+          ]
+        : _vm._e()
+    ],
+    2
+  )
+};
+var __vue_staticRenderFns__$_ = [];
+__vue_render__$_._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$_ = undefined;
+  /* scoped */
+  var __vue_scope_id__$_ = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$_ = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$_ = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$_ = normalizeComponent(
+    { render: __vue_render__$_, staticRenderFns: __vue_staticRenderFns__$_ },
+    __vue_inject_styles__$_,
+    __vue_script__$X,
+    __vue_scope_id__$_,
+    __vue_is_functional_template__$_,
+    __vue_module_identifier__$_,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+var script$Y = {
+  name: 'XTabs',
+  components: { XIcon: __vue_component__, XCloseIconButton: __vue_component__$7, XRender: XRender },
+  props: {
+    value: [String, Number],
+    type: {
+      default: 'line',
+      validator: function validator(v) {
+        return ['line', 'card'].indexOf(v) > -1
+      }
+    },
+    size: {
+      validator: function validator(v) {
+        return ['default', 'small'].indexOf(v) > -1
+      }
+    },
+    closable: Boolean,
+    animated: { type: Boolean, default: true },
+    beforeClose: Function
+  },
+  data: function data() {
+    return {
+      prefix: 'x-tabs',
+      items: [],
+      activeTab: this.value,
+      showNavBtns: false,
+      translateX: 0
+    }
+  },
+  computed: {
+    classes: function classes() {
+      var ref = this;
+      var prefix = ref.prefix;
+      return [prefix, this.size && (prefix + "_" + (this.size)), (prefix + "_" + (this.type))]
+    },
+    contentStyle: function contentStyle() {
+      var this$1 = this;
+
+      var index = this.items.findIndex(function (_) { return _.key === this$1.activeTab; });
+      return index > -1 && { transform: ("translateX(" + (-index * 100) + "%)") }
+    }
+  },
+  watch: {
+    value: function value(val) {
+      this.activeTab = val;
+    },
+    activeTab: function activeTab(val) {
+      var this$1 = this;
+
+      this.$emit('input', val);
+      this.$nextTick(function () { return this$1.scrollToCurrent(); });
+    },
+    items: function items(val) {
+      if (val.length) {
+        if (this.activeTab === undefined) { this.activeTab = this.items[0].key; }
+      } else {
+        this.activeTab = undefined;
+      }
+    }
+  },
+  directives: { winresize: winresize },
+  methods: {
+    isFunc: isFunc,
+    tabClass: function tabClass(item) { // 项class
+      return [((this.prefix) + "_navItem"), { active: item.key === this.activeTab, disabled: item.disabled }]
+    },
+    addItem: function addItem(vm) {
+      var this$1 = this;
+ // 添加项组件 仅供子组件调用
+      var len = this.items.push(vm);
+      this.$nextTick(function () { return this$1.winResizeHandler(); });
+      return len
+    },
+    removeItem: function removeItem(vm) {
+      var this$1 = this;
+ // 移除项组件 仅供子组件调用
+      var index = this.items.indexOf(vm);
+      this.items.splice(index, 1);
+      if (vm.key === this.activeTab && this.items.length) {
+        this.activeTab = this.items[index > 0 ? index - 1 : 0].key;
+      }
+      this.$nextTick(function () { return this$1.winResizeHandler(); });
+    },
+    deleteItem: function deleteItem(item) {
+      var this$1 = this;
+ // 删除项 单击关闭按钮调用
+      var fn = function () { return this$1.$emit('on-tab-remove', item.key); };
+      this.beforeClose ? this.beforeClose().then(fn) : fn();
+    },
+    scrollToCurrent: function scrollToCurrent() {
+      var this$1 = this;
+ // 滚动到目标tab
+      if (this.activeTab !== undefined) {
+        var index = this.items.findIndex(function (_) { return _.key === this$1.activeTab; });
+        var ref = this.$refs;
+        var scrollView = ref.scrollView;
+        var el = scrollView.querySelectorAll('li')[index];
+        var rect = el.getBoundingClientRect();
+        var scrollViewLeft = scrollView.getBoundingClientRect().left + Math.abs(this.translateX);
+        var rightMoveDis = scrollViewLeft + scrollView.clientWidth - rect.right;
+        var leftMoveDis = scrollViewLeft - rect.left;
+        if (rightMoveDis < 0) {
+          this.onNavNext(Math.max(-rightMoveDis, el.clientWidth));
+        } else if (leftMoveDis > 0) {
+          this.onNavPrev(Math.max(leftMoveDis, el.clientWidth));
+        }
+      }
+    },
+    onTabClick: function onTabClick(item) { // tab单击
+      this.activeTab = item.key;
+      this.$emit('on-click', item.key);
+    },
+    canClose: function canClose(item) { // 是否可关闭
+      return item.closable === false ? false : (item.closable || this.closable) && this.type === 'card'
+    },
+    onNavPrev: function onNavPrev(dis) { // 向前导航
+      var ref = this.$refs.scrollView;
+      var clientWidth = ref.clientWidth;
+      var maxDis = Math.abs(this.translateX);
+      this.translateX += dis ? Math.min(maxDis, dis) : Math.min(clientWidth, maxDis > 0 ? maxDis : 0);
+    },
+    onNavNext: function onNavNext(dis) { // 向后导航
+      var ref = this.$refs.scrollView;
+      var clientWidth = ref.clientWidth;
+      var scrollWidth = ref.scrollWidth;
+      var maxDis = scrollWidth - clientWidth - Math.abs(this.translateX);
+      this.translateX -= dis ? Math.min(maxDis, dis) : Math.min(clientWidth, maxDis > 0 ? maxDis : 0);
+    },
+    winResizeHandler: function winResizeHandler() { // 窗口大小改变处理
+      var ref = this.$refs;
+      var scrollView = ref.scrollView;
+      if (scrollView) {
+        var clientWidth = scrollView.clientWidth;
+        var scrollWidth = scrollView.scrollWidth;
+        if (clientWidth + Math.abs(this.translateX) > scrollWidth) {
+          this.translateX = -scrollWidth + clientWidth;
+        }
+        this.showNavBtns = clientWidth < scrollWidth;
+      }
+    },
+    onWinResize: function onWinResize() { // 窗口大小改变节流处理 指令专用
+      return throttle(this.winResizeHandler, 50)
+    }
+  }
+};
+
+/* script */
+var __vue_script__$Y = script$Y;
+/* template */
+var __vue_render__$$ = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    {
+      directives: [
+        {
+          name: "winresize",
+          rawName: "v-winresize",
+          value: _vm.onWinResize(),
+          expression: "onWinResize()"
+        }
+      ],
+      class: _vm.classes
+    },
+    [
+      _c(
+        "div",
+        { class: _vm.prefix + "_bar" },
+        [
+          _c(
+            "div",
+            {
+              class: [_vm.prefix + "_navWrap", { showNavBtns: _vm.showNavBtns }]
+            },
+            [
+              _c("div", { class: _vm.prefix + "_scrollWrap" }, [
+                _c(
+                  "ul",
+                  {
+                    ref: "scrollView",
+                    class: _vm.prefix + "_nav",
+                    style: { transform: "translateX(" + _vm.translateX + "px)" }
+                  },
+                  _vm._l(_vm.items, function(_) {
+                    return _c(
+                      "li",
+                      {
+                        key: _.key,
+                        class: _vm.tabClass(_),
+                        on: {
+                          click: function($event) {
+                            return _vm.onTabClick(_)
+                          }
+                        }
+                      },
+                      [
+                        _.icon
+                          ? _c("x-icon", {
+                              class: _vm.prefix + "_icon",
+                              attrs: { type: _.icon }
+                            })
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.isFunc(_.label)
+                          ? _c("x-render", { attrs: { render: _.label } })
+                          : [_vm._v(_vm._s(_.label))],
+                        _vm._v(" "),
+                        _vm.canClose(_)
+                          ? _c("x-close-icon-button", {
+                              class: _vm.prefix + "_close",
+                              on: {
+                                click: function($event) {
+                                  $event.stopPropagation();
+                                  return _vm.deleteItem(_)
+                                }
+                              }
+                            })
+                          : _vm._e()
+                      ],
+                      2
+                    )
+                  }),
+                  0
+                )
+              ]),
+              _vm._v(" "),
+              _vm.showNavBtns
+                ? [
+                    _c("x-icon", {
+                      class: _vm.prefix + "_navPrev",
+                      attrs: { type: "ios-arrow-back" },
+                      on: {
+                        click: function($event) {
+                          return _vm.onNavPrev()
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("x-icon", {
+                      class: _vm.prefix + "_navNext",
+                      attrs: { type: "ios-arrow-forward" },
+                      on: {
+                        click: function($event) {
+                          return _vm.onNavNext()
+                        }
+                      }
+                    })
+                  ]
+                : _vm._e()
+            ],
+            2
+          ),
+          _vm._v(" "),
+          _vm._t("extra")
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          class: [_vm.prefix + "_content", { animated: _vm.animated }],
+          style: _vm.contentStyle
+        },
+        [_vm._t("default")],
+        2
+      )
+    ]
+  )
+};
+var __vue_staticRenderFns__$$ = [];
+__vue_render__$$._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$$ = undefined;
+  /* scoped */
+  var __vue_scope_id__$$ = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$$ = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$$ = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$$ = normalizeComponent(
+    { render: __vue_render__$$, staticRenderFns: __vue_staticRenderFns__$$ },
+    __vue_inject_styles__$$,
+    __vue_script__$Y,
+    __vue_scope_id__$$,
+    __vue_is_functional_template__$$,
+    __vue_module_identifier__$$,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+var S$8 = String, B$a = Boolean;
+var script$Z = {
+  name: 'XTabPane',
+  data: function data() {
+    return { key: this.name }
+  },
+  props: {
+    name: S$8,
+    label: [S$8, Function],
+    icon: S$8,
+    disabled: B$a,
+    closable: { type: B$a, default: null }
+  },
+  mounted: function mounted() {
+    this.parent = findParent(this, 'XTabs');
+    var len = this.parent.addItem(this);
+    if (this.key === undefined) { this.key = len - 1; }
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.parent.removeItem(this);
+  }
+};
+
+/* script */
+var __vue_script__$Z = script$Z;
+
+/* template */
+var __vue_render__$10 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { staticClass: "x-tabs-pane" }, [_vm._t("default")], 2)
+};
+var __vue_staticRenderFns__$10 = [];
+__vue_render__$10._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$10 = undefined;
+  /* scoped */
+  var __vue_scope_id__$10 = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$10 = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$10 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$10 = normalizeComponent(
+    { render: __vue_render__$10, staticRenderFns: __vue_staticRenderFns__$10 },
+    __vue_inject_styles__$10,
+    __vue_script__$Z,
+    __vue_scope_id__$10,
+    __vue_is_functional_template__$10,
+    __vue_module_identifier__$10,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+var N$6 = Number, B$b = Boolean, NS$2 = [N$6, String];
+var script$_ = {
   name: 'XTooltip',
-  components: { XPopper: __vue_component__$11 },
+  components: { XPopper: __vue_component__$X },
   props: {
     content: NS$2,
-    disabled: B$a,
-    delay: { type: N$5, default: 0 },
-    always: B$a,
+    disabled: B$b,
+    delay: { type: N$6, default: 0 },
+    always: B$b,
     theme: {
       default: 'dark',
       validator: function validator(v) {
@@ -10928,9 +10708,9 @@ var script$$ = {
 };
 
 /* script */
-var __vue_script__$$ = script$$;
+var __vue_script__$_ = script$_;
 /* template */
-var __vue_render__$12 = function() {
+var __vue_render__$11 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -10973,17 +10753,17 @@ var __vue_render__$12 = function() {
     ]
   )
 };
-var __vue_staticRenderFns__$12 = [];
-__vue_render__$12._withStripped = true;
+var __vue_staticRenderFns__$11 = [];
+__vue_render__$11._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$12 = undefined;
+  var __vue_inject_styles__$11 = undefined;
   /* scoped */
-  var __vue_scope_id__$12 = undefined;
+  var __vue_scope_id__$11 = undefined;
   /* module identifier */
-  var __vue_module_identifier__$12 = undefined;
+  var __vue_module_identifier__$11 = undefined;
   /* functional template */
-  var __vue_is_functional_template__$12 = false;
+  var __vue_is_functional_template__$11 = false;
   /* style inject */
   
   /* style inject SSR */
@@ -10992,13 +10772,13 @@ __vue_render__$12._withStripped = true;
   
 
   
-  var __vue_component__$12 = normalizeComponent(
-    { render: __vue_render__$12, staticRenderFns: __vue_staticRenderFns__$12 },
-    __vue_inject_styles__$12,
-    __vue_script__$$,
-    __vue_scope_id__$12,
-    __vue_is_functional_template__$12,
-    __vue_module_identifier__$12,
+  var __vue_component__$11 = normalizeComponent(
+    { render: __vue_render__$11, staticRenderFns: __vue_staticRenderFns__$11 },
+    __vue_inject_styles__$11,
+    __vue_script__$_,
+    __vue_scope_id__$11,
+    __vue_is_functional_template__$11,
+    __vue_module_identifier__$11,
     false,
     undefined,
     undefined,
@@ -11006,19 +10786,19 @@ __vue_render__$12._withStripped = true;
   );
 
 //
-var N$6 = Number, B$b = Boolean;
-var script$10 = {
+var N$7 = Number, B$c = Boolean;
+var script$$ = {
   name: 'XSlider',
-  components: { XTooltip: __vue_component__$12, XInputNumber: __vue_component__$J },
+  components: { XTooltip: __vue_component__$11, XInputNumber: __vue_component__$J },
   props: {
-    value: { type: [N$6, Array], default: 0 },
-    min: { type: N$6, default: 0 },
-    max: { type: N$6, default: 100 },
-    step: { type: N$6, default: 1 },
-    disabled: B$b,
-    range: B$b,
-    showInput: B$b,
-    showStops: B$b,
+    value: { type: [N$7, Array], default: 0 },
+    min: { type: N$7, default: 0 },
+    max: { type: N$7, default: 100 },
+    step: { type: N$7, default: 1 },
+    disabled: B$c,
+    range: B$c,
+    showInput: B$c,
+    showStops: B$c,
     showTip: {
       default: 'hover',
       validator: function validator(v) {
@@ -11174,9 +10954,9 @@ var script$10 = {
 };
 
 /* script */
-var __vue_script__$10 = script$10;
+var __vue_script__$$ = script$$;
 /* template */
-var __vue_render__$13 = function() {
+var __vue_render__$12 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -11321,17 +11101,17 @@ var __vue_render__$13 = function() {
     1
   )
 };
-var __vue_staticRenderFns__$13 = [];
-__vue_render__$13._withStripped = true;
+var __vue_staticRenderFns__$12 = [];
+__vue_render__$12._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$13 = undefined;
+  var __vue_inject_styles__$12 = undefined;
   /* scoped */
-  var __vue_scope_id__$13 = undefined;
+  var __vue_scope_id__$12 = undefined;
   /* module identifier */
-  var __vue_module_identifier__$13 = undefined;
+  var __vue_module_identifier__$12 = undefined;
   /* functional template */
-  var __vue_is_functional_template__$13 = false;
+  var __vue_is_functional_template__$12 = false;
   /* style inject */
   
   /* style inject SSR */
@@ -11340,13 +11120,13 @@ __vue_render__$13._withStripped = true;
   
 
   
-  var __vue_component__$13 = normalizeComponent(
-    { render: __vue_render__$13, staticRenderFns: __vue_staticRenderFns__$13 },
-    __vue_inject_styles__$13,
-    __vue_script__$10,
-    __vue_scope_id__$13,
-    __vue_is_functional_template__$13,
-    __vue_module_identifier__$13,
+  var __vue_component__$12 = normalizeComponent(
+    { render: __vue_render__$12, staticRenderFns: __vue_staticRenderFns__$12 },
+    __vue_inject_styles__$12,
+    __vue_script__$$,
+    __vue_scope_id__$12,
+    __vue_is_functional_template__$12,
+    __vue_module_identifier__$12,
     false,
     undefined,
     undefined,
@@ -11354,10 +11134,10 @@ __vue_render__$13._withStripped = true;
   );
 
 //
-var S$8 = String, B$c = Boolean, NS$3 = [Number, String];
-var script$11 = {
+var S$9 = String, B$d = Boolean, NS$3 = [Number, String];
+var script$10 = {
   name: 'XPoptip',
-  components: { XIcon: __vue_component__, XBtn: __vue_component__$1, XPopper: __vue_component__$11 },
+  components: { XIcon: __vue_component__, XBtn: __vue_component__$1, XPopper: __vue_component__$X },
   props: {
     trigger: {
       default: 'click',
@@ -11368,13 +11148,13 @@ var script$11 = {
     title: NS$3,
     content: NS$3,
     width: NS$3,
-    confirm: B$c,
-    disabled: B$c,
-    okText: { type: S$8, default: '确定' },
-    cancelText: { type: S$8, default: '取消' },
-    popperClass: S$8,
-    padding: { type: S$8, default: '8px 16px' },
-    value: B$c
+    confirm: B$d,
+    disabled: B$d,
+    okText: { type: S$9, default: '确定' },
+    cancelText: { type: S$9, default: '取消' },
+    popperClass: S$9,
+    padding: { type: S$9, default: '8px 16px' },
+    value: B$d
   },
   data: function data() {
     return { visible: this.value, prefix: 'x-poptip' }
@@ -11455,9 +11235,9 @@ var script$11 = {
 };
 
 /* script */
-var __vue_script__$11 = script$11;
+var __vue_script__$10 = script$10;
 /* template */
-var __vue_render__$14 = function() {
+var __vue_render__$13 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -11557,17 +11337,17 @@ var __vue_render__$14 = function() {
     ]
   )
 };
-var __vue_staticRenderFns__$14 = [];
-__vue_render__$14._withStripped = true;
+var __vue_staticRenderFns__$13 = [];
+__vue_render__$13._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$14 = undefined;
+  var __vue_inject_styles__$13 = undefined;
   /* scoped */
-  var __vue_scope_id__$14 = undefined;
+  var __vue_scope_id__$13 = undefined;
   /* module identifier */
-  var __vue_module_identifier__$14 = undefined;
+  var __vue_module_identifier__$13 = undefined;
   /* functional template */
-  var __vue_is_functional_template__$14 = false;
+  var __vue_is_functional_template__$13 = false;
   /* style inject */
   
   /* style inject SSR */
@@ -11576,13 +11356,13 @@ __vue_render__$14._withStripped = true;
   
 
   
-  var __vue_component__$14 = normalizeComponent(
-    { render: __vue_render__$14, staticRenderFns: __vue_staticRenderFns__$14 },
-    __vue_inject_styles__$14,
-    __vue_script__$11,
-    __vue_scope_id__$14,
-    __vue_is_functional_template__$14,
-    __vue_module_identifier__$14,
+  var __vue_component__$13 = normalizeComponent(
+    { render: __vue_render__$13, staticRenderFns: __vue_staticRenderFns__$13 },
+    __vue_inject_styles__$13,
+    __vue_script__$10,
+    __vue_scope_id__$13,
+    __vue_is_functional_template__$13,
+    __vue_module_identifier__$13,
     false,
     undefined,
     undefined,
@@ -11590,9 +11370,9 @@ __vue_render__$14._withStripped = true;
   );
 
 //
-var script$12 = {
+var script$11 = {
   name: 'XDropdown',
-  components: { XPopper: __vue_component__$11 },
+  components: { XPopper: __vue_component__$X },
   props: {
     trigger: {
       default: 'hover',
@@ -11651,9 +11431,9 @@ var script$12 = {
 };
 
 /* script */
-var __vue_script__$12 = script$12;
+var __vue_script__$11 = script$11;
 /* template */
-var __vue_render__$15 = function() {
+var __vue_render__$14 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -11709,6 +11489,81 @@ var __vue_render__$15 = function() {
     ]
   )
 };
+var __vue_staticRenderFns__$14 = [];
+__vue_render__$14._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$14 = undefined;
+  /* scoped */
+  var __vue_scope_id__$14 = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$14 = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$14 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$14 = normalizeComponent(
+    { render: __vue_render__$14, staticRenderFns: __vue_staticRenderFns__$14 },
+    __vue_inject_styles__$14,
+    __vue_script__$11,
+    __vue_scope_id__$14,
+    __vue_is_functional_template__$14,
+    __vue_module_identifier__$14,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+var script$12 = {
+  name: 'XDropdownItem',
+  props: {
+    name: String,
+    disabled: Boolean,
+    divided: Boolean,
+    selected: Boolean
+  },
+  data: function data() {
+    return { prefix: 'x-dropdown-item' }
+  },
+  methods: {
+    onClick: function onClick() {
+      var parent = findParent(this, 'XDropdown');
+      !this.disabled && parent && parent.itemClick(this.name);
+    }
+  }
+};
+
+/* script */
+var __vue_script__$12 = script$12;
+/* template */
+var __vue_render__$15 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("li", { class: _vm.prefix, on: { click: _vm.onClick } }, [
+    _vm.divided ? _c("div", { class: _vm.prefix + "_divider" }) : _vm._e(),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        class: [
+          _vm.prefix + "_inner",
+          { selected: _vm.selected, disabled: _vm.disabled }
+        ]
+      },
+      [_vm._t("default")],
+      2
+    )
+  ])
+};
 var __vue_staticRenderFns__$15 = [];
 __vue_render__$15._withStripped = true;
 
@@ -11741,48 +11596,14 @@ __vue_render__$15._withStripped = true;
     undefined
   );
 
-//
-var script$13 = {
-  name: 'XDropdownItem',
-  props: {
-    name: String,
-    disabled: Boolean,
-    divided: Boolean,
-    selected: Boolean
-  },
-  data: function data() {
-    return { prefix: 'x-dropdown-item' }
-  },
-  methods: {
-    onClick: function onClick() {
-      var parent = findParent(this, 'XDropdown');
-      !this.disabled && parent && parent.itemClick(this.name);
-    }
-  }
-};
-
 /* script */
-var __vue_script__$13 = script$13;
+
 /* template */
 var __vue_render__$16 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c("li", { class: _vm.prefix, on: { click: _vm.onClick } }, [
-    _vm.divided ? _c("div", { class: _vm.prefix + "_divider" }) : _vm._e(),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        class: [
-          _vm.prefix + "_inner",
-          { selected: _vm.selected, disabled: _vm.disabled }
-        ]
-      },
-      [_vm._t("default")],
-      2
-    )
-  ])
+  return _c("ul", [_vm._t("default")], 2)
 };
 var __vue_staticRenderFns__$16 = [];
 __vue_render__$16._withStripped = true;
@@ -11806,7 +11627,7 @@ __vue_render__$16._withStripped = true;
   var __vue_component__$16 = normalizeComponent(
     { render: __vue_render__$16, staticRenderFns: __vue_staticRenderFns__$16 },
     __vue_inject_styles__$16,
-    __vue_script__$13,
+    {},
     __vue_scope_id__$16,
     __vue_is_functional_template__$16,
     __vue_module_identifier__$16,
@@ -11816,49 +11637,8 @@ __vue_render__$16._withStripped = true;
     undefined
   );
 
-/* script */
-
-/* template */
-var __vue_render__$17 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("ul", [_vm._t("default")], 2)
-};
-var __vue_staticRenderFns__$17 = [];
-__vue_render__$17._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$17 = undefined;
-  /* scoped */
-  var __vue_scope_id__$17 = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$17 = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$17 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$17 = normalizeComponent(
-    { render: __vue_render__$17, staticRenderFns: __vue_staticRenderFns__$17 },
-    __vue_inject_styles__$17,
-    {},
-    __vue_scope_id__$17,
-    __vue_is_functional_template__$17,
-    __vue_module_identifier__$17,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
 //
-var script$14 = {
+var script$13 = {
   name: 'XMenu',
   props: {
     mode: {
@@ -11933,10 +11713,10 @@ var script$14 = {
 };
 
 /* script */
-var __vue_script__$14 = script$14;
+var __vue_script__$13 = script$13;
 
 /* template */
-var __vue_render__$18 = function() {
+var __vue_render__$17 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -11947,17 +11727,17 @@ var __vue_render__$18 = function() {
     2
   )
 };
-var __vue_staticRenderFns__$18 = [];
-__vue_render__$18._withStripped = true;
+var __vue_staticRenderFns__$17 = [];
+__vue_render__$17._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$18 = undefined;
+  var __vue_inject_styles__$17 = undefined;
   /* scoped */
-  var __vue_scope_id__$18 = undefined;
+  var __vue_scope_id__$17 = undefined;
   /* module identifier */
-  var __vue_module_identifier__$18 = undefined;
+  var __vue_module_identifier__$17 = undefined;
   /* functional template */
-  var __vue_is_functional_template__$18 = false;
+  var __vue_is_functional_template__$17 = false;
   /* style inject */
   
   /* style inject SSR */
@@ -11966,13 +11746,13 @@ __vue_render__$18._withStripped = true;
   
 
   
-  var __vue_component__$18 = normalizeComponent(
-    { render: __vue_render__$18, staticRenderFns: __vue_staticRenderFns__$18 },
-    __vue_inject_styles__$18,
-    __vue_script__$14,
-    __vue_scope_id__$18,
-    __vue_is_functional_template__$18,
-    __vue_module_identifier__$18,
+  var __vue_component__$17 = normalizeComponent(
+    { render: __vue_render__$17, staticRenderFns: __vue_staticRenderFns__$17 },
+    __vue_inject_styles__$17,
+    __vue_script__$13,
+    __vue_scope_id__$17,
+    __vue_is_functional_template__$17,
+    __vue_module_identifier__$17,
     false,
     undefined,
     undefined,
@@ -12012,10 +11792,10 @@ var watchMode = {
 };
 
 //
-var script$15 = {
+var script$14 = {
   mixins: [watchMode],
   name: 'XSubmenu',
-  components: { XIcon: __vue_component__, XPopper: __vue_component__$11, XCollapseTransition: __vue_component__$s },
+  components: { XIcon: __vue_component__, XPopper: __vue_component__$X, XCollapseTransition: __vue_component__$s },
   props: {
     name: [String, Number]
   },
@@ -12098,10 +11878,10 @@ var script$15 = {
 };
 
 /* script */
-var __vue_script__$15 = script$15;
+var __vue_script__$14 = script$14;
 
 /* template */
-var __vue_render__$19 = function() {
+var __vue_render__$18 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -12190,6 +11970,91 @@ var __vue_render__$19 = function() {
         1
       )
 };
+var __vue_staticRenderFns__$18 = [];
+__vue_render__$18._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$18 = undefined;
+  /* scoped */
+  var __vue_scope_id__$18 = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$18 = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$18 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$18 = normalizeComponent(
+    { render: __vue_render__$18, staticRenderFns: __vue_staticRenderFns__$18 },
+    __vue_inject_styles__$18,
+    __vue_script__$14,
+    __vue_scope_id__$18,
+    __vue_is_functional_template__$18,
+    __vue_module_identifier__$18,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+var script$15 = {
+  mixins: [watchMode],
+  name: 'XMenuItem',
+  props: {
+    name: [String, Number]
+  },
+  data: function data() {
+    return { active: false }
+  },
+  mounted: function mounted() {
+    var this$1 = this;
+
+    var menu = findParent(this, 'XMenu');
+    this.unwatchActivedName = this.$watch(
+      function () { return menu.activedItemName; },
+      function (val) { return this$1.active = val === this$1.name; },
+      { immediate: true }
+    );
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.unwatchActivedName();
+  },
+  methods: {
+    onClick: function onClick() {
+      var menu = findParent(this, 'XMenu'), 
+        submenu = findParent(this, 'XSubmenu');
+      menu.updateActiveName(this.name);
+      menu.$emit('on-select', this.name);
+      if (menu.mode === 'horizontal' && submenu) { submenu.show(false); }
+    }
+  }
+};
+
+/* script */
+var __vue_script__$15 = script$15;
+
+/* template */
+var __vue_render__$19 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "li",
+    {
+      class: ["x-menu-item", { active: _vm.active }],
+      style: _vm.titleStyle,
+      on: { click: _vm.onClick }
+    },
+    [_vm._t("default")],
+    2
+  )
+};
 var __vue_staticRenderFns__$19 = [];
 __vue_render__$19._withStripped = true;
 
@@ -12225,35 +12090,7 @@ __vue_render__$19._withStripped = true;
 //
 var script$16 = {
   mixins: [watchMode],
-  name: 'XMenuItem',
-  props: {
-    name: [String, Number]
-  },
-  data: function data() {
-    return { active: false }
-  },
-  mounted: function mounted() {
-    var this$1 = this;
-
-    var menu = findParent(this, 'XMenu');
-    this.unwatchActivedName = this.$watch(
-      function () { return menu.activedItemName; },
-      function (val) { return this$1.active = val === this$1.name; },
-      { immediate: true }
-    );
-  },
-  beforeDestroy: function beforeDestroy() {
-    this.unwatchActivedName();
-  },
-  methods: {
-    onClick: function onClick() {
-      var menu = findParent(this, 'XMenu'), 
-        submenu = findParent(this, 'XSubmenu');
-      menu.updateActiveName(this.name);
-      menu.$emit('on-select', this.name);
-      if (menu.mode === 'horizontal' && submenu) { submenu.show(false); }
-    }
-  }
+  props: { title: String }
 };
 
 /* script */
@@ -12264,16 +12101,13 @@ var __vue_render__$1a = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c(
-    "li",
-    {
-      class: ["x-menu-item", { active: _vm.active }],
-      style: _vm.titleStyle,
-      on: { click: _vm.onClick }
-    },
-    [_vm._t("default")],
-    2
-  )
+  return _c("li", [
+    _c("div", { staticClass: "x-menu-group_title", style: _vm.titleStyle }, [
+      _vm._v(_vm._s(_vm.title))
+    ]),
+    _vm._v(" "),
+    _c("ul", [_vm._t("default")], 2)
+  ])
 };
 var __vue_staticRenderFns__$1a = [];
 __vue_render__$1a._withStripped = true;
@@ -12308,22 +12142,26 @@ __vue_render__$1a._withStripped = true;
   );
 
 //
+//
+//
+//
+//
+//
+
 var script$17 = {
-  mixins: [watchMode],
-  props: { title: String }
+  props: { label: String }
 };
 
 /* script */
 var __vue_script__$17 = script$17;
-
 /* template */
 var __vue_render__$1b = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
   return _c("li", [
-    _c("div", { staticClass: "x-menu-group_title", style: _vm.titleStyle }, [
-      _vm._v(_vm._s(_vm.title))
+    _c("span", { staticClass: "x-option-group_title" }, [
+      _vm._v(_vm._s(_vm.label))
     ]),
     _vm._v(" "),
     _c("ul", [_vm._t("default")], 2)
@@ -12890,25 +12728,25 @@ var Notice = creator(__vue_component__$1f, { duration: 4.5 }, {
 });
 
 //
-var S$9 = String, B$d = Boolean, BTrue = { type: B$d, default: true };
+var S$a = String, B$e = Boolean, BTrue = { type: B$e, default: true };
 var script$1c = {
   name: 'XModal',
   components: { XOverlay: __vue_component__$B, XBtn: __vue_component__$1, XCloseIconButton: __vue_component__$7 },
   props: {
-    value: B$d,
-    title: S$9,
+    value: B$e,
+    title: S$a,
     closable: BTrue,
     maskClosable: BTrue,
-    loading: B$d,
-    scrollable: B$d,
-    fullscreen: B$d,
+    loading: B$e,
+    scrollable: B$e,
+    fullscreen: B$e,
     mask: BTrue,
-    okText: { type: S$9, default: '确定' },
-    cancelText: { type: S$9, default: '取消' },
-    width: { type: [Number, S$9], default: 520 },
-    footerHide: B$d,
+    okText: { type: S$a, default: '确定' },
+    cancelText: { type: S$a, default: '取消' },
+    width: { type: [Number, S$a], default: 520 },
+    footerHide: B$e,
     styles: Object,
-    className: S$9,
+    className: S$a,
     transfer: BTrue,
     hasCancel: BTrue
   },
@@ -13151,19 +12989,19 @@ __vue_render__$1g._withStripped = true;
 //
 
 function objectWithoutProperties$1 (obj, exclude) { var target = {}; for (var k in obj) if (Object.prototype.hasOwnProperty.call(obj, k) && exclude.indexOf(k) === -1) target[k] = obj[k]; return target; }
-var S$a = String, B$e = Boolean, F$3 = Function;
+var S$b = String, B$f = Boolean, F$3 = Function;
 var script$1d = {
   name: 'XDialog',
   components: { XIcon: __vue_component__, XModal: __vue_component__$1g, XBtn: __vue_component__$1 },
   props: {
-    value: B$e,
-    title: S$a,
-    content: S$a,
+    value: B$f,
+    title: S$b,
+    content: S$b,
     width: { default: 416 },
-    okText: { type: S$a, default: '确定' },
+    okText: { type: S$b, default: '确定' },
     cancelText: {},
-    loading: B$e,
-    scrollable: B$e,
+    loading: B$f,
+    scrollable: B$f,
     onOk: F$3,
     onCancel: F$3,
     type: {
@@ -13843,24 +13681,53 @@ __vue_render__$1k._withStripped = true;
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 var script$1h = {
-  props: { label: String }
+  props: {
+    columns: Array
+  }
 };
 
 /* script */
 var __vue_script__$1h = script$1h;
+
 /* template */
 var __vue_render__$1l = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c("li", { staticClass: "ui-option-group" }, [
-    _c("span", { staticClass: "ui-option-group-title" }, [
-      _vm._v(_vm._s(_vm.label))
-    ]),
-    _vm._v(" "),
-    _c("ul", [_vm._t("default")], 2)
+  return _c("div", { staticClass: "ui-table-header" }, [
+    _c("table", [
+      _c(
+        "colgroup",
+        _vm._l(_vm.columns, function(item) {
+          return _c("col", { key: item.key })
+        }),
+        0
+      ),
+      _vm._v(" "),
+      _c("thead", [
+        _c(
+          "tr",
+          _vm._l(_vm.columns, function(item) {
+            return _c("th", { key: item.key }, [
+              _c("div", { staticClass: "ui-table-cell" }, [
+                _vm._v(_vm._s(item.title))
+              ])
+            ])
+          }),
+          0
+        )
+      ])
+    ])
   ])
 };
 var __vue_staticRenderFns__$1l = [];
@@ -13896,183 +13763,71 @@ __vue_render__$1l._withStripped = true;
   );
 
 //
-var script$1i = {
-  name: 'ui-autocomplete',
-  components: { UiInput: __vue_component__$I, UiDrop: __vue_component__$X },
-  data: function data() {
-    return {
-      visible: false,
-      inputValue: this.value,
-      children: []
-    }
-  },
-  props: {
-    value: [String, Number],
-    data: {
-      type: Array,
-      default: function () { return []; }
-    },
-    clearable: Boolean,
-    disabled: Boolean,
-    placeholder: String,
-    size: {
-      validator: function validator(value) {
-        return ['large', 'small', 'default'].indexOf(value) !== -1
-      }
-    },
-    icon: String,
-    filterMethod: {
-      type: [Function, Boolean],
-      default: false
-    },
-    placement: {
-      default: 'bottom',
-      validator: function validator(value) {
-        return ['bottom', 'top'].indexOf(value) !== -1
-      }
-    },
-    elementId: String
-  },
-  computed: {
-    filteredData: function filteredData() {
-      var this$1 = this;
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
-      return this.inputValue ? this.data.filter(function (_) { return typeof this$1.filterMethod === 'function' ?
-          this$1.filterMethod(this$1.inputValue, _) :
-          _.toString().indexOf(this$1.inputValue) !== -1; }
-      ) : this.data
-    },
-    dropShow: function dropShow() {
-      return !!this.filteredData.length && this.visible
-    },
-    hasSlot: function hasSlot() {
-      return this.$slots.default !== undefined
-    }
-  },
-  directives: { winclick: winclick },
-  watch: {
-    value: function value(newVal) {
-      this.inputValue = newVal;
-    },
-    inputValue: function inputValue(newVal) {
-      this.$emit('input', newVal);
-      this.$emit('on-search', newVal);
-      this.$emit('on-change', newVal);
-    }
+var script$1i = {
+  props: {
+    data: Array,
+    columns: Array,
+    rowClassName: Function
   },
   methods: {
-    handleClick: function handleClick(event) {
-      this.visible = !this.visible;
+    setRowClassName: function setRowClassName(row, index) {
+      var customClsName = this.rowClassName && this.rowClassName(row, index);
+      return [customClsName, { hasCustomClsName: customClsName }]
     },
-    handleOptionClick: function handleOptionClick(item) {
-      var this$1 = this;
-
-      this.inputValue = item;
-      this.$emit('on-select', item);
-      this.$nextTick(function () { return this$1.visible = false; });
-    },
-    handleWinClick: function handleWinClick(event) {
-      var target = event.target;
-      if (
-        target && 
-        (isSelfOrParent(this.$el, target) || 
-        isSelfOrParent(this.$refs.UiDrop.$el, target))
-      ) { return }
-      this.visible = false;
-    },
-    handleFocus: function handleFocus(event) {
-      this.$emit('on-focus', event);
-    },
-    handleBlur: function handleBlur(event) {
-      this.$emit('on-blur', event);
+    setColClassName: function setColClassName(row, col) {
+      var cellClsName = (row.cellClassName || {})[col.key];
+      return [col.className, cellClsName, { hasCustomClsName: cellClsName || col.className }]
     }
   }
 };
 
 /* script */
 var __vue_script__$1i = script$1i;
+
 /* template */
 var __vue_render__$1m = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    {
-      directives: [
-        {
-          name: "winclick",
-          rawName: "v-winclick",
-          value: _vm.handleWinClick,
-          expression: "handleWinClick"
-        }
-      ],
-      staticClass: "ui-autocomplete"
-    },
-    [
-      _c("UiInput", {
-        attrs: {
-          placeholder: _vm.placeholder,
-          clearable: _vm.clearable,
-          size: _vm.size,
-          disabled: _vm.disabled,
-          elementId: _vm.elementId,
-          icon: _vm.icon
-        },
-        on: { "on-focus": _vm.handleFocus, "on-blur": _vm.handleBlur },
-        nativeOn: {
-          click: function($event) {
-            return _vm.handleClick($event)
-          }
-        },
-        model: {
-          value: _vm.inputValue,
-          callback: function($$v) {
-            _vm.inputValue = $$v;
-          },
-          expression: "inputValue"
-        }
-      }),
-      _vm._v(" "),
+  return _c("div", { staticClass: "ui-table-body" }, [
+    _c("table", [
       _c(
-        "ui-drop",
-        {
-          ref: "UiDrop",
-          attrs: { visible: _vm.dropShow, parentName: _vm.$options.name }
-        },
-        [
-          _c(
-            "ul",
-            { staticClass: "ui-autocomplete-select" },
-            [
-              _vm._t("default"),
-              _vm._v(" "),
-              !_vm.hasSlot
-                ? _vm._l(_vm.filteredData, function(item, index) {
-                    return _c(
-                      "li",
-                      {
-                        key: index,
-                        staticClass: "ui-autocomplete-select-item",
-                        class: { active: item === _vm.inputValue },
-                        on: {
-                          click: function($event) {
-                            return _vm.handleOptionClick(item)
-                          }
-                        }
-                      },
-                      [_vm._v("\n          " + _vm._s(item) + "\n        ")]
-                    )
-                  })
-                : _vm._e()
-            ],
-            2
+        "tbody",
+        _vm._l(_vm.data, function(row, index) {
+          return _c(
+            "tr",
+            { key: index, class: _vm.setRowClassName(row, index) },
+            _vm._l(_vm.columns, function(col) {
+              return _c(
+                "td",
+                { key: col.key, class: _vm.setColClassName(row, col) },
+                [
+                  _c("div", { staticClass: "ui-table-cell" }, [
+                    _vm._v(_vm._s(row[col.key]))
+                  ])
+                ]
+              )
+            }),
+            0
           )
-        ]
+        }),
+        0
       )
-    ],
-    1
-  )
+    ])
+  ])
 };
 var __vue_staticRenderFns__$1m = [];
 __vue_render__$1m._withStripped = true;
@@ -14107,196 +13862,8 @@ __vue_render__$1m._withStripped = true;
   );
 
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
 var script$1j = {
-  props: {
-    columns: Array
-  }
-};
-
-/* script */
-var __vue_script__$1j = script$1j;
-
-/* template */
-var __vue_render__$1n = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", { staticClass: "ui-table-header" }, [
-    _c("table", [
-      _c(
-        "colgroup",
-        _vm._l(_vm.columns, function(item) {
-          return _c("col", { key: item.key })
-        }),
-        0
-      ),
-      _vm._v(" "),
-      _c("thead", [
-        _c(
-          "tr",
-          _vm._l(_vm.columns, function(item) {
-            return _c("th", { key: item.key }, [
-              _c("div", { staticClass: "ui-table-cell" }, [
-                _vm._v(_vm._s(item.title))
-              ])
-            ])
-          }),
-          0
-        )
-      ])
-    ])
-  ])
-};
-var __vue_staticRenderFns__$1n = [];
-__vue_render__$1n._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$1n = undefined;
-  /* scoped */
-  var __vue_scope_id__$1n = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$1n = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$1n = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$1n = normalizeComponent(
-    { render: __vue_render__$1n, staticRenderFns: __vue_staticRenderFns__$1n },
-    __vue_inject_styles__$1n,
-    __vue_script__$1j,
-    __vue_scope_id__$1n,
-    __vue_is_functional_template__$1n,
-    __vue_module_identifier__$1n,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-var script$1k = {
-  props: {
-    data: Array,
-    columns: Array,
-    rowClassName: Function
-  },
-  methods: {
-    setRowClassName: function setRowClassName(row, index) {
-      var customClsName = this.rowClassName && this.rowClassName(row, index);
-      return [customClsName, { hasCustomClsName: customClsName }]
-    },
-    setColClassName: function setColClassName(row, col) {
-      var cellClsName = (row.cellClassName || {})[col.key];
-      return [col.className, cellClsName, { hasCustomClsName: cellClsName || col.className }]
-    }
-  }
-};
-
-/* script */
-var __vue_script__$1k = script$1k;
-
-/* template */
-var __vue_render__$1o = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", { staticClass: "ui-table-body" }, [
-    _c("table", [
-      _c(
-        "tbody",
-        _vm._l(_vm.data, function(row, index) {
-          return _c(
-            "tr",
-            { key: index, class: _vm.setRowClassName(row, index) },
-            _vm._l(_vm.columns, function(col) {
-              return _c(
-                "td",
-                { key: col.key, class: _vm.setColClassName(row, col) },
-                [
-                  _c("div", { staticClass: "ui-table-cell" }, [
-                    _vm._v(_vm._s(row[col.key]))
-                  ])
-                ]
-              )
-            }),
-            0
-          )
-        }),
-        0
-      )
-    ])
-  ])
-};
-var __vue_staticRenderFns__$1o = [];
-__vue_render__$1o._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$1o = undefined;
-  /* scoped */
-  var __vue_scope_id__$1o = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$1o = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$1o = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$1o = normalizeComponent(
-    { render: __vue_render__$1o, staticRenderFns: __vue_staticRenderFns__$1o },
-    __vue_inject_styles__$1o,
-    __vue_script__$1k,
-    __vue_scope_id__$1o,
-    __vue_is_functional_template__$1o,
-    __vue_module_identifier__$1o,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-var script$1l = {
-  components: { UiTableHeader: __vue_component__$1n, UiTableBody: __vue_component__$1o },
+  components: { UiTableHeader: __vue_component__$1l, UiTableBody: __vue_component__$1m },
   props: {
     data: {
       type: Array,
@@ -14344,9 +13911,9 @@ var script$1l = {
 };
 
 /* script */
-var __vue_script__$1l = script$1l;
+var __vue_script__$1j = script$1j;
 /* template */
-var __vue_render__$1p = function() {
+var __vue_render__$1n = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -14377,17 +13944,17 @@ var __vue_render__$1p = function() {
     ]
   )
 };
-var __vue_staticRenderFns__$1p = [];
-__vue_render__$1p._withStripped = true;
+var __vue_staticRenderFns__$1n = [];
+__vue_render__$1n._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$1p = undefined;
+  var __vue_inject_styles__$1n = undefined;
   /* scoped */
-  var __vue_scope_id__$1p = undefined;
+  var __vue_scope_id__$1n = undefined;
   /* module identifier */
-  var __vue_module_identifier__$1p = undefined;
+  var __vue_module_identifier__$1n = undefined;
   /* functional template */
-  var __vue_is_functional_template__$1p = false;
+  var __vue_is_functional_template__$1n = false;
   /* style inject */
   
   /* style inject SSR */
@@ -14396,13 +13963,13 @@ __vue_render__$1p._withStripped = true;
   
 
   
-  var __vue_component__$1p = normalizeComponent(
-    { render: __vue_render__$1p, staticRenderFns: __vue_staticRenderFns__$1p },
-    __vue_inject_styles__$1p,
-    __vue_script__$1l,
-    __vue_scope_id__$1p,
-    __vue_is_functional_template__$1p,
-    __vue_module_identifier__$1p,
+  var __vue_component__$1n = normalizeComponent(
+    { render: __vue_render__$1n, staticRenderFns: __vue_staticRenderFns__$1n },
+    __vue_inject_styles__$1n,
+    __vue_script__$1j,
+    __vue_scope_id__$1n,
+    __vue_is_functional_template__$1n,
+    __vue_module_identifier__$1n,
     false,
     undefined,
     undefined,
@@ -14471,27 +14038,27 @@ var comps = {
   Page: __vue_component__$_,
   Tabs: __vue_component__$$,
   TabPane: __vue_component__$10,
-  Slider: __vue_component__$13,
-  Tooltip: __vue_component__$12,
-  Poptip: __vue_component__$14,
-  Dropdown: __vue_component__$15,
-  DropdownMenu: __vue_component__$17,
-  DropdownItem: __vue_component__$16,
-  Menu: __vue_component__$18,
-  MenuItem: __vue_component__$1a,
-  Submenu: __vue_component__$19,
-  MenuGroup: __vue_component__$1b,
+  Slider: __vue_component__$12,
+  Tooltip: __vue_component__$11,
+  Poptip: __vue_component__$13,
+  Dropdown: __vue_component__$14,
+  DropdownMenu: __vue_component__$16,
+  DropdownItem: __vue_component__$15,
+  Menu: __vue_component__$17,
+  MenuItem: __vue_component__$19,
+  Submenu: __vue_component__$18,
+  MenuGroup: __vue_component__$1a,
+  Select: __vue_component__$Y,
+  Option: __vue_component__$Z,
+  OptionGroup: __vue_component__$1b,
 
   Upload: __vue_component__$1i,
   Form: __vue_component__$1j,
   FormItem: __vue_component__$1k,
   // Cascader,
   // ColorPicker,
-  Select: __vue_component__$Y,
-  Option: __vue_component__$Z,
-  OptionGroup: __vue_component__$1l,
-  Table: __vue_component__$1p,
-  AutoComplete: __vue_component__$1m
+  Table: __vue_component__$1n,
+  // AutoComplete
   // ,DatePicker,
   // TimePicker
 };

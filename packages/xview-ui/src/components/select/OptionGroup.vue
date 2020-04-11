@@ -1,6 +1,6 @@
 <template>
   <li>
-    <span class="x-select-option-group_title">{{label}}</span>
+    <span class="x-option-group_title">{{label}}</span>
     <ul><slot></slot></ul>
   </li>
 </template>
@@ -9,3 +9,12 @@ export default {
   props: { label: String }
 }
 </script>
+<style lang="less">
+.x-option-group_title {
+  height: 30px;
+  line-height: 30px;
+  color: #999;
+  font-size: 12px;
+  padding-left: 8px;
+}
+</style>

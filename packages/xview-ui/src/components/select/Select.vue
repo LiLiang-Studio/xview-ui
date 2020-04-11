@@ -1,26 +1,26 @@
 <template>
   <div :class="prefixCls">
-    <x-popper v-bind="popperProps" @clickoutside="onClickoutside">
-      <div tabindex="0" slot="reference" :class="boxClass" @click="onToggle" @focus="onFocus" @keydown="onKeydown">
+    <x-popper v-bind="popperProps" @clickoutside="toggle(false)">
+      <div tabindex="0" slot="reference" :class="boxClass" @click="toggle()" @focus="onFocus" @keydown="onKeydown">
         <template v-if="multiple">
           <x-tag closable :fade="false"
             v-for="_ in selectedValue" :key="_" @on-close.stop="removeSelected(_)">{{getLabel(_)}}</x-tag>
           <input v-if="!filterable && !selectedValue.length"
             :class="`${prefixCls}_input placeholder`" readonly :placeholder="placeholder">
           <input v-if="filterable" ref="Input" :class="`${prefixCls}_input`" v-model="searchValue"
-            :style="inputStyle" :placeholder="inputPlaceholder" @blur="onInputBlur">
+            :style="inputStyle" :placeholder="inputPlaceholder">
           <span :class="`${prefixCls}_inputText`" ref="SearchText">{{searchText}}</span>
         </template>
         <template v-else>
           <input v-if="filterable"
-            ref="Input" :class="`${prefixCls}_input`" :placeholder="placeholder" v-model="searchValue" @blur="onInputBlur">
+            ref="Input" :class="`${prefixCls}_input`" :placeholder="placeholder" v-model="searchValue">
           <template v-else>
             <span v-if="selectedValue.length" :class="`${prefixCls}_label`">{{singleLabel}}</span>
             <span v-else :class="`${prefixCls}_placeholder`">{{placeholder}}</span>
           </template>
         </template>
         <div :class="`${prefixCls}_arrow`">
-          <x-icon :class="`${prefixCls}_clearIcon`" type="ios-close" @click.native.stop="onClear"/>
+          <x-icon :class="`${prefixCls}_clearIcon`" type="ios-close" @click.stop="onClear"/>
           <x-icon :class="`${prefixCls}_downIcon`" type="ios-arrow-down"/>
         </div>
       </div>
@@ -36,12 +36,12 @@
 import XTag from '../tag'
 import XIcon from '../icon'
 import XPopper from '../popper'
-const N = Number, S = String, B = Boolean
+const N = Number, S = String, B = Boolean, SNA = [S, N, Array]
 export default {
   name: 'XSelect',
   components: { XTag, XIcon, XPopper },
   props: {
-    value: [S, N, Array],
+    value: SNA,
     multiple: B,
     disabled: B,
     clearable: B,
@@ -50,7 +50,7 @@ export default {
     remoteMethod: Function,
     loading: B,
     loadingText: { type: S, default: '加载中' },
-    label: [S, N, Array],
+    label: SNA,
     size: {
       validator(v) {
         return ['large', 'small', 'default'].indexOf(v) > -1
@@ -114,9 +114,7 @@ export default {
   },
   watch: {
     visible(val) {
-      if (val) {
-        this.$nextTick(() => this.listStyle = { minWidth: `${this.$el.offsetWidth}px` })
-      }
+      val && this.$nextTick(() => this.listStyle = { minWidth: `${this.$el.offsetWidth}px` })
     },
     value: 'updateModel',
     selectedValue(val) {
@@ -130,13 +128,12 @@ export default {
     children(val) {
       val.forEach(_ => _.selected = this.selectedValue.indexOf(_.value) > -1)
     },
-
-    searchValue(newVal) {
+    searchValue(val) {
       if (!this.filterable) return
       if (this.remote) {
-        this.remoteMethod && this.remoteMethod(newVal)
+        this.remoteMethod && this.remoteMethod(val)
       } else {
-        let _newVal = newVal.toLowerCase()
+        let _newVal = val.toLowerCase()
         this.children.forEach(_ => {
           let _val = ('' + _.value).toLowerCase()
           let _label = _.label === undefined ? '' : ('' + _.label).toLowerCase()
@@ -146,7 +143,7 @@ export default {
       if (!this.multiple) return
       this.$nextTick(() => {
         this.$refs.Input.style.width = 
-          newVal || this.selectedValue.length ? 
+          val || this.selectedValue.length ? 
           Math.min(this.$refs.SearchText.offsetWidth, this.$el.offsetWidth - 25) + 'px' : ''
       })
     }
@@ -164,7 +161,7 @@ export default {
         let index = this.selectedValue.indexOf(val)
         index < 0 ? this.selectedValue.push(val) : this.selectedValue.splice(index, 1)
       } else {
-        this.visible = false
+        this.toggle(false)
         this.selectedValue = [val]
       }
       this.children.forEach(_ => _.focus = _.value === val)
@@ -182,83 +179,45 @@ export default {
       let vm = this.children.find(_ => _.value === value)
       return vm ? vm.label || vm.value : value
     },
-    onClickoutside() {
-      this.visible = false
+    setOptionFocus(isUp) {
+      let children = this.children.filter(_ => !_.removed), len = children.length
+      if (len) {
+        let index = children.findIndex(_ => _.focus)
+        this.children.forEach(_ => _.focus = false)
+        index = isUp ? (index <= 0 ? len - 1 : index - 1) : (index < len - 1 ? index + 1 : 0)
+        let vm = children[index]
+        vm.focus = true
+        vm.$el.scrollIntoViewIfNeeded()
+      }
     },
-    onToggle() {
-      this.visible = !this.visible
+    toggle(visible) {
+      this.visible = visible === undefined ? !this.visible : visible
     },
-
     onClear() {
       this.selectedValue = []
-    },
-    showAll() {
-      this.children.forEach(_ => _.$data.isDelete = false)
-    },
-    getCheckedTextOfSingle() {
-      return ''
     },
     onFocus() {
       if (this.filterable) this.$refs.Input.focus()
     },
-    /**
-     * @param {KeyboardEvent} e
-     */
     onKeydown(e) {
-      const K_UP = 38, K_DOWN = 40, K_ESC = 27, K_ENTER = 13, K_DEL = 46, K_BACKSPACE = 8
-      let { keyCode } = e
-      if ([K_UP, K_DOWN, K_ESC].indexOf(keyCode) !== -1) {
+      const { keyCode } = e, UP = 38, DOWN = 40, ESC = 27, ENTER = 13, DEL = 46, BACKSPACE = 8, TAB = 9
+      if ([UP, DOWN, ESC, TAB].indexOf(keyCode) > -1) {
         e.preventDefault()
       }
-      if (keyCode === K_ENTER) {
-        this.visible && this.updateValueByFocusOption()
-      } else if (keyCode === K_UP) {
-        if (this.visible) this.setOptionFocus('up')
-      } else if (keyCode === K_DOWN) {
+      if (keyCode === ENTER) {
         if (this.visible) {
-          this.setOptionFocus()
-        } else {
-          this.visible = true
+          let vm =  this.children.find(_ => _.focus && !_.removed)
+          vm ? this.updateSelected(vm.value) : this.toggle()
         }
-      } else if (keyCode === K_ESC) {
-        this.visible = false
-      } else if (keyCode === K_DEL || keyCode === K_BACKSPACE) {
-        if (!(this.multiple && this.filterable) || this.searchValue) return
-        this.selectedValue.pop()
+      } else if (keyCode === UP) {
+        this.visible && this.setOptionFocus(true)
+      } else if (keyCode === DOWN) {
+        this.visible ? this.setOptionFocus() : this.toggle()
+      } else if (keyCode === ESC) {
+        this.toggle(false)
+      } else if ([DEL, BACKSPACE].indexOf(keyCode) > -1) {
+        this.multiple && this.filterable && !this.searchValue && this.selectedValue.pop()
       }
-    },
-    /**
-     * @param {MouseEvent} event
-     */
-    onInputBlur(e) {
-      
-    },
-    updateValueByFocusOption() {
-      let vm =  this.children.find(_ => _.focus)
-      if (vm) this.updateSelected(vm.value)
-    },
-    setOptionFocus(dir = 'down') {
-      let arr = this.children.filter(_ => !_.isDelete)
-      let len = arr.length
-      if (!len) return
-      let focusIndex = arr.map(_ => _.focus).indexOf(true)
-      this.children.forEach(_ => _.$data.focus = false)
-      if (dir === 'down') {
-        if (focusIndex < len - 1) {
-          focusIndex++
-        } else {
-          focusIndex = 0
-        }
-      } else {
-        if (focusIndex <= 0) {
-          focusIndex = len - 1
-        } else {
-          focusIndex--
-        }
-      }
-      let vm = arr[focusIndex]
-      vm.$data.focus = true
-      vm.$el.scrollIntoViewIfNeeded()
     }
   }
 }

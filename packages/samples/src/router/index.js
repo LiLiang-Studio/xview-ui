@@ -5,6 +5,7 @@ import HomeRouter from '../pages/HomeRouter.vue'
 Vue.use(Router)
 
 const coms = {
+  AutoComplete: () => import('../pages/AutoComplete.vue'),
   Select: () => import('../pages/Select.vue'),
   Menu: () => import('../pages/Menu.vue'),
   Dropdown: () => import('../pages/Dropdown.vue'),
@@ -55,7 +56,6 @@ const coms = {
 
   // DatePicker: () => import('../pages/DatePicker.vue'),
   // TimePicker: () => import('../pages/TimePicker.vue'),
-  // AutoComplete: () => import('../pages/AutoComplete.vue'),
   Form: () => import('../pages/Form.vue'),
   Table: () => import('../pages/Table.vue'),
   Upload: () => import('../pages/Upload.vue')

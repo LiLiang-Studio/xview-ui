@@ -3,7 +3,8 @@
     <div class="page-title">AutoComplete 自动完成</div>
     <p>输入框自动完成功能。</p>
 
-    <div class="page-sub-title">基本用法，通过 data 设置自动完成的数据源。</div>
+    <div class="page-sub-title">基础用法</div>
+    <p>基本用法，通过 data 设置自动完成的数据源。</p><br>
     <AutoComplete
       v-model="value1"
       :data="data1"
@@ -12,7 +13,8 @@
       style="width:200px"
     ></AutoComplete>
 
-    <!-- <div class="page-sub-title">除了使用 data，还可以直接传入 Option 组件作为 slot 使用，这样可以自定义显示效果。</div>
+    <div class="page-sub-title">自定义选项</div>
+    <p>除了使用 data，还可以直接传入 Option 组件作为 slot 使用，这样可以自定义显示效果。</p><br>
     <AutoComplete
       v-model="value2"
       @on-search="handleSearch2"
@@ -20,9 +22,10 @@
       style="width:200px"
     >
       <Option v-for="item in data2" :value="item" :key="item">{{ item }}</Option>
-    </AutoComplete> -->
+    </AutoComplete>
 
-    <div class="page-sub-title">不区分大小写的 AutoComplete，及过滤的用法。</div>
+    <div class="page-sub-title">不区分大小写</div>
+    <p>不区分大小写的 AutoComplete，及过滤的用法。</p><br>
     <AutoComplete
       v-model="value3"
       :data="data3"
@@ -31,7 +34,8 @@
       style="width:200px"
     ></AutoComplete>
 
-    <!-- <div class="page-sub-title">完全自定义 Option，显示复杂的布局。</div>
+    <div class="page-sub-title">查询模式</div>
+    <p>完全自定义 Option，显示复杂的布局。</p><br>
     <AutoComplete v-model="value4" icon="ios-search" placeholder="input here" style="width:300px">
       <div class="demo-auto-complete-item" v-for="item in data4" :key="item.title">
         <div class="demo-auto-complete-group">
@@ -48,7 +52,7 @@
         target="_blank"
         class="demo-auto-complete-more"
       >查看所有结果</a>
-    </AutoComplete> -->
+    </AutoComplete>
   </div>
 </template>
 <script>

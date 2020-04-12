@@ -1,65 +1,54 @@
 <template>
-  <div class="ui-autocomplete" v-winclick="handleWinClick">
-    <UiInput v-model="inputValue" 
-      :placeholder="placeholder" :clearable="clearable" :size="size" :disabled="disabled" :elementId="elementId" :icon="icon"
-      @click.native="handleClick" @on-focus="handleFocus" @on-blur="handleBlur"/>
-    <ui-drop ref="UiDrop" :visible="dropShow" :parentName="$options.name">
-      <ul class="ui-autocomplete-select">
+  <div :class="prefix">
+    <x-popper v-bind="popperProps" @clickoutside="toggle(false)">
+      <x-input slot="reference" v-bind="$attrs" v-model="inputValue" @click="onClick" @on-focus="onFocus" @on-blur="onBlur"/>
+      <ul :class="`${prefix}_list`" :style="listStyle">
         <slot></slot>
-        <template v-if="!hasSlot">
-          <li class="ui-autocomplete-select-item" 
-            v-for="(item, index) in filteredData" :key="index" :class="{active: item === inputValue}" 
-            @click="handleOptionClick(item)">
-            {{item}}
-          </li>
+        <template v-if="!$slots.default">
+          <li v-for="(item, index) in filteredData" :key="index" 
+            :class="[`${prefix}_listItem`, {active: item === inputValue}]" @click="onOptionClick(item)">{{item}}</li>
         </template>
       </ul>
-    </ui-drop>
+    </x-popper>
   </div>
 </template>
 <script>
-import UiInput from '../input'
-import UiDrop from '../select/OptionList.vue'
-import { isSelfOrParent } from '../../utils'
-import { winclick } from '../../directives'
+import XInput from '../input'
+import XPopper from '../popper'
 export default {
-  name: 'ui-autocomplete',
-  components: { UiInput, UiDrop },
-  data() {
-    return {
-      visible: false,
-      inputValue: this.value,
-      children: []
-    }
-  },
+  name: 'XAutocomplete',
+  components: { XInput, XPopper },
   props: {
     value: [String, Number],
     data: {
       type: Array,
       default: () => []
     },
-    clearable: Boolean,
-    disabled: Boolean,
-    placeholder: String,
-    size: {
-      validator(value) {
-        return ['large', 'small', 'default'].indexOf(value) !== -1
-      }
-    },
-    icon: String,
     filterMethod: {
       type: [Function, Boolean],
       default: false
     },
-    placement: {
-      default: 'bottom',
-      validator(value) {
-        return ['bottom', 'top'].indexOf(value) !== -1
-      }
-    },
-    elementId: String
+    placement: String
+  },
+  data() {
+    return {
+      visible: false,
+      inputValue: this.value,
+      children: [],
+      listStyle: null,
+      prefix: 'x-autocomplete'
+    }
   },
   computed: {
+    popperProps() {
+      return {
+        ref: 'Popper',
+        adaptive: false,
+        visible: this.visible,
+        transitionName: 'x-animate-dropdown',
+        placement: this.placement || 'bottom-start'
+      }
+    },
     filteredData() {
       return this.inputValue ? this.data.filter(_ =>
         typeof this.filterMethod === 'function' ?
@@ -69,12 +58,8 @@ export default {
     },
     dropShow() {
       return !!this.filteredData.length && this.visible
-    },
-    hasSlot() {
-      return this.$slots.default !== undefined
     }
   },
-  directives: { winclick },
   watch: {
     value(newVal) {
       this.inputValue = newVal
@@ -83,30 +68,33 @@ export default {
       this.$emit('input', newVal)
       this.$emit('on-search', newVal)
       this.$emit('on-change', newVal)
+    },
+    visible(val) {
+      val && this.$nextTick(() => this.listStyle = { minWidth: `${this.$el.offsetWidth}px` })
     }
   },
   methods: {
-    handleClick(event) {
+    addItem(vm) {
+      this.children.push(vm)
+    },
+    removeItem(vm) {
+      this.children.splice(this.children.indexOf(vm), 1)
+    },
+    toggle(visible) {
+      this.visible = visible === undefined ? !this.visible : visible
+    },
+    onClick(event) {
       this.visible = !this.visible
     },
-    handleOptionClick(item) {
+    onOptionClick(item) {
       this.inputValue = item
       this.$emit('on-select', item)
       this.$nextTick(() => this.visible = false)
     },
-    handleWinClick(event) {
-      let { target } = event
-      if (
-        target && 
-        (isSelfOrParent(this.$el, target) || 
-        isSelfOrParent(this.$refs.UiDrop.$el, target))
-      ) return
-      this.visible = false
-    },
-    handleFocus(event) {
+    onFocus(event) {
       this.$emit('on-focus', event)
     },
-    handleBlur(event) {
+    onBlur(event) {
       this.$emit('on-blur', event)
     }
   }
@@ -114,16 +102,24 @@ export default {
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-autocomplete-select {
-  list-style: none;
-}
-
-.ui-autocomplete-select-item {
-  padding: 7px 16px;
-  cursor: pointer;
-  transition: background-color .2s ease-in-out;
-  &.active, &:hover {
-    background-color: @disabled-bg-color;
+.x-autocomplete {
+  width: 100%;
+  display: inline-block;
+  vertical-align: middle;
+  &_list {
+    padding: 5px 0;
+    list-style: none;
+  }
+  &_listItem {
+    cursor: pointer;
+    padding: 7px 16px;
+    transition: background-color .2s ease-in-out;
+    &.active, &:hover {
+      background: darken(@bg-color, 2%);
+    }
+  }
+  .x-popper, .x-popper_reference {
+    width: 100%;
   }
 }
 </style>

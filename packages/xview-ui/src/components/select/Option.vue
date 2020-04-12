@@ -38,7 +38,7 @@ export default {
     }
   },
   mounted() {
-    this.parent = findParent(this, 'XSelect')
+    this.parent = findParent(this, 'XSelect') || findParent(this, 'XAutocomplete')
     this.parent.addItem(this)
   },
   beforeDestroy() {
@@ -61,6 +61,7 @@ export default {
   list-style: none;
   padding: 7px 16px;
   line-height: 1.2;
+  transition: background-color .2s ease-in-out;
   &.focus:not(.disabled), &:hover:not(.disabled) {
     background: darken(@bg-color, 2%);
   }

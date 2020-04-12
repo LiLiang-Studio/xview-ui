@@ -1,13 +1,11 @@
 <template>
   <div :class="prefix">
     <x-popper v-bind="popperProps" @clickoutside="toggle(false)">
-      <x-input slot="reference" v-bind="$attrs" v-model="inputValue" @click="onClick" @on-focus="onFocus" @on-blur="onBlur"/>
+      <x-input slot="reference" v-bind="$attrs" v-model="inputValue" v-on="inputListeners"/>
       <ul :class="`${prefix}_list`" :style="listStyle">
-        <slot></slot>
-        <template v-if="!$slots.default">
-          <li v-for="(item, index) in filteredData" :key="index" 
-            :class="[`${prefix}_listItem`, {active: item === inputValue}]" @click="onOptionClick(item)">{{item}}</li>
-        </template>
+        <slot>
+          <li v-for="(_, i) in filtered" :key="i" :class="[`${prefix}_item`, {focus: _ === focusValue}]" @click="onItemClick(_)">{{_}}</li>
+        </slot>
       </ul>
     </x-popper>
   </div>
@@ -15,6 +13,7 @@
 <script>
 import XInput from '../input'
 import XPopper from '../popper'
+import { isFunc } from '../../tools'
 export default {
   name: 'XAutocomplete',
   components: { XInput, XPopper },
@@ -28,14 +27,16 @@ export default {
       type: [Function, Boolean],
       default: false
     },
-    placement: String
+    placement: String,
+    transfer: Boolean
   },
   data() {
     return {
-      visible: false,
-      inputValue: this.value,
       children: [],
+      visible: false,
       listStyle: null,
+      focusValue: this.value,
+      inputValue: this.value,
       prefix: 'x-autocomplete'
     }
   },
@@ -44,58 +45,101 @@ export default {
       return {
         ref: 'Popper',
         adaptive: false,
-        visible: this.visible,
+        transfer: this.transfer,
         transitionName: 'x-animate-dropdown',
-        placement: this.placement || 'bottom-start'
+        placement: this.placement || 'bottom-start',
+        visible: this.visible && (this.children.length > 0 || this.filtered.length > 0)
       }
     },
-    filteredData() {
-      return this.inputValue ? this.data.filter(_ =>
-        typeof this.filterMethod === 'function' ?
-          this.filterMethod(this.inputValue, _) :
-          _.toString().indexOf(this.inputValue) !== -1
-      ) : this.data
+    filtered() {
+      let val = this.inputValue, filter = this.filterMethod
+      return val && filter ? this.data.filter(_ => isFunc(filter) ? filter(val, _) : (_ + '').indexOf(val) > -1) : this.data
     },
-    dropShow() {
-      return !!this.filteredData.length && this.visible
+    inputListeners() {
+      return {
+        ...this.$listeners,
+        click: () => this.toggle(),
+        input: () => this.toggle(true),
+        'on-keydown': this.onKeydown
+      }
     }
   },
   watch: {
-    value(newVal) {
-      this.inputValue = newVal
+    value(val) {
+      this.inputValue = val
     },
-    inputValue(newVal) {
-      this.$emit('input', newVal)
-      this.$emit('on-search', newVal)
-      this.$emit('on-change', newVal)
+    inputValue(val) {
+      this.$emit('input', val)
+      this.$emit('on-change', val)
+      val && this.$emit('on-search', val)
+      this.updateFocus()
+      this.focusValue = val
     },
     visible(val) {
-      val && this.$nextTick(() => this.listStyle = { minWidth: `${this.$el.offsetWidth}px` })
+      if (val) {
+        this.updateFocus()
+        this.$nextTick(() => this.listStyle = { minWidth: `${this.$el.offsetWidth}px` })
+      }
     }
   },
   methods: {
+    updateFocus() {
+      if (this.children.length) this.children.forEach(_ => _.focus = [_.value, _.label].indexOf(this.inputValue) > -1)
+    },
     addItem(vm) {
       this.children.push(vm)
     },
     removeItem(vm) {
       this.children.splice(this.children.indexOf(vm), 1)
     },
+    updateSelected(vm) {
+      this.toggle(false)
+      this.inputValue = vm.label || vm.value
+      this.children.forEach(_ => _.focus = false)
+      vm.focus = true
+    },
     toggle(visible) {
       this.visible = visible === undefined ? !this.visible : visible
     },
-    onClick(event) {
-      this.visible = !this.visible
+    onItemClick(val) {
+      this.toggle(false)
+      this.inputValue = val
     },
-    onOptionClick(item) {
-      this.inputValue = item
-      this.$emit('on-select', item)
-      this.$nextTick(() => this.visible = false)
+    onKeydown(e) {
+      if (this.visible) { // 38: 向上, 40: 向下, 27: ESC, 13: 回车, 9: TAB
+        if ([9, 27, 38, 40].indexOf(e.keyCode) > -1) e.preventDefault()
+        let action = {
+          13: this.onEnter,
+          27: this.toggle,
+          38: this.setFocus.bind(this, true),
+          40: this.setFocus
+        }[e.keyCode]
+        action && action()
+      }
     },
-    onFocus(event) {
-      this.$emit('on-focus', event)
+    onEnter() {
+      if (this.children.length) {
+        let vm = this.children.find(_ => _.focus)
+        return vm ? this.updateSelected(vm) : this.toggle()
+      }
+      this.toggle()
+      this.inputValue = this.focusValue
     },
-    onBlur(event) {
-      this.$emit('on-blur', event)
+    getNextIndex(index, len, isUp) {
+      return isUp ? (index <= 0 ? len - 1 : index - 1) : (index < len - 1 ? index + 1 : 0)
+    },
+    setFocus(isUp) {
+      if (this.children.length) {
+        let children = this.children.filter(_ => !_.disabled)
+        if (children.length) {
+          let index = children.findIndex(_ => _.focus)
+          this.children.forEach(_ => _.focus = false)
+          children[this.getNextIndex(index, children.length, isUp)].focus = true
+        }
+      } else {
+        let index = this.filtered.indexOf(this.focusValue)
+        this.focusValue = this.filtered[this.getNextIndex(index, this.filtered.length, isUp)]
+      }
     }
   }
 }
@@ -110,11 +154,10 @@ export default {
     padding: 5px 0;
     list-style: none;
   }
-  &_listItem {
+  &_item {
     cursor: pointer;
     padding: 7px 16px;
-    transition: background-color .2s ease-in-out;
-    &.active, &:hover {
+    &.focus, &:hover {
       background: darken(@bg-color, 2%);
     }
   }

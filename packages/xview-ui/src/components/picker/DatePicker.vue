@@ -1,24 +1,21 @@
 <template>
-  <div class="ui-datepicker" v-winclick="handleWinClick" @click="handleClick">
+  <div class="ui-datepicker" @click="handleClick">
     <UiInput icon="ios-calendar-outline"/>
-    <ui-drop ref="UiDrop" class="ui-datepicker-dropdown" :visible="dropVisible" :parentName="$options.name">
+    <!-- <ui-drop ref="UiDrop" class="ui-datepicker-dropdown" :visible="dropVisible" :parentName="$options.name">
       <UiHeader/>
       <UiDateView/>
-    </ui-drop>
+    </ui-drop> -->
   </div>
 </template>
 <script>
-import { isSelfOrParent } from './../../utils'
 import { propsMixin } from './mixins'
 import UiInput from '../input'
-import UiDrop from './../select/OptionList.vue'
 import UiDateView from './DateView.vue'
 import UiHeader from './Header.vue'
-import { winclick } from '../../directives'
 export default {
   name: 'ui-datepicker',
   mixins: [propsMixin],
-  components: { UiInput, UiDrop, UiDateView, UiHeader },
+  components: { UiInput, UiDateView, UiHeader },
   data() {
     return {
       dropVisible: false
@@ -42,17 +39,9 @@ export default {
       default: () => {}
     }
   },
-  directives: { winclick },
   methods: {
     handleClick() {
       this.dropVisible = true
-    },
-    handleWinClick(event) {
-      if (
-        isSelfOrParent(this.$el, event.target) || 
-        isSelfOrParent(this.$refs.UiDrop.$el, event.target)
-      ) return
-      this.dropVisible = false
     }
   }
 }

@@ -40,7 +40,7 @@
       <div class="demo-auto-complete-item" v-for="item in data4" :key="item.title">
         <div class="demo-auto-complete-group">
           <span>{{ item.title }}</span>
-          <a href="https://www.google.com/search?q=iView" target="_blank">更多</a>
+          <a href="https://www.google.com/search?q=xview-ui" target="_blank">更多</a>
         </div>
         <Option v-for="option in item.children" :value="option.title" :key="option.title">
           <span class="demo-auto-complete-title">{{ option.title }}</span>
@@ -48,7 +48,7 @@
         </Option>
       </div>
       <a
-        href="https://www.google.com/search?q=iView"
+        href="https://www.google.com/search?q=xview-ui"
         target="_blank"
         class="demo-auto-complete-more"
       >查看所有结果</a>
@@ -71,11 +71,11 @@ export default {
           title: "话题",
           children: [
             {
-              title: "iView",
+              title: "xview",
               count: 10000
             },
             {
-              title: "iView UI",
+              title: "xview-ui",
               count: 10600
             }
           ]
@@ -84,11 +84,11 @@ export default {
           title: "问题",
           children: [
             {
-              title: "iView UI 有多好",
+              title: "xview-ui 有多好",
               count: 60100
             },
             {
-              title: "iView 是啥",
+              title: "xview-ui 是啥",
               count: 30010
             }
           ]
@@ -97,7 +97,7 @@ export default {
           title: "文章",
           children: [
             {
-              title: "iView 是一个设计语言",
+              title: "xview-ui 是一个设计语言",
               count: 100000
             }
           ]

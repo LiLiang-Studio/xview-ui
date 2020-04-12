@@ -14,12 +14,12 @@
             <input v-if="!filterable && !selectedValue.length"
               :class="`${prefixCls}_input placeholder`" :placeholder="placeholder">
             <input v-if="filterable" ref="Input" :class="`${prefixCls}_input`" v-model="searchValue"
-              :style="inputStyle" :placeholder="inputPlaceholder" @input="toggle(true)">
+              :style="inputStyle" :placeholder="inputPlaceholder" @focus="onInputFocus" @blur="onInputBlur" @input="toggle(true)">
             <span :class="`${prefixCls}_inputText`" ref="SearchText">{{searchText}}</span>
           </template>
           <template v-else>
             <input v-if="filterable" ref="Input" :class="`${prefixCls}_input`" 
-              :placeholder="placeholder" v-model="searchValue" @blur="onInputBlur" @input="toggle(true)">
+              :placeholder="placeholder" v-model="searchValue" @focus="onInputFocus" @blur="onInputBlur" @input="toggle(true)">
             <template v-else>
               <span v-if="selectedValue.length" :class="`${prefixCls}_label`">{{singleLabel}}</span>
               <span v-else :class="`${prefixCls}_placeholder`">{{placeholder}}</span>
@@ -78,6 +78,7 @@ export default {
       selectedValue: this.getModel(),
       children: [],
       searchValue: '',
+      inputFocus: false,
       cache: new Cache(this.value, this.label)
     }
   },
@@ -97,6 +98,7 @@ export default {
         `${this.prefixCls}_selection`,
         this.size && `${this.prefixCls}_${this.size}`,
         {
+          inputFocus: this.inputFocus,
           listVisible: this.visible,
           disabled: this.disabled,
           multiple: this.multiple,
@@ -269,8 +271,12 @@ export default {
         }
       }
     },
+    onInputFocus() {
+      this.inputFocus = true
+    },
     onInputBlur() {
-      setTimeout(() => this.searchValue = this.singleLabel, 300)
+      this.inputFocus = false
+      !this.multiple && setTimeout(() => this.searchValue = this.singleLabel, 300)
     }
   }
 }
@@ -316,7 +322,7 @@ export default {
         height: @size-normal;
       }
     }
-    &:hover:not(.disabled), &:focus:not(.disabled), &.listVisible {
+    &:hover:not(.disabled), &:focus:not(.disabled), &.listVisible, &.inputFocus {
       border-color: @primary-color;
     }
     &.clearable:hover:not(.disabled) {

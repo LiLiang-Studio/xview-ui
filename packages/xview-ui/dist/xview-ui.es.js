@@ -1,5 +1,5 @@
 /*!
- * xview-ui v1.5.7-1
+ * xview-ui v1.5.7-2
  * (c) 2019-2020 LiLiang
  * Released under the MIT License.
  */
@@ -9323,6 +9323,7 @@ var script$V = {
       selectedValue: this.getModel(),
       children: [],
       searchValue: '',
+      inputFocus: false,
       cache: new Cache(this.value, this.label)
     }
   },
@@ -9340,6 +9341,7 @@ var script$V = {
         ((this.prefixCls) + "_selection"),
         this.size && ((this.prefixCls) + "_" + (this.size)),
         {
+          inputFocus: this.inputFocus,
           listVisible: this.visible,
           disabled: this.disabled,
           multiple: this.multiple,
@@ -9522,10 +9524,14 @@ var script$V = {
         }
       }
     },
+    onInputFocus: function onInputFocus() {
+      this.inputFocus = true;
+    },
     onInputBlur: function onInputBlur() {
       var this$1 = this;
 
-      setTimeout(function () { return this$1.searchValue = this$1.singleLabel; }, 300);
+      this.inputFocus = false;
+      !this.multiple && setTimeout(function () { return this$1.searchValue = this$1.singleLabel; }, 300);
     }
   }
 };
@@ -9636,6 +9642,8 @@ var __vue_render__$Y = function() {
                               attrs: { placeholder: _vm.inputPlaceholder },
                               domProps: { value: _vm.searchValue },
                               on: {
+                                focus: _vm.onInputFocus,
+                                blur: _vm.onInputBlur,
                                 input: [
                                   function($event) {
                                     if ($event.target.composing) {
@@ -9676,6 +9684,7 @@ var __vue_render__$Y = function() {
                               attrs: { placeholder: _vm.placeholder },
                               domProps: { value: _vm.searchValue },
                               on: {
+                                focus: _vm.onInputFocus,
                                 blur: _vm.onInputBlur,
                                 input: [
                                   function($event) {

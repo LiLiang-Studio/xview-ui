@@ -1,105 +1,71 @@
 <template>
   <div :class="prefix">
-    <input type="file" ref="File" v-show="false" :disabled="disabled" :multiple="multiple" :accept="accept" @change="onFileChange">
-    <div :class="[`${prefix}-${type}`, {dragOver}]" @click="selectFile" 
-      @drop.prevent="onDrop" @dragover.prevent="dragOver = true" @dragleave.prevent="dragOver = false">
+    <input v-show="0" v-bind="inputProps" @change="onFileChange">
+    <div :class="[`${prefix}_${type}`, {dragOver}]"
+      @click="selectFile" @drop.prevent="onDrop" @dragover.prevent="dragOver = true" @dragleave.prevent="dragOver = false">
       <slot></slot>
     </div>
-    <ul v-if="showUploadList" :class="`${prefix}-list`">
-      <li v-for="item in fileList" :key="item.key">
-        <div :class="`${prefix}-finish`">
-          <ui-icon type="document"/>
-          <span :class="`${prefix}-filename`" @click="previewItem">{{item.name}}</span>
-          <b :class="`${prefix}-spring`"></b>
-          <ui-close-icon-button :class="`${prefix}-remove`" size="18" @click="removeItem(item)"/>
+    <ul v-if="showUploadList" :class="`${prefix}_list`">
+      <li v-for="_ in fileList" :key="_.key">
+        <div :class="`${prefix}_finish`">
+          <x-icon type="document"/>
+          <span :class="`${prefix}_filename`" @click="previewItem">{{_.name}}</span>
+          <b :class="`${prefix}_spring`"></b>
+          <x-close-icon-button v-if="_.status !== 'normal'" :class="`${prefix}_remove`" size="18" @click="removeItem(_)"/>
         </div>
-        <transition :name="`${prefix}-progressbar`">
-          <ui-progress v-if="item.showProgress" 
-            :class="`${prefix}-progressbar`" :strokeWidth="2" :percent="item.percentage" :status="item.status"/>
+        <transition :name="`${prefix}_progress`">
+          <x-progress v-if="_.showProgress" :class="`${prefix}_progress`" :strokeWidth="2" :percent="_.percent" :status="_.status"/>
         </transition>
       </li>
     </ul>
-    <div v-if="hasTip" :class="`${prefix}-tip`">
+    <div v-if="$slots.tip" :class="`${prefix}_tip`">
       <slot name="tip"></slot>
     </div>
   </div>
 </template>
 <script>
-import UiIcon from '../icon'
-import UiProgress from '../progress'
-import UiCloseIconButton from '../close-icon-button'
+import XIcon from '../icon'
+import XProgress from '../progress'
+import XCloseIconButton from '../close-icon-button'
+const B = Boolean, F = Function
 let incKey = 0
 export default {
-  name: 'UiUpload',
-  components: { UiIcon, UiProgress, UiCloseIconButton },
-  data() {
-    return {
-      prefix: 'ui-upload',
-      fileList: [],
-      dragOver: false
-    }
-  },
+  name: 'XUpload',
+  components: { XIcon, XProgress, XCloseIconButton },
   props: {
-    action: {
-      type: String,
-      required: true
-    },
-    headers: {
-      type: Object,
-      default: () => ({})
-    },
-    multiple: Boolean,
-    disabled: Boolean,
+    action: { type: String, required: true },
+    headers: { type: Object, default: () => ({}) },
+    disabled: B,
     data: Object,
-    name: {
-      type: String,
-      default: 'file'
-    },
-    withCredentials: Boolean,
-    showUploadList: {
-      type: Boolean,
-      default: true
-    },
-    type: {
-      default: 'select',
-      validator(value) {
-        return ['select', 'drag'].indexOf(value) !== -1
-      }
-    },
-    accept: String,
-    format: {
-      type: Array,
-      default: () => []
-    },
+    name: { type: String, default: 'file' },
+    withCredentials: B,
+    showUploadList: { type: B, default: true },
+    type: { default: 'select', validator: v => ['select', 'drag'].indexOf(v) > -1 },
+    format: { type: Array, default: () => [] },
     maxSize: Number,
-    beforeUpload: Function,
-    onProgress: Function,
-    onSuccess: Function,
-    onError: Function,
-    onPreview: Function,
-    onRemove: Function,
-    onFormatError: Function,
-    onExceededSize: Function,
-    defaultFileList: {
-      type: Array,
-      default: () => []
-    }
+    beforeUpload: F,
+    onProgress: F,
+    onSuccess: F,
+    onError: F,
+    onPreview: F,
+    onRemove: F,
+    onFormatError: F,
+    onExceededSize: F,
+    defaultFileList: { type: Array, default: () => [] }
+  },
+  data() {
+    return { prefix: 'x-upload', fileList: [], dragOver: false }
   },
   computed: {
-    hasTip() {
-      return this.$slots.tip !== undefined
+    inputProps() {
+      return { ...this.$attrs, type: 'file', ref: 'File', disabled: this.disabled }
     }
   },
   watch: {
     defaultFileList: {
       immediate: true,
-      handler(newval) {
-        this.fileList = newval.map(_ => ({
-          ..._, 
-          key: incKey++,
-          showProgress: false,
-          status: 'success'
-        }))
+      handler(val) {
+        this.fileList = val.map(_ => ({ ..._,  key: incKey++, status: 'success' }))
       }
     }
   },
@@ -109,40 +75,45 @@ export default {
     },
     onDrop(e) {
       this.dragOver = false
-      if (this.disabled) return
-      this.onFileChange(e)
+      if (!this.disabled) this.onFileChange(e)
     },
     onFileChange(e) {
-      let files = Array.prototype.slice.call(e.target.files || e.dataTransfer.files)
-      files.forEach(file => this.validFormat(file) && this.validSize(file) && this.upload(file))
+      Array.from(e.target.files || e.dataTransfer.files).forEach(_ => this.validate(_) && this.upload(_))
       this.$nextTick(() => e.target.value = '')
     },
-    validFormat(file) {
+    validate(file) {
       if (this.format.length) {
         let fileFormat = file.name.split('.').pop().toLowerCase()
-        if (this.format.every(_ => _.toLowerCase() !== fileFormat)) {
+        if (this.format.indexOf(fileFormat) < 0) {
           this.onFormatError && this.onFormatError(file, this.fileList)
           return false
         }
-      }
-      return true
-    },
-    validSize(file) {
-      if (this.maxSize && file.size > this.maxSize * 1024) {
+      } else if (this.maxSize && file.size > this.maxSize * 1024) {
         this.onExceededSize && this.onExceededSize(file, this.fileList)
         return false
       }
       return true
     },
+    onFail(e, item) {
+      item.percent = 100
+      item.status = 'wrong'
+      item.showProgress = false
+      this.fileList.splice(this.fileList.indexOf(item), 1)
+      this.onError && this.onError(e, item, this.fileList)
+    },
     upload(file) {
       const fileItem = {
         file,
-        percentage: 0,
+        percent: 0,
         key: incKey++,
         name: file.name,
-        status: 'normal',
-        showProgress: true
+        status: 'normal'
       }
+      if (this.beforeUpload) {
+        let result = this.beforeUpload(file)
+        if (result === false || result instanceof Promise) return
+      }
+      fileItem.showProgress = true
       this.fileList.push(fileItem)
       const formData = new FormData()
       formData.append(this.name, file)
@@ -150,30 +121,21 @@ export default {
       const xhr = new XMLHttpRequest()
       xhr.onprogress = e => {
         if (e.total > 0) {
-          fileItem.percentage = e.loaded / e.total * 100
+          fileItem.percent = e.loaded / e.total * 100
         }
         this.onProgress && this.onProgress(e, fileItem, this.fileList)
       }
       xhr.onload = () => {
-        if (xhr.status < 200 && xhr.status >= 300) {
-          fileItem.status = 'wrong'
-          fileItem.showProgress = false
-          this.fileList.splice(this.fileList.indexOf(fileItem), 1)
-          return this.onError && this.onError(new Error(`fail to post ${this.action} ${xhr.status}'`), fileItem, this.fileList)
+        if (xhr.status < 200 || xhr.status >= 300) {
+          return this.onFail(new Error(`fail to post ${this.action} ${xhr.status}`), fileItem)
         }
-        fileItem.percentage = 100
+        fileItem.percent = 100
         fileItem.status = 'success'
         fileItem.showProgress = false
         fileItem.response = xhr.response
         this.onSuccess && this.onSuccess(xhr.response, fileItem, this.fileList)
       }
-      xhr.onerror = err => {
-        fileItem.percentage = 100
-        fileItem.status = 'wrong'
-        fileItem.showProgress = false
-        this.fileList.splice(this.fileList.indexOf(fileItem), 1)
-        this.onError && this.onError(err)
-      }
+      xhr.onerror = e => this.onFail(e, fileItem)
       xhr.open('post', this.action, true)
       xhr.withCredentials = this.withCredentials
       Object.keys(this.headers).forEach(_ => xhr.setRequestHeader(_, headers[_]))
@@ -194,11 +156,11 @@ export default {
 </script>
 <style lang="less">
 @import url("../../styles/vars.less");
-.ui-upload {
-  &-select {
+.x-upload {
+  &_select {
     display: inline-block;
   }
-  &-drag {
+  &_drag {
     display: block;
     cursor: pointer;
     text-align: center;
@@ -213,34 +175,34 @@ export default {
       border: 2px dashed @primary-color;
     }
   }
-  &-tip, &-list {
+  &_tip, &_list {
     margin-top: 8px;
   }
-  &-list {
+  &_list {
     list-style: none;
   }
-  &-finish {
+  &_finish {
     cursor: default;
     padding: 4px 6px;
     display: flex;
     align-items: center;
     transition: all .2s ease;
     &:hover {
-      background-color: @disabled-bg-color;
+      background-color: darken(@bg-color, 2%);
     }
   }
-  &-filename {
+  &_filename {
     margin: 0 5px;
     cursor: pointer;
     transition: color .2s ease;
   }
-  &-finish:hover &-filename {
+  &_finish:hover &_filename {
     color: @primary-color;
   }
-  &-spring {
+  &_spring {
     flex: 1;
   }
-  &-progressbar {
+  &_progress {
     transition: opacity .3s ease .3s;
     &-leave-to {
       opacity: 0;

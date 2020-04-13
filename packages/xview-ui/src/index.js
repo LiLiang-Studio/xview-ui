@@ -74,6 +74,7 @@ import Select from './components/select' // 下拉选择框
 import Option from './components/option' // 下拉选择框选项
 import OptionGroup from './components/option-group' // 下拉选择框选项组
 import AutoComplete from './components/auto-complete' // 自动完成
+import Upload from './components/upload' // 上传
 
 import loadingBarService from './components/loading-bar' // 加载条
 import Spin from './components/spin' // 加载中
@@ -84,8 +85,6 @@ import Modal from './components/modal' // 模态框
 /**
  * 待优化组件
  */
-// 上传
-import Upload from './components/upload'
 // 表单
 import Form from './components/form'
 import FormItem from './components/form-item'
@@ -171,8 +170,8 @@ const comps = {
   Option,
   OptionGroup,
   AutoComplete,
-
   Upload,
+
   Form,
   FormItem,
   // Cascader,

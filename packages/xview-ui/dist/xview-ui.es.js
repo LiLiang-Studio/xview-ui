@@ -1,5 +1,5 @@
 /*!
- * xview-ui v1.5.8
+ * xview-ui v1.5.9
  * (c) 2019-2020 LiLiang
  * Released under the MIT License.
  */
@@ -12457,34 +12457,133 @@ __vue_render__$1c._withStripped = true;
   );
 
 //
-//
-//
-//
-//
-//
-//
-
+var B$e = Boolean, F$3 = Function;
+var incKey = 0;
 var script$19 = {
-  name: 'XLoadingBar',
+  name: 'XUpload',
+  components: { XIcon: __vue_component__, XProgress: __vue_component__$q, XCloseIconButton: __vue_component__$7 },
   props: {
-    color: String,
-    failedColor: String,
-    height: {
-      type: Number,
-      default: 2
-    },
-    percent: Number,
-    status: String
+    action: { type: String, required: true },
+    headers: { type: Object, default: function () { return ({}); } },
+    disabled: B$e,
+    data: Object,
+    name: { type: String, default: 'file' },
+    withCredentials: B$e,
+    showUploadList: { type: B$e, default: true },
+    type: { default: 'select', validator: function (v) { return ['select', 'drag'].indexOf(v) > -1; } },
+    format: { type: Array, default: function () { return []; } },
+    maxSize: Number,
+    beforeUpload: F$3,
+    onProgress: F$3,
+    onSuccess: F$3,
+    onError: F$3,
+    onPreview: F$3,
+    onRemove: F$3,
+    onFormatError: F$3,
+    onExceededSize: F$3,
+    defaultFileList: { type: Array, default: function () { return []; } }
   },
   data: function data() {
-    return { prefix: 'x-loadingBar' }
+    return { prefix: 'x-upload', fileList: [], dragOver: false }
   },
   computed: {
-    styles: function styles() {
-      return { height: ((this.height) + "px") }
+    inputProps: function inputProps() {
+      return Object.assign({}, this.$attrs, {type: 'file', ref: 'File', disabled: this.disabled})
+    }
+  },
+  watch: {
+    defaultFileList: {
+      immediate: true,
+      handler: function handler(val) {
+        this.fileList = val.map(function (_) { return (Object.assign({}, _,  {key: incKey++, status: 'success'})); });
+      }
+    }
+  },
+  methods: {
+    selectFile: function selectFile() {
+      this.$refs.File.click();
     },
-    barStyle: function barStyle() {
-      return { transform: ("scaleX(" + (this.percent / 100) + ")"), background: this.status === 'error' ? this.failedColor : this.color }
+    onDrop: function onDrop(e) {
+      this.dragOver = false;
+      if (!this.disabled) { this.onFileChange(e); }
+    },
+    onFileChange: function onFileChange(e) {
+      var this$1 = this;
+
+      Array.from(e.target.files || e.dataTransfer.files).forEach(function (_) { return this$1.validate(_) && this$1.upload(_); });
+      this.$nextTick(function () { return e.target.value = ''; });
+    },
+    validate: function validate(file) {
+      if (this.format.length) {
+        var fileFormat = file.name.split('.').pop().toLowerCase();
+        if (this.format.indexOf(fileFormat) < 0) {
+          this.onFormatError && this.onFormatError(file, this.fileList);
+          return false
+        }
+      } else if (this.maxSize && file.size > this.maxSize * 1024) {
+        this.onExceededSize && this.onExceededSize(file, this.fileList);
+        return false
+      }
+      return true
+    },
+    onFail: function onFail(e, item) {
+      item.percent = 100;
+      item.status = 'wrong';
+      item.showProgress = false;
+      this.fileList.splice(this.fileList.indexOf(item), 1);
+      this.onError && this.onError(e, item, this.fileList);
+    },
+    upload: function upload(file) {
+      var this$1 = this;
+
+      var fileItem = {
+        file: file,
+        percent: 0,
+        key: incKey++,
+        name: file.name,
+        status: 'normal'
+      };
+      if (this.beforeUpload) {
+        var result = this.beforeUpload(file);
+        if (result === false || result instanceof Promise) { return }
+      }
+      fileItem.showProgress = true;
+      this.fileList.push(fileItem);
+      var formData = new FormData();
+      formData.append(this.name, file);
+      this.data && Object.keys(this.data).forEach(function (_) { return formData.append(_, this$1.data[_]); });
+      var xhr = new XMLHttpRequest();
+      xhr.onprogress = function (e) {
+        if (e.total > 0) {
+          fileItem.percent = e.loaded / e.total * 100;
+        }
+        this$1.onProgress && this$1.onProgress(e, fileItem, this$1.fileList);
+      };
+      xhr.onload = function () {
+        if (xhr.status < 200 || xhr.status >= 300) {
+          return this$1.onFail(new Error(("fail to post " + (this$1.action) + " " + (xhr.status))), fileItem)
+        }
+        fileItem.percent = 100;
+        fileItem.status = 'success';
+        fileItem.showProgress = false;
+        fileItem.response = xhr.response;
+        this$1.onSuccess && this$1.onSuccess(xhr.response, fileItem, this$1.fileList);
+      };
+      xhr.onerror = function (e) { return this$1.onFail(e, fileItem); };
+      xhr.open('post', this.action, true);
+      xhr.withCredentials = this.withCredentials;
+      Object.keys(this.headers).forEach(function (_) { return xhr.setRequestHeader(_, headers[_]); });
+      xhr.send(formData);
+    },
+    removeItem: function removeItem(item) {
+      this.fileList.splice(this.fileList.indexOf(item), 1);
+      this.onRemove && this.onRemove(item, this.fileList);
+    },
+    previewItem: function previewItem(item) {
+      this.onPreview && this.onPreview(item);
+    },
+    clearFiles: function clearFiles() {
+      this.fileList = [];
     }
   }
 };
@@ -12496,13 +12595,115 @@ var __vue_render__$1d = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c("transition", { attrs: { name: _vm.prefix } }, [
-    _c("div", { class: _vm.prefix, style: _vm.styles }, [
-      _c("div", {
-        class: [_vm.prefix + "_bar", _vm.status],
-        style: _vm.barStyle
-      })
-    ])
+  return _c("div", { class: _vm.prefix }, [
+    _c(
+      "input",
+      _vm._b(
+        {
+          directives: [
+            { name: "show", rawName: "v-show", value: 0, expression: "0" }
+          ],
+          on: { change: _vm.onFileChange }
+        },
+        "input",
+        _vm.inputProps,
+        false
+      )
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        class: [_vm.prefix + "_" + _vm.type, { dragOver: _vm.dragOver }],
+        on: {
+          click: _vm.selectFile,
+          drop: function($event) {
+            $event.preventDefault();
+            return _vm.onDrop($event)
+          },
+          dragover: function($event) {
+            $event.preventDefault();
+            _vm.dragOver = true;
+          },
+          dragleave: function($event) {
+            $event.preventDefault();
+            _vm.dragOver = false;
+          }
+        }
+      },
+      [_vm._t("default")],
+      2
+    ),
+    _vm._v(" "),
+    _vm.showUploadList
+      ? _c(
+          "ul",
+          { class: _vm.prefix + "_list" },
+          _vm._l(_vm.fileList, function(_) {
+            return _c(
+              "li",
+              { key: _.key },
+              [
+                _c(
+                  "div",
+                  { class: _vm.prefix + "_finish" },
+                  [
+                    _c("x-icon", { attrs: { type: "document" } }),
+                    _vm._v(" "),
+                    _c(
+                      "span",
+                      {
+                        class: _vm.prefix + "_filename",
+                        on: { click: _vm.previewItem }
+                      },
+                      [_vm._v(_vm._s(_.name))]
+                    ),
+                    _vm._v(" "),
+                    _c("b", { class: _vm.prefix + "_spring" }),
+                    _vm._v(" "),
+                    _.status !== "normal"
+                      ? _c("x-close-icon-button", {
+                          class: _vm.prefix + "_remove",
+                          attrs: { size: "18" },
+                          on: {
+                            click: function($event) {
+                              return _vm.removeItem(_)
+                            }
+                          }
+                        })
+                      : _vm._e()
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "transition",
+                  { attrs: { name: _vm.prefix + "_progress" } },
+                  [
+                    _.showProgress
+                      ? _c("x-progress", {
+                          class: _vm.prefix + "_progress",
+                          attrs: {
+                            strokeWidth: 2,
+                            percent: _.percent,
+                            status: _.status
+                          }
+                        })
+                      : _vm._e()
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          }),
+          0
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.$slots.tip
+      ? _c("div", { class: _vm.prefix + "_tip" }, [_vm._t("tip")], 2)
+      : _vm._e()
   ])
 };
 var __vue_staticRenderFns__$1d = [];
@@ -12537,6 +12738,87 @@ __vue_render__$1d._withStripped = true;
     undefined
   );
 
+//
+//
+//
+//
+//
+//
+//
+
+var script$1a = {
+  name: 'XLoadingBar',
+  props: {
+    color: String,
+    failedColor: String,
+    height: {
+      type: Number,
+      default: 2
+    },
+    percent: Number,
+    status: String
+  },
+  data: function data() {
+    return { prefix: 'x-loadingBar' }
+  },
+  computed: {
+    styles: function styles() {
+      return { height: ((this.height) + "px") }
+    },
+    barStyle: function barStyle() {
+      return { transform: ("scaleX(" + (this.percent / 100) + ")"), background: this.status === 'error' ? this.failedColor : this.color }
+    }
+  }
+};
+
+/* script */
+var __vue_script__$1a = script$1a;
+/* template */
+var __vue_render__$1e = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("transition", { attrs: { name: _vm.prefix } }, [
+    _c("div", { class: _vm.prefix, style: _vm.styles }, [
+      _c("div", {
+        class: [_vm.prefix + "_bar", _vm.status],
+        style: _vm.barStyle
+      })
+    ])
+  ])
+};
+var __vue_staticRenderFns__$1e = [];
+__vue_render__$1e._withStripped = true;
+
+  /* style */
+  var __vue_inject_styles__$1e = undefined;
+  /* scoped */
+  var __vue_scope_id__$1e = undefined;
+  /* module identifier */
+  var __vue_module_identifier__$1e = undefined;
+  /* functional template */
+  var __vue_is_functional_template__$1e = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  var __vue_component__$1e = normalizeComponent(
+    { render: __vue_render__$1e, staticRenderFns: __vue_staticRenderFns__$1e },
+    __vue_inject_styles__$1e,
+    __vue_script__$1a,
+    __vue_scope_id__$1e,
+    __vue_is_functional_template__$1e,
+    __vue_module_identifier__$1e,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
 var vm$1, tid, clearTimer = function () { clearInterval(tid), tid = null; },
   getVM$1 = function () { return vm$1 || (vm$1 = new Vue({
     data: function data() {
@@ -12546,7 +12828,7 @@ var vm$1, tid, clearTimer = function () { clearInterval(tid), tid = null; },
       }
     },
     render: function render(h) {
-      return h(__vue_component__$1d, {
+      return h(__vue_component__$1e, {
         style: { zIndex: this.options.zIndex },
         props: Object.assign({}, this.options, this.customOptions),
         directives: [{ name: 'show', value: this.options.visible }]
@@ -12615,16 +12897,16 @@ var loadingBarService = {
 //
 //
 
-var script$1a = {
+var script$1b = {
   props: {
     transition: String
   }
 };
 
 /* script */
-var __vue_script__$1a = script$1a;
+var __vue_script__$1b = script$1b;
 /* template */
-var __vue_render__$1e = function() {
+var __vue_render__$1f = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -12642,17 +12924,17 @@ var __vue_render__$1e = function() {
     1
   )
 };
-var __vue_staticRenderFns__$1e = [];
-__vue_render__$1e._withStripped = true;
+var __vue_staticRenderFns__$1f = [];
+__vue_render__$1f._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$1e = undefined;
+  var __vue_inject_styles__$1f = undefined;
   /* scoped */
-  var __vue_scope_id__$1e = undefined;
+  var __vue_scope_id__$1f = undefined;
   /* module identifier */
-  var __vue_module_identifier__$1e = undefined;
+  var __vue_module_identifier__$1f = undefined;
   /* functional template */
-  var __vue_is_functional_template__$1e = false;
+  var __vue_is_functional_template__$1f = false;
   /* style inject */
   
   /* style inject SSR */
@@ -12661,13 +12943,13 @@ __vue_render__$1e._withStripped = true;
   
 
   
-  var __vue_component__$1e = normalizeComponent(
-    { render: __vue_render__$1e, staticRenderFns: __vue_staticRenderFns__$1e },
-    __vue_inject_styles__$1e,
-    __vue_script__$1a,
-    __vue_scope_id__$1e,
-    __vue_is_functional_template__$1e,
-    __vue_module_identifier__$1e,
+  var __vue_component__$1f = normalizeComponent(
+    { render: __vue_render__$1f, staticRenderFns: __vue_staticRenderFns__$1f },
+    __vue_inject_styles__$1f,
+    __vue_script__$1b,
+    __vue_scope_id__$1f,
+    __vue_is_functional_template__$1f,
+    __vue_module_identifier__$1f,
     false,
     undefined,
     undefined,
@@ -12689,7 +12971,7 @@ function creator (Component, config, addons) {
     render: function render(h) {
       var this$1 = this;
 
-      return h(__vue_component__$1e, {
+      return h(__vue_component__$1f, {
         style: { zIndex: this.zIndex },
         props: { transition: Component.transition }
       }, this.items.map(function (ref, i) {
@@ -12744,7 +13026,7 @@ function creator (Component, config, addons) {
 
 //
 var prefix$1 = 'x-message';
-var script$1b = {
+var script$1c = {
   name: 'XMessage',
   components: { XIcon: __vue_component__, XCloseIconButton: __vue_component__$7 },
   transition: prefix$1,
@@ -12784,9 +13066,9 @@ var script$1b = {
 };
 
 /* script */
-var __vue_script__$1b = script$1b;
+var __vue_script__$1c = script$1c;
 /* template */
-var __vue_render__$1f = function() {
+var __vue_render__$1g = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -12819,17 +13101,17 @@ var __vue_render__$1f = function() {
     )
   ])
 };
-var __vue_staticRenderFns__$1f = [];
-__vue_render__$1f._withStripped = true;
+var __vue_staticRenderFns__$1g = [];
+__vue_render__$1g._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$1f = undefined;
+  var __vue_inject_styles__$1g = undefined;
   /* scoped */
-  var __vue_scope_id__$1f = undefined;
+  var __vue_scope_id__$1g = undefined;
   /* module identifier */
-  var __vue_module_identifier__$1f = undefined;
+  var __vue_module_identifier__$1g = undefined;
   /* functional template */
-  var __vue_is_functional_template__$1f = false;
+  var __vue_is_functional_template__$1g = false;
   /* style inject */
   
   /* style inject SSR */
@@ -12838,20 +13120,20 @@ __vue_render__$1f._withStripped = true;
   
 
   
-  var __vue_component__$1f = normalizeComponent(
-    { render: __vue_render__$1f, staticRenderFns: __vue_staticRenderFns__$1f },
-    __vue_inject_styles__$1f,
-    __vue_script__$1b,
-    __vue_scope_id__$1f,
-    __vue_is_functional_template__$1f,
-    __vue_module_identifier__$1f,
+  var __vue_component__$1g = normalizeComponent(
+    { render: __vue_render__$1g, staticRenderFns: __vue_staticRenderFns__$1g },
+    __vue_inject_styles__$1g,
+    __vue_script__$1c,
+    __vue_scope_id__$1g,
+    __vue_is_functional_template__$1g,
+    __vue_module_identifier__$1g,
     false,
     undefined,
     undefined,
     undefined
   );
 
-var Message = creator(__vue_component__$1f, null, {
+var Message = creator(__vue_component__$1g, null, {
   loading: function loading(addNotice, options, getVM) {
     var key = addNotice(options, 'loading');
     return function () { return getVM().removeItem(key); }
@@ -12860,7 +13142,7 @@ var Message = creator(__vue_component__$1f, null, {
 
 //
 var prefix$2 = 'x-notice';
-var script$1c = {
+var script$1d = {
   name: 'XNotice',
   components: { XIcon: __vue_component__, XCloseIconButton: __vue_component__$7 },
   transition: prefix$2,
@@ -12905,9 +13187,9 @@ var script$1c = {
 };
 
 /* script */
-var __vue_script__$1c = script$1c;
+var __vue_script__$1d = script$1d;
 /* template */
-var __vue_render__$1g = function() {
+var __vue_render__$1h = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -12946,17 +13228,17 @@ var __vue_render__$1g = function() {
     )
   ])
 };
-var __vue_staticRenderFns__$1g = [];
-__vue_render__$1g._withStripped = true;
+var __vue_staticRenderFns__$1h = [];
+__vue_render__$1h._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$1g = undefined;
+  var __vue_inject_styles__$1h = undefined;
   /* scoped */
-  var __vue_scope_id__$1g = undefined;
+  var __vue_scope_id__$1h = undefined;
   /* module identifier */
-  var __vue_module_identifier__$1g = undefined;
+  var __vue_module_identifier__$1h = undefined;
   /* functional template */
-  var __vue_is_functional_template__$1g = false;
+  var __vue_is_functional_template__$1h = false;
   /* style inject */
   
   /* style inject SSR */
@@ -12965,43 +13247,43 @@ __vue_render__$1g._withStripped = true;
   
 
   
-  var __vue_component__$1g = normalizeComponent(
-    { render: __vue_render__$1g, staticRenderFns: __vue_staticRenderFns__$1g },
-    __vue_inject_styles__$1g,
-    __vue_script__$1c,
-    __vue_scope_id__$1g,
-    __vue_is_functional_template__$1g,
-    __vue_module_identifier__$1g,
+  var __vue_component__$1h = normalizeComponent(
+    { render: __vue_render__$1h, staticRenderFns: __vue_staticRenderFns__$1h },
+    __vue_inject_styles__$1h,
+    __vue_script__$1d,
+    __vue_scope_id__$1h,
+    __vue_is_functional_template__$1h,
+    __vue_module_identifier__$1h,
     false,
     undefined,
     undefined,
     undefined
   );
 
-var Notice = creator(__vue_component__$1g, { duration: 4.5 }, {
+var Notice = creator(__vue_component__$1h, { duration: 4.5 }, {
   open: function open(addNotice, options) {
     addNotice(options, 'open');
   }
 });
 
 //
-var S$a = String, B$e = Boolean, BTrue = { type: B$e, default: true };
-var script$1d = {
+var S$a = String, B$f = Boolean, BTrue = { type: B$f, default: true };
+var script$1e = {
   name: 'XModal',
   components: { XOverlay: __vue_component__$B, XBtn: __vue_component__$1, XCloseIconButton: __vue_component__$7 },
   props: {
-    value: B$e,
+    value: B$f,
     title: S$a,
     closable: BTrue,
     maskClosable: BTrue,
-    loading: B$e,
-    scrollable: B$e,
-    fullscreen: B$e,
+    loading: B$f,
+    scrollable: B$f,
+    fullscreen: B$f,
     mask: BTrue,
     okText: { type: S$a, default: '确定' },
     cancelText: { type: S$a, default: '取消' },
     width: { type: [Number, S$a], default: 520 },
-    footerHide: B$e,
+    footerHide: B$f,
     styles: Object,
     className: S$a,
     transfer: BTrue,
@@ -13071,9 +13353,9 @@ var script$1d = {
 };
 
 /* script */
-var __vue_script__$1d = script$1d;
+var __vue_script__$1e = script$1e;
 /* template */
-var __vue_render__$1h = function() {
+var __vue_render__$1i = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -13202,17 +13484,17 @@ var __vue_render__$1h = function() {
     1
   )
 };
-var __vue_staticRenderFns__$1h = [];
-__vue_render__$1h._withStripped = true;
+var __vue_staticRenderFns__$1i = [];
+__vue_render__$1i._withStripped = true;
 
   /* style */
-  var __vue_inject_styles__$1h = undefined;
+  var __vue_inject_styles__$1i = undefined;
   /* scoped */
-  var __vue_scope_id__$1h = undefined;
+  var __vue_scope_id__$1i = undefined;
   /* module identifier */
-  var __vue_module_identifier__$1h = undefined;
+  var __vue_module_identifier__$1i = undefined;
   /* functional template */
-  var __vue_is_functional_template__$1h = false;
+  var __vue_is_functional_template__$1i = false;
   /* style inject */
   
   /* style inject SSR */
@@ -13221,13 +13503,13 @@ __vue_render__$1h._withStripped = true;
   
 
   
-  var __vue_component__$1h = normalizeComponent(
-    { render: __vue_render__$1h, staticRenderFns: __vue_staticRenderFns__$1h },
-    __vue_inject_styles__$1h,
-    __vue_script__$1d,
-    __vue_scope_id__$1h,
-    __vue_is_functional_template__$1h,
-    __vue_module_identifier__$1h,
+  var __vue_component__$1i = normalizeComponent(
+    { render: __vue_render__$1i, staticRenderFns: __vue_staticRenderFns__$1i },
+    __vue_inject_styles__$1i,
+    __vue_script__$1e,
+    __vue_scope_id__$1i,
+    __vue_is_functional_template__$1i,
+    __vue_module_identifier__$1i,
     false,
     undefined,
     undefined,
@@ -13246,21 +13528,21 @@ __vue_render__$1h._withStripped = true;
 //
 
 function objectWithoutProperties$1 (obj, exclude) { var target = {}; for (var k in obj) if (Object.prototype.hasOwnProperty.call(obj, k) && exclude.indexOf(k) === -1) target[k] = obj[k]; return target; }
-var S$b = String, B$f = Boolean, F$3 = Function;
-var script$1e = {
+var S$b = String, B$g = Boolean, F$4 = Function;
+var script$1f = {
   name: 'XDialog',
-  components: { XIcon: __vue_component__, XModal: __vue_component__$1h, XBtn: __vue_component__$1 },
+  components: { XIcon: __vue_component__, XModal: __vue_component__$1i, XBtn: __vue_component__$1 },
   props: {
-    value: B$f,
+    value: B$g,
     title: S$b,
     content: S$b,
     width: { default: 416 },
     okText: { type: S$b, default: '确定' },
     cancelText: {},
-    loading: B$f,
-    scrollable: B$f,
-    onOk: F$3,
-    onCancel: F$3,
+    loading: B$g,
+    scrollable: B$g,
+    onOk: F$4,
+    onCancel: F$4,
     type: {
       validator: function validator(v) {
         return ['info', 'success', 'warning', 'error', 'confirm'].indexOf(v) !== -1
@@ -13298,9 +13580,9 @@ var script$1e = {
 };
 
 /* script */
-var __vue_script__$1e = script$1e;
+var __vue_script__$1f = script$1f;
 /* template */
-var __vue_render__$1i = function() {
+var __vue_render__$1j = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -13329,367 +13611,6 @@ var __vue_render__$1i = function() {
     ],
     2
   )
-};
-var __vue_staticRenderFns__$1i = [];
-__vue_render__$1i._withStripped = true;
-
-  /* style */
-  var __vue_inject_styles__$1i = undefined;
-  /* scoped */
-  var __vue_scope_id__$1i = undefined;
-  /* module identifier */
-  var __vue_module_identifier__$1i = undefined;
-  /* functional template */
-  var __vue_is_functional_template__$1i = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  var __vue_component__$1i = normalizeComponent(
-    { render: __vue_render__$1i, staticRenderFns: __vue_staticRenderFns__$1i },
-    __vue_inject_styles__$1i,
-    __vue_script__$1e,
-    __vue_scope_id__$1i,
-    __vue_is_functional_template__$1i,
-    __vue_module_identifier__$1i,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-function objectWithoutProperties$2 (obj, exclude) { var target = {}; for (var k in obj) if (Object.prototype.hasOwnProperty.call(obj, k) && exclude.indexOf(k) === -1) target[k] = obj[k]; return target; }
-
-var vm$2, getVM$2 = function () { return vm$2 || (vm$2 = new Vue({
-  data: function data() {
-    return { options: {} }
-  },
-  render: function render(h) {
-    var this$1 = this;
-
-    var ref = this.options;
-    var render = ref.render;
-    var rest = objectWithoutProperties$2( ref, ["render"] );
-    var props = rest;
-    return h(__vue_component__$1i, {
-      props: props, on: { leave: function () { return this$1.destroy(); } }
-    }, render && [render(h)])
-  },
-  methods: {
-    toggle: function toggle(value) {
-      this.options = Object.assign({}, this.options, {value: value});
-    },
-    show: function show(options) {
-      this.options = Object.assign({}, options, {value: true});
-    },
-    destroy: function destroy() {
-      this.$destroy();
-      vm$2 = null;
-    }
-  }
-}).$mount()); };
-
-__vue_component__$1h.service = Object.assign({}, [
-    'info',
-    'success',
-    'warning',
-    'error',
-    'confirm'
-  ].reduce(function (acc, type) {
-    var obj;
-
-    return Object.assign({}, acc,
-      ( obj = {}, obj[type] = function (options) { getVM$2().show(Object.assign({}, options, {type: type})); }, obj ))
-  }, {}),
-  {remove: function remove() {
-    vm$2 && vm$2.toggle(false);
-  }});
-
-//
-var incKey = 0;
-var script$1f = {
-  name: 'UiUpload',
-  components: { UiIcon: __vue_component__, UiProgress: __vue_component__$q, UiCloseIconButton: __vue_component__$7 },
-  data: function data() {
-    return {
-      prefix: 'ui-upload',
-      fileList: [],
-      dragOver: false
-    }
-  },
-  props: {
-    action: {
-      type: String,
-      required: true
-    },
-    headers: {
-      type: Object,
-      default: function () { return ({}); }
-    },
-    multiple: Boolean,
-    disabled: Boolean,
-    data: Object,
-    name: {
-      type: String,
-      default: 'file'
-    },
-    withCredentials: Boolean,
-    showUploadList: {
-      type: Boolean,
-      default: true
-    },
-    type: {
-      default: 'select',
-      validator: function validator(value) {
-        return ['select', 'drag'].indexOf(value) !== -1
-      }
-    },
-    accept: String,
-    format: {
-      type: Array,
-      default: function () { return []; }
-    },
-    maxSize: Number,
-    beforeUpload: Function,
-    onProgress: Function,
-    onSuccess: Function,
-    onError: Function,
-    onPreview: Function,
-    onRemove: Function,
-    onFormatError: Function,
-    onExceededSize: Function,
-    defaultFileList: {
-      type: Array,
-      default: function () { return []; }
-    }
-  },
-  computed: {
-    hasTip: function hasTip() {
-      return this.$slots.tip !== undefined
-    }
-  },
-  watch: {
-    defaultFileList: {
-      immediate: true,
-      handler: function handler(newval) {
-        this.fileList = newval.map(function (_) { return (Object.assign({}, _, 
-          {key: incKey++,
-          showProgress: false,
-          status: 'success'})); });
-      }
-    }
-  },
-  methods: {
-    selectFile: function selectFile() {
-      this.$refs.File.click();
-    },
-    onDrop: function onDrop(e) {
-      this.dragOver = false;
-      if (this.disabled) { return }
-      this.onFileChange(e);
-    },
-    onFileChange: function onFileChange(e) {
-      var this$1 = this;
-
-      var files = Array.prototype.slice.call(e.target.files || e.dataTransfer.files);
-      files.forEach(function (file) { return this$1.validFormat(file) && this$1.validSize(file) && this$1.upload(file); });
-      this.$nextTick(function () { return e.target.value = ''; });
-    },
-    validFormat: function validFormat(file) {
-      if (this.format.length) {
-        var fileFormat = file.name.split('.').pop().toLowerCase();
-        if (this.format.every(function (_) { return _.toLowerCase() !== fileFormat; })) {
-          this.onFormatError && this.onFormatError(file, this.fileList);
-          return false
-        }
-      }
-      return true
-    },
-    validSize: function validSize(file) {
-      if (this.maxSize && file.size > this.maxSize * 1024) {
-        this.onExceededSize && this.onExceededSize(file, this.fileList);
-        return false
-      }
-      return true
-    },
-    upload: function upload(file) {
-      var this$1 = this;
-
-      var fileItem = {
-        file: file,
-        percentage: 0,
-        key: incKey++,
-        name: file.name,
-        status: 'normal',
-        showProgress: true
-      };
-      this.fileList.push(fileItem);
-      var formData = new FormData();
-      formData.append(this.name, file);
-      this.data && Object.keys(this.data).forEach(function (_) { return formData.append(_, this$1.data[_]); });
-      var xhr = new XMLHttpRequest();
-      xhr.onprogress = function (e) {
-        if (e.total > 0) {
-          fileItem.percentage = e.loaded / e.total * 100;
-        }
-        this$1.onProgress && this$1.onProgress(e, fileItem, this$1.fileList);
-      };
-      xhr.onload = function () {
-        if (xhr.status < 200 && xhr.status >= 300) {
-          fileItem.status = 'wrong';
-          fileItem.showProgress = false;
-          this$1.fileList.splice(this$1.fileList.indexOf(fileItem), 1);
-          return this$1.onError && this$1.onError(new Error(("fail to post " + (this$1.action) + " " + (xhr.status) + "'")), fileItem, this$1.fileList)
-        }
-        fileItem.percentage = 100;
-        fileItem.status = 'success';
-        fileItem.showProgress = false;
-        fileItem.response = xhr.response;
-        this$1.onSuccess && this$1.onSuccess(xhr.response, fileItem, this$1.fileList);
-      };
-      xhr.onerror = function (err) {
-        fileItem.percentage = 100;
-        fileItem.status = 'wrong';
-        fileItem.showProgress = false;
-        this$1.fileList.splice(this$1.fileList.indexOf(fileItem), 1);
-        this$1.onError && this$1.onError(err);
-      };
-      xhr.open('post', this.action, true);
-      xhr.withCredentials = this.withCredentials;
-      Object.keys(this.headers).forEach(function (_) { return xhr.setRequestHeader(_, headers[_]); });
-      xhr.send(formData);
-    },
-    removeItem: function removeItem(item) {
-      this.fileList.splice(this.fileList.indexOf(item), 1);
-      this.onRemove && this.onRemove(item, this.fileList);
-    },
-    previewItem: function previewItem(item) {
-      this.onPreview && this.onPreview(item);
-    },
-    clearFiles: function clearFiles() {
-      this.fileList = [];
-    }
-  }
-};
-
-/* script */
-var __vue_script__$1f = script$1f;
-/* template */
-var __vue_render__$1j = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", { class: _vm.prefix }, [
-    _c("input", {
-      directives: [
-        { name: "show", rawName: "v-show", value: false, expression: "false" }
-      ],
-      ref: "File",
-      attrs: {
-        type: "file",
-        disabled: _vm.disabled,
-        multiple: _vm.multiple,
-        accept: _vm.accept
-      },
-      on: { change: _vm.onFileChange }
-    }),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        class: [_vm.prefix + "-" + _vm.type, { dragOver: _vm.dragOver }],
-        on: {
-          click: _vm.selectFile,
-          drop: function($event) {
-            $event.preventDefault();
-            return _vm.onDrop($event)
-          },
-          dragover: function($event) {
-            $event.preventDefault();
-            _vm.dragOver = true;
-          },
-          dragleave: function($event) {
-            $event.preventDefault();
-            _vm.dragOver = false;
-          }
-        }
-      },
-      [_vm._t("default")],
-      2
-    ),
-    _vm._v(" "),
-    _vm.showUploadList
-      ? _c(
-          "ul",
-          { class: _vm.prefix + "-list" },
-          _vm._l(_vm.fileList, function(item) {
-            return _c(
-              "li",
-              { key: item.key },
-              [
-                _c(
-                  "div",
-                  { class: _vm.prefix + "-finish" },
-                  [
-                    _c("ui-icon", { attrs: { type: "document" } }),
-                    _vm._v(" "),
-                    _c(
-                      "span",
-                      {
-                        class: _vm.prefix + "-filename",
-                        on: { click: _vm.previewItem }
-                      },
-                      [_vm._v(_vm._s(item.name))]
-                    ),
-                    _vm._v(" "),
-                    _c("b", { class: _vm.prefix + "-spring" }),
-                    _vm._v(" "),
-                    _c("ui-close-icon-button", {
-                      class: _vm.prefix + "-remove",
-                      attrs: { size: "18" },
-                      on: {
-                        click: function($event) {
-                          return _vm.removeItem(item)
-                        }
-                      }
-                    })
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "transition",
-                  { attrs: { name: _vm.prefix + "-progressbar" } },
-                  [
-                    item.showProgress
-                      ? _c("ui-progress", {
-                          class: _vm.prefix + "-progressbar",
-                          attrs: {
-                            strokeWidth: 2,
-                            percent: item.percentage,
-                            status: item.status
-                          }
-                        })
-                      : _vm._e()
-                  ],
-                  1
-                )
-              ],
-              1
-            )
-          }),
-          0
-        )
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.hasTip
-      ? _c("div", { class: _vm.prefix + "-tip" }, [_vm._t("tip")], 2)
-      : _vm._e()
-  ])
 };
 var __vue_staticRenderFns__$1j = [];
 __vue_render__$1j._withStripped = true;
@@ -13722,6 +13643,53 @@ __vue_render__$1j._withStripped = true;
     undefined,
     undefined
   );
+
+function objectWithoutProperties$2 (obj, exclude) { var target = {}; for (var k in obj) if (Object.prototype.hasOwnProperty.call(obj, k) && exclude.indexOf(k) === -1) target[k] = obj[k]; return target; }
+
+var vm$2, getVM$2 = function () { return vm$2 || (vm$2 = new Vue({
+  data: function data() {
+    return { options: {} }
+  },
+  render: function render(h) {
+    var this$1 = this;
+
+    var ref = this.options;
+    var render = ref.render;
+    var rest = objectWithoutProperties$2( ref, ["render"] );
+    var props = rest;
+    return h(__vue_component__$1j, {
+      props: props, on: { leave: function () { return this$1.destroy(); } }
+    }, render && [render(h)])
+  },
+  methods: {
+    toggle: function toggle(value) {
+      this.options = Object.assign({}, this.options, {value: value});
+    },
+    show: function show(options) {
+      this.options = Object.assign({}, options, {value: true});
+    },
+    destroy: function destroy() {
+      this.$destroy();
+      vm$2 = null;
+    }
+  }
+}).$mount()); };
+
+__vue_component__$1i.service = Object.assign({}, [
+    'info',
+    'success',
+    'warning',
+    'error',
+    'confirm'
+  ].reduce(function (acc, type) {
+    var obj;
+
+    return Object.assign({}, acc,
+      ( obj = {}, obj[type] = function (options) { getVM$2().show(Object.assign({}, options, {type: type})); }, obj ))
+  }, {}),
+  {remove: function remove() {
+    vm$2 && vm$2.toggle(false);
+  }});
 
 //
 //
@@ -14283,7 +14251,7 @@ var comps = {
   Transfer: __vue_component__$L,
   Anchor: __vue_component__$M,
   AnchorLink: __vue_component__$N,
-  Modal: __vue_component__$1h,
+  Modal: __vue_component__$1i,
   Carousel: __vue_component__$O,
   CarouselItem: __vue_component__$P,
   Tree: __vue_component__$R,
@@ -14309,8 +14277,8 @@ var comps = {
   Option: __vue_component__$Z,
   OptionGroup: __vue_component__$1b,
   AutoComplete: __vue_component__$1c,
+  Upload: __vue_component__$1d,
 
-  Upload: __vue_component__$1j,
   Form: __vue_component__$1k,
   FormItem: __vue_component__$1l,
   // Cascader,
@@ -14332,7 +14300,7 @@ function index (Vue, options) {
   Vue.prototype.$Notice = Notice;
   Vue.prototype.$Message = Message;
   Vue.prototype.$Spin = __vue_component__$y.service;
-  Vue.prototype.$Modal = __vue_component__$1h.service;
+  Vue.prototype.$Modal = __vue_component__$1i.service;
   Vue.LoadingBar = Vue.prototype.$Loading = loadingBarService;
   var prefix = typeof options.prefix === 'string' ? options.prefix : 'Ui';
   for (var name in comps) { Vue.component(prefix + name, comps[name]); }

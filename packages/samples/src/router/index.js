@@ -5,6 +5,7 @@ import HomeRouter from '../pages/HomeRouter.vue'
 Vue.use(Router)
 
 const coms = {
+  Upload: () => import('../pages/Upload.vue'),
   AutoComplete: () => import('../pages/AutoComplete.vue'),
   Select: () => import('../pages/Select.vue'),
   Menu: () => import('../pages/Menu.vue'),
@@ -57,8 +58,7 @@ const coms = {
   // DatePicker: () => import('../pages/DatePicker.vue'),
   // TimePicker: () => import('../pages/TimePicker.vue'),
   Form: () => import('../pages/Form.vue'),
-  Table: () => import('../pages/Table.vue'),
-  Upload: () => import('../pages/Upload.vue')
+  Table: () => import('../pages/Table.vue')
 }
 
 export const routes = Object.keys(coms).map(_ => ({ path: _, name: _, component: coms[_] }))

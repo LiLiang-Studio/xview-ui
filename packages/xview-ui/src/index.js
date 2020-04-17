@@ -75,6 +75,7 @@ import Option from './components/option' // 下拉选择框选项
 import OptionGroup from './components/option-group' // 下拉选择框选项组
 import AutoComplete from './components/auto-complete' // 自动完成
 import Upload from './components/upload' // 上传
+import Cascader from './components/cascader' // 级联选择
 
 import loadingBarService from './components/loading-bar' // 加载条
 import Spin from './components/spin' // 加载中
@@ -90,8 +91,6 @@ import Form from './components/form'
 import FormItem from './components/form-item'
 // 颜色选择器
 // import ColorPicker from './components/color-picker'
-// // 级联选择
-// import Cascader from './components/cascader'
 // 表格
 import Table from './components/table/Table.vue'
 // 日期选择器
@@ -171,10 +170,10 @@ const comps = {
   OptionGroup,
   AutoComplete,
   Upload,
+  Cascader,
 
   Form,
   FormItem,
-  // Cascader,
   // ColorPicker,
   Table,
   // DatePicker,

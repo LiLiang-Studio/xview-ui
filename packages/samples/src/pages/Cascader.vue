@@ -43,10 +43,10 @@
       </Col>
     </Row>
 
-    <div class="page-sub-title">选择即改变</div>
+    <!-- <div class="page-sub-title">选择即改变</div>
     <p>指定 value 默认值，组件会在初始化时选定数据。</p>
     <br />
-    <Cascader :data="data" change-on-select></Cascader>
+    <Cascader :data="data" change-on-select></Cascader> -->
 
     <div class="page-sub-title">自定义已选项</div>
     <p>
@@ -73,10 +73,10 @@
     <br />
     <Cascader :data="data4" :load-data="loadData"></Cascader>
 
-    <div class="page-sub-title">搜索</div>
+    <!-- <div class="page-sub-title">搜索</div>
     <p>使用属性 filterable 可直接搜索选项并选择。暂不支持服务端搜索。</p>
     <br />
-    <Cascader v-model="value3" :data="data" filterable></Cascader>
+    <Cascader v-model="value3" :data="data" filterable></Cascader> -->
   </div>
 </template>
 <script>

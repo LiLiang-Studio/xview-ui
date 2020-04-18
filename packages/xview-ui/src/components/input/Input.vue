@@ -137,9 +137,9 @@ export default {
     }
   },
   methods: {
-    onClear() {
+    onClear(e) {
       this.$emit('input', '')
-      this.$emit('on-clear')
+      this.$emit('on-clear', e)
     },
     onIconClick() {
       this.$emit('on-click')

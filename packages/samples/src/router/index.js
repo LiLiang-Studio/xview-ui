@@ -5,6 +5,7 @@ import HomeRouter from '../pages/HomeRouter.vue'
 Vue.use(Router)
 
 const coms = {
+  ColorPicker: () => import('../pages/ColorPicker.vue'),
   Cascader: () => import('../pages/Cascader.vue'),
   Upload: () => import('../pages/Upload.vue'),
   AutoComplete: () => import('../pages/AutoComplete.vue'),

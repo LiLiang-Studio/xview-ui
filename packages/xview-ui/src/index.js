@@ -75,7 +75,8 @@ import Option from './components/option' // 下拉选择框选项
 import OptionGroup from './components/option-group' // 下拉选择框选项组
 import AutoComplete from './components/auto-complete' // 自动完成
 import Upload from './components/upload' // 上传
-import Cascader from './components/cascader' // 级联选择
+import Cascader from './components/cascader' // 级联选择框
+import ColorPicker from './components/color-picker' // 颜色选择器
 
 import loadingBarService from './components/loading-bar' // 加载条
 import Spin from './components/spin' // 加载中
@@ -83,14 +84,9 @@ import Message from './components/message' // 消息
 import Notice from './components/notice' // 通知
 import Modal from './components/modal' // 模态框
 
-/**
- * 待优化组件
- */
 // 表单
 import Form from './components/form'
 import FormItem from './components/form-item'
-// 颜色选择器
-// import ColorPicker from './components/color-picker'
 // 表格
 import Table from './components/table/Table.vue'
 // 日期选择器
@@ -171,10 +167,10 @@ const comps = {
   AutoComplete,
   Upload,
   Cascader,
+  ColorPicker,
 
   Form,
   FormItem,
-  // ColorPicker,
   Table,
   // DatePicker,
   // TimePicker
@@ -182,8 +178,7 @@ const comps = {
 
 /**
  * 安装插件
- * @param {import('vue').VueConstructor} Vue 
- * @param {Object} options 
+ * @param {import('vue').VueConstructor} Vue
  */
 export default function (Vue, options = {}) {
   Vue.prototype.$XVIEW_UI = tools

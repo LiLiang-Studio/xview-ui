@@ -62,7 +62,6 @@ export default {
     },
     popperProps() {
       return {
-        ref: 'Popper',
         adaptive: false,
         visible: this.visible,
         transfer: this.transfer,
@@ -88,7 +87,7 @@ export default {
       this.visible = visible === undefined ? !this.visible : visible
     },
     onClick() {
-      if (!this.disabled) this.toggle()
+      !this.disabled && this.toggle()
     },
     onClear() {
       this.toggle(false)

@@ -11,13 +11,13 @@
     </div>
     <div :class="`${prefix}_dropdown`">
       <div :class="`${prefix}_picker`">
-        <div :class="`${prefix}_satur`">
+        <div ref="Satur" :class="`${prefix}_satur`" :style="saturStyle" @mousedown.prevent="onSaturMousedown">
           <div :class="`${prefix}_satur_white`"></div>
           <div :class="`${prefix}_satur_black`"></div>
-          <div :class="`${prefix}_pointer`"></div>
+          <div :class="`${prefix}_pointer`" :style="pointer.style"></div>
         </div>
-        <div v-if="hue" :class="`${prefix}_hue`">
-          <span></span>
+        <div v-if="hue" :class="`${prefix}_hue`" @click.self="onHueClick">
+          <span :style="{left: hueCursor.left}"></span>
         </div>
         <div v-if="alpha" :class="`${prefix}_alpha`">
           <span></span>
@@ -31,19 +31,21 @@
         </ul>
       </div>
       <div :class="`${prefix}_confirm`">
-        <x-input size="small" :readonly="!editable"/>
-        <x-btn size="small">清空</x-btn>
-        <x-btn size="small" type="primary">确定</x-btn>
+        <x-input size="small" :readonly="!editable" v-model="tempValue"/>
+        <x-btn size="small" @click="onClear">清空</x-btn>
+        <x-btn size="small" type="primary" @click="onOK">确定</x-btn>
       </div>
     </div>
   </x-popper>
 </template>
 <script>
+import tinycolor from 'tinycolor2'
 import XIcon from '../icon'
 import XInput from '../input'
 import XBtn from '../button'
 import XPopper from '../popper'
 import { recommendColors } from './utils'
+import { getOffset, throttle } from '../../tools'
 const B = Boolean, BTrue = { type: B, default: true }
 export default {
   name: 'XColorPicker',
@@ -71,7 +73,9 @@ export default {
       visible: false,
       tempValue: this.value,
       selectedValue: this.value,
-      prefix: 'x-color-picker'
+      prefix: 'x-color-picker',
+      hueCursor: {},
+      pointer: {}
     }
   },
   computed: {
@@ -95,6 +99,9 @@ export default {
     },
     defaultColors() {
       return this.colors.length ? this.colors : this.recommend ? recommendColors : []
+    },
+    saturStyle() {
+      return { background: tinycolor({ h: this.hueCursor.h, s: 1, v: 1 }).toHexString() }
     }
   },
   methods: {
@@ -106,6 +113,50 @@ export default {
     },
     onPopperShow() {
       this.tempValue = this.selectedValue || '#2d8cf0'
+      this.setInitStyle()
+    },
+    setInitStyle() {
+      let hsv = tinycolor(this.tempValue).toHsv()
+      this.hueCursor = { h: hsv.h, left: `${hsv.h / 360 * 100}%` }
+      this.pointer = {
+        s: hsv.s,
+        v: hsv.v,
+        style: { left: `${hsv.s * 100}%`, top: `${(1 - hsv.v) * 100}%` }
+      }
+    },
+    onHueClick(e) {
+      let h = e.offsetX / e.target.offsetWidth * 360
+      this.hueCursor = { h, left: `${h / 360 * 100}%` }
+    },
+    onClear() {
+      this.visible = false
+      this.selectedValue = ''
+    },
+    onOK() {
+
+    },
+    updatePointer(e) {
+      let offset = getOffset(this.$refs.Satur)
+      let { offsetWidth, offsetHeight } = this.$refs.Satur
+      let s = (e.clientX - offset.left) / offsetWidth
+      let v = (offsetHeight - (e.clientY - offset.top)) / offsetHeight
+      s = s < 0 ? 0 : s > 1 ? 1 : s
+      v = v < 0 ? 0 : v > 1 ? 1 : v
+      this.pointer = {
+        s,
+        v,
+        style: { left: `${s * 100}%`, top: `${(1 - v) * 100}%` }
+      }
+      this.tempValue = this.selectedValue = tinycolor({ h: this.hueCursor.h, s, v }).toHexString()
+    },
+    onSaturMousedown(e) {
+      this.updatePointer(e)
+      window.addEventListener('mousemove', this.updatePointer, false)
+      window.addEventListener('mouseup', this.onWinMouseup, false)
+    },
+    onWinMouseup(e) {
+      window.removeEventListener('mousemove', this.updatePointer, false)
+      window.removeEventListener('mouseup', this.onWinMouseup, false)
     }
   }
 }
@@ -189,7 +240,6 @@ export default {
     height: 180px;
     cursor: pointer;
     position: relative;
-    background: @primary-color;
     > div {
       position: absolute;
     }

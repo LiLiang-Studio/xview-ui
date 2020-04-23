@@ -1,5 +1,5 @@
 <template>
-  <x-popper v-bind="popperProps" @clickoutside="toggle(false)" @on-popper-show="onPopperShow">
+  <x-popper v-bind="popperProps" @clickoutside="toggle(false)" @on-popper-show="onPopperShow" @on-popper-hide="onOpenChange(false)">
     <div slot="reference" tabindex="0" :class="classes" @click="onClick">
       <div :class="`${prefix}_color`">
         <div v-if="!visible && !selectedValue" :class="`${prefix}_color_empty`">
@@ -11,27 +11,28 @@
     </div>
     <div :class="`${prefix}_dropdown`">
       <div :class="`${prefix}_picker`">
-        <div ref="Satur" :class="`${prefix}_satur`" :style="saturStyle" @mousedown.prevent="onSaturMousedown">
+        <div ref="Satur" tabindex="0" :class="`${prefix}_satur`" :style="saturStyle" @mousedown.prevent="onSaturMousedown">
           <div :class="`${prefix}_satur_white`"></div>
           <div :class="`${prefix}_satur_black`"></div>
-          <div :class="`${prefix}_pointer`" :style="pointer.style"></div>
+          <div :class="`${prefix}_pointer`" :style="pointerStyle"></div>
         </div>
-        <div v-if="hue" :class="`${prefix}_hue`" @click.self="onHueClick">
-          <span :style="{left: hueCursor.left}"></span>
+        <div v-if="hue" tabindex="0" ref="Hue" :class="`${prefix}_hue`" @mousedown.prevent="onHueMousedown">
+          <span :style="hueCursorStyle"></span>
         </div>
-        <div v-if="alpha" :class="`${prefix}_alpha`">
-          <span></span>
+        <div v-if="alpha" tabindex="0" ref="Alpha" :class="`${prefix}_alpha`" @mousedown.prevent="onAlphaMousedown">
+          <div :class="`${prefix}_alpha_bar`" :style="alphaStyle"></div>
+          <span :style="alphaCursorStyle"></span>
         </div>
         <ul v-if="defaultColors.length" :class="`${prefix}_colors`">
           <li v-for="color in defaultColors" :key="color">
-            <div tabindex="-1" :class="`${prefix}_colors_block`" :style="{background: color}">
+            <div tabindex="-1" :class="`${prefix}_colors_block`" :style="{background: color}" @click="onBlockClick(color)">
               <div :class="`${prefix}_pointer`"></div>
             </div>
           </li>
         </ul>
       </div>
       <div :class="`${prefix}_confirm`">
-        <x-input size="small" :readonly="!editable" v-model="tempValue"/>
+        <x-input size="small" :readonly="!editable" v-model="tempValue" @on-blur="updateHsv"/>
         <x-btn size="small" @click="onClear">清空</x-btn>
         <x-btn size="small" type="primary" @click="onOK">确定</x-btn>
       </div>
@@ -45,7 +46,7 @@ import XInput from '../input'
 import XBtn from '../button'
 import XPopper from '../popper'
 import { recommendColors } from './utils'
-import { getOffset, throttle } from '../../tools'
+import { getOffset } from '../../tools'
 const B = Boolean, BTrue = { type: B, default: true }
 export default {
   name: 'XColorPicker',
@@ -57,10 +58,7 @@ export default {
     alpha: B,
     hue: BTrue,
     recommend: B,
-    colors: {
-      type: Array,
-      default: () => []
-    },
+    colors: { type: Array, default: () => [] },
     format: {
       validator: v => ['hsl', 'hsv', 'hex', 'rgb'].indexOf(v) > -1
     },
@@ -75,7 +73,8 @@ export default {
       selectedValue: this.value,
       prefix: 'x-color-picker',
       hueCursor: {},
-      pointer: {}
+      pointer: {},
+      hsv: {}
     }
   },
   computed: {
@@ -101,10 +100,43 @@ export default {
       return this.colors.length ? this.colors : this.recommend ? recommendColors : []
     },
     saturStyle() {
-      return { background: tinycolor({ h: this.hueCursor.h, s: 1, v: 1 }).toHexString() }
+      return { background: tinycolor({ h: this.hsv.h, s: 1, v: 1 }).toHexString() }
+    },
+    hueCursorStyle() {
+      return { h: this.hsv.h, left: `${this.hsv.h / 360 * 100}%` }
+    },
+    pointerStyle() {
+      return { left: `${this.hsv.s * 100}%`, top: `${(1 - this.hsv.v) * 100}%` }
+    },
+    alphaStyle() {
+      let { r, g, b } = tinycolor(this.tempValue).toRgb(), rgb = `${r},${g},${b}`
+      return { background: `linear-gradient(to right,rgba(${rgb},0) 0%,rgb(${rgb}) 100%)` }
+    },
+    alphaCursorStyle() {
+      return { left: `${this.hsv.a / 1 * 100}%` }
+    }
+  },
+  watch: {
+    hsv(val) {
+      this.tempValue = this.formatter(val)
+    },
+    selectedValue(val) {
+      this.$emit('input', val)
+    },
+    value(val) {
+      this.selectedValue = val
     }
   },
   methods: {
+    formatter(hsv) {
+      let format = this.format || (this.alpha ? 'rgb' : 'hex'), color = tinycolor(hsv)
+      return {
+        hsl: () => color.toHslString(),
+        hsv: () => color.toHsvString(),
+        hex: () => this.alpha ? color.toHex8String() : color.toHexString(),
+        rgb: () => color.toRgbString()
+      }[format]()
+    },
     toggle(visible) {
       this.visible = visible === undefined ? !this.visible : visible
     },
@@ -113,27 +145,24 @@ export default {
     },
     onPopperShow() {
       this.tempValue = this.selectedValue || '#2d8cf0'
-      this.setInitStyle()
+      this.updateHsv()
+      this.onOpenChange(true)
     },
-    setInitStyle() {
-      let hsv = tinycolor(this.tempValue).toHsv()
-      this.hueCursor = { h: hsv.h, left: `${hsv.h / 360 * 100}%` }
-      this.pointer = {
-        s: hsv.s,
-        v: hsv.v,
-        style: { left: `${hsv.s * 100}%`, top: `${(1 - hsv.v) * 100}%` }
-      }
+    onOpenChange(visible) {
+      this.$emit('on-open-change', visible)
     },
-    onHueClick(e) {
-      let h = e.offsetX / e.target.offsetWidth * 360
-      this.hueCursor = { h, left: `${h / 360 * 100}%` }
+    updateHsv() {
+      this.hsv = tinycolor(this.tempValue).toHsv()
     },
     onClear() {
-      this.visible = false
+      this.toggle(false)
       this.selectedValue = ''
+      this.$emit('on-change', this.selectedValue)
     },
     onOK() {
-
+      this.toggle(false)
+      this.selectedValue = this.tempValue
+      this.$emit('on-change', this.selectedValue)
     },
     updatePointer(e) {
       let offset = getOffset(this.$refs.Satur)
@@ -142,21 +171,52 @@ export default {
       let v = (offsetHeight - (e.clientY - offset.top)) / offsetHeight
       s = s < 0 ? 0 : s > 1 ? 1 : s
       v = v < 0 ? 0 : v > 1 ? 1 : v
-      this.pointer = {
-        s,
-        v,
-        style: { left: `${s * 100}%`, top: `${(1 - v) * 100}%` }
-      }
-      this.tempValue = this.selectedValue = tinycolor({ h: this.hueCursor.h, s, v }).toHexString()
+      this.hsv = { ...this.hsv, s, v }
     },
     onSaturMousedown(e) {
       this.updatePointer(e)
       window.addEventListener('mousemove', this.updatePointer, false)
-      window.addEventListener('mouseup', this.onWinMouseup, false)
+      window.addEventListener('mouseup', this.onSaturMouseup, false)
     },
-    onWinMouseup(e) {
+    onSaturMouseup(e) {
+      this.$refs.Satur.focus()
       window.removeEventListener('mousemove', this.updatePointer, false)
-      window.removeEventListener('mouseup', this.onWinMouseup, false)
+      window.removeEventListener('mouseup', this.onSaturMouseup, false)
+    },
+    updateHue(e) {
+      let offset = getOffset(this.$refs.Hue)
+      let { offsetWidth, offsetHeight } = this.$refs.Hue
+      let h = (e.clientX - offset.left) / offsetWidth * 360
+      this.hsv = { ...this.hsv, h: h > 360 || h < 0 ? 0 : h }
+    },
+    onHueMousedown(e) {
+      this.updateHue(e)
+      window.addEventListener('mousemove', this.updateHue, false)
+      window.addEventListener('mouseup', this.onHueMouseup, false)
+    },
+    onHueMouseup() {
+      this.$refs.Hue.focus()
+      window.removeEventListener('mousemove', this.updateHue, false)
+      window.removeEventListener('mouseup', this.onHueMouseup, false)
+    },
+    onBlockClick(color) {
+      this.hsv = tinycolor(color).toHsv()
+    },
+    updateAlpha(e) {
+      let offset = getOffset(this.$refs.Alpha)
+      let { offsetWidth, offsetHeight } = this.$refs.Alpha
+      let a = (e.clientX - offset.left) / offsetWidth
+      this.hsv = { ...this.hsv, a: a > 1 ? 1 : a < 0 ? 0 : a }
+    },
+    onAlphaMousedown(e) {
+      this.updateAlpha(e)
+      window.addEventListener('mousemove', this.updateAlpha, false)
+      window.addEventListener('mouseup', this.onAlphaMouseup, false)
+    },
+    onAlphaMouseup() {
+      this.$refs.Alpha.focus()
+      window.removeEventListener('mousemove', this.updateAlpha, false)
+      window.removeEventListener('mouseup', this.onAlphaMouseup, false)
     }
   }
 }
@@ -235,6 +295,13 @@ export default {
     border-radius: 50%;
     box-shadow: 0 0 0 1.5px #fff, inset 0 0 1px 1px rgba(0,0,0,.3), 0 0 1px 2px rgba(0,0,0,.4);
   }
+  &_hue, &_alpha, &_satur {
+    outline: none;
+    transition: box-shadow .2s;
+    &:focus {
+      .control-shadow(@primary-color);
+    }
+  }
   &_satur {
     width: 240px;
     height: 180px;
@@ -282,6 +349,14 @@ export default {
   &_alpha {
     background: url("../../icons/alpha.png");
     background-size: 10px;
+    &_bar {
+      border-radius: 2px;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
   }
   &_colors {
     list-style: none;
@@ -321,6 +396,9 @@ export default {
     }
     .x-btn:not(:last-child) {
       margin-right: 5px;
+    }
+    input {
+      font-size: 12px;
     }
   }
 }

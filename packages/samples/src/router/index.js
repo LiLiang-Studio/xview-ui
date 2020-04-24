@@ -5,6 +5,7 @@ import HomeRouter from '../pages/HomeRouter.vue'
 Vue.use(Router)
 
 const coms = {
+  TimePicker: () => import('../pages/TimePicker.vue'),
   ColorPicker: () => import('../pages/ColorPicker.vue'),
   Cascader: () => import('../pages/Cascader.vue'),
   Upload: () => import('../pages/Upload.vue'),
@@ -58,7 +59,6 @@ const coms = {
   Icon: () => import('../pages/Icon.vue'),
 
   // DatePicker: () => import('../pages/DatePicker.vue'),
-  // TimePicker: () => import('../pages/TimePicker.vue'),
   Form: () => import('../pages/Form.vue'),
   Table: () => import('../pages/Table.vue')
 }

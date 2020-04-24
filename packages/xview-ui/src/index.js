@@ -77,6 +77,7 @@ import AutoComplete from './components/auto-complete' // 自动完成
 import Upload from './components/upload' // 上传
 import Cascader from './components/cascader' // 级联选择框
 import ColorPicker from './components/color-picker' // 颜色选择器
+import TimePicker from './components/time-picker' // 时间选择器
 
 import loadingBarService from './components/loading-bar' // 加载条
 import Spin from './components/spin' // 加载中
@@ -91,8 +92,6 @@ import FormItem from './components/form-item'
 import Table from './components/table/Table.vue'
 // 日期选择器
 // import DatePicker from './components/picker/DatePicker.vue'
-// // 时间选择器
-// import TimePicker from './components/picker/TimePicker.vue'
 
 const comps = {
   Icon,
@@ -168,12 +167,12 @@ const comps = {
   Upload,
   Cascader,
   ColorPicker,
+  TimePicker,
 
   Form,
   FormItem,
   Table,
-  // DatePicker,
-  // TimePicker
+  // DatePicker
 }
 
 /**

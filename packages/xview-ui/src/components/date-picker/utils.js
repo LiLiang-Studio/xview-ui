@@ -2,6 +2,8 @@ import { isBool } from '../../tools'
 
 const S = String, B = Boolean, BTrue = { type: B, default: true }
 
+export const genNums = len => Array.apply(null, { length: len }).map((_, i) => ({ val: (i < 10 ? '0' : '') + i }))
+
 export const mixins = {
   props: {
     value: [Date, S, Array],

@@ -128,43 +128,6 @@ export const setAutoHeight = (textarea, minRows, maxRows) => {
 }
 
 /**
- * 格式化日期
- * @param {Date|String} date 
- * @param {String} format 
- */
-export const dateFormat = (date, format = 'yyyy-MM-dd hh:mm:ss') => {
-  if (typeof date === 'string') {
-    let mts = date.match(/(\/Date\((\d+)\)\/)/)
-    if (mts && mts.length >= 3) date = parseInt(mts[2])
-  }
-  date = new Date(date)
-  if (!date || date.toUTCString() === 'Invalid Date') return ''
-  let map = {
-    M: date.getMonth() + 1,
-    d: date.getDate(),
-    h: date.getHours(),
-    m: date.getMinutes(),
-    s: date.getSeconds(),
-    q: Math.floor((date.getMonth() + 3) / 3),
-    S: date.getMilliseconds()
-  }
-  format = format.replace(/([yMdhmsqS])+/g, (all, t) => {
-    let v = map[t]
-    if (v !== undefined) {
-      if (all.length > 1) {
-        v = '0' + v
-        v = v.substr(v.length - 2)
-      }
-      return v
-    } else if (t === 'y') {
-      return (date.getFullYear() + '').substr(4 - all.length)
-    }
-    return all
-  })
-  return format
-}
-
-/**
  * 获取元素在页面中的偏移位置
  * @param {HTMLElement} el
  */
@@ -194,4 +157,57 @@ export function getOffset(el) {
  */
 export const isOutside = (e, el) => {
   return e.target !== el && Array.from(el.querySelectorAll('*')).indexOf(e.target) < 0
+}
+
+const pad = (val, len) => (val + '').length < len ? pad('0' + val, len) : val
+
+/**
+ * 格式化日期
+ * @param {Date | String} d 
+ * @param {String} format 
+ */
+export const formatDate = (d, format = 'yyyy-MM-dd HH:mm:ss') => {
+  if (!d) return ''
+  if (isStr(d)) d = new Date(d)
+  let year = d.getFullYear()
+  let month = d.getMonth() + 1
+  let date = d.getDate()
+  let day = d.getDay()
+  let hours = d.getHours()
+  let minutes = d.getMinutes()
+  let seconds = d.getSeconds()
+  let ms = d.getMilliseconds()
+  let zone = d.getTimezoneOffset()
+  let dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+  let monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+  let shortMonthNames = monthNames.map(_ => _.slice(0, 3))
+  let shortDayNames = dayNames.map(_ => _.slice(0, 3))
+
+  return format
+    .replace(/yyyy/g, () => year) // 年份（四位）
+    .replace(/yy/g, () => (year + '').slice(2)) // 年份（两位）
+    .replace(/MMMM/g, () => monthNames[month - 1]) // 月份（英文）
+    .replace(/MMM/g, () => shortMonthNames[month - 1]) // 月份（英文简写
+    .replace(/MM/g, () => pad(month, 2)) // 月份（两位）
+    .replace(/M/g, () => month) // 月份（一位）
+    .replace(/dddd/g, () => dayNames[day]) // 星期（英文）
+    .replace(/ddd/g, () => shortDayNames[day]) // 星期（英文简写）
+    .replace(/dd/g, () => pad(date, 2)) // 日期（两位）
+    .replace(/d/g, () => date) // 日期（一位）
+    .replace(/DD/g, () => '0' + day) // 星期（两位）
+    .replace(/D/g, () => day) // 星期（一位）
+    .replace(/HH/g, () => pad(hours, 2)) // 小时（24小时制两位）
+    .replace(/H/g, () => hours) // 小时（24小时制一位）
+    .replace(/hh/g, () => pad(hours > 12 ? hours - 12 : hours, 2)) // 小时（12小时制两位）
+    .replace(/h/g, () => hours > 12 ? hours - 12 : hours) // 小时（12小时制一位）
+    .replace(/mm/g, () => pad(minutes, 2)) // 分钟（两位）
+    .replace(/m/g, () => minutes) // 分钟（一位）
+    .replace(/ss/g, () => pad(seconds, 2)) // 秒钟（两位）
+    .replace(/s/g, () => seconds) // 秒钟（一位）
+    .replace(/SSS/g, () => pad(ms, 3)) // 毫秒（三位）
+    .replace(/SS/g, () => pad(Math.round(ms / 10), 2)) // 毫秒（两位）
+    .replace(/S/g, () => Math.round(ms / 100)) // 毫秒（一位）
+    .replace(/A/g, () => hours > 12 ? 'PM' : 'AM') // 上午与下午（大写）
+    .replace(/a/g, () => hours > 12 ? 'pm' : 'am') // 上午与下午（小写）
+    .replace(/ZZ/g, () => (zone > 0 ? '-' : '+') + pad(Math.floor(Math.abs(zone) / 60) * 100 + Math.abs(zone) % 60, 4)) // 时区
 }

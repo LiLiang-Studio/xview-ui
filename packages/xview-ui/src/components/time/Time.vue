@@ -2,7 +2,7 @@
   <span class="x-time" :is="hash ? 'a' : 'span'" :href="hash">{{convertedValue}}</span>
 </template>
 <script>
-import { dateFormat } from '../../tools'
+import { formatDate } from '../../tools'
 export default {
   name: 'XTime',
   props: {
@@ -36,8 +36,8 @@ export default {
     convert() {
       this.convertedValue = ({
         relative: this.convertRelTime(),
-        date: dateFormat(this.time, 'yyyy-MM-dd'),
-        datetime: dateFormat(this.time)
+        date: formatDate(this.time, 'yyyy-MM-dd'),
+        datetime: formatDate(this.time)
       })[this.type]
     },
     convertRelTime() {

@@ -42,7 +42,8 @@ export const mixins = {
         disabled: this.disabled,
         clearable: this.clearable,
         readonly: this.readonly,
-        placeholder: this.placeholder
+        placeholder: this.placeholder,
+        icon: 'ios-clock-outline'
       }
     },
     popperProps() {

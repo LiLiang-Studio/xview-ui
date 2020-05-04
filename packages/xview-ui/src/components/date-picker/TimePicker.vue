@@ -6,21 +6,21 @@
       </slot>
     </template>
     <div v-if="isRange" class="x-time-picker_boxs">
-      <x-time-picker-box title="开始时间" v-bind="{...boxProps, confirm: false}"/>
-      <x-time-picker-box title="结束时间" v-bind="boxProps"/>
+      <x-panel title="开始时间" v-bind="{...boxProps, confirm: false}"/>
+      <x-panel title="结束时间" v-bind="boxProps"/>
     </div>
-    <x-time-picker-box v-else v-bind="boxProps"/>
+    <x-panel v-else v-bind="boxProps"/>
   </x-popper>
 </template>
 <script>
 import XInput from '../input'
 import XPopper from '../popper'
-import XTimePickerBox from './time/Picker.vue'
+import XPanel from './time/Panel.vue'
 import { mixins } from './utils'
 export default {
   mixins: [mixins],
   name: 'XTimePicker',
-  components: { XInput, XPopper, XTimePickerBox },
+  components: { XInput, XPopper, XPanel },
   props: {
     type: {
       validator: v => ['time', 'timerange'].indexOf(v) > -1

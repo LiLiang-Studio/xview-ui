@@ -2,9 +2,9 @@
   <div :class="prefix">
     <div :class="`${prefix}_title`" v-if="title">{{title}}</div>
     <div :class="[`${prefix}_lists`, {bottomBorder}]">
-      <x-time-list v-if="boxVisible.hours" :data="hours"/>
-      <x-time-list v-if="boxVisible.minutes" :data="minutes"/>
-      <x-time-list v-if="boxVisible.seconds" :data="seconds"/>
+      <x-time-list v-if="boxVisible.hours" :data="hours" @select="onSelectHours"/>
+      <x-time-list v-if="boxVisible.minutes" :data="minutes" @select="onSelectMinutes"/>
+      <x-time-list v-if="boxVisible.seconds" :data="seconds" @select="onSelectSeconds"/>
     </div>
     <div v-if="confirm" :class="`${prefix}_btns`">
       <x-btn size="small">清空</x-btn>
@@ -32,7 +32,7 @@ export default {
     steps: { type: A, default: () => [] }
   },
   data() {
-    return { prefix: 'x-time-picker-box' }
+    return { prefix: 'x-time-picker-panel' }
   },
   computed: {
     hours() {
@@ -67,12 +67,26 @@ export default {
         seconds: formatDate.hasSeconds(format)
       }
     }
+  },
+  methods: {
+    updateActiveItem(item) {
+      
+    },
+    onSelectHours(item) {
+      
+    },
+    onSelectMinutes(item) {
+
+    },
+    onSelectSeconds() {
+
+    }
   }
 }
 </script>
 <style lang="less">
 @import url("../../../styles/vars.less");
-.x-time-picker-box {
+.x-time-picker-panel {
   & + & &_lists {
     border-left: 3px solid @divider-color;
   }

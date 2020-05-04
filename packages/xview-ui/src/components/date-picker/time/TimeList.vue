@@ -1,7 +1,10 @@
 <template>
   <div :class="prefix">
     <ul>
-      <li v-for="_ in data" :key="_.val" :class="{disabled: _.disabled}">{{_.val}}</li>
+      <li v-for="_ in data"
+        :key="_.val"
+        :class="{active: _.active, disabled: _.disabled}"
+        @click="onItemClick(_, $event)">{{_.val}}</li>
     </ul>
   </div>
 </template>
@@ -16,6 +19,19 @@ export default {
   },
   data() {
     return { prefix: 'x-time-list' }
+  },
+  methods: {
+    /**
+     * @param {MouseEvent} e
+     */
+    onItemClick(item, e) {
+      if (!item.disabled) {
+        /** @type {HTMLElement} */
+        let el = e.target
+        el.scrollIntoView()
+        this.$emit('select', item)
+      }
+    }
   }
 }
 </script>

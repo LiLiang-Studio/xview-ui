@@ -168,7 +168,7 @@ const pad = (val, len) => (val + '').length < len ? pad('0' + val, len) : val
  */
 export const formatDate = (d, format = 'yyyy-MM-dd HH:mm:ss') => {
   if (!d) return ''
-  if (isStr(d)) d = new Date(d)
+  if (!(d instanceof Date)) d = new Date(d)
   let year = d.getFullYear()
   let month = d.getMonth() + 1
   let date = d.getDate()
@@ -211,3 +211,7 @@ export const formatDate = (d, format = 'yyyy-MM-dd HH:mm:ss') => {
     .replace(/a/g, () => hours > 12 ? 'pm' : 'am') // 上午与下午（小写）
     .replace(/ZZ/g, () => (zone > 0 ? '-' : '+') + pad(Math.floor(Math.abs(zone) / 60) * 100 + Math.abs(zone) % 60, 4)) // 时区
 }
+
+formatDate.hasHours = format => /[h|H]/.test(format)
+formatDate.hasMinutes = format => /m/.test(format)
+formatDate.hasSeconds = format => /s/.test(format)

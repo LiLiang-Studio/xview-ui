@@ -20,13 +20,13 @@ export default {
 }
 </script>
 <style lang="less">
-@import url("../../styles/vars.less");
+@import url("../../../styles/vars.less");
 .x-time-list {
   width: 56px;
   max-height: 144px;
   float: left;
   overflow: hidden;
-  border-right: 1px solid @border-color;
+  border-right: 1px solid @divider-color;
   &:hover {
     overflow: auto;
   }

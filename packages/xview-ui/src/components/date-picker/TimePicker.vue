@@ -5,60 +5,51 @@
         <x-input v-bind="inputProps" @click="onClick"/>
       </slot>
     </template>
-    <x-time-list :data="hours"/>
-    <x-time-list :data="minutes"/>
-    <x-time-list :data="seconds"/>
+    <div v-if="isRange" class="x-time-picker_boxs">
+      <x-time-picker-box title="开始时间" v-bind="{...boxProps, confirm: false}"/>
+      <x-time-picker-box title="结束时间" v-bind="boxProps"/>
+    </div>
+    <x-time-picker-box v-else v-bind="boxProps"/>
   </x-popper>
 </template>
 <script>
-import XBtn from '../button'
 import XInput from '../input'
 import XPopper from '../popper'
-import XTimeList from './TimeList.vue'
-import { mixins, genNums } from './utils'
-const A = Array
+import XTimePickerBox from './time/Picker.vue'
+import { mixins } from './utils'
 export default {
   mixins: [mixins],
   name: 'XTimePicker',
-  components: { XBtn, XInput, XPopper, XTimeList },
+  components: { XInput, XPopper, XTimePickerBox },
   props: {
     type: {
       validator: v => ['time', 'timerange'].indexOf(v) > -1
     },
-    steps: { type: A, default: () => [] },
-    disabledHours: A,
-    disabledMinutes: A,
-    disabledSeconds: A,
-    hideDisabledOptions: Boolean
+    format: {
+      type: String,
+      default: 'HH:mm:ss'
+    }
   },
   computed: {
-    hours() {
-      let nums = genNums(24)
-      if (this.disabledHours) {
-        if (this.hideDisabledOptions) return nums.filter(_ => this.disabledHours.indexOf(+_.val) < 0)
-        nums.forEach(_ => this.disabledHours.indexOf(+_.val) > -1 && (_.disabled = true)) 
-      }
-      return nums
+    isRange() {
+      return this.type === 'timerange'
     },
-    minutes() {
-      let nums = genNums(60) 
-      if (this.disabledMinutes) {
-        if (this.hideDisabledOptions) return nums.filter(_ => this.disabledMinutes.indexOf(+_.val) < 0)
-        nums.forEach(_ => this.disabledMinutes.indexOf(+_.val) > -1 && (_.disabled = true)) 
+    boxProps() {
+      return {
+        ...this.$attrs,
+        format: this.format,
+        confirm: this.confirm,
+        bottomBorder: this.confirm
       }
-      return nums
-    },
-    seconds() {
-      let nums = genNums(60) 
-      if (this.disabledSeconds) {
-        if (this.hideDisabledOptions) return nums.filter(_ => this.disabledSeconds.indexOf(+_.val) < 0)
-        nums.forEach(_ => this.disabledSeconds.indexOf(+_.val) > -1 && (_.disabled = true)) 
-      }
-      return nums
     }
   }
 }
 </script>
 <style lang="less">
-
+@import url("../../styles/vars.less");
+.x-time-picker {
+  &_boxs {
+    display: flex;
+  }
+}
 </style>
